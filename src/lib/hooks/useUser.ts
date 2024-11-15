@@ -6,7 +6,7 @@ const useUser = () => {
     queryKey: ["user"],
     queryFn: async () => await userInfo(),
     retry: false,
-    select: (response) => response.data,
+    select: (response) => response,
   });
 
   return userInfoData;
