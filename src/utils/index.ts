@@ -1,22 +1,24 @@
-import { format } from "date-fns";
+import dayjs from "dayjs";
 
 export const dateFormat = (
-  date: Date,
+  date: Date | string,
   type: "slash" | "dash" | "dot" | "fullDash" | "fullDot"
-) => {
+): string => {
+  const formattedDate = dayjs(date); // dayjs로 날짜 객체 생성
+
   switch (type) {
     case "slash":
-      return format(date, "yyyy/MM/dd");
+      return formattedDate.format("YYYY/MM/DD");
     case "dash":
-      return format(date, "yyyy-MM-dd");
+      return formattedDate.format("YYYY-MM-DD");
     case "dot":
-      return format(date, "yyyy.MM.dd");
+      return formattedDate.format("YYYY.MM.DD");
     case "fullDash":
-      return format(date, "yyyy-MM-dd HH:mm");
+      return formattedDate.format("YYYY-MM-DD HH:mm");
     case "fullDot":
-      return format(date, "yyyy.MM.dd HH:mm");
+      return formattedDate.format("YYYY.MM.DD HH:mm");
     default:
-      return format(date, "yyyy-MM-dd");
+      return formattedDate.format("YYYY-MM-DD");
   }
 };
 
