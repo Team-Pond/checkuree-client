@@ -1,15 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import AuthApiClient from "../../api/auth/AuthApiClient";
+import { userInfo } from "../../api/AttendanceApiClient";
 
 const useUser = () => {
-  const { data: userInfo } = useQuery({
+  const { data: userInfoData } = useQuery({
     queryKey: ["user"],
-    queryFn: async () => await AuthApiClient.getInstance().userInfo(),
+    queryFn: async () => await userInfo(),
     retry: false,
-    select: (response) => response.data,
+    select: (response) => response,
   });
 
-  return userInfo;
+  return userInfoData;
 };
 
 export default useUser;

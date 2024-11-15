@@ -86,7 +86,15 @@ export default function SignIn() {
             initialValues={initailValues}
           >
             {({ getFieldProps, isValid, dirty, handleSubmit }) => (
-              <form onSubmit={handleSubmit}>
+              <form
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "32px",
+                  justifyContent: "center",
+                }}
+                onSubmit={handleSubmit}
+              >
                 <LoginFormTextBox>
                   <TextField
                     {...getFieldProps("username")}
@@ -189,6 +197,7 @@ const LoginFormBox = styled(Box)(() => {
     justifyContent: "center",
   };
 });
+
 const LoginFormTextBox = styled(Box)(() => {
   return {
     display: "flex",
