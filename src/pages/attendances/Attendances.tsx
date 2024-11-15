@@ -73,15 +73,20 @@ const Attendances: React.FC = () => {
     queryKey: ["attendancy-list"],
     queryFn: async () => {
       const response = await getAttendanceList();
-      return response.data;
+      if (!response.success) return undefined;
+      return response;
     },
   });
-
+  console.log(attendancyList);
   return (
     <ContainerST>
       {attendancyList ? (
         <BoxSTAttendanceWrapper>
-          <Box>
+          <Box
+            sx={{
+              textAlign: "left",
+            }}
+          >
             <Typography fontSize={14} lineHeight={"19.07px"} color={"#797979"}>
               {todayFormat}
             </Typography>
@@ -110,7 +115,11 @@ const Attendances: React.FC = () => {
                     }}
                   />
                   <BoxSTAttendanceFooter>
-                    <Box>
+                    <Box
+                      sx={{
+                        textAlign: "left",
+                      }}
+                    >
                       <TypoSTTitle>{item.attendance.title}</TypoSTTitle>
                       <TypoSTDescription>
                         {item.attendance.description || "출석부 설명입니다."}
@@ -184,7 +193,6 @@ const BoxSTAttendanceWrapper = styled(Box)(() => {
     gap: "10px",
     flexDirection: "column",
     flexWrap: "wrap",
-    paddingTop: "64px",
   };
 });
 
@@ -193,7 +201,7 @@ const BoxSTAttendance = styled(Box)(() => {
     width: "150px",
     height: "185px",
     border: "1px solid green",
-    borderRadius: "4px",
+    borderRadius: "8px",
     display: "flex",
     gap: "12px",
     cursor: "pointer",
@@ -205,8 +213,6 @@ const BoxSTAttendance = styled(Box)(() => {
 
 const BoxSTAttendanceFooter = styled(Box)(() => {
   return {
-    width: "100%",
-    padding: "0px 7px",
     display: "flex",
     flexDirection: "column",
     gap: "3px",
