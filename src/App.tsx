@@ -45,11 +45,12 @@ function App() {
             <Route
               path={route.path}
               element={
-                isAuthenticated ? (
-                  <Navigate to={"/attendances"} />
-                ) : (
-                  route.element
-                )
+                // isAuthenticated ? (
+                //   <Navigate to={"/attendances"} />
+                // ) : (
+                //   route.element
+                // )
+                route.element
               }
             />
           );
