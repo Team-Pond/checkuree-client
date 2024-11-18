@@ -204,6 +204,7 @@ const AttendanceCreateForm = (props: IProps) => {
       </BoxSTImageWrapper>
       <input
         type="file"
+        accept="image/jpeg, image/png"
         ref={fileInputRef}
         style={{ display: "none" }}
         onChange={handleFileChange}

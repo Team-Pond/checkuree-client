@@ -216,6 +216,8 @@ const BoxSTAttendanceFooter = styled(Box)(() => {
     display: "flex",
     flexDirection: "column",
     gap: "3px",
+    width: "100%",
+    // padding: "px",
   };
 });
 
