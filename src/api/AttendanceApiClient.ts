@@ -1,12 +1,15 @@
 import ApiClient from "./ApiClient";
+import {
+  CreateAttendanceRequest,
+  CreateAttendeeRequest,
+  CreateRecordsRequest,
+  CreateSchedulesRequest,
+  DeleteAttendeesRequest,
+  LoginDataRequest,
+  UseApiProps,
+} from "./schema";
 
-interface UseApiProps {
-  url: string;
-  method: "GET" | "POST" | "PUT" | "DELETE";
-  data: any;
-  dependencies: any[];
-}
-
+// Singleton BaseApi
 export const useFetch = async ({ url, method, data }: UseApiProps) => {
   const response = await ApiClient.request({
     url,
@@ -18,13 +21,7 @@ export const useFetch = async ({ url, method, data }: UseApiProps) => {
   return response.data;
 };
 
-export interface LoginData {
-  username: string;
-  password: string;
-  isAutoLogin: boolean;
-}
-
-export const userLogin = async (request: LoginData) => {
+export const userLogin = async (request: LoginDataRequest) => {
   const response = await ApiClient.request({
     method: "POST",
     url: "/auth/signin",
@@ -67,7 +64,7 @@ export const getAttendanceSchedulesByDate = async ({
   date,
   pageNo = 1,
 }: {
-  attendanceId: string;
+  attendanceId: string | undefined;
   date: string;
   pageNo: number;
 }) => {
@@ -127,18 +124,8 @@ export const getAttendeeDetail = async (attendeeId: string) => {
   return response.data;
 };
 
-export interface CreateAttendance {
-  title: string;
-  description: string;
-  availableFrom: string;
-  availableTo: string;
-  allowLateness: string;
-  attendanceDays: string;
-  image: File;
-}
-
 /** 출석부 생성 */
-export const createAttandance = async (request: CreateAttendance) => {
+export const createAttandance = async (request: CreateAttendanceRequest) => {
   const response = await ApiClient.request({
     method: "POST",
     url: `/attendances`,
@@ -150,21 +137,8 @@ export const createAttandance = async (request: CreateAttendance) => {
   return response.data;
 };
 
-export interface CreateAttendee {
-  attendanceId: string;
-  name: string;
-  gender: string;
-  mobileNumber?: string;
-  subMobileNumber?: string;
-  birth: string;
-  course?: string;
-  grade?: string;
-  school?: string;
-  description?: string;
-}
-
 /** 명단관리 > 출석대상 등록 */
-export const createAttendee = async (parameters: CreateAttendee) => {
+export const createAttendee = async (parameters: CreateAttendeeRequest) => {
   const response = await ApiClient.request({
     method: "POST",
     url: `/attendees`,
@@ -173,19 +147,10 @@ export const createAttendee = async (parameters: CreateAttendee) => {
   return response.data;
 };
 
-export interface CreateAttendance {
-  title: string;
-  description: string;
-  availableFrom: string;
-  availableTo: string;
-  allowLateness: string;
-  attendanceDays: string;
-  image: File;
-}
 /** 명단관리 > 출석대상 정보 수정 */
 export const updateAttendee = async (
   attendeeId: string,
-  parameters: CreateAttendee
+  parameters: CreateAttendeeRequest
 ) => {
   const response = await ApiClient.request({
     method: "PATCH",
@@ -195,45 +160,8 @@ export const updateAttendee = async (
   return response.data;
 };
 
-export type SingleSchedulesType = { id?: number; day: string; time: string }[];
-export interface CreateSchedules {
-  attendanceId: string;
-  attendeeId: string;
-  singleSchedules: SingleSchedulesType;
-}
-
-export interface CreateAttendance {
-  title: string;
-  description: string;
-  availableFrom: string;
-  availableTo: string;
-  allowLateness: string;
-  attendanceDays: string;
-  image: File;
-}
-
-export interface SingleRecords {
-  status: string;
-  attendeeId: string;
-  date: string;
-  time: string;
-  day: string;
-  etc: string;
-  lateTime?: string;
-  absenceType?: string;
-}
-export interface CreateRecords {
-  attendanceId: string;
-  singleRecords: SingleRecords[];
-}
-
-export interface DeleteAttendees {
-  ids: string[];
-  attendanceId: string;
-}
-
 /** 명단관리 > 출석대상 등록 후 스케쥴 등록 */
-export const createSchedules = async (parameters: CreateSchedules) => {
+export const createSchedules = async (parameters: CreateSchedulesRequest) => {
   const response = await ApiClient.request({
     method: "POST",
     url: `/schedules`,
@@ -244,7 +172,7 @@ export const createSchedules = async (parameters: CreateSchedules) => {
 };
 
 /** 출석기록 생성 및 수정 */
-export const createRecords = async (parameters: CreateRecords) => {
+export const createRecords = async (parameters: CreateRecordsRequest) => {
   const response = await ApiClient.request({
     method: "POST",
     url: `/records`,
@@ -254,7 +182,7 @@ export const createRecords = async (parameters: CreateRecords) => {
 };
 /** 출석대상 삭제 */
 
-export const deleteAttendees = async (parameters: DeleteAttendees) => {
+export const deleteAttendees = async (parameters: DeleteAttendeesRequest) => {
   const response = await ApiClient.request({
     method: "DELETE",
     url: `/attendees`,

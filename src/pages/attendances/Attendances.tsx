@@ -77,7 +77,6 @@ const Attendances: React.FC = () => {
       return response;
     },
   });
-  console.log(attendancyList);
   return (
     <ContainerST>
       {attendancyList ? (
@@ -216,6 +215,8 @@ const BoxSTAttendanceFooter = styled(Box)(() => {
     display: "flex",
     flexDirection: "column",
     gap: "3px",
+    width: "100%",
+    // padding: "px",
   };
 });
 
