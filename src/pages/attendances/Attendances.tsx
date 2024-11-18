@@ -77,7 +77,6 @@ const Attendances: React.FC = () => {
       return response;
     },
   });
-  console.log(attendancyList);
   return (
     <ContainerST>
       {attendancyList ? (

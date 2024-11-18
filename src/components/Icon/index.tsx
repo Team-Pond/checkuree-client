@@ -13,6 +13,7 @@ interface IconType {
 
 const Icon = (props: IconType) => {
   const { icon, size, color, cns, onClick } = props;
+
   return (
     <IconContainer
       className={cx(
