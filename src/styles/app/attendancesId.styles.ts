@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Colors } from "../globalStyles";
 
 export const AttendanceIdContainer = styled.section`
-  width: 393px;
+  width: 375px;
   display: flex;
   justify-content: center;
   & > .attendance-header {
