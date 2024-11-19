@@ -1,4 +1,4 @@
-import React, { SetStateAction, useState } from "react";
+import React, { SetStateAction } from "react";
 
 // Components
 import { Box, styled, Typography } from "@mui/material";
