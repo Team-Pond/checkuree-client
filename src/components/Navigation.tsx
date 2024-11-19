@@ -17,28 +17,28 @@ interface Menu {
 
 interface Iprops {
   status: boolean;
-  setAttendeeList: React.Dispatch<SetStateAction<ParsedAttendeeListType>>;
-  onSaveAction: () => void;
+  setAttendeeList?: React.Dispatch<SetStateAction<ParsedAttendeeListType>>;
+  onSaveAction?: () => void;
 }
 
 const menuList = (attendanceId: string): Menu[] => {
   return [
     {
-      name: "attendance",
-      path: "/attendanceId",
+      name: "attendances",
+      path: `/attendances/${attendanceId}`,
       icon: "/images/icons/check-icon.svg",
       iconActivate: "/images/icons/check-activate-icon.svg",
       label: "출석 체크",
     },
     {
       name: "statistics",
-      path: "/attendanceId",
+      path: "/statistics",
       icon: "/images/icons/statistics-icon.svg",
       iconActivate: "/images/icons/statistics-activate-icon.svg",
       label: "출석 통계",
     },
     {
-      name: "management",
+      name: "list-management",
       path: `/list-management/${attendanceId}`,
       icon: "/images/icons/list-icon.svg",
       iconActivate: "/images/icons/list-activate-icon.svg",
@@ -46,7 +46,7 @@ const menuList = (attendanceId: string): Menu[] => {
     },
     {
       name: "settings",
-      path: "/attendanceId",
+      path: "/settings",
       icon: "/images/icons/setting-icon.svg",
       iconActivate: "/images/icons/setting-activate-icon.svg",
       label: "출석부 설정",
@@ -58,29 +58,29 @@ const Navigation = (props: Iprops) => {
   const { status, setAttendeeList, onSaveAction } = props;
 
   const navigate = useNavigate();
-  const attendanceId = useLocation().pathname.split("/")[2];
 
-  const [activeMenu, setActiveMenu] = useState<string>("attendance");
+  const attendanceId = useLocation().pathname.split("/")[2];
+  const pathName = useLocation().pathname.split("/")[1];
 
   const handleMenuClick = (menu: Menu) => {
-    setActiveMenu(menu.name);
     navigate(menu.path);
   };
 
   const resetAllStatus = () => {
-    setAttendeeList((prevState) => {
-      return Object.fromEntries(
-        Object.entries(prevState).map(([time, items]) => [
-          time,
-          items.map((item) => ({
-            ...item,
-            newStatus: "",
-            isDetailOpen: false,
-            etc: "",
-          })),
-        ])
-      );
-    });
+    if (setAttendeeList)
+      setAttendeeList((prevState) => {
+        return Object.fromEntries(
+          Object.entries(prevState).map(([time, items]) => [
+            time,
+            items.map((item) => ({
+              ...item,
+              newStatus: "",
+              isDetailOpen: false,
+              etc: "",
+            })),
+          ])
+        );
+      });
   };
 
   return (
@@ -101,7 +101,7 @@ const Navigation = (props: Iprops) => {
                   : handleMenuClick(menu)
               }
             >
-              {activeMenu === menu.name ? (
+              {pathName === menu.name ? (
                 <img
                   src={"/images/icons/eclipse-icon.svg"}
                   alt={""}
@@ -124,7 +124,7 @@ const Navigation = (props: Iprops) => {
               >
                 <img
                   key={index}
-                  src={activeMenu === menu.name ? menu.iconActivate : menu.icon}
+                  src={pathName === menu.name ? menu.iconActivate : menu.icon}
                   alt={menu.label}
                   width={19}
                   height={16.5}

@@ -27,6 +27,7 @@ import BottomDrawer from "../../components/BottomDrawer";
 import FormContents from "../../components/FormContents";
 import ListManagementAttendanceItem from "../../components/listManagementAcctendanceItem";
 import { ListManagementContainer } from "../../components/listManagement.styles";
+import Navigation from "../../components/Navigation";
 
 const ListManagement = () => {
   const { id: attendanceId } = useParams();
@@ -146,6 +147,7 @@ const ListManagement = () => {
       <Fab color="primary" aria-label="add" onClick={() => setIsAddOpen(true)}>
         <Icon icon={Icons.add} size={32} color={Colors.White} />
       </Fab>
+      <Navigation status={false} />
     </ListManagementContainer>
   );
 };

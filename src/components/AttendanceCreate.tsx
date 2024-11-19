@@ -431,7 +431,7 @@ const BoxSTcancel = styled(Box)(() => {
 const BoxSTbutton = styled(Box)(() => {
   return {
     display: "flex",
-    maxWidth: 340,
+    maxWidth: 375,
     width: "100%",
     justifyContent: "center",
   };

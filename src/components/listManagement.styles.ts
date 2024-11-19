@@ -27,6 +27,7 @@ export const ListManagementContainer = styled.section`
 
     & > .attendance-info {
       & > .name {
+        text-align: left;
         font-size: 20px;
         font-weight: 600;
         color: ${Colors.Black01};
@@ -112,15 +113,16 @@ export const AttendanceItemContainer = styled.div`
 export const FormContentsContainer = styled.section<{ gender: string }>`
   height: 786px;
   overflow: auto;
-
+  padding: 30px 0px;
+  display: flex;
+  justify-content: center;
   & > form {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 24px;
-    padding: 32px 27px 36px;
-    margin-bottom: 60px;
 
+    max-width: 330px;
     & > .form-row {
       & > .label {
         font-size: 14px;
@@ -294,6 +296,7 @@ export const FormContentsContainer = styled.section<{ gender: string }>`
       justify-content: center;
       font-weight: 600;
       color: ${Colors.White};
+      border-radius: 0px;
     }
 
     & > .cancel {
