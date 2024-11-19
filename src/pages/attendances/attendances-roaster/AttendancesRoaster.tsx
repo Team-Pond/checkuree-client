@@ -136,7 +136,7 @@ const AttendancesRoaster = () => {
       return {} as AttendanceSchedulesByDateItemObj;
     },
     initialPageParam: { pageNo: 1 },
-    getNextPageParam: (attendeeList, allPages, lastPageParam) => {
+    getNextPageParam: (attendeeList, _allPages, lastPageParam) => {
       if (!attendeeList || _.isEmpty(attendeeList)) {
         return undefined;
       }
