@@ -26,7 +26,7 @@ import Icon from "../../components/Icon";
 import BottomDrawer from "../../components/BottomDrawer";
 import FormContents from "../../components/FormContents";
 import ListManagementAttendanceItem from "../../components/listManagementAcctendanceItem";
-import { ListManagementContainer } from "../../components/listManagement.styles";
+
 import Navigation from "../../components/Navigation";
 
 const ListManagement = () => {
@@ -98,9 +98,9 @@ const ListManagement = () => {
   }, [data]);
 
   return (
-    <ListManagementContainer>
-      <section className="attendance-header">
-        <div className="attendance-img">
+    <section className="w-full relative">
+      <section className="w-full max-w-[393px] fixed top-0 box-border bg-white pt-[42px] pb-[12px] px-0">
+        <div className="attendance-img w-8 h-8 rounded-lg bg-[#D9D9D9] mb-3">
           {attendanceDetail.imageUrl ? (
             <img
               src={attendanceDetail.imageUrl}
@@ -112,12 +112,14 @@ const ListManagement = () => {
         </div>
 
         <section className="attendance-info">
-          <div className="name">{attendanceDetail.title}</div>
+          <div className="text-left text-[20px] text-[#222222] font-semibold ">
+            {attendanceDetail.title}
+          </div>
         </section>
       </section>
 
       {/* 출석부 명단 */}
-      <section className="attendance-list">
+      <section className="flex gap-3 flex-col pt-3 px-0 pb-[120px] mt-[125px]">
         {attendeeList && attendeeList.length > 0
           ? attendanceSummary &&
             attendeeList.map((item, index) => (
@@ -144,11 +146,15 @@ const ListManagement = () => {
         }
       />
       {/* 등록 버튼 */}
-      <Fab color="primary" aria-label="add" onClick={() => setIsAddOpen(true)}>
+      <div
+        className="w-12 h-12 fixed right-6 bottom-6 flex items-center justify-center rounded-3xl box-border bg-[#59996B] cursor-pointer"
+        aria-label="add"
+        onClick={() => setIsAddOpen(true)}
+      >
         <Icon icon={Icons.add} size={32} color={Colors.White} />
-      </Fab>
+      </div>
       <Navigation status={false} />
-    </ListManagementContainer>
+    </section>
   );
 };
 
