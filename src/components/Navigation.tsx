@@ -1,7 +1,6 @@
 import React, { SetStateAction } from "react";
 
 // Components
-import { Box, styled, Typography } from "@mui/material";
 
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -86,14 +85,25 @@ const Navigation = (props: Iprops) => {
   return (
     <React.Fragment>
       {status ? (
-        <BoxSTNavigationActivate>
-          <BoxSTCancel onClick={() => resetAllStatus()}>취소</BoxSTCancel>
-          <BoxSTConfirm onClick={onSaveAction}>저장</BoxSTConfirm>
-        </BoxSTNavigationActivate>
+        <div className="max-w-[359px] min-x-[330px] h-[60px] flex items-center justify-between fixed bottom-12 z-[9999] left-[50%] translate-x-[-50%]">
+          <button
+            className="w-[102px] h-[60px] rounded-[30px] bg-white text-[#59996B] text-base font-semibold flex justify-around items-center shadow-sm"
+            onClick={() => resetAllStatus()}
+          >
+            취소
+          </button>
+          <button
+            className="w-[247px] h-[60px] rounded-[30px] bg-[#59996B] text-white text-base font-semibold flex justify-around items-center shadow-sm"
+            onClick={onSaveAction}
+          >
+            저장
+          </button>
+        </div>
       ) : (
-        <BoxSTNavigation>
+        <nav className="min-w-[330px] max-w-[359px] h-[60px] bg-[#59996B] rounded-[30px] flex shadow-sm items-center justify-around fixed bottom-12 z-[9999] left-[50%] translate-x-[-50%]">
           {menuList(attendanceId).map((menu, index) => (
-            <BoxSTMenu
+            <div
+              className="flex flex-col items-center justify-around h-[60px] w-[60px]"
               key={menu.name}
               onClick={() =>
                 menu.name === "statistics" || menu.name === "settings"
@@ -104,24 +114,19 @@ const Navigation = (props: Iprops) => {
               {pathName === menu.name ? (
                 <img
                   src={"/images/icons/eclipse-icon.svg"}
-                  alt={""}
+                  alt={"eclipse img"}
                   width={60}
                   height={60}
                   style={{
                     position: "absolute",
                     zIndex: 0,
+                    height: 64,
+                    top: 0,
                   }}
+                  className="absolute z-0 h-[64px] top-0"
                 />
               ) : null}
-              <Box
-                sx={{
-                  position: "relative",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "7px",
-                }}
-              >
+              <div className="relative flex flex-col items-center gap-[7px]">
                 <img
                   key={index}
                   src={pathName === menu.name ? menu.iconActivate : menu.icon}
@@ -129,96 +134,14 @@ const Navigation = (props: Iprops) => {
                   width={19}
                   height={16.5}
                 />
-                <Typography fontSize={12} color={"white"}>
-                  {menu.label}
-                </Typography>
-              </Box>
-            </BoxSTMenu>
+                <p className="text-white text-xs">{menu.label}</p>
+              </div>
+            </div>
           ))}
-        </BoxSTNavigation>
+        </nav>
       )}
     </React.Fragment>
   );
 };
 
 export default Navigation;
-
-const BoxSTNavigation = styled(Box)(() => {
-  return {
-    minWidth: "330px",
-    maxWidth: "359px",
-    height: "60px",
-    backgroundColor: "#59996B",
-    borderRadius: "30px",
-    display: "flex",
-    boxShadow: "0px 2px 10px 4px rgba(0, 0, 0, 0.25)",
-    alignItems: "center",
-    justifyContent: "space-around",
-    position: "fixed",
-    bottom: "48px",
-    zIndex: "9999",
-    left: "50%",
-    transform: "translateX(-50%)",
-  };
-});
-
-const BoxSTMenu = styled(Box)(() => {
-  return {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "space-around",
-    height: "60px",
-    width: "60px",
-  };
-});
-
-const BoxSTNavigationActivate = styled(Box)(() => {
-  return {
-    minWidth: "330px",
-    maxWidth: "359px",
-    height: "60px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    position: "fixed",
-    bottom: "48px",
-    zIndex: "9999",
-    left: "50%",
-    transform: "translateX(-50%)",
-  };
-});
-
-const BoxSTConfirm = styled(Box)(() => {
-  return {
-    width: "247px",
-    height: "60px",
-    borderRadius: "30px",
-    backgroundColor: "#59996B",
-    color: "white",
-    fontSize: "16px",
-    fontWeight: 600,
-    lineHeight: "21.79px",
-    display: "flex",
-    justifyContent: "space-around",
-    alignItems: "center",
-    boxShadow: "0px 2px 10px 4px rgba(0, 0, 0, 0.25)",
-  };
-});
-
-const BoxSTCancel = styled(Box)(() => {
-  return {
-    width: "102px",
-    height: "60px",
-    borderRadius: "30px",
-    color: "#59996B",
-    background: "white",
-    fontSize: "16px",
-    fontWeight: 600,
-    lineHeight: "21.79px",
-    display: "flex",
-    justifyContent: "space-around",
-    alignItems: "center",
-    boxShadow: "0px 2px 10px 4px rgba(0, 0, 0, 0.25)",
-  };
-});
