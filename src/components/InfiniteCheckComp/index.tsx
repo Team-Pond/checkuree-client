@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import styled from "@emotion/styled";
 
 export default function InfiniteCheckComp(props: {
   isIndicator?: boolean;
@@ -41,17 +40,14 @@ export default function InfiniteCheckComp(props: {
   }, [callNextPage, initialDataLoading, hasNextPage]);
 
   return (
-    <Styles.MoreLoadingWrapper ref={infiniteRef} height={height}>
+    <div
+      className="w-full flex items-center"
+      ref={infiniteRef}
+      style={{
+        height,
+      }}
+    >
       {isInfinityLoading ? <div>...loading</div> : null}
-    </Styles.MoreLoadingWrapper>
+    </div>
   );
 }
-
-const Styles = {
-  MoreLoadingWrapper: styled.div<{ height: string }>`
-    width: 100%;
-    height: ${({ height }) => height};
-    display: flex;
-    align-items: center;
-  `,
-};

@@ -3,9 +3,7 @@ import { Colors } from "../styles/globalStyles";
 
 export const ListManagementContainer = styled.section`
   width: 100%;
-
   position: relative;
-
   & > .attendance-header {
     width: 393px;
     position: fixed;

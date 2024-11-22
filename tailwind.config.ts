@@ -1,7 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 
-const colors = {
-  ...defaultColors,
+const colors: any = {
   white: "#FFFFFF",
   black: "#000000",
   red: {
@@ -165,7 +164,7 @@ const colors = {
 };
 
 export default {
-  content: [],
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     colors,
     extend: {},
