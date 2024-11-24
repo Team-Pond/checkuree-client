@@ -168,7 +168,10 @@ const FormContents = ({
   }, [data]);
 
   return (
-    <FormContentsContainer gender={watch("gender")}>
+    <section
+      className="h-[786px] overflow-auto py-[30px] flex justify-center"
+      gender={watch("gender")}
+    >
       {/* 전체 스케쥴보기 모달은 수정일때만 노출 */}
       {attendeeId && (
         <Modal
@@ -184,17 +187,21 @@ const FormContents = ({
         </Modal>
       )}
 
-      <form id="create-attendees" onSubmit={onSubmit}>
+      <form
+        className="w-full flex flex-col gap-6 max-w-[330px]"
+        id="create-attendees"
+        onSubmit={onSubmit}
+      >
         <div className="form-row">
-          <div className="label">이름</div>
-          <div className="value">
+          <div className="text-sm font-medium mb-2">이름</div>
+          <div className="z-[1]">
             <TextField {...register("name")} />
           </div>
         </div>
 
         <div className="form-row">
-          <div className="label">성별</div>
-          <div className="value">
+          <div className="text-sm font-medium mb-2">성별</div>
+          <div className="z-[1]">
             <FormControl>
               <RadioGroup
                 defaultValue="MALE"
@@ -260,13 +267,13 @@ const FormContents = ({
           <div className="label">생년월일</div>
           <div className="value">
             <div
-              className="calendar-input"
+              className="w-full h-10 py-2 px-[13px] border border-[#D5D5D5] rounded-lg box-border"
               onClick={() => setShowCalendar(true)}
             >
               {watch("birth") ? (
                 dateFormat(new Date(watch("birth")), "slash")
               ) : (
-                <span>YYYY/MM/DD</span>
+                <span className="text-[#C9C9C9]">YYYY/MM/DD</span>
               )}
             </div>
             <Modal open={showCalendar} onClose={() => setShowCalendar(false)}>
@@ -398,7 +405,7 @@ const FormContents = ({
           저장
         </button>
       </section>
-    </FormContentsContainer>
+    </section>
   );
 };
 
