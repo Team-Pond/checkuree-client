@@ -10,7 +10,6 @@ import _ from "lodash";
 import { useQuery } from "@tanstack/react-query";
 
 // Components
-import { Fab } from "@mui/material";
 
 // Types
 import { useParams } from "react-router-dom";
@@ -115,6 +114,7 @@ const ListManagement = () => {
           <div className="text-left text-[20px] text-[#222222] font-semibold ">
             {attendanceDetail.title}
           </div>
+          ``
         </section>
       </section>
 
@@ -133,6 +133,7 @@ const ListManagement = () => {
       </section>
 
       {/* 등록/변경 모달 */}
+
       <BottomDrawer
         open={isAddOpen || isUpdateOpen.length > 0}
         onClose={onCloseModal}
@@ -146,6 +147,7 @@ const ListManagement = () => {
         }
       />
       {/* 등록 버튼 */}
+
       <div
         className="w-12 h-12 fixed right-6 bottom-6 flex items-center justify-center rounded-3xl box-border bg-[#59996B] cursor-pointer"
         aria-label="add"
@@ -153,7 +155,7 @@ const ListManagement = () => {
       >
         <Icon icon={Icons.add} size={32} color={Colors.White} />
       </div>
-      <Navigation status={false} />
+      {!(isAddOpen || isUpdateOpen.length > 0) && <Navigation status={false} />}
     </section>
   );
 };
