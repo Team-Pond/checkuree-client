@@ -24,6 +24,7 @@ import { twMerge } from "tailwind-merge";
 // Utils
 
 // Styles
+import "./FormContents.css";
 
 // Types
 
@@ -162,9 +163,28 @@ const FormContents = ({
     }
   }, [data]);
 
+  const tileClassName = ({ date, view }: { date: Date; view: string }) => {
+    if (view === "month") {
+      // 월간 뷰에서만 스타일 적용
+      const today = new Date();
+      if (
+        date.getFullYear() === today.getFullYear() &&
+        date.getMonth() === today.getMonth() &&
+        date.getDate() === today.getDate()
+      ) {
+        return "highlight"; // 현재 날짜에 'highlight' 클래스 추가
+      }
+      const day = date.getDay(); // 0: 일요일, 6: 토요일
+      if (day === 0) return "sunday"; // 일요일
+      if (day === 6) return "saturday"; // 토요일
+    }
+
+    return null;
+  };
+
   return (
     <section
-      className="h-[786px] overflow-auto py-[30px] flex justify-center"
+      className="h-[786px] overflow-auto "
       // gender={watch("gender")}
     >
       {/* 전체 스케쥴보기 모달은 수정일때만 노출 */}
@@ -183,7 +203,7 @@ const FormContents = ({
       )}
 
       <form
-        className="w-full flex flex-col gap-6 max-w-[330px]"
+        className="w-full flex flex-col gap-6  pt-8 pl-[27px] pb-9 pr-[27px] mb-16"
         id="create-attendees"
         onSubmit={onSubmit}
       >
@@ -274,6 +294,9 @@ const FormContents = ({
             <Modal open={showCalendar} onClose={() => setShowCalendar(false)}>
               <div className="fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
                 <Calendar
+                  className={".react-calendar__month-view__weekdays"}
+                  formatDay={(_, date: any) => date.getDate()}
+                  tileClassName={tileClassName}
                   value={watch("birth")}
                   onChange={(date) => {
                     if (date && date instanceof Date) {
