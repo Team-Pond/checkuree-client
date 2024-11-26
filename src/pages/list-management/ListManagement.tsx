@@ -27,6 +27,7 @@ import FormContents from "../../components/FormContents";
 import ListManagementAttendanceItem from "../../components/listManagementAcctendanceItem";
 
 import Navigation from "../../components/Navigation";
+import PageContainer from "../../components/PageContainer";
 
 const ListManagement = () => {
   const { id: attendanceId } = useParams();
@@ -97,8 +98,8 @@ const ListManagement = () => {
   }, [data]);
 
   return (
-    <section className="w-full relative">
-      <section className="w-full max-w-[393px] fixed top-0 box-border bg-white pt-[42px] pb-[12px] px-0">
+    <PageContainer>
+      <section className="w-full max-w-[339px] sticky left-0 right-0 top-0 bg-white pt-[42px] pb-[12px] px-0">
         <div className="attendance-img w-8 h-8 rounded-lg bg-[#D9D9D9] mb-3">
           {attendanceDetail.imageUrl ? (
             <img
@@ -114,12 +115,11 @@ const ListManagement = () => {
           <div className="text-left text-[20px] text-[#222222] font-semibold ">
             {attendanceDetail.title}
           </div>
-          ``
         </section>
       </section>
 
       {/* 출석부 명단 */}
-      <section className="flex gap-3 flex-col pt-3 px-0 pb-[120px] mt-[125px]">
+      <section className="flex gap-3 flex-col pt-3 px-0 pb-[120px] w-full max-w-[339px]">
         {attendeeList && attendeeList.length > 0
           ? attendanceSummary &&
             attendeeList.map((item, index) => (
@@ -156,7 +156,7 @@ const ListManagement = () => {
         <Icon icon={Icons.add} size={32} color={Colors.White} />
       </div>
       {!(isAddOpen || isUpdateOpen.length > 0) && <Navigation status={false} />}
-    </section>
+    </PageContainer>
   );
 };
 

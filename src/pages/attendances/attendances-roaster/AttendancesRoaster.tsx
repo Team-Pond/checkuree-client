@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import "dayjs/locale/ko";
 
 // Api
 import {
@@ -40,6 +41,7 @@ import {
   CreateRecordsRequest,
 } from "../../../api/schema";
 import Navigation from "../../../components/Navigation";
+import PageContainer from "../../../components/PageContainer";
 
 export type HandleListItemType = (
   index: number,
@@ -288,8 +290,8 @@ const AttendancesRoaster = () => {
   }, [attendance]);
 
   return (
-    <section className="max-w-[375px] w-full flex justify-center">
-      <header className="fixed top-0 bg-white pad pt-[42px] pb-[12px] px-0">
+    <PageContainer>
+      <header className="sticky top-0 left-0 right-0 bg-white pt-[42px] pb-[12px] px-0">
         <div className="min-w-[339px] w-full box-border">
           <div className="h-8 mb-3 flex items-center">
             {detailData?.imageUrl && (
@@ -340,7 +342,6 @@ const AttendancesRoaster = () => {
                 onClick={() => handlePrevDay()}
               />
               <DatePicker
-                locale={dayjs.locale("ko")}
                 selected={new Date(selectedDate)}
                 onChange={(date) => {
                   if (date) {
@@ -377,7 +378,7 @@ const AttendancesRoaster = () => {
       </header>
 
       {/* 출석부 명단 */}
-      <section className="max-w-[375px] flex gap-6 flex-col pt-[12px] pb-[120px] px-0 mt-[146px]">
+      <section className="max-w-[375px] flex gap-6 flex-col pt-[12px] pb-[120px] px-0">
         {Object.keys(attendeeList).map((time) => {
           return (
             <div className="attendance-list-by-time" key={`time__${time}`}>
@@ -418,7 +419,7 @@ const AttendancesRoaster = () => {
         setAttendeeList={setAttendeeList}
         onSaveAction={onSaveAction}
       />
-    </section>
+    </PageContainer>
   );
 };
 

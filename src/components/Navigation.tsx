@@ -85,7 +85,7 @@ const Navigation = (props: Iprops) => {
   return (
     <React.Fragment>
       {status ? (
-        <div className="max-w-[359px] min-x-[330px] h-[60px] flex items-center justify-between fixed bottom-12 z-[9999] left-[50%] translate-x-[-50%]">
+        <div className="max-w-[359px] min-x-[330px] h-[60px] flex items-center justify-between sticky left-0 right-0 bottom-12 z-[9999]">
           <button
             className="w-[102px] h-[60px] rounded-[30px] bg-white text-[#59996B] text-base font-semibold flex justify-around items-center shadow-sm"
             onClick={() => resetAllStatus()}
@@ -100,7 +100,7 @@ const Navigation = (props: Iprops) => {
           </button>
         </div>
       ) : (
-        <nav className="min-w-[330px] max-w-[359px] h-[60px] bg-[#59996B] rounded-[30px] flex shadow-sm items-center justify-around fixed bottom-12 z-[9999] left-[50%] translate-x-[-50%]">
+        <nav className="min-w-[330px] max-w-[359px] h-[60px] bg-[#59996B] rounded-[30px] flex shadow-sm items-center justify-around sticky left-0 right-0 bottom-12 z-[9999]">
           {menuList(attendanceId).map((menu, index) => (
             <div
               className="flex flex-col items-center justify-around h-[60px] w-[60px]"

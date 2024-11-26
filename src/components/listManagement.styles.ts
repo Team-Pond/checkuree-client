@@ -312,27 +312,27 @@ export const FormContentsContainer = styled.section<{ gender: string }>`
 `;
 
 export const CalendarContainer = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  .calendar-container {
+    @apply p-4 bg-white rounded-lg shadow-md;
+  }
 
-  & .react-calendar {
-    border-radius: 8px;
+  .react-calendar {
+    @apply border-none rounded-lg text-sm;
+  }
 
-    & .react-calendar__month-view__days__day--weekend {
-      color: ${Colors.WarningRed};
-    }
+  .react-calendar__tile {
+    @apply p-2 text-center transition-all duration-200 ease-in-out cursor-pointer;
+  }
 
-    & .react-calendar__tile--now {
-      background: none;
-    }
+  .react-calendar__tile--active {
+    @apply font-semibold bg-green-500 text-white rounded-lg hover:bg-green-600 focus:bg-green-600;
+  }
 
-    & .react-calendar__tile--active,
-    .react-calendar__tile--active:enabled:hover,
-    .react-calendar__tile--active:enabled:focus {
-      font-weight: 600;
-      background: ${Colors.CheckureeGreen};
-    }
+  .react-calendar__tile--now {
+    @apply bg-transparent text-gray-800;
+  }
+
+  .react-calendar__month-view__days__day--weekend {
+    @apply text-red-500;
   }
 `;
