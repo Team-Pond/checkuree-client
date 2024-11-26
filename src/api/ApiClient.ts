@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import Cookies from "js-cookie";
 import { setTokens } from "../lib/auth";
+
 const ApiClient: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_ROOT,
   headers: {
@@ -26,6 +27,7 @@ ApiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       console.error("인증되지 않았습니다. - 401 STATUS");
+
       return refresh(error.config);
     }
     return Promise.reject(error);
@@ -44,8 +46,15 @@ function getRefreshToken(): string | undefined {
   return Cookies.get(import.meta.env.VITE_REFRESH_TOKEN);
 }
 
+let isRefreshing = false;
+
 async function refresh(config: AxiosRequestConfig) {
   const refreshToken = getRefreshToken();
+  if (isRefreshing) {
+    return Promise.reject(new Error("이미 토큰 갱신 중"));
+  }
+
+  isRefreshing = true;
   if (!!refreshToken) {
     try {
       const refreshResult = await axios.request({
@@ -57,6 +66,7 @@ async function refresh(config: AxiosRequestConfig) {
         },
       });
 
+      console.log(refreshResult);
       setTokens({
         accessToken: refreshResult.data.data!.accessToken,
         refreshToken: refreshResult.data.data!.refreshToken,
@@ -71,7 +81,16 @@ async function refresh(config: AxiosRequestConfig) {
         },
       });
     } catch (e) {
-      console.error(e);
+      isRefreshing = false;
+      Cookies.remove(import.meta.env.VITE_ACCESS_TOKEN);
+      Cookies.remove(import.meta.env.VITE_REFRESH_TOKEN);
+      console.error("토큰 갱신 실패:", e);
+      window.location.href = "/auth/signin";
     }
+  } else {
+    isRefreshing = false;
+    Cookies.remove(import.meta.env.VITE_ACCESS_TOKEN);
+    Cookies.remove(import.meta.env.VITE_REFRESH_TOKEN);
+    window.location.href = "/auth/signin";
   }
 }
