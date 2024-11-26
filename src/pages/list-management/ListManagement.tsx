@@ -114,7 +114,6 @@ const ListManagement = () => {
           <div className="text-left text-[20px] text-[#222222] font-semibold ">
             {attendanceDetail.title}
           </div>
-          ``
         </section>
       </section>
 
