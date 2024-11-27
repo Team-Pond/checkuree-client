@@ -26,9 +26,12 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" key={"/"} element={<Navigate to={"/auth/signin"} />} />
+        {/* / 경로 시 로그인 페이지로 이동 */}
+        <Route path="/" element={<Navigate to={"/auth/signin"} />} />
         <Route path="/auth/signin" element={<SignIn />} />
         <Route path="/auth/signup" element={<SignUp />} />
+
+        {/* 인증 처리 */}
         {routes.map((route) => {
           return (
             <Route
