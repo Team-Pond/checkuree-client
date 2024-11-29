@@ -67,7 +67,7 @@ const FormContents = ({
     isSuccess,
     createAttendee,
     updateAttendee,
-    deleteAttendees,
+
     generateTimeOptions,
   } = useFormContents({
     watch,
