@@ -1,17 +1,5 @@
 import ApiClient from "./ApiClient";
-import { LoginDataRequest, UseApiProps } from "./schema";
-
-// Singleton BaseApi
-export const useFetch = async ({ url, method, data }: UseApiProps) => {
-  const response = await ApiClient.request({
-    url,
-    method,
-    data,
-    baseURL: import.meta.env.VITE_VITE_API_ROOT,
-  });
-
-  return response.data;
-};
+import { LoginDataRequest } from "./schema";
 
 export const userLogin = async (request: LoginDataRequest) => {
   const response = await ApiClient.request({

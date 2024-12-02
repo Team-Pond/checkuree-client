@@ -5,20 +5,7 @@ import {
   CreateRecordsRequest,
   CreateSchedulesRequest,
   DeleteAttendeesRequest,
-  UseApiProps,
 } from "./schema";
-
-// Singleton BaseApi
-export const useFetch = async ({ url, method, data }: UseApiProps) => {
-  const response = await ApiClient.request({
-    url,
-    method,
-    data,
-    baseURL: import.meta.env.VITE_VITE_API_ROOT,
-  });
-
-  return response.data;
-};
 
 export const getAttendanceList = async () => {
   const response = await ApiClient.request({
