@@ -2,9 +2,9 @@ import styled from "@emotion/styled";
 import { Colors } from "../globalStyles";
 
 export const AttendanceIdContainer = styled.section`
-  width: 393px;
-  padding: 0 27px;
-
+  width: 375px;
+  display: flex;
+  justify-content: center;
   & > .attendance-header {
     position: fixed;
     top: 0;
@@ -134,6 +134,7 @@ export const AttendanceIdContainer = styled.section`
 
     & > .attendance-list-by-time {
       & > .attendance-time {
+        text-align: left;
         font-size: 15px;
         font-weight: 600;
         margin-bottom: 4px;

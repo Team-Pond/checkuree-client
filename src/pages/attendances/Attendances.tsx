@@ -1,19 +1,12 @@
-import "dayjs/locale/ko"; // 한국어 locale 설정
-
-import { Box, Fab, Typography, styled } from "@mui/material";
 import React, { useState } from "react";
-
 import dayjs from "dayjs";
 import { useQuery } from "@tanstack/react-query";
-
 import { useNavigate } from "react-router-dom";
 import useUser from "../../lib/hooks/useUser";
 import { DayOfWeek, sortWeekdays } from "../../utils";
 import BottomDrawer from "../../components/BottomDrawer";
 import AttendanceCreateForm from "../../components/AttendanceCreate";
 import { getAttendanceList } from "../../api/AttendanceApiClient";
-
-dayjs.locale("ko");
 
 interface Attendance {
   attendeeCount: number;
@@ -77,71 +70,61 @@ const Attendances: React.FC = () => {
       return response;
     },
   });
-  console.log(attendancyList);
   return (
-    <ContainerST>
+    <section className="flex justify-center">
       {attendancyList ? (
-        <BoxSTAttendanceWrapper>
-          <Box
-            sx={{
-              textAlign: "left",
-            }}
-          >
-            <Typography fontSize={14} lineHeight={"19.07px"} color={"#797979"}>
+        <div className="flex flex-col gap-[10px] flex-wrap">
+          <div className="text-left">
+            <p className="text-sm leading-[19px] text-[#797979]">
               {todayFormat}
-            </Typography>
-            <Typography fontSize={20} lineHeight={"27.24px"} fontWeight={600}>
+            </p>
+            <p className="text-[20px] leading-[27px] font-semibold">
               {user?.name || ""}님, 안녕하세요.
-            </Typography>
-          </Box>
-          <GridST>
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-5 px-[9px]">
             {attendancyList?.items.map((item: AttendanceId) => {
               return (
-                <BoxSTAttendance
+                <div
                   onClick={() => navigate(`/attendances/${item.attendanceId}`)}
                   key={`attendance-item__${item.attendanceId}`}
+                  className="w-[150px] h-[185px] border border-[green] rounded-lg flex gap-3 cursor-pointer flex-col items-center p-2"
                 >
                   <img
                     src={
                       item.attendance.imageUrl || "images/sckeleton-image.svg"
                     }
-                    width={142}
-                    height={102}
                     alt="스켈레톤 이미지"
-                    style={{
-                      objectFit: "cover",
-                      // objectPosition:
-                      //     '0px -10px',
-                    }}
+                    className="object-cover max-w-140 w-full h-[90px]"
+                    style={
+                      {
+                        // objectPosition:
+                        //     '0px -10px',
+                      }
+                    }
                   />
-                  <BoxSTAttendanceFooter>
-                    <Box
-                      sx={{
-                        textAlign: "left",
-                      }}
-                    >
-                      <TypoSTTitle>{item.attendance.title}</TypoSTTitle>
-                      <TypoSTDescription>
+                  <div className="flex flex-col gap-[3px] w-full">
+                    <div className="text-left">
+                      <p className="text-[16px] font-semibold leading-[21px] overflow-hidden whitespace-nowrap text-ellipsis">
+                        {item.attendance.title}
+                      </p>
+                      <p className="text-sm font-medium text-[#797979] overflow-hidden whitespace-nowrap text-ellipsis">
                         {item.attendance.description || "출석부 설명입니다."}
-                      </TypoSTDescription>
-                    </Box>
-                    <Box
-                      display={"flex"}
-                      alignItems={"center"}
-                      justifyContent={"space-between"}
-                    >
-                      <TypoSTDay>
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-medium text-[#797979]">
                         {mapDaysToKorean(item.attendance.days)}
-                      </TypoSTDay>
-                      <TypoSTAttendeCount>
+                      </p>
+                      <p className="text-sm font-medium border border-[#F0FFF4]">
                         {item.attendance.attendeeCount}
-                      </TypoSTAttendeCount>
-                    </Box>
-                  </BoxSTAttendanceFooter>
-                </BoxSTAttendance>
+                      </p>
+                    </div>
+                  </div>
+                </div>
               );
             })}
-            <FabSTbutton>
+            <div className="fixed bottom-6 right-6 bg-[#59996B] rounded-full">
               <img
                 src={"/images/icons/add-icon.svg"}
                 alt=""
@@ -149,9 +132,9 @@ const Attendances: React.FC = () => {
                 height={48}
                 onClick={() => setIsCreate(true)}
               />
-            </FabSTbutton>
-          </GridST>
-        </BoxSTAttendanceWrapper>
+            </div>
+          </div>
+        </div>
       ) : (
         <>...Loading</>
       )}
@@ -165,108 +148,8 @@ const Attendances: React.FC = () => {
           />
         }
       />
-    </ContainerST>
+    </section>
   );
 };
 
 export default Attendances;
-
-const ContainerST = styled(Box)(() => {
-  return {
-    display: "flex",
-    justifyContent: "center",
-  };
-});
-
-const GridST = styled(Box)(() => {
-  return {
-    display: "grid",
-    gridTemplateColumns: "repeat(2,1fr)",
-    gap: "20px",
-    padding: "0px 9px",
-  };
-});
-
-const BoxSTAttendanceWrapper = styled(Box)(() => {
-  return {
-    display: "flex",
-    gap: "10px",
-    flexDirection: "column",
-    flexWrap: "wrap",
-  };
-});
-
-const BoxSTAttendance = styled(Box)(() => {
-  return {
-    width: "150px",
-    height: "185px",
-    border: "1px solid green",
-    borderRadius: "8px",
-    display: "flex",
-    gap: "12px",
-    cursor: "pointer",
-    flexDirection: "column",
-    alignItems: "center",
-    padding: "4px",
-  };
-});
-
-const BoxSTAttendanceFooter = styled(Box)(() => {
-  return {
-    display: "flex",
-    flexDirection: "column",
-    gap: "3px",
-  };
-});
-
-const TypoSTAttendeCount = styled(Typography)(() => {
-  return {
-    fontSize: "12px",
-    fontWeight: 500,
-    alignItems: "center",
-    justifyContent: "space-between",
-    border: "1px solid #F0FFF4",
-    lineHeight: "16.34px",
-  };
-});
-
-const TypoSTTitle = styled(Typography)(() => {
-  return {
-    fontSize: "16px",
-    fontWeight: 600,
-    lineHeight: "21.79px",
-    overflow: "hidden",
-    whiteSpace: "nowrap",
-    textOverflow: "ellipsis",
-  };
-});
-
-const TypoSTDescription = styled(Typography)(() => {
-  return {
-    fontSize: "14px",
-    fontWeight: 500,
-    color: "#797979",
-    lineHeight: "19.07px",
-    overflow: "hidden",
-    whiteSpace: "nowrap",
-    textOverflow: "ellipsis",
-  };
-});
-
-const TypoSTDay = styled(Typography)(() => {
-  return {
-    fontSize: "12px",
-    fontWeight: 500,
-    color: "#797979",
-    lineHeight: "16.34px",
-  };
-});
-
-const FabSTbutton = styled(Fab)(() => {
-  return {
-    position: "fixed",
-    bottom: 24,
-    right: 24,
-    background: "#59996B",
-  };
-});
