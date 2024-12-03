@@ -1,50 +1,37 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+# 🌐 Links
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> **Service** : (작업중)
 
-## Expanding the ESLint configuration
+# ⚙️ How to Start
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 0️⃣ Prerequisites
 
-- Configure the top-level `parserOptions` property like this:
+- [Node.js 22.9.0](https://nodejs.org/en/download/package-manager/)
+- [npm 10.8.3](https://www.npmjs.com/package/npm/v/10.7.0)
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 1️⃣ Installation
+
+### Front-End
+
+```bash
+$ npm install
+$ npm run dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+# ⚒️ Stacks
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Front-End
+![React.js](https://img.shields.io/badge/React.js-000000?style=for-the-badge&logo=React.js&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=white)
+![TailWind CSS](https://img.shields.io/badge/Tailwind_CSS-grey?style=for-the-badge&logo=tailwind-css&logoColor=38B2AC)
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+
+## 1. 프로젝트 구조 및 히스토리
+현재 작업된 기준에 대한 대략적 설명입니다.
+
+- MUI에서 Tailwind CSS로 마이그레이션
+    디자인 일관성 및 성능 향상: Tailwind CSS 도입으로 가벼운 스타일링 구현
+    개발 생산성 증가: 유틸리티 클래스 기반 스타일링으로 CSS 작성 시간 단축
