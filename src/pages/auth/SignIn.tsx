@@ -9,7 +9,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import { setTokens } from "../../lib/auth";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { userLogin } from "../../api/AttendanceApiClient";
+import { userLogin } from "../../api/AuthApiClient";
 
 export interface LoginDataType {
   username: string;
