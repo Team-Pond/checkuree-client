@@ -5,7 +5,6 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import _ from "lodash";
 import { AttendeeData } from "../api/schema";
 import { compareDays, ScheduleType } from "../utils";
-import { AttendanceItemContainer } from "./listManagement.styles";
 import Icon from "./Icon";
 import { Colors, Icons } from "../styles/globalStyles";
 
@@ -67,28 +66,32 @@ const ListManagementAttendanceItem = (props: PropsType) => {
   }, [item.schedules]);
 
   return (
-    <AttendanceItemContainer key={`attendance-item__${item.id}`}>
+    <div key={`attendance-item__${item.id}`}>
       <div
-        className={"attendance-item__container"}
+        className={
+          "w-full h-[58px] pt-[9px] px-[18px] pb-[10px] border border-[#59996B] rounded-lg box-border bg-white"
+        }
         onClick={() => {
           setIsUpdateOpen(item.id);
         }}
       >
-        <div className="name">{item.name}</div>
+        <div className="flex gap-1 items-center font-medium">{item.name}</div>
 
-        <div className={"bottom-container"}>
-          <div className={"days"}>{attendanceDay}</div>
-          <div className={"status-container"}>
+        <div className={"flex items-center justify-between"}>
+          <div className={"text-sm font-medium text-[#8E8E8E]"}>
+            {attendanceDay}
+          </div>
+          <div className={"flex gap-1"}>
             {statusIcons.map((item) => (
-              <div className="status" key={item.icon}>
+              <div className="flex gap-[2px] items-center" key={item.icon}>
                 <Icon icon={Icons[item.icon]} color={Colors.Gray80} size={16} />
-                <div className="count">{item.count}</div>
+                <div className="leading-[14px]">{item.count}</div>
               </div>
             ))}
           </div>
         </div>
       </div>
-    </AttendanceItemContainer>
+    </div>
   );
 };
 

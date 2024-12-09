@@ -10,7 +10,6 @@ import _ from "lodash";
 import { useQuery } from "@tanstack/react-query";
 
 // Components
-import { Fab } from "@mui/material";
 
 // Types
 import { useParams } from "react-router-dom";
@@ -26,8 +25,9 @@ import Icon from "../../components/Icon";
 import BottomDrawer from "../../components/BottomDrawer";
 import FormContents from "../../components/FormContents";
 import ListManagementAttendanceItem from "../../components/listManagementAcctendanceItem";
-import { ListManagementContainer } from "../../components/listManagement.styles";
+
 import Navigation from "../../components/Navigation";
+import PageContainer from "../../components/PageContainer";
 
 const ListManagement = () => {
   const { id: attendanceId } = useParams();
@@ -98,9 +98,9 @@ const ListManagement = () => {
   }, [data]);
 
   return (
-    <ListManagementContainer>
-      <section className="attendance-header">
-        <div className="attendance-img">
+    <PageContainer>
+      <section className="w-full max-w-[339px] sticky left-0 right-0 top-0 bg-white pt-[42px] pb-[12px] px-0">
+        <div className="attendance-img w-8 h-8 rounded-lg bg-[#D9D9D9] mb-3">
           {attendanceDetail.imageUrl ? (
             <img
               src={attendanceDetail.imageUrl}
@@ -112,12 +112,14 @@ const ListManagement = () => {
         </div>
 
         <section className="attendance-info">
-          <div className="name">{attendanceDetail.title}</div>
+          <div className="text-left text-[20px] text-[#222222] font-semibold ">
+            {attendanceDetail.title}
+          </div>
         </section>
       </section>
 
       {/* 출석부 명단 */}
-      <section className="attendance-list">
+      <section className="flex gap-3 flex-col pt-3 px-0 pb-[120px] w-full max-w-[339px]">
         {attendeeList && attendeeList.length > 0
           ? attendanceSummary &&
             attendeeList.map((item, index) => (
@@ -131,6 +133,7 @@ const ListManagement = () => {
       </section>
 
       {/* 등록/변경 모달 */}
+
       <BottomDrawer
         open={isAddOpen || isUpdateOpen.length > 0}
         onClose={onCloseModal}
@@ -144,11 +147,16 @@ const ListManagement = () => {
         }
       />
       {/* 등록 버튼 */}
-      <Fab color="primary" aria-label="add" onClick={() => setIsAddOpen(true)}>
+
+      <div
+        className="w-12 h-12 fixed right-6 bottom-6 flex items-center justify-center rounded-3xl box-border bg-[#59996B] cursor-pointer"
+        aria-label="add"
+        onClick={() => setIsAddOpen(true)}
+      >
         <Icon icon={Icons.add} size={32} color={Colors.White} />
-      </Fab>
-      <Navigation status={false} />
-    </ListManagementContainer>
+      </div>
+      {!(isAddOpen || isUpdateOpen.length > 0) && <Navigation status={false} />}
+    </PageContainer>
   );
 };
 

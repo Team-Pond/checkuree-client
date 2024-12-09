@@ -31,7 +31,6 @@ export function ScheduleModalContent({
           SUNDAY: [],
         };
 
-        console.log(response);
         response.items.forEach((item: any) => {
           parsedTimeList[item.day] = parsedTimeList[item.day].concat(item.time);
         });

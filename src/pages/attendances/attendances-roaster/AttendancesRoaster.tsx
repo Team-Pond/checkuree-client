@@ -3,20 +3,15 @@ import { useEffect, useState } from "react";
 // Next
 import { useNavigate, useParams } from "react-router-dom";
 
-import "dayjs/locale/ko";
-
 // Utils
 import _ from "lodash";
 import dayjs from "dayjs";
-import "dayjs/locale/ko";
-dayjs.locale("ko");
 
 // Calendar
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
-
-// Styles
+import "dayjs/locale/ko";
 
 // Api
 import {
@@ -32,7 +27,6 @@ import { dateFormat } from "../../../utils";
 import { Colors, Icons } from "../../../styles/globalStyles";
 import Icon from "../../../components/Icon";
 import InfiniteCheckComp from "../../../components/InfiniteCheckComp";
-import { AttendanceIdContainer } from "../../../styles/app/attendancesId.styles";
 import AttendanceItem from "../../../components/AttendanceItem";
 import {
   createRecords,
@@ -47,6 +41,7 @@ import {
   CreateRecordsRequest,
 } from "../../../api/schema";
 import Navigation from "../../../components/Navigation";
+import PageContainer from "../../../components/PageContainer";
 
 export type HandleListItemType = (
   index: number,
@@ -170,8 +165,6 @@ const AttendancesRoaster = () => {
     },
   });
 
-  console.log(detailData);
-
   // 출석기록 생성 및 수정
   const { mutate: createRecordsMutation } = useMutation({
     mutationKey: ["records"],
@@ -292,25 +285,22 @@ const AttendancesRoaster = () => {
       const attendeeLists = attendance.pages.reduce((acc, obj) => {
         return { ...acc, ...obj };
       }, {});
-
       setAttendeeList(attendeeLists);
     }
   }, [attendance]);
 
   return (
-    <AttendanceIdContainer>
-      <section className="attendance-header">
-        <div className="attendance-header-wrapper">
-          <div className="attendance-img">
+    <PageContainer>
+      <header className="sticky top-0 left-0 right-0 bg-white pt-[42px] pb-[12px] px-0">
+        <div className="min-w-[339px] w-full box-border">
+          <div className="h-8 mb-3 flex items-center">
             {detailData?.imageUrl && (
               <img
                 src={detailData.imageUrl}
                 alt="attendance-img"
+                className=""
                 width={32}
                 height={32}
-                style={{
-                  cursor: "pointer",
-                }}
                 onClick={() => navigate("/attendances")}
               />
             )}
@@ -320,12 +310,12 @@ const AttendancesRoaster = () => {
             </div>
           </div>
 
-          <section className="attendance-info">
-            <section className="attendance-status-container">
+          <section className="pl-[5px] pr-[5px] flex justify-between">
+            <section className="flex gap-1">
               {statusIcons.map((item) => {
                 return (
                   <div
-                    className="status"
+                    className="flex gap-[2px] items-center"
                     key={`attendance-status__${item.icon}`}
                   >
                     <Icon
@@ -333,12 +323,14 @@ const AttendancesRoaster = () => {
                       color={Colors.Gray80}
                       size={16}
                     />
-                    <div className="count">{item.count || 0}</div>
+                    <div className="text-xs font-medium text-[#8E8E8E]">
+                      {item.count || 0}
+                    </div>
                   </div>
                 );
               })}
             </section>
-            <div className="date-box">
+            <div className="flex items-center">
               <img
                 src={"/images/icons/arrow-left-icon.svg"}
                 alt=""
@@ -350,7 +342,6 @@ const AttendancesRoaster = () => {
                 onClick={() => handlePrevDay()}
               />
               <DatePicker
-                locale={dayjs.locale("ko")}
                 selected={new Date(selectedDate)}
                 onChange={(date) => {
                   if (date) {
@@ -360,10 +351,14 @@ const AttendancesRoaster = () => {
                   }
                 }}
                 customInput={
-                  <div className="date-container">
-                    <div className="date">{selectedDate.split("-")[1]}</div>
-                    <div className="date">{selectedDate.split("-")[2]}</div>
-                    <div className="date">
+                  <div className="w-[71px] h-[23px] flex items-center justify-evenly rounded box-border bg-[D9D9D9] z-[1000]">
+                    <div className="w-[21px] h-[19px] rounded-sm box-border text-sm text-center bg-white">
+                      {selectedDate.split("-")[1]}
+                    </div>
+                    <div className="w-[21px] h-[19px] rounded-sm box-border text-sm text-center bg-white">
+                      {selectedDate.split("-")[2]}
+                    </div>
+                    <div className="w-[21px] h-[19px] rounded-sm box-border text-sm text-center bg-white">
                       {dayjs(selectedDate).locale("ko").format("ddd")}
                     </div>
                   </div>
@@ -374,26 +369,24 @@ const AttendancesRoaster = () => {
                 alt=""
                 width={24}
                 height={24}
-                style={{
-                  cursor: "pointer",
-                }}
+                className="cursor-pointer"
                 onClick={() => handleNextDay()}
               />
             </div>
           </section>
         </div>
-      </section>
+      </header>
 
       {/* 출석부 명단 */}
-      <section className="attendance-list">
+      <section className="max-w-[375px] flex gap-6 flex-col pt-[12px] pb-[120px] px-0">
         {Object.keys(attendeeList).map((time) => {
           return (
-            <section className="attendance-list-by-time" key={`time__${time}`}>
-              <div className="attendance-time">{`${time.slice(
+            <div className="attendance-list-by-time" key={`time__${time}`}>
+              <div className="text-left text-[15px] font-semibold mb-1">{`${time.slice(
                 0,
                 2
               )}:${time.slice(2, 4)}`}</div>
-              <div className="attendee-list">
+              <div className="flex flex-col gap-3">
                 {attendeeList[time].map((item, index) => (
                   <AttendanceItem
                     item={item}
@@ -404,7 +397,7 @@ const AttendancesRoaster = () => {
                   />
                 ))}
               </div>
-            </section>
+            </div>
           );
         })}
 
@@ -426,7 +419,7 @@ const AttendancesRoaster = () => {
         setAttendeeList={setAttendeeList}
         onSaveAction={onSaveAction}
       />
-    </AttendanceIdContainer>
+    </PageContainer>
   );
 };
 

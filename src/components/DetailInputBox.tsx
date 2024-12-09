@@ -3,9 +3,8 @@
 import { TextField } from "@mui/material";
 
 // Styles
-
-import { DetailButton } from "../styles/app/attendancesId.styles";
 import { AttendanceSchedulesByDateItem } from "../api/schema";
+import { twMerge } from "tailwind-merge";
 
 export type HandleListItemType = (
   index: number,
@@ -51,8 +50,13 @@ const DetailInputBox = ({ item, time, index, handleListItem }: PropsType) => {
       {status === "Late" ? (
         <div className="detail-buttons">
           {detailOptions.Late.map((option) => (
-            <DetailButton
-              isSelected={option.value === item.lateTime}
+            <div
+              className={twMerge(
+                "w-fit px-3 rounded-[44px] box-border text-xs font-medium text-center",
+                option.value === item.lateTime
+                  ? "text-white bg-[#222222]"
+                  : "text-[#222222]"
+              )}
               onClick={() => {
                 handleListItem(index, time, "lateTime", option.value);
                 handleListItem(index, time, "newStatus", "Late");
@@ -60,14 +64,19 @@ const DetailInputBox = ({ item, time, index, handleListItem }: PropsType) => {
               key={option.value}
             >
               {option.label}
-            </DetailButton>
+            </div>
           ))}
         </div>
       ) : status === "Absent" ? (
         <div className="detail-buttons">
           {detailOptions.Absent.map((option) => (
-            <DetailButton
-              isSelected={option.value === item.absenceType}
+            <div
+              className={twMerge(
+                "w-fit px-3 rounded-[44px] box-border text-xs font-medium text-center",
+                option.value === item.lateTime
+                  ? "text-white bg-[#222222]"
+                  : "text-[#222222]"
+              )}
               onClick={() => {
                 handleListItem(index, time, "absenceType", option.value);
                 handleListItem(index, time, "newStatus", "Absent");
@@ -75,7 +84,7 @@ const DetailInputBox = ({ item, time, index, handleListItem }: PropsType) => {
               key={option.value}
             >
               {option.label}
-            </DetailButton>
+            </div>
           ))}
         </div>
       ) : null}
