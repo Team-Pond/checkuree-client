@@ -23,3 +23,12 @@ dist-ssr
 
 #env
 .env
+*storybook.log
+
+# Storybook cache
+.storybook-cache/
+
+# Storybook static build files
+storybook-static/
+stories
+.storybook
