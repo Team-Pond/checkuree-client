@@ -29,7 +29,7 @@ const initailValues = {
   isAutoLogin: false,
 };
 
-export default function SignIn() {
+export default function KakaoSignIn() {
   const accessToken = Cookies.get("ACCESS_TOKEN");
 
   const navigate = useNavigate();
