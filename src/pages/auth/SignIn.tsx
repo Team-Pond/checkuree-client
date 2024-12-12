@@ -59,12 +59,12 @@ export default function SignIn() {
   }, []);
 
   return (
-    <section className="flex flex-col justify-center items-center h-full gap-8">
-      <div className="flex flex-col items-center gap-7">
+    <section className="flex flex-col justify-center items-center h-full gap-8 px-6">
+      <div className="flex flex-col items-center gap-12">
         <img
           src={"/images/logos/checkuree_logo.svg"}
-          width={300}
-          height={50}
+          width={284}
+          height={48}
           alt="로고 이미지"
         />
         <div className="flex flex-col gap-8 justify-center w-full">
@@ -77,42 +77,47 @@ export default function SignIn() {
           >
             {({ getFieldProps, isValid, dirty, handleSubmit }) => (
               <form
-                className="flex flex-col gap-8 justify-center w-full"
+                className="flex flex-col gap-6 justify-center w-full"
                 onSubmit={handleSubmit}
               >
-                <div className="flex flex-col gap-3 w-full">
+                <div className="flex flex-col gap-4 w-full items-start">
                   <input
                     {...getFieldProps("username")}
-                    placeholder="아이디를 입력해주세요."
-                    className="bg-white w-full h-10 rounded-lg pl-3 border"
+                    placeholder="example@email.com"
+                    className="bg-white w-full h-12 rounded-2xl p-4 border-[2px] focus:outline-none"
                   />
                   <input
                     {...getFieldProps("password")}
                     type="password"
-                    placeholder="비밀번호를 입력해주세요."
-                    className="bg-white  w-full h-10 rounded-lg pl-3 border"
+                    placeholder="비밀번호"
+                    className="bg-white w-full h-12 rounded-2xl p-4 border-[2px] focus:outline-none"
                   />
+                  <div>
+                    <p className="font-medium text-[#5D5D5D]">로그인 유지</p>
+                  </div>
                 </div>
 
-                <div className="flex flex-col gap-[10px]">
-                  <button
-                    className={twMerge(
-                      "max-w-[313px] h-10 rounded-[20px] text-md font-semibold flex items-center justify-center text-white bg-[#59996B] cursor-pointer",
-                      !(isValid && dirty) ? "#D9D9D9" : "#59996B"
-                    )}
-                    disabled={!(isValid && dirty)}
-                    type="submit"
-                  >
-                    체쿠리 로그인
-                  </button>
-                  <button
-                    onClick={() =>
-                      navigate("https://checkuree.com/api/v1/auth/kakao")
-                    }
-                    className="max-w-[313px] h-10 rounded-[20px] text-md font-semibold flex items-center justify-center text-[#3A1D1D] cursor-pointer bg-[#FDDC3F]"
-                  >
-                    카카오 로그인
-                  </button>
+                <button
+                  className={twMerge(
+                    "w-full h-[54px] rounded-xl text-lg leading-[22px] font-semibold flex items-center justify-center text-[#FFFFFF] bg-[#59996B] cursor-pointer",
+                    !(isValid && dirty) ? "#D9D9D9" : "#59996B"
+                  )}
+                  disabled={!(isValid && dirty)}
+                  type="submit"
+                >
+                  체쿠리 ID로 계속하기
+                </button>
+
+                <div className="flex justify-between">
+                  <p className="text-xs leading-[15px] text-[#5D5D5D] font-semibold w-[114px]">
+                    아이디 찾기
+                  </p>
+                  <p className="text-xs leading-[15px] text-[#5D5D5D] font-semibold border-x border-[#E7E7E7] w-[114px]">
+                    회원 가입
+                  </p>
+                  <p className="text-xs leading-[15px]  text-[#5D5D5D]font-semibold w-[114px]">
+                    비밀번호 찾기
+                  </p>
                 </div>
               </form>
             )}
