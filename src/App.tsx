@@ -5,14 +5,16 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import SignIn from "./pages/auth/SignIn";
-import SignUp from "./pages/auth/SignUp";
+
 import Attendances from "./pages/attendances/Attendances";
 import AttendancesRoaster from "./pages/attendances/attendances-roaster/AttendancesRoaster";
 import ListManagement from "./pages/list-management/ListManagement";
 import ProtectedRoute from "./ProtectedRoute";
 import PageContainer from "./components/PageContainer";
 import KakaoSignIn from "./pages/kakao-auth/SignIn";
+import CheckureeSignIn from "./pages/checkuree-auth/SignIn";
+import SignIn from "./pages/auth/SignIn";
+import AttendanceCheck from "./pages/attendances/attendance-check/AttendanceCheck";
 
 interface RouteType {
   path: string;
@@ -32,9 +34,12 @@ function App() {
           {/* / 경로 시 로그인 페이지로 이동 */}
           <Route path="/" element={<Navigate to={"/auth/signin"} />} />
           <Route path="/auth/signin" element={<SignIn />} />
-          <Route path="/auth/signup" element={<SignUp />} />
+          <Route path="/checkuree-auth/signin" element={<CheckureeSignIn />} />
           <Route path="/kakao-auth/signin" element={<KakaoSignIn />} />
-          <Route path="/kakao-auth/signup" element={<SignUp />} />
+          <Route
+            path="/attendances/attendance-check"
+            element={<AttendanceCheck />}
+          />
           {/* 인증 처리 */}
           {routes.map((route) => {
             return (
