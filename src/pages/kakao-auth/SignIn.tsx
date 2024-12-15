@@ -10,7 +10,6 @@ export interface LoginDataType {
 
 export default function KakaoSignIn() {
   const accessToken = Cookies.get("ACCESS_TOKEN");
-
   useEffect(() => {
     if (accessToken) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
@@ -35,6 +34,10 @@ export default function KakaoSignIn() {
           <button
             className="relative flex items-center justify-center w-[342px] h-[52px] rounded-xl bg-[#FEE500] border border-[#000000] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
             type="submit"
+            onClick={() =>
+              (window.location.href =
+                "https://dev.checkuree.com/oauth2/authorization/kakao")
+            }
           >
             <img
               src="/images/icons/ico-kakao-logo.svg"

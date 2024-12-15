@@ -9,7 +9,7 @@ export default function AttendanceCheck() {
 
             <button className="">결석</button>
             <button className="">출석</button>
-            <button>
+            <button className="w-8 h-8 ">
               <img src="" alt="" />
             </button>
           </div>
