@@ -39,7 +39,7 @@ export default function SignIn() {
         </div>
         <button
           className="relative flex items-center justify-center w-[342px] h-[52px] rounded-xl bg-[#FEE500]"
-          type="submit"
+          onClick={() => navigate("/kakao-auth/signin")}
         >
           <img
             src="/images/icons/ico-kakao-logo.svg"
@@ -50,12 +50,7 @@ export default function SignIn() {
           />
 
           {/* font 적용 */}
-          <p
-            className="ml-[30px] font-medium text-[17px]"
-            onClick={() => navigate("/kakao-auth/signin")}
-          >
-            카카오로 시작하기
-          </p>
+          <p className="ml-[30px] font-medium text-[17px]">카카오로 시작하기</p>
         </button>
       </div>
     </section>
