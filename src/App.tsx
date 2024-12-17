@@ -6,24 +6,32 @@ import {
   Navigate,
 } from "react-router-dom";
 
-import Attendances from "./pages/attendances/Attendances";
-import AttendancesRoaster from "./pages/attendances/attendances-roaster/AttendancesRoaster";
-import ListManagement from "./pages/list-management/ListManagement";
 import ProtectedRoute from "./ProtectedRoute";
 import PageContainer from "./components/PageContainer";
-import KakaoSignIn from "./pages/kakao-auth/SignIn";
-import CheckureeSignIn from "./pages/checkuree-auth/SignIn";
-import SignIn from "./pages/auth/SignIn";
-import AttendanceCheck from "./pages/attendances/attendance-check/AttendanceCheck";
-import { Suspense } from "react";
+import { lazy, Suspense } from "react";
 import Loading from "./components/Loading";
+
+// Lazy load components
+const Attendances = lazy(() => import("./pages/attendances/Attendances"));
+const AttendancesRoaster = lazy(
+  () => import("./pages/attendances/attendances-roaster/AttendancesRoaster")
+);
+const ListManagement = lazy(
+  () => import("./pages/list-management/ListManagement")
+);
+const KakaoSignIn = lazy(() => import("./pages/kakao-auth/SignIn"));
+const CheckureeSignIn = lazy(() => import("./pages/checkuree-auth/SignIn"));
+const SignIn = lazy(() => import("./pages/auth/SignIn"));
+const AttendanceCheck = lazy(
+  () => import("./pages/attendances/attendance-check/AttendanceCheck")
+);
 
 interface RouteType {
   path: string;
   element: JSX.Element;
 }
 const routes: RouteType[] = [
-  { path: "/attendances", element: <Attendances /> },
+  { path: "/attendances", element: <Attendances /> }, // 출석부
   { path: "/attendances/:id", element: <AttendancesRoaster /> },
   { path: "/list-management/:id", element: <ListManagement /> },
 ];
@@ -35,7 +43,7 @@ function App() {
         <PageContainer>
           <Routes>
             {/* / 경로 시 로그인 페이지로 이동 */}
-            <Route path="/" element={<Navigate to={"/auth/signin"} />} />
+            <Route path="/" element={<Navigate to={"/attendances"} />} />
             <Route path="/auth/signin" element={<SignIn />} />
             <Route
               path="/checkuree-auth/signin"
@@ -46,7 +54,6 @@ function App() {
               path="/attendances/attendance-check"
               element={<AttendanceCheck />}
             />
-            <Route path="/loading" element={<Loading />} />
 
             {/* 인증 처리 */}
             {routes.map((route) => {
