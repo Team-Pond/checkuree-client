@@ -3,16 +3,17 @@ import { motion, useScroll, useTransform } from "framer-motion";
 export default function Header() {
   const SUB_HEADER = [
     {
-      src: "/images/icons/ico-check.svg",
-      name: "전체 출석",
+      src: "/images/icons/ico-zzz.svg",
+      name: "휴원하기",
     },
+
     {
       src: "/images/icons/ico-user-add.svg",
       name: "인원 추가",
     },
     {
-      src: "/images/icons/ico-zzz.svg",
-      name: "휴원하기",
+      src: "/images/icons/ico-check.svg",
+      name: "전체 출석",
     },
   ];
 
@@ -59,15 +60,7 @@ export default function Header() {
           width={9}
           height={9}
         />
-        <div className="flex items-center gap-4">
-          <p className="text-xl font-bold">12월 10일</p>
-          <img
-            src="/images/icons/ico-arrow-down.svg"
-            alt="아래 화살"
-            width={12}
-            height={12}
-          />
-        </div>
+        <p className="text-xl font-bold">12월 10일</p>
         <img
           src="/images/icons/ico-arrow-right.svg"
           alt="오른쪽 화살"
