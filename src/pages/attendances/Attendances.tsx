@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 const MOCK_DATA = [
   {
     imgUrl: "/images/img-test.png",
@@ -65,6 +67,7 @@ const MOCK_DATA = [
 ];
 
 export default function Attendances() {
+  const navigate = useNavigate();
   return (
     <section className="flex flex-col w-full min-h-screen">
       <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
@@ -83,9 +86,12 @@ export default function Attendances() {
       </div>
 
       <div className="w-full flex-1 bg-bg-secondary py-5 grid grid-cols-2 gap-y-5 justify-items-center  ">
-        {MOCK_DATA.map((attendance) => {
+        {MOCK_DATA.map((attendance, index) => {
           return (
-            <div className="max-w-[162px] w-full  ">
+            <div
+              className="max-w-[162px] w-full"
+              onClick={() => navigate(`/attendances/${index}`)}
+            >
               <img
                 src={attendance.imgUrl}
                 className="w-full h-[97px] rounded-t-2xl"

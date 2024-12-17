@@ -106,8 +106,6 @@ const AttendancesRoaster = () => {
         date: selectedDate,
         pageNo: pageParam.pageNo,
       });
-
-      //   console.log(response);
       if (_.has(response, "items")) {
         const result: AttendanceSchedulesByDateItemObj = response.items[0];
 

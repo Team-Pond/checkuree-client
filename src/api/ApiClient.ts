@@ -66,7 +66,6 @@ async function refresh(config: AxiosRequestConfig) {
         },
       });
 
-      console.log(refreshResult);
       setTokens({
         accessToken: refreshResult.data.data!.accessToken,
         refreshToken: refreshResult.data.data!.refreshToken,

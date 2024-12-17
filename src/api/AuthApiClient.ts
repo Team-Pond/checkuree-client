@@ -2,7 +2,6 @@ import ApiClient from "./ApiClient";
 import { LoginDataRequest } from "./schema";
 
 export const userLogin = async (request: LoginDataRequest) => {
-  console.log(request);
   const response = await ApiClient.request({
     method: "POST",
     url: "/auth/signin",
