@@ -1,6 +1,6 @@
 export default function Bottom() {
   return (
-    <div className="flex justify-between px-[44px] items-center  sticky bottom-0 z-50 w-full h-[92px] bg-white rounded-3xl">
+    <div className="flex justify-between px-[44px] items-center  sticky bottom-0 z-50 w-full h-[92px] bg-white rounded-2xl">
       <div className="flex flex-col gap-2 items-center">
         <img
           src="/images/icons/attendance-check/ico-attendance.svg"

@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { setTokens } from "../lib/auth";
 
 const ApiClient: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_ROOT,
+  baseURL: import.meta.env.VITE_API_DEV_ROOT,
   headers: {
     "Content-Type": "application/json",
     "X-Requested-With": "XMLHttpRequest",
@@ -58,7 +58,7 @@ async function refresh(config: AxiosRequestConfig) {
   if (!!refreshToken) {
     try {
       const refreshResult = await axios.request({
-        baseURL: import.meta.env.VITE_API_ROOT,
+        baseURL: import.meta.env.VITE_API_DEV_ROOT,
         url: "/auth/refresh-token",
         method: "POST",
         data: {

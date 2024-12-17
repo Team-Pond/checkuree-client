@@ -9,7 +9,7 @@ export interface LoginDataType {
 }
 
 export default function KakaoSignIn() {
-  const accessToken = Cookies.get("ACCESS_TOKEN");
+  const accessToken = Cookies.get("accessToken");
   useEffect(() => {
     if (accessToken) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;

@@ -19,22 +19,6 @@ const MOCK_DATA = [
     time: "오후 7:00",
     name: "박상후",
   },
-  // {
-  //   time: "오후 8:00",
-  //   name: "이예은",
-  // },
-  // {
-  //   time: "오후 9:00",
-  //   name: "나루토",
-  // },
-  // {
-  //   time: "오후 10:00",
-  //   name: "사스케",
-  // },
-  // {
-  //   time: "오후 11:00",
-  //   name: "이치고",
-  // },
 ];
 
 export default function MainContents() {
