@@ -70,7 +70,6 @@ export default function CheckureeSignIn() {
         <div className="flex flex-col gap-8 justify-center w-full">
           <Formik
             onSubmit={(values: LoginDataType) => {
-              console.log(values);
               loginMutation(values);
             }}
             validationSchema={toFormikValidationSchema(LoginSchema)}
