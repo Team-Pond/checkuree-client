@@ -1,7 +1,14 @@
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
 export default function Bottom() {
+  const navigate = useNavigate();
   return (
     <div className="flex justify-between px-[44px] items-center  sticky bottom-0 z-50 w-full h-[92px] bg-white rounded-2xl">
-      <div className="flex flex-col gap-2 items-center">
+      <div
+        className="flex flex-col gap-2 items-center"
+        onClick={() => navigate("/attendances")}
+      >
         <img
           src="/images/icons/attendance-check/ico-attendance.svg"
           alt="출석부 아이콘"
@@ -19,7 +26,10 @@ export default function Bottom() {
         />
         <p className="text-xs text-text-tertiary">명단</p>
       </div>
-      <div className="flex flex-col gap-2 items-center">
+      <div
+        className="flex flex-col gap-2 items-center"
+        onClick={() => toast("준비중인 기능입니다.")}
+      >
         <img
           src="/images/icons/attendance-check/ico-statistics.svg"
           alt="출석부 아이콘"
