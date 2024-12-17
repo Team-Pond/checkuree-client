@@ -6,6 +6,8 @@ import {
   AttendeeNewResponse,
   AttendeeNewRequest,
   AttendeeCheckNameResponse,
+  AttendeeCheckRequest,
+  AttendeeCheckResponse,
 } from "./AttendeeSchema";
 
 export const createAttendee = async ({
@@ -23,6 +25,7 @@ export const createAttendee = async ({
   return response.data;
 };
 
+// 이름 중복 체크
 export const checkNameAttendee = async (
   params: AttendeeCheckNameRequest
 ): Promise<AttendeeCheckNameResponse> => {
@@ -31,6 +34,24 @@ export const checkNameAttendee = async (
   const response = await ApiClient.request({
     method: "GET",
     url: `/book/${attendanceBookId}/attendee/check-name?name=${name}`,
+  });
+
+  return response.data;
+};
+
+// 학생 출석 체크
+export const statusCheckAttendee = async (
+  params: AttendeeCheckRequest
+): Promise<AttendeeCheckResponse> => {
+  const { attendanceBookId, attendeeId, status } = params;
+
+  const response = await ApiClient.request({
+    method: "PATCH",
+    url: `/book/${attendanceBookId}/attendee/status`,
+    params: {
+      attendeeId,
+      status,
+    },
   });
 
   return response.data;

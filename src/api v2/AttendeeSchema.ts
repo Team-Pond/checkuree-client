@@ -40,3 +40,13 @@ export type AttendeeCheckNameRequest = {
 };
 
 export type AttendeeCheckNameResponse = SuccessResponse | ErrorResponse;
+
+// 출석 체크
+
+export type AttendeeCheckRequest = {
+  attendanceBookId: string;
+  attendeeId: number;
+  status: string;
+};
+
+export type AttendeeCheckResponse = SuccessResponse | ErrorResponse;
