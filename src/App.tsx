@@ -13,9 +13,6 @@ import Loading from "./components/Loading";
 
 // Lazy load components
 const Attendances = lazy(() => import("./pages/attendances/Attendances"));
-const AttendancesRoaster = lazy(
-  () => import("./pages/attendances/attendances-roaster/AttendancesRoaster")
-);
 const ListManagement = lazy(
   () => import("./pages/list-management/ListManagement")
 );
@@ -32,7 +29,7 @@ interface RouteType {
 }
 const routes: RouteType[] = [
   { path: "/attendances", element: <Attendances /> }, // 출석부
-  { path: "/attendances/:id", element: <AttendancesRoaster /> },
+  { path: "/attendances/:id", element: <AttendanceCheck /> },
   { path: "/list-management/:id", element: <ListManagement /> },
 ];
 
