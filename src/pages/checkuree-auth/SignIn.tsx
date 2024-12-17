@@ -30,9 +30,10 @@ const initailValues = {
 };
 
 export default function CheckureeSignIn() {
-  const accessToken = Cookies.get("ACCESS_TOKEN");
+  const accessToken = Cookies.get("accessToken");
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
   const { mutate: loginMutation } = useMutation({
     mutationKey: ["user"],
     mutationFn: async (params: LoginDataType) => await userLogin(params),
@@ -69,6 +70,7 @@ export default function CheckureeSignIn() {
         <div className="flex flex-col gap-8 justify-center w-full">
           <Formik
             onSubmit={(values: LoginDataType) => {
+              console.log(values);
               loginMutation(values);
             }}
             validationSchema={toFormikValidationSchema(LoginSchema)}

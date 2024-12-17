@@ -69,7 +69,7 @@ const AttendanceCreateForm = (props: IProps) => {
   // TODO: REFRESH
   const RefreshApi = async () => {
     const result = await fetch(
-      `${import.meta.env.VITE_API_ROOT}/auth/refresh-token`,
+      `${import.meta.env.VITE_API_DEV_ROOT}/auth/refresh-token`,
       {
         method: "POST",
         headers: {
@@ -82,8 +82,8 @@ const AttendanceCreateForm = (props: IProps) => {
     ).then((response) => response.json());
 
     // 쿠키 등록
-    Cookies.set("ACCESS_TOKEN", result.data.accessToken);
-    Cookies.set("REFRESH_TOKEN", result.data.refreshToken);
+    Cookies.set(import.meta.env.VITE_ACCESS_TOKEN, result.data.accessToken);
+    Cookies.set(import.meta.env.VITE_REFRESH_TOKEN, result.data.refreshToken);
   };
 
   // 출석부 생성
