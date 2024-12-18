@@ -20,13 +20,40 @@ export function RootToaster({
     <Toaster
       position="top-center"
       toastOptions={{
-        icon: null,
-        className: "min-w-[400px] !bg-gray-900 !text-white !text-center",
+        // warn
+        icon: (
+          <img
+            src="/images/icons/toast/ico-warning.svg"
+            width={22}
+            height={22}
+          />
+        ),
+        className:
+          "!pl-5 min-w-[358px] !rounded-2xl  !h-[56px] !bg-[#6D6D6D] !text-white !font-medium !text-md !text-center",
+
+        // success
         success: {
-          className: "min-w-[400px] !bg-green-400 !text-white !text-center",
+          icon: (
+            <img
+              src="/images/icons/toast/ico-success.svg"
+              width={22}
+              height={22}
+            />
+          ),
+          className:
+            "!pl-5 min-w-[358px] !rounded-2xl !h-[56px] !bg-[#6D6D6D] !text-white !font-medium !text-md !text-center",
         },
+        // error
         error: {
-          className: "min-w-[400px] !bg-red-700 !text-white !text-center",
+          icon: (
+            <img
+              src="/images/icons/toast/ico-fail.svg"
+              width={22}
+              height={22}
+            />
+          ),
+          className:
+            "!pl-5 min-w-[358px] !rounded-2xl !h-[56px] !bg-[#6D6D6D] !text-white !font-medium !text-md !text-center",
         },
       }}
       {...props}
