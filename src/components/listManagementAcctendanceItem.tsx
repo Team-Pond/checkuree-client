@@ -3,10 +3,11 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import _ from "lodash";
-import { AttendeeData } from "../api/schema";
-import { compareDays, ScheduleType } from "../utils";
+
 import Icon from "./Icon";
-import { Colors, Icons } from "../styles/globalStyles";
+import { AttendeeData } from "@/api/schema";
+import { compareDays, ScheduleType } from "@/utils";
+import { Colors, Icons } from "@/styles/globalStyles";
 
 // Styles
 

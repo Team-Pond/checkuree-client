@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getMeBooks } from "@/api v2/AttendanceBookApiClient";
 
 const MOCK_DATA = [
   {
@@ -68,12 +70,20 @@ const MOCK_DATA = [
 
 export default function Attendances() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const getMyBooks = async () => {
+      await getMeBooks().then((res) => console.log(res));
+    };
+    getMyBooks();
+  }, []);
+
   return (
     <section className="flex flex-col w-full min-h-screen">
       <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
         <img
           src="/images/logos/checkuree_logo.svg"
-          alt="알림 아이콘"
+          alt="체쿠리 아이콘"
           width={170}
           height={20}
         />
@@ -85,7 +95,7 @@ export default function Attendances() {
         />
       </div>
 
-      <div className="w-full flex-1 bg-bg-secondary py-5 grid grid-cols-2 gap-y-5 justify-items-center  ">
+      <div className="w-full flex-1 bg-bg-secondary py-5 grid grid-cols-2 gap-y-6 justify-items-center  ">
         {MOCK_DATA.map((attendance, index) => {
           return (
             <div
@@ -124,8 +134,8 @@ export default function Attendances() {
         <img
           src="/images/icons/attendance/ico-plus.svg"
           alt="플러스 아이콘"
-          width={18}
-          height={18}
+          width={16}
+          height={16}
         />
         <p className="text-white font-semibold text-lg">출석부</p>
       </button>

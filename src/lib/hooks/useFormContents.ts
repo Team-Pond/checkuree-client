@@ -9,15 +9,15 @@ import {
   deleteAttendees,
   getAttendeeDetail,
   updateAttendee,
-} from "../../api/AttendanceApiClient";
+} from "@/api/AttendanceApiClient";
 import {
   AttendeeData,
   CreateAttendeeRequest,
   CreateSchedulesRequest,
   DeleteAttendeesRequest,
   SingleSchedulesType,
-} from "../../api/schema";
-import { Inputs } from "../../components/FormContents";
+} from "@/api/schema";
+import { Inputs } from "@/components/FormContents";
 
 interface PropsType {
   watch: UseFormWatch<Inputs>;

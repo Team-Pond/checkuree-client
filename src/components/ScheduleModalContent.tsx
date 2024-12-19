@@ -1,10 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 
 import styled from "@emotion/styled";
-
-import { Colors } from "../styles/globalStyles";
-import { convertEngDayToKorDay } from "../utils";
-import { getSchedulesById } from "../api/AttendanceApiClient";
+import { getSchedulesById } from "@/api/AttendanceApiClient";
+import { convertEngDayToKorDay } from "@/utils";
+import { Colors } from "@/styles/globalStyles";
 
 type ParsedTimeList = Record<string, string[]>;
 

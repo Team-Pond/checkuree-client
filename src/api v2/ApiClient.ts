@@ -1,6 +1,6 @@
+import { setTokens } from "@/lib/auth";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import Cookies from "js-cookie";
-import { setTokens } from "../lib/auth";
 
 const ApiClient: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_DEV_ROOT,

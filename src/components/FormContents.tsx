@@ -13,18 +13,21 @@ import {
   Modal,
   FormControl,
 } from "@mui/material";
-import { Attendance, SingleSchedulesType } from "../api/schema";
+
 import Icon from "./Icon";
-import { Colors, Icons } from "../styles/globalStyles";
-import { dateFormat, sortWeekdays } from "../utils/index";
+
 import { ScheduleModalContent } from "./ScheduleModalContent";
-import useFormContents from "../lib/hooks/useFormContents";
+
 import { twMerge } from "tailwind-merge";
 
 // Utils
 
 // Styles
 import "./FormContents.css";
+import { Attendance, SingleSchedulesType } from "@/api/schema";
+import useFormContents from "@/lib/hooks/useFormContents";
+import { Colors, Icons } from "@/styles/globalStyles";
+import { dateFormat, sortWeekdays } from "@/utils";
 
 // Types
 

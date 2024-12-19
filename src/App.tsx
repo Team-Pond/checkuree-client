@@ -6,23 +6,22 @@ import {
   Navigate,
 } from "react-router-dom";
 
-import ProtectedRoute from "./ProtectedRoute";
-import PageContainer from "./components/PageContainer";
+import ProtectedRoute from "@/ProtectedRoute";
+import PageContainer from "@/components/PageContainer";
+import Loading from "@/components/Loading";
 import { lazy, Suspense } from "react";
-import Loading from "./components/Loading";
 
 // Lazy load components
-const Attendances = lazy(() => import("./pages/attendances/Attendances"));
+const Attendances = lazy(() => import("@/pages/attendances/Attendances"));
 const ListManagement = lazy(
-  () => import("./pages/list-management/ListManagement")
+  () => import("@/pages/list-management/ListManagement")
 );
-const KakaoSignIn = lazy(() => import("./pages/kakao-auth/SignIn"));
-const CheckureeSignIn = lazy(() => import("./pages/checkuree-auth/SignIn"));
-const SignIn = lazy(() => import("./pages/auth/SignIn"));
+const KakaoSignIn = lazy(() => import("@/pages/kakao-auth/SignIn"));
+const CheckureeSignIn = lazy(() => import("@/pages/checkuree-auth/SignIn"));
+const SignIn = lazy(() => import("@/pages/auth/SignIn"));
 const AttendanceCheck = lazy(
-  () => import("./pages/attendances/attendance-check/AttendanceCheck")
+  () => import("@/pages/attendances/attendance-check/AttendanceCheck")
 );
-
 interface RouteType {
   path: string;
   element: JSX.Element;

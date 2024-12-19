@@ -1,6 +1,6 @@
 // Libraries
+import { Colors } from "@/styles/globalStyles";
 import styled from "@emotion/styled";
-import { Colors } from "../../styles/globalStyles";
 
 // Styles
 

@@ -23,25 +23,25 @@ import {
 
 // Components
 
-import { dateFormat } from "../../../utils";
-import { Colors, Icons } from "../../../styles/globalStyles";
-import Icon from "../../../components/Icon";
-import InfiniteCheckComp from "../../../components/InfiniteCheckComp";
-import AttendanceItem from "../../../components/AttendanceItem";
+import { dateFormat } from "@/utils";
+import { Colors, Icons } from "@/styles/globalStyles";
+import Icon from "@/components/Icon";
+import InfiniteCheckComp from "@/components/InfiniteCheckComp";
+import AttendanceItem from "@/components/AttendanceItem";
 import {
   createRecords,
   getAttendanceDetail,
   getAttendanceSchedulesByDate,
   getAttendanceSummaryByDate,
-} from "../../../api/AttendanceApiClient";
+} from "@/api/AttendanceApiClient";
 import {
   Attendance,
   AttendanceSchedulesByDateItem,
   AttendanceSchedulesByDateItemObj,
   CreateRecordsRequest,
-} from "../../../api/schema";
-import Navigation from "../../../components/Navigation";
-import PageContainer from "../../../components/PageContainer";
+} from "@/api/schema";
+import Navigation from "@/components/Navigation";
+import PageContainer from "@/components/PageContainer";
 
 export type HandleListItemType = (
   index: number,

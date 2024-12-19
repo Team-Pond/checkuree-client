@@ -15,7 +15,7 @@ import { SetStateAction, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
-import { createAttandance } from "../api/AttendanceApiClient";
+import { createAttandance } from "@/api/AttendanceApiClient";
 
 export interface CreateAttendance {
   title: string;
