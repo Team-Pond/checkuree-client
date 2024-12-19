@@ -6,13 +6,15 @@
 
 // Types
 
-import { Images } from "../styles/globalStyles";
+import { AttendanceSchedulesByDateItem } from "@/api/schema";
+import { HandleListItemType } from "@/pages/attendances/attendances-roaster/AttendancesRoaster";
 import {
   AttendanceItemContainer,
   StatusButton,
-} from "../styles/app/attendancesId.styles";
-import { AttendanceSchedulesByDateItem } from "../api/schema";
-import DetailInputBox, { HandleListItemType } from "./DetailInputBox";
+} from "@/styles/app/attendancesId.styles";
+
+import { Images } from "@/styles/globalStyles";
+import DetailInputBox from "./DetailInputBox";
 
 interface PropsType {
   index: number;

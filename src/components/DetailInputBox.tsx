@@ -1,9 +1,10 @@
 "use client";
+import { AttendanceSchedulesByDateItem } from "@/api/schema";
 // Components
 import { TextField } from "@mui/material";
 
 // Styles
-import { AttendanceSchedulesByDateItem } from "../api/schema";
+
 import { twMerge } from "tailwind-merge";
 
 export type HandleListItemType = (

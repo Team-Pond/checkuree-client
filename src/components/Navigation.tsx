@@ -1,10 +1,10 @@
+import { ParsedAttendeeListType } from "@/pages/attendances/attendances-roaster/AttendancesRoaster";
 import React, { SetStateAction } from "react";
 
 // Components
 
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ParsedAttendeeListType } from "../pages/attendances/attendances-roaster/AttendancesRoaster";
 
 interface Menu {
   name: string;

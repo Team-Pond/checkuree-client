@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { statusCheckAttendee } from "../../../../api v2/AttendeeApiClient";
+import { statusCheckAttendee } from "@/api v2/AttendeeApiClient";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -41,6 +41,7 @@ export default function MainContents() {
   const attendanceBookId = location.pathname.split("/")[2];
 
   const [attendees, setAttendees] = useState(MOCK_DATA);
+
   // TODO: 낙관적 업데이트 적용
   const checkAttendee = async (status: string, attendeeId: number) => {
     await statusCheckAttendee({

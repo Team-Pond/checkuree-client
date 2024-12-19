@@ -1,5 +1,5 @@
-import Logo from "../../public/images/logos/checkuree_logo.svg";
-import DetailOpen from "../../public/images/icons/ico-detail-open.svg";
+import Logo from "@/public/images/logos/checkuree_logo.svg";
+import DetailOpen from "@/public/images/icons/ico-detail-open.svg";
 
 // Types
 type ColorKey =

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getMeBooks } from "../../api v2/AttendanceBookApiClient";
+import { getMeBooks } from "@/api v2/AttendanceBookApiClient";
 
 const MOCK_DATA = [
   {

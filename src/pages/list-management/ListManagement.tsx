@@ -13,21 +13,21 @@ import { useQuery } from "@tanstack/react-query";
 
 // Types
 import { useParams } from "react-router-dom";
-import { Colors, Icons } from "../../styles/globalStyles";
-import { Attendance, AttendeeData } from "../../api/schema";
+import { Colors, Icons } from "@/styles/globalStyles";
+import { Attendance, AttendeeData } from "@/api/schema";
 import {
   getAttendanceDetail,
   getAttendanceSummary,
   getAttendeeList,
-} from "../../api/AttendanceApiClient";
+} from "@/api/AttendanceApiClient";
 
-import Icon from "../../components/Icon";
-import BottomDrawer from "../../components/BottomDrawer";
-import FormContents from "../../components/FormContents";
-import ListManagementAttendanceItem from "../../components/listManagementAcctendanceItem";
+import Icon from "@/components/Icon";
+import BottomDrawer from "@/components/BottomDrawer";
+import FormContents from "@/components/FormContents";
+import ListManagementAttendanceItem from "@/components/listManagementAcctendanceItem";
 
-import Navigation from "../../components/Navigation";
-import PageContainer from "../../components/PageContainer";
+import Navigation from "@/components/Navigation";
+import PageContainer from "@/components/PageContainer";
 
 const ListManagement = () => {
   const { id: attendanceId } = useParams();
