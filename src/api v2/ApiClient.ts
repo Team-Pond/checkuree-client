@@ -65,9 +65,10 @@ async function refresh(config: AxiosRequestConfig) {
           refreshToken,
         },
       });
+
       setTokens({
-        accessToken: refreshResult.data.data!.accessToken,
-        refreshToken: refreshResult.data.data!.refreshToken,
+        accessToken: refreshResult.data!.accessToken,
+        refreshToken: refreshResult.data!.refreshToken,
       });
 
       // 무한 오류에 빠질 수 있음으로 순수한 axios 기본 인스턴스로 재시도한다.
@@ -75,7 +76,7 @@ async function refresh(config: AxiosRequestConfig) {
         ...config,
         headers: {
           ...config.headers,
-          Authorization: `Bearer ${refreshResult.data.data!.accessToken}`,
+          Authorization: `Bearer ${refreshResult.data!.accessToken}`,
         },
       });
     } catch (e) {
