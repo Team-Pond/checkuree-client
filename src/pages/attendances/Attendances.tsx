@@ -130,7 +130,10 @@ export default function Attendances() {
         })}
       </div>
 
-      <button className="w-[104px] h-[46px] border border-black fixed bottom-[44px] right-[18px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary">
+      <button
+        onClick={() => navigate("/attendances/attendance-create")}
+        className="w-[104px] h-[46px] border border-black fixed bottom-[44px] right-[18px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
+      >
         <img
           src="/images/icons/attendance/ico-plus.svg"
           alt="플러스 아이콘"
