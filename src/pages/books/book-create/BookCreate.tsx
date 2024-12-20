@@ -17,7 +17,7 @@ const DaysMatch: Record<string, DaysType> = {
   일: "SUNDAY",
 };
 
-export default function AttendanceCreate() {
+export default function BookCreate() {
   const navigate = useNavigate();
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [dayArrays, setDayArrays] = useState<DaysType[]>([]);
@@ -60,11 +60,11 @@ export default function AttendanceCreate() {
     <section className="flex flex-col gap-7 w-full pb-[30px]">
       <div
         className="w-full h-[64px] flex items-center justify-between px-4 py-5"
-        onClick={() => navigate("/attendances")}
+        onClick={() => navigate("/book")}
       >
         <p className="font-bold text-text-primary text-[22px]">출석부 등록</p>
         <img
-          src="/images/icons/attendance-create/ico-close.svg"
+          src="/images/icons/book-create/ico-close.svg"
           alt="닫기 아이콘"
           width={40}
           height={40}
@@ -172,9 +172,7 @@ export default function AttendanceCreate() {
                 />
                 <img
                   src={
-                    fileUrl
-                      ? fileUrl
-                      : "/images/icons/attendance-create/ico-plus.svg"
+                    fileUrl ? fileUrl : "/images/icons/book-create/ico-plus.svg"
                   }
                   alt="이미지 추가 아이콘"
                   className={twMerge(

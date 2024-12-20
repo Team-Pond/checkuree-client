@@ -13,26 +13,21 @@ import { lazy, Suspense } from "react";
 import ScrollToTop from "./components/ScrollToTop";
 
 // Lazy load components
-const Attendances = lazy(() => import("@/pages/attendances/Attendances"));
-const AttendanceCreate = lazy(
-  () => import("@/pages/attendances/attendance-create/AttendanceCreate")
-);
+const Books = lazy(() => import("@/pages/books/Books"));
+const BookCreate = lazy(() => import("@/pages/books/book-create/BookCreate"));
 const KakaoSignIn = lazy(() => import("@/pages/kakao-auth/SignIn"));
 const CheckureeSignIn = lazy(() => import("@/pages/checkuree-auth/SignIn"));
 
 const SignIn = lazy(() => import("@/pages/auth/SignIn"));
-const AttendanceCheck = lazy(
-  () => import("@/pages/attendances/attendance-check/AttendanceCheck")
-);
+const BookCheck = lazy(() => import("@/pages/books/book-check/BookCheck"));
 interface RouteType {
   path: string;
   element: JSX.Element;
 }
 const routes: RouteType[] = [
-  { path: "/attendances", element: <Attendances /> }, // 출석부
-  { path: "/attendances/attendance-create", element: <AttendanceCreate /> }, // 출석부
-  { path: "/attendances/:id", element: <AttendanceCheck /> },
-  { path: "/attendances/attendance-check", element: <AttendanceCheck /> },
+  { path: "/book", element: <Books /> }, // 출석부
+  { path: "/book/create", element: <BookCreate /> }, // 출석부
+  { path: "/book/:id", element: <BookCheck /> },
 ];
 
 function App() {
@@ -42,7 +37,7 @@ function App() {
         <PageContainer>
           <ScrollToTop />
           <Routes>
-            <Route path="/" element={<Navigate to={"/attendances"} />} />
+            <Route path="/" element={<Navigate to={"/book"} />} />
             <Route path="*" element={<Navigate to={""} />} /> {/* 404페이지 */}
             <Route path="/auth/signin" element={<SignIn />} />
             <Route

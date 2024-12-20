@@ -68,7 +68,7 @@ const MOCK_DATA = [
   },
 ];
 
-export default function Attendances() {
+export default function Books() {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -88,7 +88,7 @@ export default function Attendances() {
           height={20}
         />
         <img
-          src="/images/icons/attendance/ico-notification.svg"
+          src="/images/icons/book/ico-notification.svg"
           alt="알림 아이콘"
           width={20}
           height={20}
@@ -100,7 +100,7 @@ export default function Attendances() {
           return (
             <div
               className="max-w-[162px] w-full"
-              onClick={() => navigate(`/attendances/${index}`)}
+              onClick={() => navigate(`/book/${index}`)}
             >
               <img
                 src={attendance.imgUrl}
@@ -131,11 +131,11 @@ export default function Attendances() {
       </div>
 
       <button
-        onClick={() => navigate("/attendances/attendance-create")}
+        onClick={() => navigate("/book/create")}
         className="w-[104px] h-[46px] border border-black fixed bottom-[44px] right-[18px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
       >
         <img
-          src="/images/icons/attendance/ico-plus.svg"
+          src="/images/icons/book/ico-plus.svg"
           alt="플러스 아이콘"
           width={16}
           height={16}

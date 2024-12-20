@@ -14,10 +14,10 @@ export default function Bottom() {
         onClick={() => navigate(currentPath)}
       >
         <img
-          src={`/images/icons/attendance-check/${
-            currentPath.split("/")[1] === "attendances"
-              ? "ico-attendance-active"
-              : "ico-attendance"
+          src={`/images/icons/book-check/${
+            currentPath.split("/")[1] === "book"
+              ? "ico-book-active"
+              : "ico-book"
           }.svg`}
           alt="출석부 아이콘"
           width={20}
@@ -25,7 +25,7 @@ export default function Bottom() {
         <p
           className={twMerge(
             "text-xs ",
-            currentPath.split("/")[1] === "attendances"
+            currentPath.split("/")[1] === "book"
               ? "text-text-primary"
               : "text-text-tertiary"
           )}
@@ -35,7 +35,7 @@ export default function Bottom() {
       </div>
       <div className="flex flex-col gap-2 items-center">
         <img
-          src="/images/icons/attendance-check/ico-roaster.svg"
+          src="/images/icons/book-check/ico-roaster.svg"
           alt="출석부 아이콘"
           width={20}
           height={20}
@@ -47,7 +47,7 @@ export default function Bottom() {
         onClick={() => toast("준비중인 기능입니다.")}
       >
         <img
-          src="/images/icons/attendance-check/ico-statistics.svg"
+          src="/images/icons/book-check/ico-statistics.svg"
           alt="출석부 아이콘"
           width={20}
           height={20}
