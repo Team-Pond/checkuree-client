@@ -103,7 +103,7 @@ export default function MainContents() {
                   disabled={attendee.status === "ATTENDING" ? true : false}
                 >
                   <img
-                    src={`/images/icons/attendance-check/${
+                    src={`/images/icons/book-check/${
                       attendee.status === "ATTENDING"
                         ? "ico-note-active.svg"
                         : "ico-note.svg"

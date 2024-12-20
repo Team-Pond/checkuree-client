@@ -3,7 +3,7 @@ type ResponseBase = {
   message: string;
 };
 
-type DaysType =
+export type DaysType =
   | "MONDAY"
   | "TUESDAY"
   | "WEDNESDAY"
