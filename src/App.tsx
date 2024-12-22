@@ -15,6 +15,9 @@ import ScrollToTop from "./components/ScrollToTop";
 // Lazy load components
 const Books = lazy(() => import("@/pages/books/Books"));
 const BookCreate = lazy(() => import("@/pages/books/book-create/BookCreate"));
+const BookRoaster = lazy(
+  () => import("@/pages/books/book-roaster/BookRoaster")
+);
 const KakaoSignIn = lazy(() => import("@/pages/kakao-auth/SignIn"));
 const CheckureeSignIn = lazy(() => import("@/pages/checkuree-auth/SignIn"));
 
@@ -25,9 +28,10 @@ interface RouteType {
   element: JSX.Element;
 }
 const routes: RouteType[] = [
-  { path: "/book", element: <Books /> }, // 출석부
-  { path: "/book/create", element: <BookCreate /> }, // 출석부
-  { path: "/book/:id", element: <BookCheck /> },
+  { path: "/book", element: <Books /> }, // 출석부 목록
+  { path: "/book/create", element: <BookCreate /> }, // 출석부 생성
+  { path: "/book/:id", element: <BookCheck /> }, // 출석부 출석
+  { path: "/book/roaster", element: <BookRoaster /> }, // 출석부 명단
 ];
 
 function App() {
