@@ -11,11 +11,11 @@ export default function Bottom() {
     <div className="flex justify-between px-[44px] items-center  sticky bottom-0 z-50 w-full h-[92px] bg-white rounded-2xl">
       <div
         className="flex flex-col gap-2 items-center"
-        onClick={() => navigate(currentPath)}
+        onClick={() => navigate("/book/0")}
       >
         <img
           src={`/images/icons/book-check/${
-            currentPath.split("/")[1] === "book"
+            currentPath.split("/")[2] !== "roaster"
               ? "ico-book-active"
               : "ico-book"
           }.svg`}
@@ -25,7 +25,7 @@ export default function Bottom() {
         <p
           className={twMerge(
             "text-xs ",
-            currentPath.split("/")[1] === "book"
+            currentPath.split("/")[2] !== "roaster"
               ? "text-text-primary"
               : "text-text-tertiary"
           )}
@@ -33,14 +33,30 @@ export default function Bottom() {
           출석부
         </p>
       </div>
-      <div className="flex flex-col gap-2 items-center">
+      <div
+        className="flex flex-col gap-2 items-center"
+        onClick={() => navigate("/book/roaster")}
+      >
         <img
-          src="/images/icons/book-check/ico-roaster.svg"
+          src={`/images/icons/book-check/${
+            currentPath.split("/")[2] === "roaster"
+              ? "ico-roaster-active"
+              : "ico-roaster"
+          }.svg`}
           alt="출석부 아이콘"
           width={20}
           height={20}
         />
-        <p className="text-xs text-text-tertiary">명단</p>
+        <p
+          className={twMerge(
+            "text-xs ",
+            currentPath.split("/")[2] === "roaster"
+              ? "text-text-primary"
+              : "text-text-tertiary"
+          )}
+        >
+          명단
+        </p>
       </div>
       <div
         className="flex flex-col gap-2 items-center"
