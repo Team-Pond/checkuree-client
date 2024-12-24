@@ -23,11 +23,11 @@ type ErrorResponse = ResponseBase & {
 
 export type CreateBookRequest = {
   title: string;
-  description: string;
-  availableFrom: string;
-  availableTo: String;
+  description?: string;
+  availableFrom?: string;
+  availableTo?: String;
   availableDays: DaysType[];
-  imageUrl: string;
+  imageUrl?: string;
 };
 
 export type CreateBookResponse = SuccessResponse | ErrorResponse;
