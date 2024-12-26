@@ -1,35 +1,82 @@
+import { createBook } from "@/api v2/AttendanceBookApiClient";
 import { CreateBookRequest, DaysType } from "@/api v2/AttendanceBookSchema";
-import React, { ChangeEvent, useRef, useState } from "react";
-import { UseFormRegister } from "react-hook-form";
+import { ChangeEvent, useRef, useState } from "react";
+import { useForm, UseFormRegister } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
-
-type IProps = {
-  register: UseFormRegister<CreateBookRequest>;
-  handleFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  onDaysChange: (day: DaysType) => void;
-  fileUrl?: string;
-  dayArrays: DaysType[];
-  DaysMatch: Record<string, DaysType>;
-};
 
 const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
 
-export default function Step1(props: IProps) {
+const DaysMatch: Record<string, DaysType> = {
+  월: "MONDAY",
+  화: "TUESDAY",
+  수: "WEDNESDAY",
+  목: "THURSDAY",
+  금: "FRIDAY",
+  토: "SATURDAY",
+  일: "SUNDAY",
+};
+
+type iProps = {
+  handleStep2Change: () => void;
+};
+export default function Step1(props: iProps) {
+  const { handleStep2Change } = props;
+
+  const [fileUrl, setFileUrl] = useState<string>();
+  const [isNext, setIsNext] = useState<boolean>(false);
+
+  const [dayArrays, setDayArrays] = useState<DaysType[]>([]);
+
   const {
     register,
-    handleFileChange,
-    fileUrl,
-    dayArrays,
-    DaysMatch,
-    onDaysChange,
-  } = props;
+    setValue,
+    handleSubmit,
+    getValues,
+    watch,
+    formState: { errors, isSubmitting, isDirty },
+  } = useForm<CreateBookRequest>({
+    mode: "onBlur", // 폼이벤트 유효성 검사 트리거
+  });
+
+  const onDaysChange = (day: DaysType) => {
+    if (dayArrays.includes(DaysMatch[day])) {
+      setDayArrays(dayArrays.filter((item) => item !== DaysMatch[day]));
+    } else {
+      setDayArrays([...dayArrays, DaysMatch[day]]);
+    }
+  };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target;
+    const file = files?.[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file!);
+    reader.onload = () => {
+      setFileUrl(reader.result as string);
+    };
+  };
+
   const fileRef = useRef<HTMLInputElement | null>(null);
   const triggerFileInput = () => {
     fileRef.current?.click();
   };
 
   return (
-    <React.Fragment>
+    <form
+      onSubmit={handleSubmit(async () => {
+        setValue("imageUrl", fileUrl!);
+        await createBook({
+          ...getValues(),
+          availableFrom: "2024",
+          availableTo: "0022",
+          availableDays: ["MONDAY"],
+          description: "",
+          imageUrl: "",
+        });
+        handleStep2Change();
+      })}
+      className="flex flex-col justify-center gap-6 max-w-[342px] w-full"
+    >
       {/* 출석부 이름 */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
@@ -41,7 +88,7 @@ export default function Step1(props: IProps) {
           {...register("title", { required: true })}
           type="text"
           placeholder="출석부 이름"
-          className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-bold"
+          className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />
       </div>
 
@@ -137,9 +184,21 @@ export default function Step1(props: IProps) {
         <input
           {...register("description")}
           type="text"
-          className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none"
+          className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />
       </div>
-    </React.Fragment>
+      <button
+        className={twMerge(
+          "max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl",
+          isNext
+            ? "bg-bg-tertiary text-[#f1f8f3]"
+            : "bg-bg-disabled text-text-disabled"
+        )}
+        disabled={!isNext}
+        type="submit"
+      >
+        <p className="font-semibold text-lg">다음으로</p>
+      </button>
+    </form>
   );
 }

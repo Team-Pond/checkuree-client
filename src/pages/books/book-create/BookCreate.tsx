@@ -1,11 +1,13 @@
 import { createBook } from "@/api v2/AttendanceBookApiClient";
 import { CreateBookRequest, DaysType } from "@/api v2/AttendanceBookSchema";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { twMerge } from "tailwind-merge";
+
 import Step1 from "./components/Step1";
 import Step2 from "./components/Step2";
+import { twMerge } from "tailwind-merge";
+import { getSubjects } from "@/api v2/CourseApiClient";
 
 const DaysMatch: Record<string, DaysType> = {
   월: "MONDAY",
@@ -21,24 +23,12 @@ export default function BookCreate() {
   const navigate = useNavigate();
 
   const [fileUrl, setFileUrl] = useState<string>();
-
+  const [isNext, setIsNext] = useState<boolean>(false);
+  const [isStep2, setIsStep2] = useState<boolean>(false);
   const [dayArrays, setDayArrays] = useState<DaysType[]>([]);
-  const onDaysChange = (day: DaysType) => {
-    if (dayArrays.includes(DaysMatch[day])) {
-      setDayArrays(dayArrays.filter((item) => item !== DaysMatch[day]));
-    } else {
-      setDayArrays([...dayArrays, DaysMatch[day]]);
-    }
-  };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-    const file = files?.[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file!);
-    reader.onload = () => {
-      setFileUrl(reader.result as string);
-    };
+  const handleStep2Change = () => {
+    setIsStep2(true);
   };
 
   const {
@@ -52,6 +42,20 @@ export default function BookCreate() {
     mode: "onBlur", // 폼이벤트 유효성 검사 트리거
   });
 
+  const title = watch("title");
+  const availableDays = dayArrays;
+
+  useEffect(() => {
+    setIsNext(!!title && availableDays.length > 0);
+  }, [title, availableDays]);
+
+  const getSubject = async () => {
+    await getSubjects();
+  };
+
+  useEffect(() => {
+    getSubject();
+  }, []);
   return (
     <section className="flex flex-col gap-7 w-full pb-[30px]">
       <div
@@ -70,41 +74,36 @@ export default function BookCreate() {
       <div className="w-full flex flex-col gap-10 items-center">
         <div className="flex gap-2 w-full justify-center">
           <hr className="border-[2px] border-bg-tertiary max-w-[174px] w-full rounded-full" />
-          <div className="border-[2px] border-[#DDEEDF] max-w-[174px] w-full rounded-full" />
+          <div
+            className={twMerge(
+              "border-[2px]  max-w-[174px] w-full rounded-full",
+              isStep2 ? "border-bg-tertiary" : "border-[#DDEEDF]"
+            )}
+          />
         </div>
 
         <div className="flex w-full justify-center">
-          <form
-            action=""
+          <div
             onSubmit={handleSubmit(async () => {
               setValue("imageUrl", fileUrl!);
-              await createBook(getValues());
+              await createBook({
+                ...getValues(),
+                availableFrom: "2024",
+                availableTo: "0022",
+                availableDays: ["MONDAY"],
+                description: "",
+                imageUrl: "",
+              });
+              handleStep2Change();
             })}
             className="flex flex-col justify-center gap-6 max-w-[342px] w-full"
           >
-            <Step1
-              register={register}
-              fileUrl={fileUrl}
-              handleFileChange={handleFileChange}
-              onDaysChange={onDaysChange}
-              dayArrays={dayArrays}
-              DaysMatch={DaysMatch}
-            />
-
-            <Step2 register={register} />
-            <button
-              className={twMerge(
-                "max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl",
-                !isDirty === false
-                  ? "bg-bg-tertiary text-[#f1f8f3]"
-                  : "bg-bg-disabled text-text-disabled"
-              )}
-              disabled={!isDirty}
-              type="submit"
-            >
-              <p className="font-semibold text-lg">다음으로</p>
-            </button>
-          </form>
+            {isStep2 ? (
+              <Step2 />
+            ) : (
+              <Step1 handleStep2Change={handleStep2Change} />
+            )}
+          </div>
         </div>
       </div>
     </section>
