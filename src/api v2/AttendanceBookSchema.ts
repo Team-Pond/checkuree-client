@@ -28,6 +28,7 @@ export type CreateBookRequest = {
   availableTo?: String;
   availableDays: DaysType[];
   imageUrl?: string;
+  curriculumName: string;
 };
 
 export type CreateBookResponse = SuccessResponse | ErrorResponse;
