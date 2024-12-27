@@ -8,6 +8,8 @@ import {
   AttendeeCheckNameResponse,
   AttendeeCheckRequest,
   AttendeeCheckResponse,
+  GetAttendeeListRequest,
+  GetAttendeeListResponse,
 } from "./AttendeeSchema";
 
 export const createAttendee = async ({
@@ -34,6 +36,25 @@ export const checkNameAttendee = async (
   const response = await ApiClient.request({
     method: "GET",
     url: `/book/${attendanceBookId}/attendee/check-name?name=${name}`,
+  });
+
+  return response.data;
+};
+
+// 학생 목록 조회
+export const getAttendee = async (
+  params: GetAttendeeListRequest
+): Promise<GetAttendeeListResponse> => {
+  const { attendanceBookId, filter } = params;
+
+  const scheduleDays = filter.scheduleDays.join(",");
+
+  console.log(filter.gender);
+  const response = await ApiClient.request({
+    method: "GET",
+    url: `/book/${attendanceBookId}/attendee?age.min=0&age.max=100&scheduleDays=${scheduleDays}&gender=${
+      filter.gender || ""
+    }&status=ATTENDING`,
   });
 
   return response.data;

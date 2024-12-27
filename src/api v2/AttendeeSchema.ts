@@ -1,5 +1,15 @@
-type Gender = "MALE" | "FEMALE";
+type Gender = "MALE" | "FEMALE" | "";
 type Parent = "FATHER" | "MATHER";
+type Status = "ATTENDING" | string;
+
+export type DaysType =
+  | "MONDAY"
+  | "TUESDAY"
+  | "WEDNESDAY"
+  | "THURSDAY"
+  | "FRIDAY"
+  | "SATURDAY"
+  | "SUNDAY";
 
 interface Associates {
   name: string;
@@ -50,3 +60,56 @@ export type AttendeeCheckRequest = {
 };
 
 export type AttendeeCheckResponse = SuccessResponse | ErrorResponse;
+
+export type GetAttendeeListRequest = {
+  attendanceBookId: string;
+  filter: {
+    age: {
+      min: number;
+      max: number;
+    };
+    gender: Gender;
+    gradeIds: number[];
+    scheduleDays: DaysType[];
+    status: Status;
+  };
+};
+export type GetAttendeeListResponse = {
+  status: 200;
+  data: {
+    content: {
+      id: number;
+      name: string;
+      gender: Gender;
+      status: "ATTENDING";
+      grades: {
+        id: number;
+        name: string;
+      }[];
+      age: number;
+      scheduleDays: DaysType[];
+    }[];
+    empty: boolean;
+    first: boolean;
+    last: boolean;
+    number: number;
+    numberOfelements: number;
+    size: number;
+    pageable: {
+      offset: number;
+      pageNumber: number;
+      pageSize: number;
+      paged: boolean;
+      sort: {
+        empty: boolean;
+        sorted: boolean;
+        unsorted: boolean;
+      };
+    };
+    sort: {
+      emply: boolean;
+      sorted: boolean;
+      unsorted: boolean;
+    };
+  };
+} & ErrorResponse;
