@@ -1,7 +1,8 @@
 import { createBook } from "@/api v2/AttendanceBookApiClient";
 import { CreateBookRequest, DaysType } from "@/api v2/AttendanceBookSchema";
-import { ChangeEvent, useRef, useState } from "react";
-import { useForm, UseFormRegister } from "react-hook-form";
+
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 
 const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
@@ -17,7 +18,7 @@ const DaysMatch: Record<string, DaysType> = {
 };
 
 type iProps = {
-  handleStep2Change: () => void;
+  handleStep2Change: (id: number) => void;
 };
 export default function Step1(props: iProps) {
   const { handleStep2Change } = props;
@@ -61,6 +62,13 @@ export default function Step1(props: iProps) {
     fileRef.current?.click();
   };
 
+  const title = watch("title");
+  const availableDays = dayArrays;
+
+  useEffect(() => {
+    setIsNext(!!title && availableDays.length > 0);
+  }, [title, availableDays]);
+
   return (
     <form
       onSubmit={handleSubmit(async () => {
@@ -72,8 +80,11 @@ export default function Step1(props: iProps) {
           availableDays: ["MONDAY"],
           description: "",
           imageUrl: "",
+        }).then((res) => {
+          if (res.status === 200) {
+            handleStep2Change(res.data.id);
+          }
         });
-        handleStep2Change();
       })}
       className="flex flex-col justify-center gap-6 max-w-[342px] w-full"
     >
@@ -194,7 +205,7 @@ export default function Step1(props: iProps) {
             ? "bg-bg-tertiary text-[#f1f8f3]"
             : "bg-bg-disabled text-text-disabled"
         )}
-        disabled={!isNext}
+        // disabled={!isNext}
         type="submit"
       >
         <p className="font-semibold text-lg">다음으로</p>

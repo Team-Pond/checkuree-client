@@ -4,9 +4,14 @@ import { useForm, UseFormRegister } from "react-hook-form";
 
 import BottomDrawer from "@/components/BottomDrawer";
 import { twMerge } from "tailwind-merge";
-import { createBook } from "@/api v2/AttendanceBookApiClient";
+import { useQuery } from "@tanstack/react-query";
+import { getSubjectItems, getSubjects } from "@/api v2/CourseApiClient";
 
-export default function Step2() {
+type IProps = {
+  id: number;
+};
+export default function Step2(props: IProps) {
+  const { id } = props;
   const {
     register,
     setValue,
@@ -20,8 +25,11 @@ export default function Step2() {
 
   const [openFilter, setOpenFilter] = useState<boolean>(false);
   const [curriculumData, setCurriCulumData] = useState<string[]>([]);
-  const [isCurriculum, setIsCurriculum] = useState<boolean>(false);
-
+  const [isCurriculum, setIsCurriculum] = useState<boolean>(true);
+  const [selectedSubject, setSelectedSubject] = useState<{
+    id: number;
+    title: string;
+  }>();
   const onDrawerChange = () => {
     setOpenFilter(!openFilter);
   };
@@ -29,6 +37,29 @@ export default function Step2() {
   const handleCurriculumChange = (curriCulumName: string) => {
     setCurriCulumData([...curriculumData, curriCulumName]);
   };
+
+  const { data: subjects } = useQuery({
+    queryKey: ["subjects"],
+    queryFn: async () =>
+      await getSubjects().then((res) => {
+        if (res.status === 200) return res.data;
+      }),
+  });
+
+  const { data: subejctItems } = useQuery({
+    enabled: !!selectedSubject?.id,
+    queryKey: ["subject-items", selectedSubject?.title],
+    queryFn: async () =>
+      await getSubjectItems({ subjectId: String(selectedSubject?.id) }).then(
+        (res) => {
+          if (res.status === 200) {
+            return res;
+          }
+        }
+      ),
+  });
+
+  console.log(subejctItems);
 
   return (
     <form
@@ -52,8 +83,6 @@ export default function Step2() {
           </div>
         );
       })}
-
-      {/* 커리큘럼 버튼 추가 */}
 
       {isCurriculum ? (
         <>
@@ -163,34 +192,42 @@ export default function Step2() {
 
                   <div className="w-full max-w-[345px] h-[234px] flex bg-white ">
                     <ul className="w-full max-w-[107px] overflow-y-scroll scrollbar-hide rounded-tl-lg">
-                      <li className="h-[52px] flex items-center justify-center text-text-brand text-m-bold bg-bg-base">
-                        체르니
-                      </li>
-                      <li className="bg-white h-[52px] flex items-center justify-center text-m-medium text-text-primary">
-                        하농
-                      </li>
-                      <li className="bg-white h-[52px] flex items-center justify-center text-m-medium text-text-primary">
-                        재즈
-                      </li>
-                      <li className="bg-white h-[52px] flex items-center justify-center text-m-medium text-text-primary">
-                        OST
-                      </li>
-                      <li className="bg-white h-[52px] flex items-center justify-center text-m-medium text-text-primary">
-                        가요
-                      </li>
+                      {subjects?.map((subject) => {
+                        return (
+                          <li
+                            key={subject.id}
+                            className={twMerge(
+                              "bg-white h-[52px] flex items-center justify-center",
+                              selectedSubject?.title === subject.title
+                                ? "text-text-brand font-bold bg-bg-base"
+                                : "text-text-primary text-m-medium"
+                            )}
+                            onClick={() => setSelectedSubject(subject)}
+                          >
+                            {subject.title}
+                          </li>
+                        );
+                      })}
                     </ul>
                     <ul className="w-full overflow-y-scroll bg-[#f6f6f6] px-[14px] rounded-tr-lg">
-                      <li className="h-[52px] flex items-center justify-between">
-                        <p className="text-text-primary text-s-semibold">
-                          체르니
-                        </p>
-                        <img
-                          src="/images/icons/book-roaster/ico-plus-black.svg"
-                          alt="플러스 아이콘"
-                          width={24}
-                          height={24}
-                        />
-                      </li>
+                      {subejctItems?.data.map((subejctItem) => {
+                        return (
+                          <li
+                            key={subejctItem.level}
+                            className="h-[52px] flex items-center justify-between"
+                          >
+                            <p className="text-text-primary text-s-semibold">
+                              {subejctItem.title}
+                            </p>
+                            <img
+                              src="/images/icons/book-roaster/ico-plus-black.svg"
+                              alt="플러스 아이콘"
+                              width={24}
+                              height={24}
+                            />
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 </div>
