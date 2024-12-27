@@ -106,6 +106,7 @@ export default function Header() {
           {SUB_HEADER.map((item) => {
             return (
               <motion.button
+                key={item.name}
                 style={{
                   height: headerHeight,
                   transition: "height 0.1s",
