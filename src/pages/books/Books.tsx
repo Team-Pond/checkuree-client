@@ -82,18 +82,20 @@ export default function Books() {
         })}
       </div>
 
-      <button
-        onClick={() => navigate("/book/create")}
-        className="w-[104px] h-[46px] fixed bottom-[44px] right-[18px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
-      >
-        <img
-          src="/images/icons/book/ico-plus.svg"
-          alt="플러스 아이콘"
-          width={16}
-          height={16}
-        />
-        <p className="text-white font-semibold text-lg">출석부</p>
-      </button>
+      <div className="fixed justify-items-end bottom-[44px] pr-[18px] float-right  max-w-[390px] w-full text-right left-1/2 transform -translate-x-1/2">
+        <button
+          onClick={() => navigate("/book/create")}
+          className=" w-[104px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
+        >
+          <img
+            src="/images/icons/book/ico-plus.svg"
+            alt="플러스 아이콘"
+            width={16}
+            height={16}
+          />
+          <p className="text-white font-semibold text-lg">출석부</p>
+        </button>
+      </div>
     </section>
   );
 }
