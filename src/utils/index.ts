@@ -1,3 +1,4 @@
+import { DaysType } from "@/api v2/AttendanceBookSchema";
 import dayjs from "dayjs";
 
 export const dateFormat = (
@@ -72,4 +73,70 @@ export function sortWeekdays(weekdays: string[]): DayOfWeek[] {
   return weekdays.sort(
     (a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b)
   ) as DayOfWeek[];
+}
+
+const DayTransfer = {
+  MONDAY: "월",
+  TUESDAY: "화",
+  WEDNESDAY: "수",
+  THURSDAY: "목",
+  FRIDAY: "금",
+  SATURDAY: "토",
+  SUNDAY: "일",
+};
+
+export function getDayGroupFromInput(input: DaysType[]) {
+  const weekdays = ["월", "화", "수", "목", "금"];
+  const weekends = ["토", "일"];
+  const allDays = ["월", "화", "수", "목", "금", "토", "일"];
+
+  // Input을 한글 요일로 변환
+  const days = input.map((item) => DayTransfer[item]);
+
+  // 매일
+  if (
+    days.every((day) => allDays.includes(day)) &&
+    days.length === allDays.length
+  ) {
+    return "매일";
+  }
+
+  // 평일
+  if (
+    days.every((day) => weekdays.includes(day)) &&
+    days.length === weekdays.length
+  ) {
+    return "평일";
+  }
+
+  // 주말
+  if (
+    days.every((day) => weekends.includes(day)) &&
+    days.length === weekends.length
+  ) {
+    return "주말";
+  }
+
+  // 각각 요일
+  return days.join(", ");
+}
+
+function formatTime(time: string) {
+  // time을 문자열로 변환하고 시간과 분을 분리
+  const timeStr = time.padStart(4, "0");
+  const hours = parseInt(timeStr.slice(0, 2), 10);
+  const minutes = timeStr.slice(2);
+
+  // 오전/오후 계산
+  const period = hours < 12 ? "오전" : "오후";
+  const formattedHour = hours % 12 === 0 ? 12 : hours % 12;
+
+  return `${period} ${formattedHour}${minutes === "00" ? "" : `:${minutes}`}시`;
+}
+
+export function formatTimeRange(startTime: string, endTime: string) {
+  const formattedStartTime = formatTime(startTime);
+  const formattedEndTime = formatTime(endTime);
+
+  return `${formattedStartTime} ~ ${formattedEndTime}`;
 }

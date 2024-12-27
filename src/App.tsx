@@ -11,7 +11,7 @@ import PageContainer from "@/components/PageContainer";
 import Loading from "@/components/Loading";
 import { lazy, Suspense } from "react";
 import ScrollToTop from "./components/ScrollToTop";
-
+import { ErrorBoundary } from "react-error-boundary";
 // Lazy load components
 const Books = lazy(() => import("@/pages/books/Books"));
 const BookCreate = lazy(() => import("@/pages/books/book-create/BookCreate"));
@@ -31,12 +31,13 @@ const routes: RouteType[] = [
   { path: "/book", element: <Books /> }, // 출석부 목록
   { path: "/book/create", element: <BookCreate /> }, // 출석부 생성
   { path: "/book/:id", element: <BookCheck /> }, // 출석부 출석
-  { path: "/book/roaster", element: <BookRoaster /> }, // 출석부 명단
+  { path: "/roaster/:id", element: <BookRoaster /> }, // 출석부 명단
 ];
 
 function App() {
   return (
     <Router>
+      {/* <ErrorBoundary fallback={<Loading />}> */}
       <Suspense fallback={<Loading />}>
         <PageContainer>
           <ScrollToTop />
@@ -64,6 +65,7 @@ function App() {
           </Routes>
         </PageContainer>
       </Suspense>
+      {/* </ErrorBoundary> */}
     </Router>
   );
 }

@@ -7,6 +7,7 @@ export default function BookCheck() {
     <section className="flex flex-col w-full">
       <Header />
       <MainContents />
+      <div className="flex justify-between px-[44px] items-center w-full h-[92px] bg-bg-secondary" />
       <Bottom />
     </section>
   );

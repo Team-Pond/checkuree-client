@@ -1,53 +1,20 @@
-import { createBook } from "@/api v2/AttendanceBookApiClient";
-import { CreateBookRequest, DaysType } from "@/api v2/AttendanceBookSchema";
-import { ChangeEvent, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { DaysType } from "@/api v2/AttendanceBookSchema";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import Step1 from "./components/Step1";
 import Step2 from "./components/Step2";
 import { twMerge } from "tailwind-merge";
 import { getSubjects } from "@/api v2/CourseApiClient";
 
-const DaysMatch: Record<string, DaysType> = {
-  월: "MONDAY",
-  화: "TUESDAY",
-  수: "WEDNESDAY",
-  목: "THURSDAY",
-  금: "FRIDAY",
-  토: "SATURDAY",
-  일: "SUNDAY",
-};
-
 export default function BookCreate() {
   const navigate = useNavigate();
 
-  const [fileUrl, setFileUrl] = useState<string>();
-  const [isNext, setIsNext] = useState<boolean>(false);
   const [isStep2, setIsStep2] = useState<boolean>(false);
-  const [dayArrays, setDayArrays] = useState<DaysType[]>([]);
-
-  const handleStep2Change = () => {
+  const [bookId, setBookId] = useState<number>();
+  const handleStep2Change = (id: number) => {
     setIsStep2(true);
+    setBookId(id);
   };
-
-  const {
-    register,
-    setValue,
-    handleSubmit,
-    getValues,
-    watch,
-    formState: { errors, isSubmitting, isDirty },
-  } = useForm<CreateBookRequest>({
-    mode: "onBlur", // 폼이벤트 유효성 검사 트리거
-  });
-
-  const title = watch("title");
-  const availableDays = dayArrays;
-
-  useEffect(() => {
-    setIsNext(!!title && availableDays.length > 0);
-  }, [title, availableDays]);
 
   const getSubject = async () => {
     await getSubjects();
@@ -83,26 +50,13 @@ export default function BookCreate() {
         </div>
 
         <div className="flex w-full justify-center">
-          <div
-            onSubmit={handleSubmit(async () => {
-              setValue("imageUrl", fileUrl!);
-              await createBook({
-                ...getValues(),
-                availableFrom: "2024",
-                availableTo: "0022",
-                availableDays: ["MONDAY"],
-                description: "",
-                imageUrl: "",
-              });
-              handleStep2Change();
-            })}
-            className="flex flex-col justify-center gap-6 max-w-[342px] w-full"
-          >
-            {isStep2 ? (
-              <Step2 />
+          <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
+            {/* {isStep2 ? (
+              <Step2 id={bookId!} />
             ) : (
               <Step1 handleStep2Change={handleStep2Change} />
-            )}
+            )} */}
+            <Step2 id={bookId!} />
           </div>
         </div>
       </div>

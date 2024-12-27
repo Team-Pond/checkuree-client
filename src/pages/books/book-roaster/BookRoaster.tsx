@@ -1,111 +1,65 @@
 import BottomDrawer from "@/components/BottomDrawer";
 import { useState } from "react";
 import Bottom from "../book-check/components/Bottom";
+import { useQuery } from "@tanstack/react-query";
+import { getAttendee } from "@/api v2/AttendeeApiClient";
 
+import { getDayGroupFromInput } from "@/utils";
+import { DaysType } from "@/api v2/AttendanceBookSchema";
+import { twMerge } from "tailwind-merge";
+
+const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
+
+const DaysMatch: Record<string, DaysType> = {
+  월: "MONDAY",
+  화: "TUESDAY",
+  수: "WEDNESDAY",
+  목: "THURSDAY",
+  금: "FRIDAY",
+  토: "SATURDAY",
+  일: "SUNDAY",
+};
 export default function BookRoaster() {
-  const MOCK_DATA = [
-    {
-      name: "배서윤",
-      availableDays: "월, 화, 수",
-      lesson: "바이엘 & 체르니",
-      age: 12,
-    },
-    {
-      name: "배서윤",
-      availableDays: "월, 화, 수",
-      lesson: "바이엘 & 체르니",
-      age: 12,
-    },
-    {
-      name: "배서윤",
-      availableDays: "월, 화, 수",
-      lesson: "바이엘 & 체르니",
-      age: 12,
-    },
-    {
-      name: "배서윤",
-      availableDays: "월, 화, 수",
-      lesson: "바이엘 & 체르니",
-      age: 12,
-    },
-    {
-      name: "배서윤",
-      availableDays: "월, 화, 수",
-      lesson: "바이엘 & 체르니",
-      age: 12,
-    },
-    {
-      name: "배서윤",
-      availableDays: "월, 화, 수",
-      lesson: "바이엘 & 체르니",
-      age: 12,
-    },
-    {
-      name: "배서윤",
-      availableDays: "월, 화, 수",
-      lesson: "바이엘 & 체르니",
-      age: 12,
-    },
-    {
-      name: "배서윤",
-      availableDays: "월, 화, 수",
-      lesson: "바이엘 & 체르니",
-      age: 12,
-    },
-    {
-      name: "배서윤",
-      availableDays: "월, 화, 수",
-      lesson: "바이엘 & 체르니",
-      age: 12,
-    },
-    {
-      name: "배서윤",
-      availableDays: "월, 화, 수",
-      lesson: "바이엘 & 체르니",
-      age: 12,
-    },
-    {
-      name: "배서윤",
-      availableDays: "월, 화, 수",
-      lesson: "바이엘 & 체르니",
-      age: 12,
-    },
-    {
-      name: "배서윤",
-      availableDays: "월, 화, 수",
-      lesson: "바이엘 & 체르니",
-      age: 12,
-    },
-    {
-      name: "배서윤",
-      availableDays: "월, 화, 수",
-      lesson: "바이엘 & 체르니",
-      age: 12,
-    },
-    {
-      name: "배서윤",
-      availableDays: "월, 화, 수",
-      lesson: "바이엘 & 체르니",
-      age: 12,
-    },
-    {
-      name: "배서윤",
-      availableDays: "월, 화, 수",
-      lesson: "바이엘 & 체르니",
-      age: 12,
-    },
-    {
-      name: "배서윤",
-      availableDays: "월, 화, 수",
-      lesson: "바이엘 & 체르니",
-      age: 12,
-    },
-  ];
-
   const [openFilter, setOpenFilter] = useState<boolean>(false);
-
+  const attendanceBookId = location.pathname.split("/")[2];
   const onDrawerChange = () => {
     setOpenFilter(!openFilter);
+  };
+
+  const [dayArrays, setDayArrays] = useState<DaysType[]>([]);
+  const [gender, setGenrder] = useState<"MALE" | "FEMALE" | "">("");
+
+  const onDaysChange = (day: DaysType) => {
+    if (dayArrays.includes(DaysMatch[day])) {
+      setDayArrays(dayArrays.filter((item) => item !== DaysMatch[day]));
+    } else {
+      setDayArrays([...dayArrays, DaysMatch[day]]);
+    }
+  };
+
+  const { data: roaster } = useQuery({
+    queryKey: ["roaster", attendanceBookId, dayArrays, gender],
+    queryFn: async () => {
+      const response = await getAttendee({
+        attendanceBookId: attendanceBookId,
+        filter: {
+          age: {
+            min: 30,
+            max: 1,
+          },
+          gradeIds: [0],
+          scheduleDays: dayArrays,
+          gender: gender,
+          status: "ATTENDING",
+        },
+      });
+      if (response.status === 200) return response;
+    },
+  });
+
+  const getGrades = (grades: { id: number; name: string }[]) => {
+    const gradesBooks = grades.map((grade) => grade.name);
+    return gradesBooks.join(" / ");
   };
 
   return (
@@ -159,10 +113,17 @@ export default function BookRoaster() {
         <p className="text-left text-s-semibold text-text-secondary mb-1">
           전체
         </p>
+
         <div className="border-t border-[#F6F6F6]">
-          {MOCK_DATA.map((student) => {
+          {/* <div>
+            <img src="" alt="" />
+            <p className="text-s-medium text-[#B0B0B0]">
+              일치하는 학생이 없습니다.
+            </p>
+          </div> */}
+          {roaster?.data.content.map((student) => {
             return (
-              <div className="py-4 px-2 flex gap-4">
+              <div key={student.id} className="py-4 px-2 flex gap-4">
                 <img
                   src="/images/icons/book-roaster/ico-student.svg"
                   alt="학생 아이콘"
@@ -182,10 +143,10 @@ export default function BookRoaster() {
                   </div>
                   <div className="flex gap-2">
                     <p className="text-text-brand text-s-semibold">
-                      {student.availableDays}
+                      {getDayGroupFromInput(student.scheduleDays)}
                     </p>
                     <p className="text-[#B0B0B0] text-s-medium">
-                      {student.lesson}
+                      {getGrades(student.grades)}
                     </p>
                   </div>
                 </div>
@@ -205,10 +166,28 @@ export default function BookRoaster() {
               <div className="flex flex-col gap-3 text-left">
                 <p className="text-m-bold text-text-primary">학생 성별</p>
                 <div className="flex gap-2">
-                  <button className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
+                  <button
+                    onClick={() => setGenrder(gender === "MALE" ? "" : "MALE")}
+                    className={twMerge(
+                      "rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover",
+                      gender === "MALE"
+                        ? "border-border-brand text-text-brand"
+                        : "text-border-secondary-hover"
+                    )}
+                  >
                     남성
                   </button>
-                  <button className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
+                  <button
+                    onClick={() =>
+                      setGenrder(gender === "FEMALE" ? "" : "FEMALE")
+                    }
+                    className={twMerge(
+                      "rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover",
+                      gender === "FEMALE"
+                        ? "border-border-brand text-text-brand"
+                        : "text-border-secondary-hover"
+                    )}
+                  >
                     여성
                   </button>
                 </div>
@@ -240,27 +219,22 @@ export default function BookRoaster() {
               <div className="flex flex-col gap-3 text-left">
                 <p className="text-m-bold text-text-primary">학생 성별</p>
                 <div className="flex gap-2">
-                  <button className="rounded-lg border border-[#d1d1d1] w-[41px] h-[33px] text-s-medium text-border-secondary-hover">
-                    월
-                  </button>
-                  <button className="rounded-lg border border-[#d1d1d1] w-[41px] h-[33px] text-s-medium text-border-secondary-hover">
-                    화
-                  </button>
-                  <button className="rounded-lg border border-[#d1d1d1] w-[41px] h-[33px] text-s-medium text-border-secondary-hover">
-                    수
-                  </button>
-                  <button className="rounded-lg border border-[#d1d1d1] w-[41px] h-[33px] text-s-medium text-border-secondary-hover">
-                    목
-                  </button>
-                  <button className="rounded-lg border border-[#d1d1d1] w-[41px] h-[33px] text-s-medium text-border-secondary-hover">
-                    금
-                  </button>
-                  <button className="rounded-lg border border-[#d1d1d1] w-[41px] h-[33px] text-s-medium text-border-secondary-hover">
-                    토
-                  </button>
-                  <button className="rounded-lg border border-[#d1d1d1] w-[41px] h-[33px] text-s-medium text-border-secondary-hover">
-                    일
-                  </button>
+                  {DAYS.map((day, index) => {
+                    return (
+                      <button
+                        key={day}
+                        className={twMerge(
+                          "rounded-lg border border-[#d1d1d1] w-[41px] h-[33px] text-s-medium text-border-secondary-hover",
+                          dayArrays.includes(DaysMatch[DAYS[index]])
+                            ? "border-border-brand text-text-brand"
+                            : "text-border-secondary-hover"
+                        )}
+                        onClick={() => onDaysChange(DAYS[index] as DaysType)}
+                      >
+                        {DAYS[index]}
+                      </button>
+                    );
+                  })}
                 </div>
                 <div className="flex gap-2">
                   <button className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
@@ -273,13 +247,21 @@ export default function BookRoaster() {
               </div>
             </div>
 
-            <button className="w-full h-[54px] bg-bg-tertiary text-[#f1f8f3] rounded-2xl text-l-semibold">
+            <button
+              className="w-full h-[54px] bg-bg-tertiary text-[#f1f8f3] rounded-2xl text-l-semibold"
+              onClick={() => {}}
+            >
               필터 적용
             </button>
           </>
         }
       />
-      {!openFilter && <Bottom />}
+      {!openFilter && (
+        <>
+          <div className="flex justify-between px-[44px] items-center w-full h-[92px]" />
+          <Bottom />
+        </>
+      )}
     </section>
   );
 }
