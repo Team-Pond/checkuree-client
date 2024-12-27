@@ -120,3 +120,23 @@ export function getDayGroupFromInput(input: DaysType[]) {
   // 각각 요일
   return days.join(", ");
 }
+
+function formatTime(time: string) {
+  // time을 문자열로 변환하고 시간과 분을 분리
+  const timeStr = time.padStart(4, "0");
+  const hours = parseInt(timeStr.slice(0, 2), 10);
+  const minutes = timeStr.slice(2);
+
+  // 오전/오후 계산
+  const period = hours < 12 ? "오전" : "오후";
+  const formattedHour = hours % 12 === 0 ? 12 : hours % 12;
+
+  return `${period} ${formattedHour}${minutes === "00" ? "" : `:${minutes}`}시`;
+}
+
+export function formatTimeRange(startTime: string, endTime: string) {
+  const formattedStartTime = formatTime(startTime);
+  const formattedEndTime = formatTime(endTime);
+
+  return `${formattedStartTime} ~ ${formattedEndTime}`;
+}
