@@ -31,42 +31,41 @@ const routes: RouteType[] = [
   { path: "/book", element: <Books /> }, // 출석부 목록
   { path: "/book/create", element: <BookCreate /> }, // 출석부 생성
   { path: "/book/:id", element: <BookCheck /> }, // 출석부 출석
-  { path: "/book/roaster", element: <BookRoaster /> }, // 출석부 명단
+  { path: "/roaster/:id", element: <BookRoaster /> }, // 출석부 명단
 ];
 
 function App() {
   return (
     <Router>
-      <ErrorBoundary fallback={<Loading />}>
-        <Suspense fallback={<Loading />}>
-          <PageContainer>
-            <ScrollToTop />
-            <Routes>
-              <Route path="/" element={<Navigate to={"/book"} />} />
-              <Route path="*" element={<Navigate to={""} />} />{" "}
-              {/* 404페이지 */}
-              <Route path="/auth/signin" element={<SignIn />} />
-              <Route
-                path="/checkuree-auth/signin"
-                element={<CheckureeSignIn />}
-              />
-              <Route path="/kakao-auth/signin" element={<KakaoSignIn />} />
-              {/* 인증 처리 */}
-              {routes.map((route) => {
-                return (
-                  <Route
-                    key={route.path}
-                    path={route.path}
-                    element={
-                      <ProtectedRoute element={route.element}></ProtectedRoute>
-                    }
-                  />
-                );
-              })}
-            </Routes>
-          </PageContainer>
-        </Suspense>
-      </ErrorBoundary>
+      {/* <ErrorBoundary fallback={<Loading />}> */}
+      <Suspense fallback={<Loading />}>
+        <PageContainer>
+          <ScrollToTop />
+          <Routes>
+            <Route path="/" element={<Navigate to={"/book"} />} />
+            <Route path="*" element={<Navigate to={""} />} /> {/* 404페이지 */}
+            <Route path="/auth/signin" element={<SignIn />} />
+            <Route
+              path="/checkuree-auth/signin"
+              element={<CheckureeSignIn />}
+            />
+            <Route path="/kakao-auth/signin" element={<KakaoSignIn />} />
+            {/* 인증 처리 */}
+            {routes.map((route) => {
+              return (
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  element={
+                    <ProtectedRoute element={route.element}></ProtectedRoute>
+                  }
+                />
+              );
+            })}
+          </Routes>
+        </PageContainer>
+      </Suspense>
+      {/* </ErrorBoundary> */}
     </Router>
   );
 }
