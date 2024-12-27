@@ -1,82 +1,28 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMeBooks } from "@/api v2/AttendanceBookApiClient";
-
-const MOCK_DATA = [
-  {
-    imgUrl: "/images/img-test.png",
-    name: "리스트반 출석부",
-    roasterCount: 12,
-    availableDays: "평일",
-    availableTime: "오전 11시 ~ 오후 8시",
-  },
-  {
-    imgUrl: "/images/img-test.png",
-    name: "리스트반 출석부",
-    roasterCount: 12,
-    availableDays: "평일",
-    availableTime: "오전 11시 ~ 오후 8시",
-  },
-  {
-    imgUrl: "/images/img-test.png",
-    name: "리스트반 출석부",
-    roasterCount: 12,
-    availableDays: "평일",
-    availableTime: "오전 11시 ~ 오후 8시",
-  },
-  {
-    imgUrl: "/images/img-test.png",
-    name: "리스트반 출석부",
-    roasterCount: 12,
-    availableDays: "평일",
-    availableTime: "오전 11시 ~ 오후 8시",
-  },
-  {
-    imgUrl: "/images/img-test.png",
-    name: "리스트반 출석부",
-    roasterCount: 12,
-    availableDays: "평일",
-    availableTime: "오전 11시 ~ 오후 8시",
-  },
-  {
-    imgUrl: "/images/img-test.png",
-    name: "리스트반 출석부",
-    roasterCount: 12,
-    availableDays: "평일",
-    availableTime: "오전 11시 ~ 오후 8시",
-  },
-  {
-    imgUrl: "/images/img-test.png",
-    name: "리스트반 출석부",
-    roasterCount: 12,
-    availableDays: "평일",
-    availableTime: "오전 11시 ~ 오후 8시",
-  },
-  {
-    imgUrl: "/images/img-test.png",
-    name: "리스트반 출석부",
-    roasterCount: 12,
-    availableDays: "평일",
-    availableTime: "오전 11시 ~ 오후 8시",
-  },
-  {
-    imgUrl: "/images/img-test.png",
-    name: "리스트반 출석부",
-    roasterCount: 12,
-    availableDays: "평일",
-    availableTime: "오전 11시 ~ 오후 8시",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { formatTimeRange, getDayGroupFromInput } from "@/utils";
 
 export default function Books() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getMyBooks = async () => {
-      await getMeBooks().then((res) => console.log(res));
-    };
+    const getMyBooks = async () => {};
     getMyBooks();
   }, []);
+
+  const { data: bookList } = useQuery({
+    queryKey: ["books"],
+    queryFn: async () => {
+      const response = await getMeBooks();
+      if (response.status === 200) {
+        return response;
+      } else {
+        console.log(response); // 에러 바운더리 추가
+      }
+    },
+  });
 
   return (
     <section className="flex flex-col w-full min-h-screen">
@@ -95,33 +41,39 @@ export default function Books() {
         />
       </div>
 
-      <div className="w-full flex-1 bg-bg-secondary py-5 grid grid-cols-2 gap-y-6 justify-items-center  ">
-        {MOCK_DATA.map((attendance, index) => {
+      <div className="w-full flex-1 bg-bg-secondary border-spacing-0 py-5 grid grid-cols-2  gap-y-6 justify-items-center  ">
+        {bookList?.data.map((attendance) => {
           return (
             <div
+              key={attendance.id}
               className="max-w-[162px] w-full"
-              onClick={() => navigate(`/book/${index}`)}
+              onClick={() => navigate(`/book/${attendance.id}`)}
             >
               <img
-                src={attendance.imgUrl}
+                src={
+                  attendance.imageUrl === "string"
+                    ? "/images/img-test.png"
+                    : attendance.imageUrl
+                }
                 className="w-full h-[97px] rounded-t-2xl"
                 alt=""
               />
               <div className="flex flex-col gap-2 px-3 py-4 text-left rounded-b-2xl bg-white">
                 <div className="flex gap-2">
                   <p className="font-bold text-text-primary">
-                    {attendance.name}
+                    {attendance.title}
                   </p>
                   <p className="font-semibold text-text-secondary">
-                    {attendance.roasterCount}
+                    {/* TODO: roasterCount */}
+                    {12}
                   </p>
                 </div>
                 <div className="flex flex-col gap-1">
                   <p className="text-text-brand font-bold text-sm">
-                    {attendance.availableDays}
+                    {getDayGroupFromInput(attendance.availableDays)}
                   </p>
                   <p className="text-text-secondary font-medium text-sm">
-                    {attendance.availableTime}
+                    {formatTimeRange("1200", "2000")}
                   </p>
                 </div>
               </div>
@@ -132,7 +84,7 @@ export default function Books() {
 
       <button
         onClick={() => navigate("/book/create")}
-        className="w-[104px] h-[46px] border border-black fixed bottom-[44px] right-[18px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
+        className="w-[104px] h-[46px] fixed bottom-[44px] right-[18px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
       >
         <img
           src="/images/icons/book/ico-plus.svg"
