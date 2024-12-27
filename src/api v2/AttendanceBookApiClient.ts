@@ -18,7 +18,7 @@ export const createBook = async (
   const response = await ApiClient.request({
     method: "POST",
     url: "/book",
-    params,
+    data: params,
   });
 
   return response.data;
@@ -57,7 +57,7 @@ export const updateBook = async ({
   const response = await ApiClient.request({
     method: "PATCH",
     url: `/book/${attendanceBookId}`,
-    params,
+    data: params,
   });
   return response.data;
 };

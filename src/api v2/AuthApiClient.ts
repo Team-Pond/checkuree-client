@@ -29,7 +29,7 @@ export const SignIn = async (
   const response = await ApiClient.request({
     method: "POST",
     url: "/auth/signin",
-    params,
+    data: params,
   });
   return response.data;
 };
@@ -41,7 +41,7 @@ export const Refresh = async (
   const response = await ApiClient.request({
     method: "POST",
     url: "/auth/refresh",
-    params,
+    data: params,
   });
   return response.data;
 };
