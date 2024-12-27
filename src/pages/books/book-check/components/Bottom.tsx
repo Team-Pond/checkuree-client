@@ -5,17 +5,22 @@ import { twMerge } from "tailwind-merge";
 export default function Bottom() {
   const location = useLocation();
   const currentPath = location.pathname;
+  const attendanceBookId = location.pathname.split("/")[2];
 
   const navigate = useNavigate();
+
   return (
-    <div className="flex justify-between px-[44px] items-center  sticky bottom-0 z-50 w-full h-[92px] bg-white rounded-2xl">
+    <div
+      className="flex justify-between px-[44px] items-center fixed bottom-0 left-1/2 transform -translate-x-1/2 z-50 
+             w-full max-w-[390px] h-[92px] bg-white rounded-2xl"
+    >
       <div
         className="flex flex-col gap-2 items-center"
-        onClick={() => navigate("/book/0")}
+        onClick={() => navigate(`/book/${attendanceBookId}`)}
       >
         <img
           src={`/images/icons/book-check/${
-            currentPath.split("/")[2] !== "roaster"
+            currentPath.split("/")[1] === "book"
               ? "ico-book-active"
               : "ico-book"
           }.svg`}
@@ -25,7 +30,7 @@ export default function Bottom() {
         <p
           className={twMerge(
             "text-xs ",
-            currentPath.split("/")[2] !== "roaster"
+            currentPath.split("/")[1] === "book"
               ? "text-text-primary"
               : "text-text-tertiary"
           )}
@@ -35,11 +40,11 @@ export default function Bottom() {
       </div>
       <div
         className="flex flex-col gap-2 items-center"
-        onClick={() => navigate("/book/roaster")}
+        onClick={() => navigate(`/roaster/${attendanceBookId}`)}
       >
         <img
           src={`/images/icons/book-check/${
-            currentPath.split("/")[2] === "roaster"
+            currentPath.split("/")[1] === "roaster"
               ? "ico-roaster-active"
               : "ico-roaster"
           }.svg`}
@@ -50,7 +55,7 @@ export default function Bottom() {
         <p
           className={twMerge(
             "text-xs ",
-            currentPath.split("/")[2] === "roaster"
+            currentPath.split("/")[1] === "roaster"
               ? "text-text-primary"
               : "text-text-tertiary"
           )}
