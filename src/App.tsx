@@ -11,7 +11,7 @@ import PageContainer from "@/components/PageContainer";
 import Loading from "@/components/Loading";
 import { lazy, Suspense } from "react";
 import ScrollToTop from "./components/ScrollToTop";
-
+import { ErrorBoundary } from "react-error-boundary";
 // Lazy load components
 const Books = lazy(() => import("@/pages/books/Books"));
 const BookCreate = lazy(() => import("@/pages/books/book-create/BookCreate"));
@@ -37,33 +37,36 @@ const routes: RouteType[] = [
 function App() {
   return (
     <Router>
-      <Suspense fallback={<Loading />}>
-        <PageContainer>
-          <ScrollToTop />
-          <Routes>
-            <Route path="/" element={<Navigate to={"/book"} />} />
-            <Route path="*" element={<Navigate to={""} />} /> {/* 404페이지 */}
-            <Route path="/auth/signin" element={<SignIn />} />
-            <Route
-              path="/checkuree-auth/signin"
-              element={<CheckureeSignIn />}
-            />
-            <Route path="/kakao-auth/signin" element={<KakaoSignIn />} />
-            {/* 인증 처리 */}
-            {routes.map((route) => {
-              return (
-                <Route
-                  key={route.path}
-                  path={route.path}
-                  element={
-                    <ProtectedRoute element={route.element}></ProtectedRoute>
-                  }
-                />
-              );
-            })}
-          </Routes>
-        </PageContainer>
-      </Suspense>
+      <ErrorBoundary fallback={<Loading />}>
+        <Suspense fallback={<Loading />}>
+          <PageContainer>
+            <ScrollToTop />
+            <Routes>
+              <Route path="/" element={<Navigate to={"/book"} />} />
+              <Route path="*" element={<Navigate to={""} />} />{" "}
+              {/* 404페이지 */}
+              <Route path="/auth/signin" element={<SignIn />} />
+              <Route
+                path="/checkuree-auth/signin"
+                element={<CheckureeSignIn />}
+              />
+              <Route path="/kakao-auth/signin" element={<KakaoSignIn />} />
+              {/* 인증 처리 */}
+              {routes.map((route) => {
+                return (
+                  <Route
+                    key={route.path}
+                    path={route.path}
+                    element={
+                      <ProtectedRoute element={route.element}></ProtectedRoute>
+                    }
+                  />
+                );
+              })}
+            </Routes>
+          </PageContainer>
+        </Suspense>
+      </ErrorBoundary>
     </Router>
   );
 }
