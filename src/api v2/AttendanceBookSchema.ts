@@ -1,5 +1,4 @@
 type ResponseBase = {
-  status: number;
   message: string;
 };
 
@@ -13,11 +12,13 @@ export type DaysType =
   | "SUNDAY";
 
 type SuccessResponse = ResponseBase & {
+  status: 200;
   data: Record<string, unknown>;
 };
 
 type ErrorResponse = ResponseBase & {
-  data: Record<string, unknown>;
+  status: 400 | 500 | 403;
+  data: {};
   timeStamp: string;
 };
 
@@ -45,4 +46,18 @@ export type UpdateBookRequest = string;
 
 export type UpdateBookResponse = SuccessResponse | ErrorResponse;
 
-export type GetMyBooksResponse = SuccessResponse | ErrorResponse;
+export type GetMyBooksDataType = {
+  id: number;
+  title: string;
+  description?: string;
+  availableFrom?: string;
+  availableTo?: String;
+  availableDays: DaysType[];
+  imageUrl: string;
+};
+type GetBookResponse = ResponseBase & {
+  status: 200;
+  data: GetMyBooksDataType[];
+};
+
+export type GetMyBooksResponse = GetBookResponse | ErrorResponse;
