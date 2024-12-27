@@ -32,7 +32,14 @@ export type CreateBookRequest = {
   curriculumName: string;
 };
 
-export type CreateBookResponse = SuccessResponse | ErrorResponse;
+export type CreateBookResponse =
+  | {
+      status: 200;
+      data: {
+        id: number;
+      };
+    }
+  | ErrorResponse;
 
 export type GetBooksRequest = string;
 
@@ -50,8 +57,12 @@ export type GetMyBooksDataType = {
   id: number;
   title: string;
   description?: string;
-  availableFrom?: string;
-  availableTo?: String;
+  availableFrom?: {
+    hhmm: string;
+  };
+  availableTo?: {
+    hhmm: string;
+  };
   availableDays: DaysType[];
   imageUrl: string;
 };
