@@ -1,3 +1,4 @@
+import { DaysType } from "@/api v2/AttendanceBookSchema";
 import dayjs from "dayjs";
 
 export const dateFormat = (
@@ -72,4 +73,50 @@ export function sortWeekdays(weekdays: string[]): DayOfWeek[] {
   return weekdays.sort(
     (a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b)
   ) as DayOfWeek[];
+}
+
+const DayTransfer = {
+  MONDAY: "월",
+  TUESDAY: "화",
+  WEDNESDAY: "수",
+  THURSDAY: "목",
+  FRIDAY: "금",
+  SATURDAY: "토",
+  SUNDAY: "일",
+};
+
+export function getDayGroupFromInput(input: DaysType[]) {
+  const weekdays = ["월", "화", "수", "목", "금"];
+  const weekends = ["토", "일"];
+  const allDays = ["월", "화", "수", "목", "금", "토", "일"];
+
+  // Input을 한글 요일로 변환
+  const days = input.map((item) => DayTransfer[item]);
+
+  // 매일
+  if (
+    days.every((day) => allDays.includes(day)) &&
+    days.length === allDays.length
+  ) {
+    return "매일";
+  }
+
+  // 평일
+  if (
+    days.every((day) => weekdays.includes(day)) &&
+    days.length === weekdays.length
+  ) {
+    return "평일";
+  }
+
+  // 주말
+  if (
+    days.every((day) => weekends.includes(day)) &&
+    days.length === weekends.length
+  ) {
+    return "주말";
+  }
+
+  // 각각 요일
+  return days.join(", ");
 }
