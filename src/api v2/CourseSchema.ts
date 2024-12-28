@@ -32,3 +32,24 @@ export type GetSubjectItemsResponse =
       }[];
     } & ResponseBase)
   | ErrorResponse;
+
+export type CreateCourseRequest = {
+  attendanceBookId: string;
+  courseParam: {
+    title: string;
+    isPrimary: boolean;
+    gradeRequests: {
+      subjectItemId: number;
+      level: number;
+    }[];
+  }[];
+};
+
+export type CreateCourseResponse =
+  | ({
+      status: 200;
+      data: {
+        id: number;
+      }[];
+    } & ResponseBase)
+  | ErrorResponse;

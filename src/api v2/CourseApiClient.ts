@@ -1,5 +1,7 @@
 import ApiClient from "./ApiClient";
 import {
+  CreateCourseRequest,
+  CreateCourseResponse,
   GetSubjectItemsRequest,
   GetSubjectItemsResponse,
   GetSubjectResponse,
@@ -16,10 +18,24 @@ export const getSubjects = async (): Promise<GetSubjectResponse> => {
 export const getSubjectItems = async ({
   subjectId,
 }: GetSubjectItemsRequest): Promise<GetSubjectItemsResponse> => {
-  console.log(subjectId);
   const response = await ApiClient.request({
     method: "GET",
     url: `/subject/${String(subjectId)}`,
+  });
+  return response.data;
+};
+
+export const createCourse = async ({
+  attendanceBookId,
+  params,
+}: {
+  attendanceBookId: string;
+  params: CreateCourseRequest;
+}): Promise<CreateCourseResponse> => {
+  const response = await ApiClient.request({
+    method: "POST",
+    url: `/book/${attendanceBookId}/course`,
+    data: params,
   });
   return response.data;
 };
