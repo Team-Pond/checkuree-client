@@ -4,11 +4,29 @@ import { useForm, UseFormRegister } from "react-hook-form";
 
 import BottomDrawer from "@/components/BottomDrawer";
 import { twMerge } from "tailwind-merge";
-import { useQuery } from "@tanstack/react-query";
-import { getSubjectItems, getSubjects } from "@/api v2/CourseApiClient";
+import {
+  useMutation,
+  useQuery,
+  QueryClient,
+  useQueryClient,
+} from "@tanstack/react-query";
+import {
+  createCourse,
+  getSubjectItems,
+  getSubjects,
+} from "@/api v2/CourseApiClient";
 
 type IProps = {
   id: number;
+};
+
+type DataType = {
+  title: string;
+  isPrimary: boolean;
+  gradeRequests: {
+    subjectItemId: number;
+    level: number;
+  }[];
 };
 export default function Step2(props: IProps) {
   const { id } = props;
@@ -19,9 +37,11 @@ export default function Step2(props: IProps) {
     getValues,
     watch,
     formState: { errors, isSubmitting, isDirty },
-  } = useForm<CreateBookRequest>({
+  } = useForm<DataType>({
     mode: "onBlur", // 폼이벤트 유효성 검사 트리거
   });
+
+  const QueryClient = useQueryClient();
 
   const [openFilter, setOpenFilter] = useState<boolean>(false);
   const [curriculumData, setCurriCulumData] = useState<string[]>([]);
@@ -30,6 +50,9 @@ export default function Step2(props: IProps) {
     id: number;
     title: string;
   }>();
+  const [selectedSubjectItems, setSelectedSubjectItems] = useState<
+    { title: string; level: number }[]
+  >([]);
   const onDrawerChange = () => {
     setOpenFilter(!openFilter);
   };
@@ -59,11 +82,20 @@ export default function Step2(props: IProps) {
       ),
   });
 
-  console.log(subejctItems);
+  const { mutate: courseMutation } = useMutation({
+    mutationKey: [""],
+    mutationFn: async () =>
+      await createCourse({ attendanceBookId: "", params: [] }),
+    onSuccess: () => {
+      // QueryClient.setQueryData([""]);
+    },
+  });
 
   return (
     <form
-      onSubmit={handleSubmit(async () => {})}
+      onSubmit={handleSubmit(() => {
+        courseMutation();
+      })}
       className="flex flex-col justify-center gap-6 max-w-[342px] w-full"
     >
       {/* 커리큘럼 추가된 것 */}
@@ -94,7 +126,8 @@ export default function Step2(props: IProps) {
             </div>
 
             <input
-              {...register("curriculumName", { required: true })}
+              {...register("title", { required: true })}
+              onChange={(e) => setValue("title", e.target.value)}
               type="text"
               placeholder="커리큘럼 이름"
               className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
@@ -112,46 +145,22 @@ export default function Step2(props: IProps) {
                 <li className="h-11 w-[326px] py-4 text-s-semibold text-text-primary">
                   <p className="ml-8 px-[2px]">올챙이(기본)</p>
                 </li>
-                <li className="h-11 w-[326px] px-1 py-4 text-s-semibold text-text-primary flex items-center gap-1">
-                  <img
-                    src={"/images/icons/book-create/ico-plus.svg"}
-                    alt="이미지 추가 아이콘"
-                    width={24}
-                    height={24}
-                    className=""
-                  />
-                  <p className="px-[2px]">바이엘1</p>
-                </li>
-                <li className="h-11 w-[326px] px-1 py-4 text-s-semibold text-text-primary flex items-center gap-1">
-                  <img
-                    src={"/images/icons/book-create/ico-plus.svg"}
-                    alt="이미지 추가 아이콘"
-                    width={24}
-                    height={24}
-                    className=""
-                  />
-                  <p className="px-[2px]">바이엘1</p>
-                </li>
-                <li className="h-11 w-[326px] px-1 py-4 text-s-semibold text-text-primary flex items-center gap-1">
-                  <img
-                    src={"/images/icons/book-create/ico-plus.svg"}
-                    alt="이미지 추가 아이콘"
-                    width={24}
-                    height={24}
-                    className=""
-                  />
-                  <p className="px-[2px]">바이엘1</p>
-                </li>
-                <li className="h-11 w-[326px] px-1 py-4 text-s-semibold text-text-primary flex items-center gap-1">
-                  <img
-                    src={"/images/icons/book-create/ico-plus.svg"}
-                    alt="이미지 추가 아이콘"
-                    width={24}
-                    height={24}
-                    className=""
-                  />
-                  <p className="px-[2px]">바이엘1</p>
-                </li>
+
+                {selectedSubjectItems.map((subjectItem) => {
+                  return (
+                    <li className="h-11 w-[326px] px-1 py-4 text-s-semibold text-text-primary flex items-center gap-1">
+                      <img
+                        src={"/images/icons/book-create/ico-plus.svg"}
+                        alt="이미지 추가 아이콘"
+                        width={24}
+                        height={24}
+                        className=""
+                      />
+                      <p className="px-[2px]">{subjectItem.title}</p>
+                    </li>
+                  );
+                })}
+
                 <div
                   onClick={() => setOpenFilter(true)}
                   className="h-11 w-[326px] text-s-semibold text-text-primary flex gap-[1px] justify-center items-center"
@@ -224,6 +233,15 @@ export default function Step2(props: IProps) {
                               alt="플러스 아이콘"
                               width={24}
                               height={24}
+                              onClick={() =>
+                                setSelectedSubjectItems([
+                                  ...selectedSubjectItems,
+                                  {
+                                    title: subejctItem.title,
+                                    level: subejctItem.level,
+                                  },
+                                ])
+                              }
                             />
                           </li>
                         );
