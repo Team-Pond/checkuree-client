@@ -51,12 +51,11 @@ export default function BookCreate() {
 
         <div className="flex w-full justify-center">
           <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
-            {/* {isStep2 ? (
+            {isStep2 ? (
               <Step2 id={bookId!} />
             ) : (
               <Step1 handleStep2Change={handleStep2Change} />
-            )} */}
-            <Step2 id={bookId!} />
+            )}
           </div>
         </div>
       </div>

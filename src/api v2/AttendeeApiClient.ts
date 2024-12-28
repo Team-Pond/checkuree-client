@@ -49,7 +49,6 @@ export const getAttendee = async (
 
   const scheduleDays = filter.scheduleDays.join(",");
 
-  console.log(filter.gender);
   const response = await ApiClient.request({
     method: "GET",
     url: `/book/${attendanceBookId}/attendee?age.min=0&age.max=100&scheduleDays=${scheduleDays}&gender=${
