@@ -77,9 +77,9 @@ export default function Step1(props: iProps) {
           ...getValues(),
           availableFrom: "2024",
           availableTo: "0022",
-          availableDays: ["MONDAY"],
-          description: "",
-          imageUrl: "",
+          availableDays: getValues("availableDays"),
+          description: getValues("description"),
+          imageUrl: fileUrl,
         }).then((res) => {
           if (res.status === 200) {
             handleStep2Change(res.data.id);
