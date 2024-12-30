@@ -59,7 +59,7 @@ async function refresh(config: AxiosRequestConfig) {
     try {
       const refreshResult = await axios.request({
         baseURL: import.meta.env.VITE_API_DEV_ROOT,
-        url: "/auth/refresh-token",
+        url: "/auth/refresh",
         method: "POST",
         data: {
           refreshToken,
@@ -70,6 +70,8 @@ async function refresh(config: AxiosRequestConfig) {
         accessToken: refreshResult.data!.accessToken,
         refreshToken: refreshResult.data!.refreshToken,
       });
+
+      console.log(refreshResult);
 
       // 무한 오류에 빠질 수 있음으로 순수한 axios 기본 인스턴스로 재시도한다.
       return axios.request({
