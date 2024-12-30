@@ -40,4 +40,4 @@ $ npm run dev
   1. 작업 시 컬러값의 단축 팔레트명을 찾아 작업했습니다. (ex. bg-disabled)
   2. 단축 팔레트명이 없다면 명시적으로 값을 지정했습니다. (ex. bg-[#EEEEEE])
 - React-hook-form 사용
-  큰 폼에서 렌더링이 자주 트리거 되며 타입이 엄격하지 않는 문제가 있는 것 같아 react-hook-form으로 진행하였습니다.
+  Formik은 큰 폼에서 렌더링이 자주 트리거 되며 타입이 엄격하지 않는 문제가 있는 것 같아 react-hook-form으로 진행하였습니다.
