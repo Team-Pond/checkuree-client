@@ -1,5 +1,6 @@
 import { createBook } from "@/api v2/AttendanceBookApiClient";
 import { CreateBookRequest, DaysType } from "@/api v2/AttendanceBookSchema";
+import TimePicker from "@/components/TimePicker";
 
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -17,33 +18,31 @@ const DaysMatch: Record<string, DaysType> = {
   일: "SUNDAY",
 };
 
-type iProps = {
-  handleStep2Change: (id: number) => void;
+type IProps = {
+  handleStep2Change: (state: boolean) => void;
+  handleBookCreate: (params: CreateBookRequest) => void;
 };
-export default function Step1(props: iProps) {
-  const { handleStep2Change } = props;
-
+export default function Step1(props: IProps) {
+  const { handleStep2Change, handleBookCreate } = props;
   const [fileUrl, setFileUrl] = useState<string>();
-  const [isNext, setIsNext] = useState<boolean>(false);
 
   const [dayArrays, setDayArrays] = useState<DaysType[]>([]);
 
-  const {
-    register,
-    setValue,
-    handleSubmit,
-    getValues,
-    watch,
-    formState: { errors, isSubmitting, isDirty },
-  } = useForm<CreateBookRequest>({
-    mode: "onBlur", // 폼이벤트 유효성 검사 트리거
-  });
+  const { register, setValue, handleSubmit, getValues } =
+    useForm<CreateBookRequest>({
+      mode: "onBlur", // 폼이벤트 유효성 검사 트리거
+    });
 
   const onDaysChange = (day: DaysType) => {
     if (dayArrays.includes(DaysMatch[day])) {
       setDayArrays(dayArrays.filter((item) => item !== DaysMatch[day]));
+      setValue(
+        "availableDays",
+        dayArrays.filter((item) => item !== DaysMatch[day])
+      );
     } else {
       setDayArrays([...dayArrays, DaysMatch[day]]);
+      setValue("availableDays", [...dayArrays, DaysMatch[day]]);
     }
   };
 
@@ -62,29 +61,89 @@ export default function Step1(props: iProps) {
     fileRef.current?.click();
   };
 
-  const title = watch("title");
-  const availableDays = dayArrays;
+  const transfer = (time: { period: string; hour: string; minute: string }) => {
+    let data = "";
+    if (time.period === "오후") {
+      data = String(Number(time.hour) + 12) + time.minute;
+    } else {
+      if (Number(time.hour) < 10) {
+        data = "0" + time.hour + time.minute;
+      } else {
+        data = time.hour + time.minute;
+      }
+    }
 
-  useEffect(() => {
-    setIsNext(!!title && availableDays.length > 0);
-  }, [title, availableDays]);
+    return data;
+  };
+  const handleStartTimeChange = (time: {
+    period: string;
+    hour: string;
+    minute: string;
+  }) => {
+    setStartTime(time);
+    setValue("availableFrom", transfer(time));
+    setIsStartPickerOpen(false); // TimePicker 닫기
+  };
+
+  const handleEndTimeChange = (time: {
+    period: string;
+    hour: string;
+    minute: string;
+  }) => {
+    setEndTime(time);
+    setValue("availableTo", transfer(time));
+    setIsEndPickerOpen(false); // TimePicker 닫기
+  };
+
+  const handleOpenStartTimePicker = () => {
+    setIsStartPickerOpen(true);
+  };
+
+  const handleOpenEndTimePicker = () => {
+    setIsEndPickerOpen(true);
+  };
+
+  const [startTime, setStartTime] = useState<{
+    period: string;
+    hour: string;
+    minute: string;
+  } | null>(null);
+
+  const [endTime, setEndTime] = useState<{
+    period: string;
+    hour: string;
+    minute: string;
+  } | null>(null);
+
+  const [isStartPickerOpen, setIsStartPickerOpen] = useState<boolean>(false);
+  const [isEndPickerOpen, setIsEndPickerOpen] = useState<boolean>(false);
+
+  const PICKER_RENDER = [
+    {
+      text: startTime
+        ? `${startTime?.period} ${startTime?.hour}시 ${startTime?.minute}분`
+        : "시작 시간",
+      timeText: "부터",
+      onChange: handleStartTimeChange,
+      handleOpen: handleOpenStartTimePicker,
+    },
+
+    {
+      text: endTime
+        ? `${endTime?.period} ${endTime?.hour}시 ${endTime?.minute}분`
+        : "종료 시간",
+      timeText: "까지",
+      onchange: handleEndTimeChange,
+      handleOpen: handleOpenEndTimePicker,
+    },
+  ];
 
   return (
     <form
       onSubmit={handleSubmit(async () => {
         setValue("imageUrl", fileUrl!);
-        await createBook({
-          ...getValues(),
-          availableFrom: "2024",
-          availableTo: "0022",
-          availableDays: getValues("availableDays"),
-          description: getValues("description"),
-          imageUrl: fileUrl,
-        }).then((res) => {
-          if (res.status === 200) {
-            handleStep2Change(res.data.id);
-          }
-        });
+        handleBookCreate(getValues());
+        handleStep2Change(true);
       })}
       className="flex flex-col justify-center gap-6 max-w-[342px] w-full"
     >
@@ -137,28 +196,27 @@ export default function Step1(props: iProps) {
           <p className="text-text-danger">*</p>
         </div>
         <div className="flex items-center gap-4">
-          <div className="flex gap-2 items-center max-w-[163px] w-full">
-            <button
-              type="button"
-              className="outline-none border border-[#E7E7E7] rounded-xl max-w-[130px] w-full h-12  flex items-center pl-4"
-            >
-              <p className="font-bold text-sm text-[#B0B0B0] w-[53px]">
-                시작 시간
-              </p>
-            </button>
-            <p className="text-sm font-bold text-text-primary">부터</p>
-          </div>
-          <div className="flex gap-2 items-center max-w-[163px] w-full">
-            <button
-              type="button"
-              className="outline-none border border-[#E7E7E7] rounded-xl max-w-[130px] w-full h-12  flex items-center pl-4"
-            >
-              <p className="font-bold text-sm text-[#B0B0B0] w-[53px]">
-                종료 시간
-              </p>
-            </button>
-            <p className="text-sm font-bold text-text-primary">까지</p>
-          </div>
+          {PICKER_RENDER.map((time, index) => {
+            return (
+              <div
+                className="flex gap-2 items-center max-w-[163px] w-full"
+                onClick={() => time.handleOpen()}
+                key={index}
+              >
+                <button
+                  type="button"
+                  className="outline-none border border-[#E7E7E7] rounded-xl max-w-[130px] w-full h-12  flex items-center pl-4"
+                >
+                  <p className="font-bold text-sm text-[#B0B0B0]">
+                    {time.text}
+                  </p>
+                </button>
+                <p className="text-sm font-bold text-text-primary">
+                  {time.timeText}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -201,15 +259,41 @@ export default function Step1(props: iProps) {
       <button
         className={twMerge(
           "max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl",
-          isNext
+          !!(
+            getValues("title") &&
+            getValues("availableDays").length > 0 &&
+            getValues("availableFrom") &&
+            getValues("availableTo")
+          )
             ? "bg-bg-tertiary text-[#f1f8f3]"
             : "bg-bg-disabled text-text-disabled"
         )}
-        // disabled={!isNext}
+        disabled={
+          !!!(
+            getValues("title") &&
+            getValues("availableDays").length > 0 &&
+            getValues("availableFrom") &&
+            getValues("availableTo")
+          )
+        }
         type="submit"
       >
         <p className="font-semibold text-lg">다음으로</p>
       </button>
+
+      {/* TimePicker 모달 */}
+      {isStartPickerOpen && (
+        <TimePicker
+          handleTimeChange={handleStartTimeChange}
+          handleOpenTimePicker={setIsStartPickerOpen}
+        />
+      )}
+      {isEndPickerOpen && (
+        <TimePicker
+          handleTimeChange={handleEndTimeChange}
+          handleOpenTimePicker={setIsEndPickerOpen}
+        />
+      )}
     </form>
   );
 }
