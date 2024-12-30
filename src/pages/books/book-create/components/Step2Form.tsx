@@ -77,15 +77,30 @@ export default function Step2Form(props: IProps) {
             </li>
             {selectedSubjectItems.map((subjectItem) => {
               return (
-                <li className="h-11 w-[326px] px-1 py-4 text-s-semibold text-text-primary flex items-center gap-1">
+                <li className="h-11 w-[326px] px-1 py-4 text-s-semibold text-text-primary flex justify-between">
+                  <div className="flex items-center gap-1">
+                    <img
+                      src={"/images/icons/book-create/ico-plus.svg"}
+                      alt="이미지 추가 아이콘"
+                      width={20}
+                      height={20}
+                      className=""
+                    />
+                    <p className="px-[2px]">{subjectItem.title}</p>
+                  </div>
                   <img
-                    src={"/images/icons/book-create/ico-plus.svg"}
+                    src={"/images/icons/book-create/ico-close.svg"}
                     alt="이미지 추가 아이콘"
-                    width={24}
-                    height={24}
-                    className=""
+                    width={32}
+                    height={32}
+                    onClick={() =>
+                      setSelectedSubjectItems(
+                        selectedSubjectItems.filter(
+                          (item) => item.title !== subjectItem.title
+                        )
+                      )
+                    }
                   />
-                  <p className="px-[2px]">{subjectItem.title}</p>
                 </li>
               );
             })}

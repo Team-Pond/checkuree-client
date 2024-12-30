@@ -1,19 +1,18 @@
-import { DaysType } from "@/api v2/AttendanceBookSchema";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Step1 from "./components/Step1";
 import Step2 from "./components/Step2";
 import { twMerge } from "tailwind-merge";
 import { getSubjects } from "@/api v2/CourseApiClient";
+import { CreateBookRequest } from "@/api v2/AttendanceBookSchema";
 
 export default function BookCreate() {
   const navigate = useNavigate();
 
   const [isStep2, setIsStep2] = useState<boolean>(false);
-  const [bookId, setBookId] = useState<number>();
-  const handleStep2Change = (id: number) => {
-    setIsStep2(true);
-    setBookId(id);
+
+  const handleStep2Change = (state: boolean) => {
+    setIsStep2(state);
   };
 
   const getSubject = async () => {
@@ -23,6 +22,13 @@ export default function BookCreate() {
   useEffect(() => {
     getSubject();
   }, []);
+
+  const [bookCreateParam, setBookCreateParams] = useState<CreateBookRequest>();
+
+  const handleBookCreate = (params: CreateBookRequest) => {
+    setBookCreateParams(params);
+  };
+
   return (
     <section className="flex flex-col gap-7 w-full pb-[30px]">
       <div
@@ -33,8 +39,8 @@ export default function BookCreate() {
         <img
           src="/images/icons/book-create/ico-close.svg"
           alt="닫기 아이콘"
-          width={40}
-          height={40}
+          width={32}
+          height={32}
         />
       </div>
 
@@ -52,9 +58,12 @@ export default function BookCreate() {
         <div className="flex w-full justify-center">
           <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
             {isStep2 ? (
-              <Step2 id={bookId!} />
+              <Step2 bookCreateParam={bookCreateParam!} />
             ) : (
-              <Step1 handleStep2Change={handleStep2Change} />
+              <Step1
+                handleStep2Change={handleStep2Change}
+                handleBookCreate={handleBookCreate}
+              />
             )}
           </div>
         </div>

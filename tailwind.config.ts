@@ -7,5 +7,21 @@ export default {
   theme: {
     extend,
   },
-  plugins: [scrollbarHide],
+  plugins: [
+    scrollbarHide,
+    function ({ addUtilities }) {
+      addUtilities({
+        ".scrollbar-none": {
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+          "-ms-overflow-style": "none", // IE and Edge
+          "scrollbar-width": "none", // Firefox
+        },
+        ".scrollable": {
+          "will-change": "transform, scroll-position",
+        },
+      });
+    },
+  ],
 };

@@ -4,10 +4,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getSubjects } from "@/api v2/CourseApiClient";
 import CurriculumForm from "./Step2Form";
-
-type IProps = {
-  id: number;
-};
+import { CreateBookRequest } from "@/api v2/AttendanceBookSchema";
 
 export type CourseData = {
   courseTitle: string;
@@ -16,9 +13,14 @@ export type CourseData = {
     level: number;
   }[];
 };
-export default function Step2(props: IProps) {
-  const { id } = props;
 
+export type IProps = {
+  bookCreateParam: CreateBookRequest;
+};
+export default function Step2(props: IProps) {
+  const { bookCreateParam } = props;
+
+  console.log(bookCreateParam);
   const { handleSubmit } = useForm<CourseData[]>({
     mode: "onBlur", // 폼이벤트 유효성 검사 트리거
   });
