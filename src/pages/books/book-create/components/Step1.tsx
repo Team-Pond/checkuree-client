@@ -1,8 +1,7 @@
-import { createBook } from "@/api v2/AttendanceBookApiClient";
 import { CreateBookRequest, DaysType } from "@/api v2/AttendanceBookSchema";
 import TimePicker from "@/components/TimePicker";
 
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 
@@ -139,14 +138,7 @@ export default function Step1(props: IProps) {
   ];
 
   return (
-    <form
-      onSubmit={handleSubmit(async () => {
-        setValue("imageUrl", fileUrl!);
-        handleBookCreate(getValues());
-        handleStep2Change(true);
-      })}
-      className="flex flex-col justify-center gap-6 max-w-[342px] w-full"
-    >
+    <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
       {/* 출석부 이름 */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
@@ -276,7 +268,11 @@ export default function Step1(props: IProps) {
             getValues("availableTo")
           )
         }
-        type="submit"
+        onClick={handleSubmit(async () => {
+          setValue("imageUrl", fileUrl!);
+          handleBookCreate(getValues());
+          handleStep2Change(true);
+        })}
       >
         <p className="font-semibold text-lg">다음으로</p>
       </button>
@@ -294,6 +290,6 @@ export default function Step1(props: IProps) {
           handleOpenTimePicker={setIsEndPickerOpen}
         />
       )}
-    </form>
+    </div>
   );
 }

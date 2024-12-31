@@ -84,12 +84,12 @@ async function refresh(config: AxiosRequestConfig) {
       Cookies.remove(import.meta.env.VITE_ACCESS_TOKEN);
       Cookies.remove(import.meta.env.VITE_REFRESH_TOKEN);
       console.error("토큰 갱신 실패:", e);
-      window.location.href = "/auth/signin";
+      // window.location.href = "/auth/signin";
     }
   } else {
     isRefreshing = false;
     Cookies.remove(import.meta.env.VITE_ACCESS_TOKEN);
     Cookies.remove(import.meta.env.VITE_REFRESH_TOKEN);
-    window.location.href = "/auth/signin";
+    // window.location.href = "/auth/signin";
   }
 }

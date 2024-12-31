@@ -22,6 +22,14 @@ type ErrorResponse = ResponseBase & {
   timeStamp: string;
 };
 
+export type CourseData = {
+  courseTitle: string;
+  courseContent: {
+    title: string;
+    level: number;
+  }[];
+};
+
 export type CreateBookRequest = {
   title: string;
   description?: string;
