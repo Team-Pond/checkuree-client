@@ -1,4 +1,4 @@
-import { setTokens } from "@/lib/auth";
+import { clearTokens, setTokens } from "@/lib/auth";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import Cookies from "js-cookie";
 
@@ -67,8 +67,8 @@ async function refresh(config: AxiosRequestConfig) {
       });
 
       setTokens({
-        accessToken: refreshResult.data!.accessToken,
-        refreshToken: refreshResult.data!.refreshToken,
+        accessToken: refreshResult.data.data!.accessToken,
+        refreshToken: refreshResult.data.data!.refreshToken,
       });
 
       console.log(refreshResult);
@@ -78,20 +78,18 @@ async function refresh(config: AxiosRequestConfig) {
         ...config,
         headers: {
           ...config.headers,
-          Authorization: `Bearer ${refreshResult.data!.accessToken}`,
+          Authorization: `Bearer ${refreshResult.data.data!.accessToken}`,
         },
       });
     } catch (e) {
       isRefreshing = false;
-      Cookies.remove(import.meta.env.VITE_ACCESS_TOKEN);
-      Cookies.remove(import.meta.env.VITE_REFRESH_TOKEN);
+      clearTokens();
       console.error("토큰 갱신 실패:", e);
-      window.location.href = "/auth/signin";
+      // window.location.href = "/auth/signin";
     }
   } else {
     isRefreshing = false;
-    Cookies.remove(import.meta.env.VITE_ACCESS_TOKEN);
-    Cookies.remove(import.meta.env.VITE_REFRESH_TOKEN);
-    window.location.href = "/auth/signin";
+    clearTokens();
+    // window.location.href = "/auth/signin";
   }
 }

@@ -12,7 +12,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
   );
 
   // 인증되지 않은 경우 "/auth/signin"으로 리다이렉트
-  return isAuthenticated ? element : <Navigate to="/auth/signin" />;
+  // return isAuthenticated ? element : <Navigate to="/auth/signin" />;
+  return element;
 };
 
 export default ProtectedRoute;
