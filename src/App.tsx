@@ -11,7 +11,7 @@ import PageContainer from "@/components/PageContainer";
 import Loading from "@/components/Loading";
 import { lazy, Suspense } from "react";
 import ScrollToTop from "./components/ScrollToTop";
-import { ErrorBoundary } from "react-error-boundary";
+
 // Lazy load components
 const Books = lazy(() => import("@/pages/books/Books"));
 const BookCreate = lazy(() => import("@/pages/books/book-create/BookCreate"));
