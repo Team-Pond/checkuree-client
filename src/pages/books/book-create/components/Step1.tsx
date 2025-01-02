@@ -2,7 +2,11 @@ import { CreateBookRequest, DaysType } from "@/api v2/AttendanceBookSchema";
 import TimePicker from "@/components/TimePicker";
 
 import { ChangeEvent, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import {
+  UseFormGetValues,
+  UseFormRegister,
+  UseFormSetValue,
+} from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 
 const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
@@ -18,41 +22,44 @@ const DaysMatch: Record<string, DaysType> = {
 };
 
 type IProps = {
-  handleStep2Change: (state: boolean) => void;
-  handleBookCreate: (params: CreateBookRequest) => void;
+  register: UseFormRegister<CreateBookRequest>;
+  setValue: UseFormSetValue<CreateBookRequest>;
+  getValues: UseFormGetValues<CreateBookRequest>;
 };
 export default function Step1(props: IProps) {
-  const { handleStep2Change, handleBookCreate } = props;
-  const [fileUrl, setFileUrl] = useState<string>();
-
-  const [dayArrays, setDayArrays] = useState<DaysType[]>([]);
-
-  const { register, setValue, handleSubmit, getValues } =
-    useForm<CreateBookRequest>({
-      mode: "onBlur", // 폼이벤트 유효성 검사 트리거
-    });
+  const { register, setValue, getValues } = props;
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
 
   const onDaysChange = (day: DaysType) => {
-    if (dayArrays.includes(DaysMatch[day])) {
-      setDayArrays(dayArrays.filter((item) => item !== DaysMatch[day]));
+    if (getValues("availableDays").includes(DaysMatch[day])) {
       setValue(
         "availableDays",
-        dayArrays.filter((item) => item !== DaysMatch[day])
+        getValues("availableDays").filter((item) => item !== DaysMatch[day])
       );
     } else {
-      setDayArrays([...dayArrays, DaysMatch[day]]);
-      setValue("availableDays", [...dayArrays, DaysMatch[day]]);
+      setValue("availableDays", [
+        ...getValues("availableDays"),
+        DaysMatch[day],
+      ]);
     }
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-    const file = files?.[0];
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (!selectedFile) return;
+
     const reader = new FileReader();
-    reader.readAsDataURL(file!);
-    reader.onload = () => {
-      setFileUrl(reader.result as string);
+    reader.onload = (e) => {
+      if (e.target && e.target.result) {
+        const result = e.target.result as string;
+        setImageSrc(result);
+        setValue("imageUrl", result);
+      }
     };
+
+    if (selectedFile) {
+      reader.readAsDataURL(selectedFile);
+    }
   };
 
   const fileRef = useRef<HTMLInputElement | null>(null);
@@ -168,7 +175,7 @@ export default function Step1(props: IProps) {
                 key={day}
                 className={twMerge(
                   "max-w-11 h-11 rounded-lg flex justify-center items-center",
-                  dayArrays.includes(DaysMatch[DAYS[index]])
+                  getValues("availableDays").includes(DaysMatch[DAYS[index]])
                     ? "bg-bg-primary text-text-interactive-primary"
                     : "bg-bg-secondary text-text-secondary"
                 )}
@@ -221,16 +228,17 @@ export default function Step1(props: IProps) {
           onClick={triggerFileInput}
         >
           <input
+            {...register("imageUrl")}
             type="file"
             className="hidden"
             ref={fileRef}
             onChange={handleFileChange}
           />
           <img
-            src={fileUrl ? fileUrl : "/images/icons/book-create/ico-plus.svg"}
+            src={imageSrc ? imageSrc : "/images/icons/book-create/ico-plus.svg"}
             alt="이미지 추가 아이콘"
             className={twMerge(
-              fileUrl ? "w-full h-full object-cover rounded-xl" : "w-7 h-7"
+              imageSrc ? "w-full h-full object-cover rounded-xl" : "w-7 h-7"
             )}
           />
         </div>
@@ -248,34 +256,6 @@ export default function Step1(props: IProps) {
           className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />
       </div>
-      <button
-        className={twMerge(
-          "max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl",
-          !!(
-            getValues("title") &&
-            getValues("availableDays").length > 0 &&
-            getValues("availableFrom") &&
-            getValues("availableTo")
-          )
-            ? "bg-bg-tertiary text-[#f1f8f3]"
-            : "bg-bg-disabled text-text-disabled"
-        )}
-        disabled={
-          !!!(
-            getValues("title") &&
-            getValues("availableDays").length > 0 &&
-            getValues("availableFrom") &&
-            getValues("availableTo")
-          )
-        }
-        onClick={handleSubmit(async () => {
-          setValue("imageUrl", fileUrl!);
-          handleBookCreate(getValues());
-          handleStep2Change(true);
-        })}
-      >
-        <p className="font-semibold text-lg">다음으로</p>
-      </button>
 
       {/* TimePicker 모달 */}
       {isStartPickerOpen && (

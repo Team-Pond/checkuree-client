@@ -1,27 +1,24 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getSubjectItems, getSubjects } from "@/api v2/CourseApiClient";
 import { CourseData } from "@/api v2/AttendanceBookSchema";
 import { twMerge } from "tailwind-merge";
 import BottomDrawer from "@/components/BottomDrawer";
 
 export type IProps = {
-  handleCourseChange: (params: CourseData[]) => void;
-  handleStep2Change: (state: boolean) => void;
+  handleCourseChange: (params: CourseData) => void;
+  courseCreateParam: CourseData[];
+  handleCurriculum: (state: boolean) => void;
+  isCurriculum: boolean;
 };
 
 export default function Step2(props: IProps) {
-  const { handleStep2Change, handleCourseChange } = props;
-
-  const { handleSubmit } = useForm<CourseData[]>({
-    mode: "onBlur", // 폼이벤트 유효성 검사 트리거
-  });
-  const [isCurriculum, setIsCurriculum] = useState<boolean>(true);
-  const [courseData, setCourseData] = useState<CourseData[]>([]);
-  const handleCurriculumChange = (newCourseData: CourseData) => {
-    setCourseData([...courseData, newCourseData]);
-  };
+  const {
+    handleCourseChange,
+    courseCreateParam,
+    handleCurriculum,
+    isCurriculum,
+  } = props;
 
   const { data: subjects } = useQuery({
     queryKey: ["subjects"],
@@ -31,16 +28,6 @@ export default function Step2(props: IProps) {
       }),
   });
 
-  const { mutate: courseMutation } = useMutation({
-    mutationKey: [""],
-    mutationFn: async () => {},
-    onSuccess: () => {},
-  });
-
-  const handleCurriculum = (state: boolean) => {
-    setIsCurriculum(state);
-  };
-
   const [courseTitle, setCourseTitle] = useState<string>("");
 
   const [selectedSubject, setSelectedSubject] = useState<{
@@ -49,7 +36,7 @@ export default function Step2(props: IProps) {
   }>();
 
   const [selectedSubjectItems, setSelectedSubjectItems] = useState<
-    { title: string; level: number }[]
+    { level: number; subjectItemId: number }[]
   >([]);
 
   const { data: subjectItems } = useQuery({
@@ -75,127 +62,132 @@ export default function Step2(props: IProps) {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(() => {
-        courseMutation();
-      })}
-      className="flex flex-col justify-center gap-6 max-w-[342px] w-full"
-    >
-      {/* 커리큘럼 추가된 것 */}
-      {courseData.map((course) => {
-        return (
-          <div className="border-t border-b border-[#f6f6f6] w-full h-16 flex justify-between items-center">
-            <p className="text-m-bold text-text-primary pl-2">
-              {course.courseTitle} <span className="text-text-danger">*</span>
-            </p>
-            <img
-              src={"/images/icons/book-create/ico-right-arrow.svg"}
-              alt="이미지 추가 아이콘"
-              width={32}
-              height={32}
-              className=""
-            />
-          </div>
-        );
-      })}
-
-      {isCurriculum ? (
-        <>
-          {/* 커리큘럼 이름 */}
-          <div className="flex flex-col gap-2">
-            <div className="flex gap-1 items-center">
-              <p className="font-bold text-m-medium">커리큘럼 이름</p>
-              <p className="text-text-danger">*</p>
+    <>
+      <div
+        key={"step2"}
+        className="flex flex-col justify-center gap-6 max-w-[342px] w-full"
+      >
+        {/* 커리큘럼 추가된 것 */}
+        {courseCreateParam.map((course) => {
+          return (
+            <div className="border-t border-b border-[#f6f6f6] w-full h-16 flex justify-between items-center">
+              <p className="text-m-bold text-text-primary pl-2">
+                {course.title} <span className="text-text-danger">*</span>
+              </p>
+              <img
+                src={"/images/icons/book-create/ico-right-arrow.svg"}
+                alt="이미지 추가 아이콘"
+                width={32}
+                height={32}
+                className=""
+              />
             </div>
+          );
+        })}
 
-            <input
-              type="text"
-              onChange={(e) => setCourseTitle(e.target.value)}
-              placeholder="커리큘럼 이름"
-              className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
-            />
-          </div>
-          {/* 커리큘럼 내용 */}
-          <div className="flex flex-col gap-2">
-            <div className="flex gap-1 items-center">
-              <p className="font-bold text-m-medium">커리큘럼 내용</p>
-              <p className="text-text-danger">*</p>
+        {isCurriculum ? (
+          <>
+            {/* 커리큘럼 이름 */}
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-1 items-center">
+                <p className="font-bold text-m-medium">커리큘럼 이름</p>
+                <p className="text-text-danger">*</p>
+              </div>
+
+              <input
+                type="text"
+                onChange={(e) => setCourseTitle(e.target.value)}
+                placeholder="커리큘럼 이름"
+                className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+              />
             </div>
+            {/* 커리큘럼 내용 */}
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-1 items-center">
+                <p className="font-bold text-m-medium">커리큘럼 내용</p>
+                <p className="text-text-danger">*</p>
+              </div>
 
-            <div className="max-w-[343px] rounded-2xl py-1 px-2 text-left bg-bg-base">
-              <ul>
-                <li className="h-11 w-[326px] py-4 text-s-semibold text-text-primary">
-                  <p className="ml-8 px-[2px]">올챙이(기본)</p>
-                </li>
-                {selectedSubjectItems.map((subjectItem) => {
-                  return (
-                    <li className="h-11 w-[326px] px-1 py-1 text-s-semibold text-text-primary flex justify-between">
-                      <div className="flex items-center gap-1 justify-center">
+              <div className="max-w-[343px] rounded-2xl py-1 px-2 text-left bg-bg-base">
+                <ul>
+                  <li className="h-11 w-[326px] py-4 text-s-semibold text-text-primary">
+                    <p className="ml-8 px-[2px]">올챙이(기본)</p>
+                  </li>
+                  {selectedSubjectItems.map((subjectItem) => {
+                    return (
+                      <li
+                        key={subjectItem.subjectItemId}
+                        className="h-11 w-[326px] px-1 py-1 text-s-semibold text-text-primary flex justify-between"
+                      >
+                        <div className="flex items-center gap-1 justify-center">
+                          <img
+                            src={"/images/icons/book-create/ico-equal.svg"}
+                            alt="이미지 추가 아이콘"
+                            width={24}
+                            height={24}
+                            className=""
+                          />
+                          <p className="px-[2px] mt-[1px]">
+                            {subjectItem.subjectItemId}
+                          </p>
+                        </div>
                         <img
-                          src={"/images/icons/book-create/ico-equal.svg"}
-                          alt="이미지 추가 아이콘"
-                          width={24}
-                          height={24}
-                          className=""
-                        />
-                        <p className="px-[2px] mt-[1px]">{subjectItem.title}</p>
-                      </div>
-                      <img
-                        src="/images/icons/book-create/ico-close-gray.svg"
-                        alt="닫기 아이콘"
-                        width={32}
-                        height={32}
-                        onClick={() =>
-                          setSelectedSubjectItems(
-                            selectedSubjectItems.filter(
-                              (item) => item.title !== subjectItem.title
+                          src="/images/icons/book-create/ico-close-gray.svg"
+                          alt="닫기 아이콘"
+                          width={32}
+                          height={32}
+                          onClick={() =>
+                            setSelectedSubjectItems(
+                              selectedSubjectItems.filter(
+                                (item) =>
+                                  item.subjectItemId !==
+                                  subjectItem.subjectItemId
+                              )
                             )
-                          )
-                        }
-                      />
-                    </li>
-                  );
-                })}
+                          }
+                        />
+                      </li>
+                    );
+                  })}
 
-                <div
-                  onClick={() => handleBottomDrawer(true)}
-                  className="h-11 w-[326px] text-s-semibold text-text-primary flex gap-[1px] justify-center items-center"
-                >
-                  <img
-                    src={"/images/icons/book-create/ico-plus.svg"}
-                    alt="이미지 추가 아이콘"
-                    width={15}
-                    height={15}
-                    className=""
-                  />
-                  <p className="text-s-medium text-border-secondary-hover">
-                    과목 추가하기
-                  </p>
-                </div>
-              </ul>
+                  <div
+                    onClick={() => handleBottomDrawer(true)}
+                    className="h-11 w-[326px] text-s-semibold text-text-primary flex gap-[1px] justify-center items-center"
+                  >
+                    <img
+                      src={"/images/icons/book-create/ico-plus.svg"}
+                      alt="이미지 추가 아이콘"
+                      width={15}
+                      height={15}
+                      className=""
+                    />
+                    <p className="text-s-medium text-border-secondary-hover">
+                      과목 추가하기
+                    </p>
+                  </div>
+                </ul>
+              </div>
             </div>
-          </div>
 
-          <button
-            className={twMerge(
-              "max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl bg-bg-tertiary text-[#f1f8f3]"
-            )}
-            onClick={() => {
-              handleCurriculumChange({
-                courseTitle: courseTitle,
-                courseContent: selectedSubjectItems,
-              });
-              setSelectedSubjectItems([]);
-              handleCourseChange(courseData);
-              handleCurriculum(false);
-            }}
-            type="button"
-          >
-            <p className="font-semibold text-lg">확인</p>
-          </button>
-        </>
-      ) : (
-        <>
+            <button
+              className={twMerge(
+                "max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl bg-bg-tertiary text-[#f1f8f3]"
+              )}
+              onClick={() => {
+                setSelectedSubjectItems([]);
+                handleCourseChange({
+                  title: courseTitle,
+                  isPrimary: true,
+                  grades: selectedSubjectItems,
+                });
+                handleCurriculum(false);
+              }}
+              type="button"
+            >
+              <p className="font-semibold text-lg">확인</p>
+            </button>
+          </>
+        ) : (
           <button
             className="w-full h-10 flex justify-center items-center bg-bg-secondary"
             onClick={() => handleCurriculum(true)}
@@ -208,19 +200,8 @@ export default function Step2(props: IProps) {
             />
             <p className="text-m-medium text-[#B0B0B0]">커리큘럼 추가하기 </p>
           </button>
-          <div className="flex gap-4">
-            <button
-              onClick={() => handleStep2Change(false)}
-              className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
-            >
-              이전으로
-            </button>
-            <button className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold">
-              생성하기
-            </button>
-          </div>
-        </>
-      )}
+        )}
+      </div>
       <BottomDrawer
         isOpen={openDrawer}
         onClose={onDrawerChange}
@@ -280,7 +261,7 @@ export default function Step2(props: IProps) {
                           setSelectedSubjectItems([
                             ...selectedSubjectItems,
                             {
-                              title: subjectItem.title,
+                              subjectItemId: subjectItem.id,
                               level: subjectItem.level,
                             },
                           ])
@@ -294,6 +275,6 @@ export default function Step2(props: IProps) {
           </div>
         }
       />
-    </form>
+    </>
   );
 }
