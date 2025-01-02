@@ -71,8 +71,6 @@ async function refresh(config: AxiosRequestConfig) {
         refreshToken: refreshResult.data.data!.refreshToken,
       });
 
-      console.log(refreshResult);
-
       // 무한 오류에 빠질 수 있음으로 순수한 axios 기본 인스턴스로 재시도한다.
       return axios.request({
         ...config,
@@ -85,11 +83,11 @@ async function refresh(config: AxiosRequestConfig) {
       isRefreshing = false;
       clearTokens();
       console.error("토큰 갱신 실패:", e);
-      // window.location.href = "/auth/signin";
+      window.location.href = "/auth/signin";
     }
   } else {
     isRefreshing = false;
     clearTokens();
-    // window.location.href = "/auth/signin";
+    window.location.href = "/auth/signin";
   }
 }

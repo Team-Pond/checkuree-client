@@ -40,48 +40,48 @@ export default function Books() {
           height={20}
         />
       </div>
-
-      <div className="w-full flex-1 bg-bg-secondary border-spacing-0 py-5 grid grid-cols-2  gap-y-6 justify-items-center  ">
-        {bookList?.data.map((attendance) => {
-          return (
-            <div
-              key={attendance.id}
-              className="max-w-[162px] h-[195px] w-full"
-              onClick={() => navigate(`/book/${attendance.id}`)}
-            >
-              <img
-                src={
-                  attendance.imageUrl === "string"
-                    ? "/images/img-test.png"
-                    : attendance.imageUrl
-                }
-                className="w-full h-[97px] rounded-t-2xl"
-                alt=""
-              />
-              <div className="flex flex-col gap-2 px-3 py-4 text-left rounded-b-2xl bg-white">
-                <div className="flex gap-2">
-                  <p className="font-bold text-text-primary">
-                    {attendance.title}
-                  </p>
-                  <p className="font-semibold text-text-secondary">
-                    {/* TODO: roasterCount */}
-                    {12}
-                  </p>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <p className="text-text-brand font-bold text-sm">
-                    {getDayGroupFromInput(attendance.availableDays)}
-                  </p>
-                  <p className="text-text-secondary font-medium text-sm">
-                    {formatTimeRange("1200", "2000")}
-                  </p>
+      <div className="flex-1 bg-bg-secondary justify-items-center">
+        <div className="w-full max-w-[340px]  border-spacing-0 py-5 grid grid-cols-2  gap-y-6 gap-x-4 ">
+          {bookList?.data.map((attendance) => {
+            return (
+              <div
+                key={attendance.id}
+                className="max-w-[162px] h-[195px] w-full"
+                onClick={() => navigate(`/book/${attendance.id}`)}
+              >
+                <img
+                  src={
+                    attendance.imageUrl === "string"
+                      ? "/images/img-test.png"
+                      : "/images/img-test.png"
+                  }
+                  className="w-full h-[97px] rounded-t-2xl"
+                  alt=""
+                />
+                <div className="flex flex-col gap-2 px-3 py-4 text-left rounded-b-2xl bg-white">
+                  <div className="flex gap-2">
+                    <p className="font-bold text-text-primary">
+                      {attendance.title}
+                    </p>
+                    <p className="font-semibold text-text-secondary">
+                      {/* TODO: roasterCount */}
+                      {12}
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <p className="text-text-brand font-bold text-sm">
+                      {getDayGroupFromInput(attendance.availableDays)}
+                    </p>
+                    <p className="text-text-secondary font-medium text-sm">
+                      {formatTimeRange("1200", "2000")}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
-
       <div className="fixed justify-items-end bottom-[44px] pr-[18px] float-right  max-w-[390px] w-full text-right left-1/2 transform -translate-x-1/2">
         <button
           onClick={() => navigate("/book/create")}
