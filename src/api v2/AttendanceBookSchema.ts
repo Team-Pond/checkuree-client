@@ -23,9 +23,10 @@ type ErrorResponse = ResponseBase & {
 };
 
 export type CourseData = {
-  courseTitle: string;
-  courseContent: {
-    title: string;
+  title: string;
+  isPrimary: boolean;
+  grades: {
+    subjectItemId: number;
     level: number;
   }[];
 };
@@ -37,6 +38,14 @@ export type CreateBookRequest = {
   availableTo: string;
   availableDays: DaysType[];
   imageUrl?: string;
+  courses: {
+    title: string;
+    isPrimary: boolean;
+    grades: {
+      subjectItemId: number;
+      level: number;
+    }[];
+  }[];
 };
 
 export type CreateBookResponse =
