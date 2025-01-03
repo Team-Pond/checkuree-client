@@ -42,7 +42,7 @@ function App() {
         <PageContainer>
           <ScrollToTop />
           <Routes>
-            <Route path="/" element={<Navigate to={"/book"} />} />
+            <Route path="/" element={<Navigate to={"/auth/signin"} />} />
             <Route path="*" element={<Navigate to={""} />} /> {/* 404페이지 */}
             <Route path="/auth/signin" element={<SignIn />} />
             <Route
