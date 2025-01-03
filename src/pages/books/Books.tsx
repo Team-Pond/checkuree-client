@@ -47,7 +47,13 @@ export default function Books() {
               <div
                 key={attendance.id}
                 className="max-w-[162px] h-[195px] w-full"
-                onClick={() => navigate(`/book/${attendance.id}`)}
+                onClick={() =>
+                  navigate(`/book/${attendance.id}`, {
+                    state: {
+                      title: attendance.title,
+                    },
+                  })
+                }
               >
                 <img
                   src={

@@ -30,17 +30,18 @@ export default function Step1(props: IProps) {
   const { register, setValue, getValues } = props;
   const [imageSrc, setImageSrc] = useState<string | null>(null);
 
+  const currentDays = getValues("availableDays") ?? [];
   const onDaysChange = (day: DaysType) => {
-    if (getValues("availableDays").includes(DaysMatch[day])) {
+    // 이미 선택되어 있다면 제거
+    if (currentDays.includes(DaysMatch[day])) {
       setValue(
         "availableDays",
-        getValues("availableDays").filter((item) => item !== DaysMatch[day])
+        currentDays.filter((item) => item !== DaysMatch[day])
       );
-    } else {
-      setValue("availableDays", [
-        ...getValues("availableDays"),
-        DaysMatch[day],
-      ]);
+    }
+    // 선택되어 있지 않다면 추가
+    else {
+      setValue("availableDays", [...currentDays, DaysMatch[day]]);
     }
   };
 
@@ -144,6 +145,7 @@ export default function Step1(props: IProps) {
     },
   ];
 
+  console.log(getValues("availableDays"));
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
       {/* 출석부 이름 */}
@@ -175,7 +177,7 @@ export default function Step1(props: IProps) {
                 key={day}
                 className={twMerge(
                   "max-w-11 h-11 rounded-lg flex justify-center items-center",
-                  getValues("availableDays").includes(DaysMatch[DAYS[index]])
+                  currentDays.includes(DaysMatch[DAYS[index]])
                     ? "bg-bg-primary text-text-interactive-primary"
                     : "bg-bg-secondary text-text-secondary"
                 )}

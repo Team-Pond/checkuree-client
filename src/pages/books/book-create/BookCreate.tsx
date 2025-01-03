@@ -12,7 +12,6 @@ import toast from "react-hot-toast";
 
 export default function BookCreate() {
   const navigate = useNavigate();
-
   const [isStep2, setIsStep2] = useState<boolean>(false);
 
   const handleStep2Change = (state: boolean) => {
@@ -56,6 +55,7 @@ export default function BookCreate() {
       }),
     onSuccess: () => {
       toast.success("출석부를 생성하였습니다.");
+      navigate("/book");
     },
   });
 
