@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import Step1 from "./components/Step1";
 import Step2 from "./components/Step2";
 import { twMerge } from "tailwind-merge";
-import { createCourse, getSubjects } from "@/api v2/CourseApiClient";
+import { getSubjects } from "@/api v2/CourseApiClient";
 import { CourseData, CreateBookRequest } from "@/api v2/AttendanceBookSchema";
-import { FormProvider, useForm, useWatch } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { createBook } from "@/api v2/AttendanceBookApiClient";
 import toast from "react-hot-toast";
@@ -77,16 +77,14 @@ export default function BookCreate() {
         bookMutation();
       })}
     >
-      <div
-        className="w-full h-[64px] flex items-center justify-between px-4 py-5"
-        onClick={() => navigate("/book")}
-      >
+      <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
         <p className="font-bold text-text-primary text-[22px]">출석부 등록</p>
         <img
           src="/images/icons/book-create/ico-close.svg"
           alt="닫기 아이콘"
           width={32}
           height={32}
+          onClick={() => navigate("/book")}
         />
       </div>
 
