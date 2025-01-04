@@ -64,6 +64,7 @@ const fontSize = {
   "m-bold": ["16px", { lineHeight: "auto", fontWeight: "700" }],
   "m-semibold": ["16px", { lineHeight: "auto", fontWeight: "600" }],
   "m-medium": ["16px", { lineHeight: "auto", fontWeight: "500" }],
+  "s-bold": ["14px", { lineHeight: "auto", fontWeight: "700" }],
   "s-semibold": ["14px", { lineHeight: "auto", fontWeight: "600" }],
   "s-medium": ["14px", { lineHeight: "auto", fontWeight: "500" }],
   "xs-semibold": ["12px", { lineHeight: "auto", fontWeight: "600" }],
