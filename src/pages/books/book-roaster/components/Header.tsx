@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 type HeaderProps = {
   title: string;
   onDrawerChange: () => void;
@@ -6,7 +8,7 @@ type HeaderProps = {
 
 export default function Header(props: HeaderProps) {
   const { title, onDrawerChange, onChangeSearch } = props;
-
+  const navigate = useNavigate();
   return (
     <>
       <div className="flex flex-col sticky top-0 z-50 bg-white border-b border-[#f6f6f6]">
@@ -15,9 +17,10 @@ export default function Header(props: HeaderProps) {
           <div className="flex gap-2">
             <img
               src="/images/icons/book-roaster/ico-plus-black.svg"
-              alt="설정 아이콘"
+              alt="학생 추가 아이콘"
               width={40}
               height={40}
+              onClick={() => navigate("/attendee/create")}
             />
             <img
               src="/images/icons/ico-settings.svg"
