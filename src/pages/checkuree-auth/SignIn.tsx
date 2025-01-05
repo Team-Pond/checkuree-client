@@ -46,7 +46,7 @@ export default function CheckureeSignIn() {
         accessToken: response.data.accessToken,
         refreshToken: response.data.refreshToken,
       });
-      toast("로그인 되었습니다.");
+      toast.success("로그인 되었습니다.");
       navigate("/attendances");
     },
     onError: () => {
@@ -61,7 +61,7 @@ export default function CheckureeSignIn() {
   }, []);
 
   return (
-    <section className="flex flex-col justify-center items-center gap-8 px-6">
+    <section className="flex flex-col justify-center items-center gap-8 px-6 h-full">
       <div className="flex flex-col items-center gap-12">
         <img
           src={"/images/logos/checkuree_logo.svg"}

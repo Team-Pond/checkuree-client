@@ -25,7 +25,7 @@ export default function Books() {
   });
 
   return (
-    <section className="flex flex-col w-full min-h-screen">
+    <section className="relative flex flex-col w-full min-h-screen">
       <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
         <img
           src="/images/logos/checkuree_logo.svg"
@@ -40,7 +40,7 @@ export default function Books() {
           height={20}
         />
       </div>
-      <div className="flex-1 bg-bg-secondary justify-items-center">
+      <div className="flex-1 bg-bg-secondary justify-items-center flex justify-center">
         <div className="w-full max-w-[340px]  border-spacing-0 py-5 grid grid-cols-2  gap-y-6 gap-x-4 ">
           {bookList?.data.map((attendance) => {
             return (
@@ -88,10 +88,10 @@ export default function Books() {
           })}
         </div>
       </div>
-      <div className="fixed justify-items-end bottom-[44px] pr-[18px] float-right  max-w-[390px] w-full text-right left-1/2 transform -translate-x-1/2">
+      <div className="fixed bottom-11 ml-[270px] max-w-[390px] w-full">
         <button
           onClick={() => navigate("/book/create")}
-          className=" w-[104px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
+          className="w-[104px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
         >
           <img
             src="/images/icons/book/ico-plus.svg"

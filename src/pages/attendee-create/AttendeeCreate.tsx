@@ -1,9 +1,29 @@
 import { useNavigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import Step1 from "./components/Step1";
+import { useState } from "react";
+import Step2 from "./components/Step2";
 
 export default function AttendeeCreate() {
   const navigate = useNavigate();
+
+  const [isStep2, setIsStep2] = useState<boolean>(false);
+
+  const handleStep2Change = (state: boolean) => {
+    setIsStep2(state);
+  };
+
+  const [isCurriculum, setIsCurriculum] = useState<boolean>(false);
+  const handleCurriculum = (state: boolean) => {
+    setIsCurriculum(state);
+  };
+
+  const isStep1Valid = true;
+  // (title || "").length > 2 &&
+  // (availableDays || []).length > 0 &&
+  // !!availableFrom &&
+  // !!availableTo;
+
   return (
     <form className="flex flex-col gap-7 w-full pb-[30px]">
       <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
@@ -30,16 +50,21 @@ export default function AttendeeCreate() {
 
         <div className="flex w-full justify-center">
           <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
-            <Step1 />
-
-            <button
-              className={twMerge(
-                "max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl",
-                "bg-bg-disabled text-text-disabled"
-              )}
-            >
-              <p className="font-semibold text-lg">다음으로</p>
-            </button>
+            {isStep2 ? <Step2 /> : <Step1 />}
+            {isStep2 === false && (
+              <button
+                className={twMerge(
+                  "max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl",
+                  isStep1Valid
+                    ? "bg-bg-tertiary text-[#f1f8f3]"
+                    : "bg-bg-disabled text-text-disabled"
+                )}
+                disabled={!isStep1Valid}
+                onClick={() => handleStep2Change(true)}
+              >
+                <p className="font-semibold text-lg">다음으로</p>
+              </button>
+            )}
           </div>
         </div>
       </div>

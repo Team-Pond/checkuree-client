@@ -9,6 +9,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { createBook } from "@/api v2/AttendanceBookApiClient";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 export default function BookCreate() {
   const navigate = useNavigate();
@@ -57,6 +58,15 @@ export default function BookCreate() {
       toast.success("출석부를 생성하였습니다.");
       navigate("/book");
     },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        console.log(error.response?.data);
+        toast.error(error.response?.data?.data || "An error occurred");
+      } else {
+        console.log(error);
+        toast.error("An unexpected error occurred");
+      }
+    },
   });
 
   // 특정 필드만 감시
@@ -65,7 +75,7 @@ export default function BookCreate() {
   });
 
   const isStep1Valid =
-    !!title &&
+    (title || "").length > 2 &&
     (availableDays || []).length > 0 &&
     !!availableFrom &&
     !!availableTo;
