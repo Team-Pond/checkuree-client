@@ -88,7 +88,7 @@ export default function Books() {
           })}
         </div>
       </div>
-      <div className="fixed bottom-11 right-0 pr-[18px] max-w-[390px] w-full sm:w-auto sm:right-0 sm:left-auto">
+      <div className="sticky justify-items-end bottom-11 pr-[18px] max-w-[390px] w-full sm:w-auto sm:right-0 sm:left-auto">
         <button
           onClick={() => navigate("/book/create")}
           className="w-[104px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
