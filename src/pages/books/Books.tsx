@@ -88,7 +88,7 @@ export default function Books() {
           })}
         </div>
       </div>
-      <div className="fixed justify-items-end bottom-[44px] pr-[18px] float-right  max-w-[390px] w-full text-right left-1/2 transform -translate-x-1/2">
+      <div className="fixed justify-items-end bottom-11 pr-[18px] right-0 float-right  max-w-[390px] w-full left-1/2 transform -translate-x-1/2">
         <button
           onClick={() => navigate("/book/create")}
           className=" w-[104px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
