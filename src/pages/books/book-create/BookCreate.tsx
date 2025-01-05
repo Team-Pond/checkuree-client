@@ -75,7 +75,7 @@ export default function BookCreate() {
   });
 
   const isStep1Valid =
-    !!title &&
+    (title || "").length > 2 &&
     (availableDays || []).length > 0 &&
     !!availableFrom &&
     !!availableTo;
