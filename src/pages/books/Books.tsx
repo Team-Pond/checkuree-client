@@ -40,7 +40,7 @@ export default function Books() {
           height={20}
         />
       </div>
-      <div className="flex-1 bg-bg-secondary justify-items-center">
+      <div className="flex-1 bg-bg-secondary justify-items-center flex justify-center">
         <div className="w-full max-w-[340px]  border-spacing-0 py-5 grid grid-cols-2  gap-y-6 gap-x-4 ">
           {bookList?.data.map((attendance) => {
             return (
