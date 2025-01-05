@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getSubjectItems, getSubjects } from "@/api v2/CourseApiClient";
 import { CourseData } from "@/api v2/AttendanceBookSchema";
@@ -60,6 +60,14 @@ export default function Step2(props: IProps) {
   const handleBottomDrawer = (open: boolean) => {
     setOpenDrawer(open);
   };
+
+  useEffect(() => {
+    if (subjects)
+      setSelectedSubject({
+        id: subjects[0].id,
+        title: subjects[0].title,
+      });
+  }, [subjects]);
 
   return (
     <>

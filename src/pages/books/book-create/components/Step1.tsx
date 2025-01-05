@@ -144,8 +144,6 @@ export default function Step1(props: IProps) {
       handleOpen: handleOpenEndTimePicker,
     },
   ];
-
-  console.log(getValues("availableDays"));
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
       {/* 출석부 이름 */}
