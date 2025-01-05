@@ -88,10 +88,10 @@ export default function Books() {
           })}
         </div>
       </div>
-      <div className="fixed justify-items-end bottom-11 pr-[18px] right-0 float-right  max-w-[390px] w-full left-1/2 transform -translate-x-1/2">
+      <div className="fixed bottom-11 right-0 pr-[18px] max-w-[390px] w-full sm:w-auto sm:right-0 sm:left-auto">
         <button
           onClick={() => navigate("/book/create")}
-          className=" w-[104px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
+          className="w-[104px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
         >
           <img
             src="/images/icons/book/ico-plus.svg"
