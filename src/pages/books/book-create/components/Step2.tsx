@@ -225,9 +225,8 @@ export default function Step2(props: IProps) {
                 width={40}
                 height={40}
                 src={"/images/icons/book-roaster/ico-glasses.svg"}
-                alt="이미지 추가 아이콘"
+                alt="검색 아이콘"
                 className="absolute top-[2px] left-1"
-                onClick={onDrawerChange}
               />
             </div>
 
