@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getAttendee } from "@/api v2/AttendeeApiClient";
 
@@ -8,6 +8,7 @@ import Bottom from "../components/Bottom";
 import BottomFilter from "./components/BottomFilter";
 import { GenderType } from "@/api v2/AttendeeSchema";
 import MainContent from "./components/MainContent";
+import { BookContext } from "@/context/BookContext";
 
 const DaysMatch: Record<string, DaysType> = {
   월: "MONDAY",
@@ -19,6 +20,8 @@ const DaysMatch: Record<string, DaysType> = {
   일: "SUNDAY",
 };
 export default function BookRoaster() {
+  const context = useContext(BookContext);
+  const { selectedBook } = context!;
   const [openFilter, setOpenFilter] = useState<boolean>(false);
   const attendanceBookId = location.pathname.split("/")[2];
   const onDrawerChange = () => {
@@ -71,7 +74,7 @@ export default function BookRoaster() {
   return (
     <section className="flex flex-col w-full">
       <Header
-        title=""
+        title={selectedBook?.title!}
         onDrawerChange={onDrawerChange}
         onChangeSearch={onChangeSearch}
       />

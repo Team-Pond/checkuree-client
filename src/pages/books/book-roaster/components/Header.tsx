@@ -13,7 +13,13 @@ export default function Header(props: HeaderProps) {
     <>
       <div className="flex flex-col sticky top-0 z-50 bg-white border-b border-[#f6f6f6]">
         <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
-          <p className="text-[22px] font-bold">{title}</p>
+          <p
+            className="text-[22px] font-bold"
+            onClick={() => navigate("/book")}
+          >
+            {title}
+          </p>
+
           <div className="flex gap-2">
             <img
               src="/images/icons/book-roaster/ico-plus-black.svg"
