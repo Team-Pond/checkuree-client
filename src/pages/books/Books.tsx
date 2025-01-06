@@ -1,12 +1,13 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMeBooks } from "@/api v2/AttendanceBookApiClient";
 import { useQuery } from "@tanstack/react-query";
 import { formatTimeRange, getDayGroupFromInput } from "@/utils";
+import { BookContext } from "@/context/BookContext";
 
 export default function Books() {
   const navigate = useNavigate();
-
+  const context = useContext(BookContext);
   useEffect(() => {
     const getMyBooks = async () => {};
     getMyBooks();
@@ -23,6 +24,13 @@ export default function Books() {
       }
     },
   });
+
+  const { setSelectedBook } = context!;
+
+  const handleNavigation = (id: string, title: string) => {
+    navigate(`/book/${id}`);
+    setSelectedBook({ title });
+  };
 
   return (
     <section className="relative flex flex-col w-full min-h-screen">
@@ -48,11 +56,7 @@ export default function Books() {
                 key={attendance.id}
                 className="max-w-[162px] h-[195px] w-full"
                 onClick={() =>
-                  navigate(`/book/${attendance.id}`, {
-                    state: {
-                      title: attendance.title,
-                    },
-                  })
+                  handleNavigation(String(attendance.id), attendance.title)
                 }
               >
                 <img
