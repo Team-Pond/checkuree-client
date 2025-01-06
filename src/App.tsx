@@ -11,6 +11,8 @@ import PageContainer from "@/components/PageContainer";
 import Loading from "@/components/Loading";
 import { lazy, Suspense } from "react";
 import ScrollToTop from "./components/ScrollToTop";
+import BookLayout from "./layouts/BookLayout";
+import NotFound from "./pages/404";
 
 // Lazy load components
 const Books = lazy(() => import("@/pages/books/Books"));
@@ -47,7 +49,7 @@ function App() {
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Navigate to={"/book"} />} />
-            <Route path="*" element={<Navigate to={""} />} /> {/* 404페이지 */}
+            <Route path="*" element={<NotFound />} /> {/* 404페이지 */}
             <Route path="/auth/signin" element={<SignIn />} />
             <Route
               path="/checkuree-auth/signin"
@@ -55,17 +57,16 @@ function App() {
             />
             <Route path="/kakao-auth/signin" element={<KakaoSignIn />} />
             {/* 인증 처리 */}
-            {routes.map((route) => {
-              return (
+            {/* Book 관련 라우트 그룹 */}
+            <Route element={<BookLayout />}>
+              {routes.map((route) => (
                 <Route
                   key={route.path}
                   path={route.path}
-                  element={
-                    <ProtectedRoute element={route.element}></ProtectedRoute>
-                  }
+                  element={<ProtectedRoute element={route.element} />}
                 />
-              );
-            })}
+              ))}
+            </Route>
           </Routes>
         </PageContainer>
       </Suspense>
