@@ -47,7 +47,7 @@ export default function CheckureeSignIn() {
         refreshToken: response.data.refreshToken,
       });
       toast.success("로그인 되었습니다.");
-      navigate("/attendances");
+      navigate("/book");
     },
     onError: () => {
       toast.error("아이디 및 비밀번호가 일치하지 않습니다.");
