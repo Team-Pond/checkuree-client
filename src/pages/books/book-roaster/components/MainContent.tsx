@@ -8,18 +8,12 @@ type IProps = {
 export default function MainContent(props: IProps) {
   const { roaster, getGrades } = props;
   return (
-    <div className="w-full px-[17px] ">
+    <div className="w-full px-[17px]">
       <p className="text-left text-s-semibold text-text-secondary mb-1">전체</p>
 
       <div className="border-t border-[#F6F6F6]">
-        {/* <div>
-                <img src="" alt="" />
-                <p className="text-s-medium text-[#B0B0B0]">
-                  일치하는 학생이 없습니다.
-                </p>
-              </div> */}
-        {roaster?.data.content.map((student) => {
-          return (
+        {roaster?.data.content.length > 0 ? (
+          roaster.data.content.map((student) => (
             <div key={student.id} className="py-4 px-2 flex gap-4">
               <img
                 src="/images/icons/book-roaster/ico-student.svg"
@@ -28,7 +22,6 @@ export default function MainContent(props: IProps) {
                 height={40}
                 className="rounded-full"
               />
-
               <div className="gap-1 text-left">
                 <div className="flex gap-2">
                   <p className="text-m-bold text-text-primary">
@@ -48,8 +41,20 @@ export default function MainContent(props: IProps) {
                 </div>
               </div>
             </div>
-          );
-        })}
+          ))
+        ) : (
+          <div className="absolute inset-0 flex flex-col gap-2 items-center justify-center">
+            <img
+              src="/images/icons/book-roaster/ico-error-frog.svg"
+              alt="체쿠리 에러 아이콘"
+              width={45}
+              height={45}
+            />
+            <p className="text-s-medium text-[#B0B0B0]">
+              등록된 학생이 없습니다.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 type HeaderProps = {
@@ -14,7 +14,6 @@ export default function Header(props: HeaderProps) {
       src: "/images/icons/ico-zzz.svg",
       name: "휴원하기",
     },
-
     {
       src: "/images/icons/ico-user-add.svg",
       name: "인원 추가",
@@ -28,25 +27,26 @@ export default function Header(props: HeaderProps) {
   // useScroll 훅을 사용하여 스크롤 진행도를 가져옵니다.
   const { scrollYProgress } = useScroll();
 
-  // 스크롤 진행도에 따라 텍스트와 아이콘의 애니메이션을 정의합니다.
+  // useSpring을 사용하여 스크롤 값을 스무딩, 파라미터 조정
+  const smoothScrollYProgress = useSpring(scrollYProgress, {
+    stiffness: 300, // 스프링의 강성도를 높여 빠르게 반응
+    damping: 20, // 감쇠를 낮춰 덜 느리게
+    mass: 1, // 질량은 기본값 유지
+  });
 
   // 애니메이션 정의
-  // 스크롤 진행도에 따라 텍스트와 아이콘의 Y 위치를 변경
-  const textY = useTransform(scrollYProgress, [0, 0.2], [0, -8]); // 텍스트는 아래로 이동
-  const iconY = useTransform(scrollYProgress, [0, 0.2], [0, 8]); // 아이콘은 위로 이동
-  // 스크롤 진행도에 따라 아이콘의 투명도 감소
-  const iconOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
-  // 스크롤 진행도에 따라 텍스트의 투명도 유지
-  const textOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 1]);
-  // 헤더의 높이를 스크롤 진행도에 따라 줄임
+  const textY = useTransform(smoothScrollYProgress, [0, 0.15], [0, -8]);
+  const iconY = useTransform(smoothScrollYProgress, [0, 0.15], [0, 8]);
+  const iconOpacity = useTransform(smoothScrollYProgress, [0, 0.15], [1, 0]);
+  const textOpacity = useTransform(smoothScrollYProgress, [0, 0.15], [1, 1]);
   const headerHeight = useTransform(
-    scrollYProgress,
-    [0, 0.3],
+    smoothScrollYProgress,
+    [0, 0.2],
     ["46px", "25px"]
   );
   const headerContainerHeight = useTransform(
-    scrollYProgress,
-    [0, 0.3],
+    smoothScrollYProgress,
+    [0, 0.2],
     ["78px", "49px"]
   );
 
@@ -64,7 +64,7 @@ export default function Header(props: HeaderProps) {
         />
       </div>
       {/* Calendar */}
-      <div className="w-full flex h-10  justify-between items-center px-4 border-b border-bg-disabled">
+      <div className="w-full flex h-10 justify-between items-center px-4 border-b border-bg-disabled">
         <img
           src="/images/icons/ico-arrow-left.svg"
           alt="왼쪽 화살"
@@ -80,17 +80,15 @@ export default function Header(props: HeaderProps) {
         />
       </div>
       {/* SubHeader */}
-
       <motion.div
         style={{
           height: headerContainerHeight,
         }}
-        className="w-full flex gap-[26px] h-[78px] justify-center items-center bg-white border-t border-bg-disabled"
+        className="w-full flex gap-[26px] justify-center items-center bg-white border-t border-bg-disabled"
       >
         <motion.div
           style={{
             height: headerHeight,
-            transition: "height 0.1s",
           }}
           className="flex flex-col justify-center items-center text-sm font-medium"
         >
@@ -98,7 +96,6 @@ export default function Header(props: HeaderProps) {
             style={{
               y: iconY,
               opacity: iconOpacity,
-              transition: "opacity 0.3s, y 0.3s",
             }}
           >
             체크 인원
@@ -107,47 +104,38 @@ export default function Header(props: HeaderProps) {
             style={{
               y: textY,
               opacity: textOpacity,
-              transition: "opacity 0.3s, y 0.3s",
             }}
           >
             10/12
           </motion.p>
         </motion.div>
         <div className="flex gap-2">
-          {SUB_HEADER.map((item) => {
-            return (
-              <motion.button
-                key={item.name}
+          {SUB_HEADER.map((item) => (
+            <motion.button
+              key={item.name}
+              style={{
+                height: headerHeight,
+              }}
+              className="w-[77px] flex flex-col items-center justify-center bg-bg-secondary rounded-lg"
+            >
+              <motion.img
                 style={{
-                  height: headerHeight,
-                  transition: "height 0.1s",
+                  y: iconY,
+                  opacity: iconOpacity,
                 }}
-                className="w-[77px] h-[46px] flex flex-col items-center justify-center bg-bg-secondary rounded-lg "
+                src={item.src}
+                alt={item.name}
+                width={16}
+                height={16}
+              />
+              <motion.p
+                className="text-xs font-medium"
+                style={{ y: textY, opacity: textOpacity }}
               >
-                <motion.img
-                  style={{
-                    y: iconY,
-                    opacity: iconOpacity,
-                    transition: "opacity 0.3s, y 0.3s",
-                  }}
-                  src={item.src}
-                  alt=""
-                  width={16}
-                  height={16}
-                />
-                <motion.p
-                  className="text-xs font-medium"
-                  style={{
-                    y: textY,
-                    opacity: textOpacity,
-                    transition: "opacity 0.3s, y 0.3s",
-                  }}
-                >
-                  {item.name}
-                </motion.p>
-              </motion.button>
-            );
-          })}
+                {item.name}
+              </motion.p>
+            </motion.button>
+          ))}
         </div>
       </motion.div>
     </div>

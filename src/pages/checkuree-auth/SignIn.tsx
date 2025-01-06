@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 import { setTokens } from "@/lib/auth";
-import { userLogin } from "@/api/AuthApiClient";
+import { SignIn } from "@/api v2/AuthApiClient";
 
 export interface LoginDataType {
   username: string;
@@ -38,16 +38,19 @@ export default function CheckureeSignIn() {
 
   const { mutate: loginMutation } = useMutation({
     mutationKey: ["user"],
-    mutationFn: async (params: LoginDataType) => await userLogin(params),
+    mutationFn: async (params: LoginDataType) => await SignIn(params),
     onSuccess: (response) => {
+      console.log(response);
+      const accessToken = response.data.accessToken;
+      const refreshToken = response.data.refreshToken;
       const token = response.data.accessToken;
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setTokens({
-        accessToken: response.data.accessToken,
-        refreshToken: response.data.refreshToken,
+        accessToken: accessToken as string,
+        refreshToken: refreshToken as string,
       });
       toast.success("로그인 되었습니다.");
-      navigate("/attendances");
+      navigate("/");
     },
     onError: () => {
       toast.error("아이디 및 비밀번호가 일치하지 않습니다.");

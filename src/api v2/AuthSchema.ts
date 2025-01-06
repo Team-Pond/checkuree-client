@@ -24,9 +24,16 @@ export type SignUpResponse = SuccessResponse | ErrorResponse;
 export type SignInRequest = {
   username: string;
   password: string;
+  isAutoLogin: boolean;
 };
-
-export type SignInResponse = SuccessResponse | ErrorResponse;
+export type SignInResponse =
+  | (SuccessResponse & {
+      data: {
+        accessToken: string;
+        refreshToken: string;
+      };
+    })
+  | ErrorResponse;
 
 export type RefreshRequest = {
   refreshToken: string;
