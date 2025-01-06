@@ -51,7 +51,7 @@ export default function MainContents() {
     });
   };
   return (
-    <div className="w-full flex flex-col gap-4 justify-center items-center py-3 px-4 bg-bg-secondary">
+    <div className="w-full flex flex-col gap-4 justify-center items-center py-3 px-4 bg-bg-secondary scrollbar-hide custom-scrollbar-hide">
       {attendees.map((attendee) => {
         return (
           <div

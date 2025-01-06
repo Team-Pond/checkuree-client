@@ -9,7 +9,7 @@ export default function BookCheck() {
   const { selectedBook } = context!;
 
   return (
-    <section className="flex flex-col w-full">
+    <section className="flex flex-col w-full scrollbar-hide custom-scrollbar-hide">
       <Header title={selectedBook?.title!} />
       <MainContents />
       <div className="flex justify-between px-[44px] items-center w-full h-[92px] bg-bg-secondary" />
