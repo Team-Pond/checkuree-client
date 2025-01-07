@@ -18,5 +18,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "svg.d.ts"]
+  "include": ["src", "/types/svg.d.ts"]
 }

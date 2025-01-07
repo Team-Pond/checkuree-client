@@ -50,6 +50,7 @@ export default function BottomFilter(props: IProps) {
                 {GENDER_BUTTONS.map((button) => {
                   return (
                     <button
+                      key={button.gender}
                       onClick={() => onChangeGender(button.gender)}
                       className={twMerge(
                         "rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover",
