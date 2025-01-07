@@ -1,6 +1,6 @@
 # 🌐 Links
 
-> **Service** : (작업중)
+> **Service** : https://pond-client.vercel.app (dev - 작업중)
 
 # ⚙️ How to Start
 
