@@ -33,7 +33,7 @@ export default function AttendeeCreate() {
           alt="닫기 아이콘"
           width={32}
           height={32}
-          onClick={() => navigate("/book-roaster")}
+          onClick={() => navigate("/book/roaster")}
         />
       </div>
 
