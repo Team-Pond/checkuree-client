@@ -40,7 +40,6 @@ export default function CheckureeSignIn() {
     mutationKey: ["user"],
     mutationFn: async (params: LoginDataType) => await SignIn(params),
     onSuccess: (response) => {
-      console.log(response);
       const accessToken = response.data.accessToken;
       const refreshToken = response.data.refreshToken;
       const token = response.data.accessToken;
