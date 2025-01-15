@@ -3,9 +3,9 @@ import BottomDrawer from "@/components/BottomDrawer";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
-
 import { getBookScheduleTable } from "@/api v2/AttendanceBookApiClient";
 import ScheduleTable from "./ScheduleTable";
+import { getScheduleAttendee } from "@/api v2/AttendeeApiClient";
 
 export default function Step2() {
   const { data: subjects } = useQuery({
@@ -27,6 +27,18 @@ export default function Step2() {
     title: string;
   }>();
 
+  const [scheduleParams, setScheduleParams] = useState<{
+    dayOfWeek: string;
+    hhmm: string;
+  }>({
+    dayOfWeek: "",
+    hhmm: "",
+  });
+
+  const handleSchedule = (dayOfWeek: string, hhmm: string) => {
+    setScheduleParams({ dayOfWeek, hhmm });
+  };
+
   const { data: subjectItems } = useQuery({
     enabled: !!selectedSubject?.id,
     queryKey: ["subject-items", selectedSubject?.title],
@@ -40,8 +52,23 @@ export default function Step2() {
       ),
   });
 
+  const { data: scheduleData } = useQuery({
+    enabled: !!scheduleParams.dayOfWeek && !!scheduleParams.hhmm,
+    queryKey: ["subject-items", selectedSubject?.title],
+    queryFn: async () =>
+      await getScheduleAttendee({
+        attendanceBookId: 5,
+        dayOfWeek: scheduleParams.dayOfWeek,
+        hhmm: scheduleParams.hhmm,
+      }).then((res) => {
+        if (res.status === 200) {
+          return res.data;
+        }
+      }),
+  });
+
   const { data: tableScheduleTable } = useQuery({
-    queryKey: ["table-schedule"],
+    queryKey: ["table-schedule", scheduleParams.dayOfWeek, scheduleParams.hhmm],
     queryFn: async () =>
       await getBookScheduleTable({
         attendanceBookId: 5,
@@ -61,7 +88,6 @@ export default function Step2() {
     setOpenDrawer(open);
   };
 
-  console.log(tableScheduleTable);
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
       {/* 커리큘럼 선택 */}
@@ -83,7 +109,7 @@ export default function Step2() {
               selectedSubjectItems &&
               `${selectedSubject?.title} > ${selectedSubjectItems?.title}`
             }
-            className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#B0B0B0] text-left"
+            className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#5D5D5D] text-left"
           ></input>
           <img
             width={8}
@@ -108,6 +134,7 @@ export default function Step2() {
             timeSlots={tableScheduleTable?.timeSlots!}
             startHhmm={tableScheduleTable?.startHhmm!}
             endHhmm={tableScheduleTable?.endHhmm!}
+            handleSchedule={handleSchedule}
           />
         )}
       </div>

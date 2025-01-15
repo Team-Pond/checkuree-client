@@ -20,7 +20,7 @@ interface ScheduleProps {
   startHhmm: string; // "12:00"
   endHhmm: string; // "20:00"
   timeSlots: number;
-  // timeSlots=16 → (20 - 12) * 2 = 16, 30분 단위
+  handleSchedule: (dayOfWeek: string, hhmm: string) => void;
 }
 
 const dayMap: Record<DayOfWeek, string> = {
@@ -45,6 +45,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
   scheduleTable,
   startHhmm,
   endHhmm,
+  handleSchedule,
 }) => {
   const start = parseHhmm(startHhmm); // { hour: 12, minute: 0 }
   const end = parseHhmm(endHhmm); // { hour: 20, minute: 0 }
@@ -109,6 +110,9 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                           ? "bg-green-200 text-green-900 font-semibold"
                           : "bg-white"
                       }`}
+                      onClick={() =>
+                        handleSchedule(dayData.dayOfWeek, String(hour + ":00"))
+                      }
                     >
                       {count > 0 ? count : ""}
                     </td>
