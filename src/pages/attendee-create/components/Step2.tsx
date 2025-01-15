@@ -3,6 +3,8 @@ import BottomDrawer from "@/components/BottomDrawer";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
+
+import { getBookScheduleTable } from "@/api v2/AttendanceBookApiClient";
 import Calendar from "./Calendar";
 
 export default function Step2() {
@@ -19,9 +21,11 @@ export default function Step2() {
     title: string;
   }>();
 
-  const [selectedSubjectItems, setSelectedSubjectItems] = useState<
-    { level: number; subjectItemId: number }[]
-  >([]);
+  const [selectedSubjectItems, setSelectedSubjectItems] = useState<{
+    level: number;
+    subjectItemId: number;
+    title: string;
+  }>();
 
   const { data: subjectItems } = useQuery({
     enabled: !!selectedSubject?.id,
@@ -36,6 +40,18 @@ export default function Step2() {
       ),
   });
 
+  const { data: tableScheduleTable } = useQuery({
+    queryKey: ["table-schedule"],
+    queryFn: async () =>
+      await getBookScheduleTable({
+        attendanceBookId: 5,
+      }).then((res) => {
+        if (res.status === 200) {
+          return res.data;
+        }
+      }),
+  });
+
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
   const onDrawerChange = () => {
@@ -45,6 +61,7 @@ export default function Step2() {
     setOpenDrawer(open);
   };
 
+  console.log(tableScheduleTable);
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
       {/* 커리큘럼 선택 */}
@@ -58,12 +75,16 @@ export default function Step2() {
           className="relative w-full max-w-[307px]"
           onClick={() => handleBottomDrawer(true)}
         >
-          <button
-            type="button"
+          <input
+            type="input"
+            placeholder="커리큘럼 선택"
+            value={
+              selectedSubject &&
+              selectedSubjectItems &&
+              `${selectedSubject?.title} > ${selectedSubjectItems?.title}`
+            }
             className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#B0B0B0] text-left"
-          >
-            <p>커리큘럼 선택</p>
-          </button>
+          ></input>
           <img
             width={8}
             height={8}
@@ -80,7 +101,15 @@ export default function Step2() {
           <p className="font-bold text-m-medium">클래스 일정</p>
           <p className="text-text-danger">*</p>
         </div>
-        <Calendar />
+
+        {tableScheduleTable && (
+          <Calendar
+            scheduleTable={tableScheduleTable?.scheduleTable!}
+            timeSlots={tableScheduleTable?.timeSlots!}
+            startHhmm={tableScheduleTable?.startHhmm!}
+            endHhmm={tableScheduleTable?.endHhmm!}
+          />
+        )}
       </div>
 
       <BottomDrawer
@@ -137,15 +166,14 @@ export default function Step2() {
                         alt="플러스 아이콘"
                         width={19}
                         height={19}
-                        onClick={() =>
-                          setSelectedSubjectItems([
-                            ...selectedSubjectItems,
-                            {
-                              subjectItemId: subjectItem.id,
-                              level: subjectItem.level,
-                            },
-                          ])
-                        }
+                        onClick={() => {
+                          setSelectedSubjectItems({
+                            subjectItemId: subjectItem.id,
+                            level: subjectItem.level,
+                            title: subjectItem.title,
+                          });
+                          handleBottomDrawer(false);
+                        }}
                       />
                     </li>
                   );
