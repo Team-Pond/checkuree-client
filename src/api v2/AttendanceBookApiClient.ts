@@ -1,5 +1,9 @@
 import ApiClient from "./ApiClient";
 import {
+  GetBookScheduleTableResponse,
+  GetBookScheudleTableRequest,
+} from "./AttendanceBookSchema";
+import {
   CreateBookRequest,
   CreateBookResponse,
   DeleteBookRequest,
@@ -69,5 +73,18 @@ export const getMeBooks = async (): Promise<GetMyBooksResponse> => {
     url: "/book/my",
   });
 
+  return response.data;
+};
+
+// 출석부 스케줄 테이블 조회
+export const getBookScheduleTable = async ({
+  attendanceBookId,
+}: {
+  attendanceBookId: GetBookScheudleTableRequest;
+}): Promise<GetBookScheduleTableResponse> => {
+  const response = await ApiClient.request({
+    method: "GET",
+    url: `/book/${attendanceBookId}/schedule/table`,
+  });
   return response.data;
 };

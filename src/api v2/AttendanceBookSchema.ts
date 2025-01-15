@@ -88,3 +88,22 @@ type GetBookResponse = ResponseBase & {
 };
 
 export type GetMyBooksResponse = GetBookResponse | ErrorResponse;
+
+interface ScheduleItem {
+  dayOfWeek: DaysType;
+  scheduleCount: number[]; // 16칸짜리 예시
+}
+
+type GetBookScheduleTableDataType = {
+  startHhmm: string;
+  endHhmm: string;
+  timeSlots: number;
+  scheduleTable: ScheduleItem[];
+};
+
+export type GetBookScheudleTableRequest = number;
+
+export type GetBookScheduleTableResponse = ResponseBase & {
+  status: 200;
+  data: GetBookScheduleTableDataType;
+};

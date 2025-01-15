@@ -20,9 +20,9 @@ export const createAttendee = async ({
   params: AttendeeNewRequest;
 }): Promise<AttendeeNewResponse> => {
   const response = await ApiClient.request({
-    method: "GET",
+    method: "PUT",
     url: `/book/${attendanceBookId}/attendee/new`,
-    params,
+    data: params,
   });
   return response.data;
 };

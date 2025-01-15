@@ -1,10 +1,74 @@
-import { useState } from "react";
+import { GenderType } from "@/api v2/AttendeeSchema";
+import React from "react";
 
-export default function Step1() {
-  const [isChecked, setIsChecked] = useState(false);
+interface Step1FormState {
+  name: string;
+  actualName: string;
+  birthDate: string;
+  gender: GenderType;
+  enrollmentDate: string;
+  // admittedToday: boolean;
+  phoneNumber: string;
+  address_1: string;
+  school: string;
+  description: string;
+}
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsChecked(e.target.checked);
+// Step1에서 받을 props 정의
+interface Step1Props {
+  formData: Step1FormState;
+  setFormData: React.Dispatch<React.SetStateAction<Step1FormState>>;
+}
+
+export default function Step1({ formData, setFormData }: Step1Props) {
+  const handleBirthdateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // 1) 숫자만 남기기
+    let input = e.target.value.replace(/\D/g, ""); // 숫자 이외 제거
+
+    // 2) 최대 8자리(YYYYMMDD)까지만 허용
+    if (input.length > 8) {
+      input = input.slice(0, 8);
+    }
+
+    // 3) 4자리 넘어가면 YYYY. 형식으로
+    if (input.length >= 5) {
+      input = input.slice(0, 4) + "." + input.slice(4);
+    }
+    // 4) 6자리 넘어가면 YYYY.MM. 형식으로
+    if (input.length >= 8) {
+      input = input.slice(0, 7) + "." + input.slice(7);
+    }
+
+    // 최종 formData 갱신
+    setFormData((prev) => ({
+      ...prev,
+      birthDate: input,
+    }));
+  };
+
+  const handleEntranceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // 1) 숫자만 남기기
+    let input = e.target.value.replace(/\D/g, ""); // 숫자 이외 제거
+
+    // 2) 최대 8자리(YYYYMMDD)까지만 허용
+    if (input.length > 8) {
+      input = input.slice(0, 8);
+    }
+
+    // 3) 4자리 넘어가면 YYYY. 형식으로
+    if (input.length >= 5) {
+      input = input.slice(0, 4) + "." + input.slice(4);
+    }
+    // 4) 6자리 넘어가면 YYYY.MM. 형식으로
+    if (input.length >= 8) {
+      input = input.slice(0, 7) + "." + input.slice(7);
+    }
+
+    // 최종 formData 갱신
+    setFormData((prev) => ({
+      ...prev,
+      enrollmentDate: input,
+    }));
   };
 
   return (
@@ -15,15 +79,18 @@ export default function Step1() {
           <p className="font-bold text-m-medium">학생 이름</p>
           <p className="text-text-danger">*</p>
         </div>
-
         <input
           type="text"
           placeholder="학생 이름"
           className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+          value={formData.name}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, name: e.target.value }))
+          }
         />
       </div>
 
-      {/* 학생 생년월일 */}
+      {/* 학생 생년월일/성별 */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
           <p className="font-bold text-m-medium">학생 생년월일/성별</p>
@@ -31,13 +98,16 @@ export default function Step1() {
         </div>
 
         <div className="flex items-center gap-[9px]">
-          <button
-            type="button"
-            className="outline-none border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12  flex items-center pl-4"
-          >
-            <p className="font-bold text-sm text-[#B0B0B0]">YYYY.MM.DD</p>
-          </button>
+          {/* 생년월일은 실제로는 datepicker 등을 사용하거나, 텍스트 입력으로 처리 가능 */}
+          <input
+            type="text"
+            placeholder="YYYY.MM.DD"
+            className="outline-none bg-white border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12 flex items-center pl-4"
+            value={formData.birthDate}
+            onChange={handleBirthdateChange}
+          />
 
+          {/* 성별 라디오 버튼 */}
           <div className="flex px-4 max-w-[170px] w-full h-12">
             <div className="flex gap-8">
               <div className="inline-flex items-center">
@@ -47,10 +117,17 @@ export default function Step1() {
                 >
                   <input
                     name="gender"
-                    value={"MALE"}
+                    value="MALE"
                     type="radio"
-                    className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-slate-400 transition-all"
                     id="male"
+                    className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-slate-400 transition-all"
+                    checked={formData.gender === "MALE"}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        gender: e.target.value as "MALE" | "FEMALE",
+                      }))
+                    }
                   />
                   <span className="absolute bg-bg-tertiary w-3 h-3 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
                 </label>
@@ -61,6 +138,7 @@ export default function Step1() {
                   남성
                 </label>
               </div>
+
               <div className="inline-flex items-center">
                 <label
                   className="relative flex items-center cursor-pointer"
@@ -68,10 +146,17 @@ export default function Step1() {
                 >
                   <input
                     name="gender"
-                    value={"FEMALE"}
+                    value="FEMALE"
                     type="radio"
-                    className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-slate-400 transition-all"
                     id="female"
+                    className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-slate-400 transition-all"
+                    checked={formData.gender === "FEMALE"}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        gender: e.target.value as "MALE" | "FEMALE",
+                      }))
+                    }
                   />
                   <span className="absolute bg-bg-tertiary w-3 h-3 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
                 </label>
@@ -95,12 +180,13 @@ export default function Step1() {
         </div>
 
         <div className="flex items-center gap-[9px]">
-          <button
-            type="button"
-            className="outline-none border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12  flex items-center pl-4"
-          >
-            <p className="font-bold text-sm text-[#B0B0B0]">YYYY.MM.DD</p>
-          </button>
+          <input
+            type="text"
+            placeholder="YYYY.MM.DD"
+            className="outline-none bg-white border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12 flex items-center pl-4"
+            value={formData.enrollmentDate}
+            onChange={handleEntranceChange}
+          />
 
           <div className="flex px-4 max-w-[170px] w-full h-12">
             <div className="flex items-center">
@@ -108,10 +194,32 @@ export default function Step1() {
                 <label className="flex items-center cursor-pointer relative">
                   <input
                     type="checkbox"
-                    checked={isChecked}
-                    onChange={handleCheckboxChange}
+                    // checked={formData.admittedToday}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        const today = new Date();
+                        const yyyy = today.getFullYear();
+                        const mm = String(today.getMonth() + 1).padStart(
+                          2,
+                          "0"
+                        );
+                        const dd = String(today.getDate()).padStart(2, "0");
+                        const formattedDate = `${yyyy}.${mm}.${dd}`;
+                        setFormData((prev) => ({
+                          ...prev,
+                          // admittedToday: true,
+                          enrollmentDate: formattedDate,
+                        }));
+                      } else {
+                        setFormData((prev) => ({
+                          ...prev,
+                          // admittedToday: false,
+                          enrollmentDate: "",
+                        }));
+                      }
+                    }}
                     className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded border border-slate-300 checked:bg-bg-tertiary checked:border-bg-tertiary"
-                    id="check4"
+                    id="admittedToday"
                   />
                   <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                     <svg
@@ -120,19 +228,19 @@ export default function Step1() {
                       viewBox="0 0 20 20"
                       fill="currentColor"
                       stroke="currentColor"
-                      stroke-width="1"
+                      strokeWidth="1"
                     >
                       <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
+                        clipRule="evenodd"
                       ></path>
                     </svg>
                   </span>
                 </label>
               </div>
               <label
-                htmlFor="checked-checkbox"
+                htmlFor="admittedToday"
                 className="ml-2 text-text-primary text-s-bold cursor-pointer"
               >
                 오늘 입학
@@ -147,48 +255,75 @@ export default function Step1() {
         <div className="flex gap-1 items-center">
           <p className="font-bold text-m-medium">학생 연락처</p>
         </div>
-
         <input
           type="text"
           placeholder="학생 연락처"
           className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+          value={formData.phoneNumber}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              phoneNumber: e.target.value,
+            }))
+          }
         />
       </div>
+
       {/* 학생 주소 */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
           <p className="font-bold text-m-medium">학생 주소</p>
           <p className="text-text-danger">*</p>
         </div>
-
         <input
           type="text"
           placeholder="학생 주소"
           className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+          value={formData.address_1}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              address_1: e.target.value,
+            }))
+          }
         />
       </div>
-      {/* 학교(선택)*/}
+
+      {/* 학교(선택) */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
           <p className="font-bold text-m-medium">학교(선택)</p>
         </div>
-
         <input
           type="text"
           placeholder="개굴초등학교"
           className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+          value={formData.school}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              school: e.target.value,
+            }))
+          }
         />
       </div>
-      {/* 비고 (선택) */}
+
+      {/* 비고(선택) */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
           <p className="font-bold text-m-medium">비고(선택)</p>
         </div>
-
         <input
           type="text"
           placeholder=""
           className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+          value={formData.description}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              description: e.target.value,
+            }))
+          }
         />
       </div>
     </div>
