@@ -5,7 +5,7 @@ import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 import { getBookScheduleTable } from "@/api v2/AttendanceBookApiClient";
-import Calendar from "./Calendar";
+import ScheduleTable from "./ScheduleTable";
 
 export default function Step2() {
   const { data: subjects } = useQuery({
@@ -103,7 +103,7 @@ export default function Step2() {
         </div>
 
         {tableScheduleTable && (
-          <Calendar
+          <ScheduleTable
             scheduleTable={tableScheduleTable?.scheduleTable!}
             timeSlots={tableScheduleTable?.timeSlots!}
             startHhmm={tableScheduleTable?.startHhmm!}

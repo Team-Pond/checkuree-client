@@ -29,7 +29,7 @@ export default function Books() {
 
   const handleNavigation = (id: string, title: string) => {
     navigate(`/book/${id}`);
-    setSelectedBook({ title });
+    setSelectedBook({ title, id });
   };
 
   return (
