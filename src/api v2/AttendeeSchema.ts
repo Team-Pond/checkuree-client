@@ -37,9 +37,16 @@ type ErrorResponse = ResponseBase & {
 export type AttendeeNewRequest = {
   name: string;
   gender: GenderType;
-  age: number;
+  birthDate: string;
+  enrollmentDate: string;
   phoneNumber: string;
-  associates: Associates[];
+  description: string;
+  school: string;
+  attendeeId?: number;
+  initialGradeId?: number;
+  isBeginner?: boolean;
+  address_1: string;
+  associates?: Associates[];
 };
 
 export type AttendeeNewResponse = SuccessResponse | ErrorResponse;
