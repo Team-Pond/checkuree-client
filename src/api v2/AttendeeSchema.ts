@@ -122,3 +122,23 @@ export type GetAttendeeListResponse = {
   status: 200;
   data: AttendeeListType;
 } & ErrorResponse;
+
+type ScheduleAttendeeDataType = {
+  attendeeId: number;
+  name: string;
+  gender: GenderType;
+  age: number;
+  scheduleId: number;
+  time: string;
+  endTime: string;
+};
+export type GetScheduleAttendeeRequest = {
+  attendanceBookId: number;
+  dayOfWeek: string;
+  hhmm: string;
+};
+
+export type GetScheduleAttendeeResponse = {
+  status: 200;
+  data: ScheduleAttendeeDataType;
+} & ErrorResponse;

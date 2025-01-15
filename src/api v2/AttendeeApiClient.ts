@@ -10,6 +10,8 @@ import {
   AttendeeCheckResponse,
   GetAttendeeListRequest,
   GetAttendeeListResponse,
+  GetScheduleAttendeeRequest,
+  GetScheduleAttendeeResponse,
 } from "./AttendeeSchema";
 
 export const createAttendee = async ({
@@ -72,6 +74,20 @@ export const statusCheckAttendee = async (
       attendeeId,
       status,
     },
+  });
+
+  return response.data;
+};
+
+// 학생 출석 체크
+export const getScheduleAttendee = async (
+  params: GetScheduleAttendeeRequest
+): Promise<GetScheduleAttendeeResponse> => {
+  const { attendanceBookId, dayOfWeek, hhmm } = params;
+
+  const response = await ApiClient.request({
+    method: "GET",
+    url: `/book/${attendanceBookId}/attendee/schedule?dayOfWeek=${dayOfWeek}&hhmm=${hhmm}`,
   });
 
   return response.data;
