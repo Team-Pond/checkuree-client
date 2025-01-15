@@ -3,6 +3,7 @@ import React, { createContext, useState, ReactNode } from "react";
 
 interface Book {
   title: string;
+  id: string;
 }
 
 interface BookContextType {
