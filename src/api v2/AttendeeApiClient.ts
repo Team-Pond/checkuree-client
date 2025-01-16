@@ -12,13 +12,17 @@ import {
   GetAttendeeListResponse,
   GetScheduleAttendeeRequest,
   GetScheduleAttendeeResponse,
+  UpdateAttendeeScheduleRequest,
+  UpdateAttendeeScheduleResponse,
+  UpdateBookProgressResponse,
+  UpdateBookProgressRequest,
 } from "./AttendeeSchema";
 
 export const createAttendee = async ({
   attendanceBookId,
   params,
 }: {
-  attendanceBookId: string;
+  attendanceBookId: number;
   params: AttendeeNewRequest;
 }): Promise<AttendeeNewResponse> => {
   const response = await ApiClient.request({
@@ -88,6 +92,46 @@ export const getScheduleAttendee = async (
   const response = await ApiClient.request({
     method: "GET",
     url: `/book/${attendanceBookId}/attendee/schedule?dayOfWeek=${dayOfWeek}&hhmm=${hhmm}`,
+  });
+
+  return response.data;
+};
+
+// 학생 출석 체크
+export const updateAttendeeSchedule = async ({
+  params,
+  attendeeId,
+  attendanceBookId,
+}: {
+  params: UpdateAttendeeScheduleRequest;
+  attendanceBookId: number;
+  attendeeId: number;
+}): Promise<UpdateAttendeeScheduleResponse> => {
+  const { schedules } = params;
+
+  const response = await ApiClient.request({
+    method: "PUT",
+    url: `/book/${attendanceBookId}/attendee/${attendeeId}/schedule`,
+    data: {
+      schedules: schedules,
+    },
+  });
+
+  return response.data;
+};
+
+// 학생 출석 체크
+export const updateBookProgress = async ({
+  params,
+  attendanceBookId,
+}: {
+  params: UpdateBookProgressRequest;
+  attendanceBookId: number;
+}): Promise<UpdateBookProgressResponse> => {
+  const response = await ApiClient.request({
+    method: "PUT",
+    url: `/book/${attendanceBookId}/progress`,
+    data: params,
   });
 
   return response.data;

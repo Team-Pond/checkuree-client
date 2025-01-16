@@ -49,7 +49,12 @@ export type AttendeeNewRequest = {
   associates?: Associates[];
 };
 
-export type AttendeeNewResponse = SuccessResponse | ErrorResponse;
+export type AttendeeNewResponse = {
+  status: 200;
+  data: {
+    id: number;
+  };
+} & ErrorResponse;
 
 export type AttendeeCheckNameRequest = {
   attendanceBookId: string;
@@ -140,5 +145,37 @@ export type GetScheduleAttendeeRequest = {
 
 export type GetScheduleAttendeeResponse = {
   status: 200;
-  data: ScheduleAttendeeDataType;
+  data: ScheduleAttendeeDataType[];
+} & ErrorResponse;
+
+export type UpdateScheduleAttendeeDataType = {
+  ids: number[];
+};
+
+export type UpdateAttendeeScheduleRequest = {
+  schedules: {
+    hhmm: string;
+    day: DaysType;
+  }[];
+};
+
+export type UpdateAttendeeScheduleResponse = {
+  status: 200;
+  data: ScheduleAttendeeDataType[];
+} & ErrorResponse;
+
+// 진도 관리 API
+export type UpdateBookProgressRequest = {
+  attendeeId: number;
+  progresses: {
+    startAt: string;
+    gradeId: number;
+  }[];
+};
+
+export type UpdateBookProgressResponse = {
+  status: 200;
+  data: {
+    ids: number[];
+  };
 } & ErrorResponse;
