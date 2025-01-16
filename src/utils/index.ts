@@ -140,3 +140,15 @@ export function formatTimeRange(startTime: string, endTime: string) {
 
   return `${formattedStartTime} ~ ${formattedEndTime}`;
 }
+
+// 오늘날짜 구하기
+export function getTodayYYYYMMDD(): string {
+  const today = new Date();
+
+  const year = today.getFullYear();
+
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}

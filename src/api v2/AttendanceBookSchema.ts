@@ -107,3 +107,43 @@ export type GetBookScheduleTableResponse = ResponseBase & {
   status: 200;
   data: GetBookScheduleTableDataType;
 };
+
+export type UpdateBookProgressDataType = {
+  ids: number[];
+};
+
+export type UpdateBookProgressRequest = {
+  attendeeId: number;
+  progress: {
+    startAt: string;
+    gradeId: number;
+  }[];
+};
+
+export type UpdateBookProgressResponse = {
+  status: 200;
+  data: UpdateBookProgressDataType;
+} & ErrorResponse;
+
+type Grade = {
+  id: number;
+  title: string;
+  level: number;
+  subjectItemId: number;
+};
+
+type Course = {
+  id: number;
+  title: string;
+  isPrimary: boolean;
+  grades: Grade[];
+};
+
+export type CoursesResponse = {
+  courses: Course[];
+};
+
+export type GetBookCourseResponse = ResponseBase & {
+  status: 200;
+  data: CoursesResponse;
+};

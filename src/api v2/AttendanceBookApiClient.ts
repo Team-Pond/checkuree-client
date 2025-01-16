@@ -1,7 +1,10 @@
 import ApiClient from "./ApiClient";
 import {
+  GetBookCourseResponse,
   GetBookScheduleTableResponse,
   GetBookScheudleTableRequest,
+  UpdateBookProgressRequest,
+  UpdateBookProgressResponse,
 } from "./AttendanceBookSchema";
 import {
   CreateBookRequest,
@@ -76,6 +79,22 @@ export const getMeBooks = async (): Promise<GetMyBooksResponse> => {
   return response.data;
 };
 
+// 출석부 수정
+export const updateBookProgress = async ({
+  attendanceBookId,
+  params,
+}: {
+  attendanceBookId: number;
+  params: UpdateBookProgressRequest;
+}): Promise<UpdateBookProgressResponse> => {
+  const response = await ApiClient.request({
+    method: "PUT",
+    url: `/book/${attendanceBookId}/progress`,
+    data: params,
+  });
+  return response.data;
+};
+
 // 출석부 스케줄 테이블 조회
 export const getBookScheduleTable = async ({
   attendanceBookId,
@@ -85,6 +104,17 @@ export const getBookScheduleTable = async ({
   const response = await ApiClient.request({
     method: "GET",
     url: `/book/${attendanceBookId}/schedule/table`,
+  });
+  return response.data;
+};
+
+// 출석부 조회
+export const getBookCourse = async (
+  attendanceBookId: GetBooksRequest
+): Promise<GetBookCourseResponse> => {
+  const response = await ApiClient.request({
+    method: "GET",
+    url: `/book/${attendanceBookId}/course`,
   });
   return response.data;
 };

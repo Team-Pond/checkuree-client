@@ -62,8 +62,8 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
 
   // 스케줄 테이블 렌더링
   return (
-    <div className="max-w-4xl mx-auto overflow-x-auto">
-      <table className="table-auto border-collapse border border-gray-300 w-full text-center">
+    <div className="max-w-4xl mx-auto overflow-x-auto rounded-2xl">
+      <table className="table-auto border-collapse border rounded-2xl border-text-tertiary w-full text-center">
         <thead>
           <tr>
             {/* 시간 컬럼 */}
@@ -105,10 +105,10 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                   return (
                     <td
                       key={`${dayData.dayOfWeek}-${slotIndex}`}
-                      className={`border border-gray-300 text-sm w-[54px] h-10 align-middle ${
+                      className={`border border-gray-300 text-sm w-[54px] h-[34px] align-middle ${
                         count > 0
-                          ? "bg-green-200 text-green-900 font-semibold"
-                          : "bg-white"
+                          ? "bg-bg-primary text-text-secondary text-xs-semibold"
+                          : "bg-white text-text-secondary text-xs-semibold"
                       }`}
                       onClick={() =>
                         handleSchedule(dayData.dayOfWeek, String(hour + ":00"))
@@ -129,11 +129,14 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                   return (
                     <td
                       key={`${dayData.dayOfWeek}-${secondSlotIndex}`}
-                      className={`border border-gray-300 text-sm w-[54px] h-10 align-middle ${
+                      className={`border border-gray-300 text-sm w-[54px] h-[34px] align-middle ${
                         count > 0
-                          ? "bg-green-200 text-green-900 font-semibold"
-                          : "bg-white"
+                          ? "bg-bg-primary text-text-secondary text-xs-semibold"
+                          : "bg-white text-text-secondary text-xs-semibold"
                       }`}
+                      onClick={() =>
+                        handleSchedule(dayData.dayOfWeek, String(hour + ":30"))
+                      }
                     >
                       {count > 0 ? count : ""}
                     </td>
