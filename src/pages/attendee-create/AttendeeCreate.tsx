@@ -4,10 +4,18 @@ import Step1 from "./components/Step1";
 import { useContext, useState } from "react";
 import Step2 from "./components/Step2";
 import { useMutation } from "@tanstack/react-query";
-import { createAttendee } from "@/api v2/AttendeeApiClient";
+import {
+  createAttendee,
+  updateAttendeeSchedule,
+} from "@/api v2/AttendeeApiClient";
 import toast from "react-hot-toast";
 import { BookContext } from "@/context/BookContext";
-import { GenderType } from "@/api v2/AttendeeSchema";
+import {
+  GenderType,
+  UpdateAttendeeScheduleRequest,
+} from "@/api v2/AttendeeSchema";
+import { updateBookProgress } from "@/api v2/AttendanceBookApiClient";
+import { getTodayYYYYMMDD } from "@/utils";
 
 interface Step1FormState {
   name: string;
@@ -15,11 +23,16 @@ interface Step1FormState {
   birthDate: string;
   gender: GenderType;
   enrollmentDate: string;
-  // admittedToday: boolean;
+
   phoneNumber: string;
   address_1: string;
   school: string;
   description: string;
+}
+
+interface progressGrade {
+  startAt: string;
+  gradeId: number;
 }
 
 export default function AttendeeCreate() {
@@ -28,6 +41,7 @@ export default function AttendeeCreate() {
   const context = useContext(BookContext);
   const { selectedBook } = context!;
 
+  const [attendeeId, setAttendeeId] = useState<number>(0);
   const [isStep2, setIsStep2] = useState<boolean>(false);
   const [formData, setFormData] = useState<Step1FormState>({
     name: "",
@@ -59,11 +73,46 @@ export default function AttendeeCreate() {
           enrollmentDate: formData.enrollmentDate.replaceAll(".", "-"),
         },
       }),
-    onSuccess: () => {
+    onSuccess: (res) => {
+      setAttendeeId(res.data.id);
       toast.success("학생 등록되었습니다.");
       handleStep2Change(true);
     },
     onError: (error) => {},
+  });
+
+  const [attendeeSchedules, setAttendeeSchedules] = useState<
+    UpdateAttendeeScheduleRequest | undefined
+  >();
+
+  const [progressGrade, setProgressGrade] = useState<progressGrade[]>();
+
+  const onChangeGrade = (gradeId: number) => {
+    setProgressGrade([
+      ...progressGrade!,
+      { gradeId, startAt: getTodayYYYYMMDD() },
+    ]);
+  };
+  const { mutate: scheduleMutation } = useMutation({
+    mutationFn: async () =>
+      await updateAttendeeSchedule({
+        params: attendeeSchedules!,
+        attendanceBookId: selectedBook?.id!,
+        attendeeId,
+      }),
+    onSuccess: async () => {
+      // const response = await getBookCourse({
+      //   attendanceBookId: context?.selectedBook?.id!,
+      // });
+      await updateBookProgress({
+        attendanceBookId: selectedBook?.id!,
+        params: {
+          attendeeId: attendeeId,
+          progress: progressGrade!,
+        },
+      });
+    },
+    onError: () => {},
   });
 
   return (
@@ -93,11 +142,36 @@ export default function AttendeeCreate() {
         <div className="flex w-full justify-center">
           <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
             {isStep2 ? (
-              <Step2 />
+              <Step2
+                // Step2로 내려줄 함수
+                // setBookProgress={setBookProgress}
+                onChangeGrade={onChangeGrade}
+                attendanceBookId={context?.selectedBook?.id!}
+                setAttendeeSchedules={setAttendeeSchedules}
+              />
             ) : (
               <Step1 formData={formData} setFormData={setFormData} />
             )}
-            {isStep2 === false && (
+            {isStep2 ? (
+              <div className="flex gap-4 w-full">
+                <button
+                  type="button"
+                  onClick={() => handleStep2Change(false)}
+                  className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
+                >
+                  이전으로
+                </button>
+                <button
+                  onClick={() => {
+                    scheduleMutation();
+                  }}
+                  type="button"
+                  className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
+                >
+                  생성하기
+                </button>
+              </div>
+            ) : (
               <button
                 type="button"
                 className={twMerge(
@@ -107,7 +181,7 @@ export default function AttendeeCreate() {
                     : "bg-bg-disabled text-text-disabled"
                 )}
                 disabled={!isStep1Valid}
-                onClick={() => attendeeMutation()}
+                onClick={() => handleStep2Change(true)}
               >
                 <p className="font-semibold text-lg">다음으로</p>
               </button>
