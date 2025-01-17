@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { getSubjects, getSubjectItems } from "@/api v2/CourseApiClient";
+
 import {
   getBookCourse,
   getBookScheduleTable,
@@ -12,15 +12,13 @@ import SubjectSelectionDrawer from "./SubjectSelectionDrawer";
 import AttendeeDrawer from "./AttendeeDrawer";
 import { DaysType } from "@/api v2/AttendanceBookSchema";
 import { UpdateAttendeeScheduleRequest } from "@/api v2/AttendeeSchema";
+import { useParams } from "react-router-dom";
 
 interface Step2Props {
-  // AttendeeCreate에서 내려받을 두 개의 Setter
-  // setBookProgress: React.Dispatch<
-  //   React.SetStateAction<UpdateBookProgressRequest | undefined>
-  // >;
   setAttendeeSchedules: React.Dispatch<
     React.SetStateAction<UpdateAttendeeScheduleRequest | undefined>
   >;
+
   attendanceBookId: number;
   onChangeGrade: (gradeId: number) => void;
 }
@@ -30,6 +28,7 @@ export default function Step2({
   attendanceBookId,
   onChangeGrade,
 }: Step2Props) {
+  const { bookId } = useParams();
   const [selectedSubject, setSelectedSubject] = useState<{
     id: number;
     title: string;
@@ -66,6 +65,7 @@ export default function Step2({
   // 스케줄 클릭 시 선택된 요일/시간 저장
   const handleSchedule = (dayOfWeek: string, hhmm: string) => {
     setScheduleParams({ dayOfWeek, hhmm });
+    handleAttendeeBottomDrawer(true);
   };
 
   // 선택된 스케줄에 따라 수강생 목록 가져오기
@@ -74,7 +74,7 @@ export default function Step2({
     queryKey: ["table-attendee", scheduleParams.dayOfWeek, scheduleParams.hhmm],
     queryFn: async () => {
       const res = await getScheduleAttendee({
-        attendanceBookId: 5,
+        attendanceBookId: Number(bookId)!,
         dayOfWeek: scheduleParams.dayOfWeek,
         hhmm: scheduleParams.hhmm,
       });
@@ -83,11 +83,11 @@ export default function Step2({
   });
 
   // 시간표 정보 가져오기
-  const { data: tableScheduleTable } = useQuery({
+  const { data: scheduleTable } = useQuery({
     queryKey: ["table-schedule"],
     queryFn: async () => {
       const res = await getBookScheduleTable({
-        attendanceBookId: attendanceBookId,
+        attendanceBookId: Number(bookId)!,
       });
       if (res.status === 200) return res.data;
     },
@@ -96,7 +96,6 @@ export default function Step2({
   // 일정 클릭 시 자동으로 수강생 Drawer 열기
   useEffect(() => {
     if (scheduleParams.dayOfWeek && scheduleParams.hhmm) {
-      handleAttendeeBottomDrawer(true);
     }
   }, [scheduleParams.dayOfWeek, scheduleParams.hhmm]);
 
@@ -107,8 +106,8 @@ export default function Step2({
         return {
           schedules: [
             {
-              day: scheduleParams.dayOfWeek as DaysType,
-              hhmm: scheduleParams.hhmm,
+              day: day,
+              hhmm: hhmm,
             },
           ],
         };
@@ -119,8 +118,8 @@ export default function Step2({
         schedules: [
           ...prev.schedules,
           {
-            day: scheduleParams.dayOfWeek as DaysType,
-            hhmm: scheduleParams.hhmm,
+            day: day,
+            hhmm: hhmm,
           },
         ],
       };
@@ -135,6 +134,14 @@ export default function Step2({
       if (res.status === 200) return res.data;
     },
   });
+
+  useEffect(() => {
+    if (openDrawer) {
+      setAttendeeOpenDrawer(false);
+    } else if (attendeeOpenDrawer) {
+      setOpenDrawer(false);
+    }
+  }, [openDrawer, attendeeOpenDrawer]);
 
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
@@ -160,13 +167,6 @@ export default function Step2({
             className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#5D5D5D] text-left"
             readOnly
           />
-          <img
-            width={8}
-            height={8}
-            src="/images/icons/attendee-create/ico-arrow-down.svg"
-            alt="input placeholder 아이콘"
-            className="absolute top-[22px] right-4"
-          />
         </div>
       </div>
 
@@ -177,31 +177,29 @@ export default function Step2({
           <p className="text-text-danger">*</p>
         </div>
 
-        {tableScheduleTable && (
+        {scheduleTable && (
           <ScheduleTable
-            scheduleTable={tableScheduleTable?.scheduleTable!}
-            timeSlots={tableScheduleTable?.timeSlots!}
-            startHhmm={tableScheduleTable?.startHhmm!}
-            endHhmm={tableScheduleTable?.endHhmm!}
+            scheduleTable={scheduleTable?.scheduleTable!}
+            timeSlots={scheduleTable?.timeSlots!}
+            startHhmm={scheduleTable?.startHhmm!}
+            endHhmm={scheduleTable?.endHhmm!}
             handleSchedule={handleSchedule}
+            handleAttendeeBottomDrawer={handleAttendeeBottomDrawer}
           />
         )}
       </div>
 
       {/* 커리큘럼 선택 Drawer */}
-
-      {bookCourses && openDrawer && (
-        <SubjectSelectionDrawer
-          isOpen={openDrawer}
-          onClose={onDrawerChange}
-          selectedSubject={selectedSubject}
-          setSelectedSubject={setSelectedSubject}
-          setSelectedSubjectItems={setSelectedSubjectItems}
-          handleBottomDrawer={handleBottomDrawer}
-          bookCourses={bookCourses!}
-          onChangeGrade={onChangeGrade}
-        />
-      )}
+      <SubjectSelectionDrawer
+        isOpen={openDrawer}
+        onClose={onDrawerChange}
+        selectedSubject={selectedSubject}
+        setSelectedSubject={setSelectedSubject}
+        setSelectedSubjectItems={setSelectedSubjectItems}
+        handleBottomDrawer={handleBottomDrawer}
+        bookCourses={bookCourses!}
+        onChangeGrade={onChangeGrade}
+      />
 
       {/* 수강생 정보 Drawer */}
       <AttendeeDrawer
