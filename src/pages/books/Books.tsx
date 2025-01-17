@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMeBooks } from "@/api v2/AttendanceBookApiClient";
 import { useQuery } from "@tanstack/react-query";
@@ -8,10 +8,6 @@ import { BookContext } from "@/context/BookContext";
 export default function Books() {
   const navigate = useNavigate();
   const context = useContext(BookContext);
-  useEffect(() => {
-    const getMyBooks = async () => {};
-    getMyBooks();
-  }, []);
 
   const { data: bookList } = useQuery({
     queryKey: ["books"],
@@ -28,7 +24,7 @@ export default function Books() {
   const { setSelectedBook } = context!;
 
   const handleNavigation = (id: string, title: string) => {
-    navigate(`/book/${id}`);
+    navigate(`/book/${id}?bookName=${title}`);
     setSelectedBook({ title, id: Number(id) });
   };
 

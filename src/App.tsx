@@ -35,9 +35,9 @@ interface RouteType {
 const routes: RouteType[] = [
   { path: "/book", element: <Books /> }, // 출석부 목록
   { path: "/book/create", element: <BookCreate /> }, // 출석부 생성
-  { path: "/attendee/create", element: <AttendeeCreate /> }, // 출석부 생성
-  { path: "/book/:id", element: <BookCheck /> }, // 출석부 출석
-  { path: "/roaster/:id", element: <BookRoaster /> }, // 출석부 명단
+  { path: "/book/:bookId/attendee/create", element: <AttendeeCreate /> }, // 출석부 생성
+  { path: "/book/:bookId", element: <BookCheck /> }, // 출석부 출석
+  { path: "/book/:bookId/attendee", element: <BookRoaster /> }, // 출석부 명단
 ];
 
 function App() {
