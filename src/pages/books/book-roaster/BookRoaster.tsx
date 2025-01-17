@@ -9,6 +9,7 @@ import BottomFilter from "./components/BottomFilter";
 import { GenderType } from "@/api v2/AttendeeSchema";
 import MainContent from "./components/MainContent";
 import { BookContext } from "@/context/BookContext";
+import { useParams, useSearchParams } from "react-router-dom";
 
 const DaysMatch: Record<string, DaysType> = {
   월: "MONDAY",
@@ -20,10 +21,14 @@ const DaysMatch: Record<string, DaysType> = {
   일: "SUNDAY",
 };
 export default function BookRoaster() {
+  const [searchParams] = useSearchParams();
+  const { bookId } = useParams();
+  const bookName = searchParams.get("bookName");
   const context = useContext(BookContext);
   const { selectedBook } = context!;
+
   const [openFilter, setOpenFilter] = useState<boolean>(false);
-  const attendanceBookId = location.pathname.split("/")[2];
+
   const onDrawerChange = () => {
     setOpenFilter(!openFilter);
   };
@@ -43,10 +48,10 @@ export default function BookRoaster() {
     setGender(gender === selectGender ? "" : selectGender);
   };
   const { data: roaster } = useQuery({
-    queryKey: ["roaster", attendanceBookId, dayArrays, gender],
+    queryKey: ["roaster", bookId, dayArrays, gender],
     queryFn: async () => {
       const response = await getAttendee({
-        attendanceBookId: attendanceBookId,
+        attendanceBookId: Number(bookId) || selectedBook?.id!,
         filter: {
           age: {
             min: 30,
@@ -74,7 +79,7 @@ export default function BookRoaster() {
   return (
     <section className="flex flex-col w-full">
       <Header
-        title={selectedBook?.title!}
+        title={bookName || selectedBook?.title!}
         onDrawerChange={onDrawerChange}
         onChangeSearch={onChangeSearch}
       />

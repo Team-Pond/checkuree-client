@@ -1,14 +1,18 @@
 import toast from "react-hot-toast";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 
 export default function Bottom() {
   const location = useLocation();
   const currentPath = location.pathname;
-  const attendanceBookId = location.pathname.split("/")[2];
+  const attendeeUrl = location.pathname.split("/")[3];
+  const bookUrl = location.pathname.split("/")[1];
 
   const navigate = useNavigate();
 
+  const { bookId } = useParams();
+
+  console.log(location.pathname);
   return (
     <div
       className="flex justify-between px-[44px] items-center fixed bottom-0 left-1/2 transform -translate-x-1/2 z-50 
@@ -16,13 +20,11 @@ export default function Bottom() {
     >
       <div
         className="flex flex-col gap-2 items-center"
-        onClick={() => navigate(`/book/${attendanceBookId}`)}
+        onClick={() => navigate(`/book/${bookId}${location.search}`)}
       >
         <img
           src={`/images/icons/book-check/${
-            currentPath.split("/")[1] === "book"
-              ? "ico-book-active"
-              : "ico-book"
+            bookUrl && !attendeeUrl ? "ico-book-active" : "ico-book"
           }.svg`}
           alt="출석부 아이콘"
           width={20}
@@ -30,9 +32,7 @@ export default function Bottom() {
         <p
           className={twMerge(
             "text-xs ",
-            currentPath.split("/")[1] === "book"
-              ? "text-text-primary"
-              : "text-text-tertiary"
+            bookUrl && !attendeeUrl ? "text-text-primary" : "text-text-tertiary"
           )}
         >
           출석부
@@ -40,13 +40,11 @@ export default function Bottom() {
       </div>
       <div
         className="flex flex-col gap-2 items-center"
-        onClick={() => navigate(`/roaster/${attendanceBookId}`)}
+        onClick={() => navigate(`/book/${bookId}/attendee${location.search}`)}
       >
         <img
           src={`/images/icons/book-check/${
-            currentPath.split("/")[1] === "roaster"
-              ? "ico-roaster-active"
-              : "ico-roaster"
+            attendeeUrl ? "ico-roaster-active" : "ico-roaster"
           }.svg`}
           alt="출석부 아이콘"
           width={20}
@@ -55,9 +53,7 @@ export default function Bottom() {
         <p
           className={twMerge(
             "text-xs ",
-            currentPath.split("/")[1] === "roaster"
-              ? "text-text-primary"
-              : "text-text-tertiary"
+            attendeeUrl ? "text-text-primary" : "text-text-tertiary"
           )}
         >
           명단

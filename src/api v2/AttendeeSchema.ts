@@ -66,7 +66,7 @@ export type AttendeeCheckNameResponse = SuccessResponse | ErrorResponse;
 // 출석 체크
 
 export type AttendeeCheckRequest = {
-  attendanceBookId: string;
+  attendanceBookId: number;
   attendeeId: number;
   status: string;
 };
@@ -74,7 +74,7 @@ export type AttendeeCheckRequest = {
 export type AttendeeCheckResponse = SuccessResponse | ErrorResponse;
 
 export type GetAttendeeListRequest = {
-  attendanceBookId: string;
+  attendanceBookId: number;
   filter: {
     age: {
       min: number;
@@ -177,5 +177,16 @@ export type UpdateBookProgressResponse = {
   status: 200;
   data: {
     ids: number[];
+  };
+} & ErrorResponse;
+
+// 출석부 학생 인증
+export type UpdateAttendeeVerifyRequest = {
+  attendeeId: number;
+};
+export type UpdateAttendeeVerifyResponse = {
+  status: 200;
+  data: {
+    id: number;
   };
 } & ErrorResponse;
