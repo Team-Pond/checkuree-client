@@ -48,14 +48,14 @@ export default function SubjectSelectionDrawer({
   onChangeGrade,
 }: SubjectSelectionDrawerProps) {
   const [grades, setGrades] = useState<Grade[]>([]);
-  console.log(grades);
+
   return (
     <BottomDrawer isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col gap-4 items-center">
         <div className="w-full max-w-[345px] h-[234px] flex bg-white ">
           {/* 왼쪽: 과목 목록 */}
           <ul className="w-full max-w-[107px] overflow-y-scroll scrollbar-hide rounded-tl-lg">
-            {bookCourses.courses?.map((subject) => {
+            {bookCourses?.courses?.map((subject) => {
               const isSelected = selectedSubject?.title === subject.title;
               return (
                 <li
