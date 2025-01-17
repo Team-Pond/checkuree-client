@@ -16,6 +16,8 @@ import {
   UpdateAttendeeScheduleResponse,
   UpdateBookProgressResponse,
   UpdateBookProgressRequest,
+  UpdateAttendeeVerifyRequest,
+  UpdateAttendeeVerifyResponse,
 } from "./AttendeeSchema";
 
 export const createAttendee = async ({
@@ -52,9 +54,7 @@ export const getAttendee = async (
   params: GetAttendeeListRequest
 ): Promise<GetAttendeeListResponse> => {
   const { attendanceBookId, filter } = params;
-
   const scheduleDays = filter.scheduleDays.join(",");
-
   const response = await ApiClient.request({
     method: "GET",
     url: `/book/${attendanceBookId}/attendee?age.min=0&age.max=100&scheduleDays=${scheduleDays}&gender=${
@@ -131,6 +131,23 @@ export const updateBookProgress = async ({
   const response = await ApiClient.request({
     method: "PUT",
     url: `/book/${attendanceBookId}/progress`,
+    data: params,
+  });
+
+  return response.data;
+};
+
+// 학생 출석 체크
+export const updateAttendeeVerify = async ({
+  params,
+  attendanceBookId,
+}: {
+  params: UpdateAttendeeVerifyRequest;
+  attendanceBookId: number;
+}): Promise<UpdateAttendeeVerifyResponse> => {
+  const response = await ApiClient.request({
+    method: "POST",
+    url: `/book/${attendanceBookId}/attendee/verify`,
     data: params,
   });
 
