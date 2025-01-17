@@ -114,7 +114,7 @@ export type UpdateBookProgressDataType = {
 
 export type UpdateBookProgressRequest = {
   attendeeId: number;
-  progress: {
+  progresses: {
     startAt: string;
     gradeId: number;
   }[];
