@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import Step1 from "./components/Step1";
 import { useContext, useState } from "react";
@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import {
   createAttendee,
   updateAttendeeSchedule,
+  updateAttendeeVerify,
 } from "@/api v2/AttendeeApiClient";
 import toast from "react-hot-toast";
 import { BookContext } from "@/context/BookContext";
@@ -37,7 +38,8 @@ interface progressGrade {
 
 export default function AttendeeCreate() {
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const { bookId } = useParams();
   const context = useContext(BookContext);
   const { selectedBook } = context!;
 
@@ -66,7 +68,7 @@ export default function AttendeeCreate() {
     mutationKey: ["book"],
     mutationFn: async () =>
       await createAttendee({
-        attendanceBookId: selectedBook?.id!,
+        attendanceBookId: Number(bookId) || selectedBook?.id!,
         params: {
           ...formData,
           birthDate: formData.birthDate.replaceAll(".", "-"),
@@ -75,7 +77,6 @@ export default function AttendeeCreate() {
       }),
     onSuccess: (res) => {
       setAttendeeId(res.data.id);
-      toast.success("학생 등록되었습니다.");
       handleStep2Change(true);
     },
     onError: (error) => {},
@@ -85,31 +86,40 @@ export default function AttendeeCreate() {
     UpdateAttendeeScheduleRequest | undefined
   >();
 
-  const [progressGrade, setProgressGrade] = useState<progressGrade[]>();
+  const [progressGrade, setProgressGrade] = useState<progressGrade[] | []>([]);
 
+  const paramBookId = Number(bookId) || selectedBook?.id!;
   const onChangeGrade = (gradeId: number) => {
     setProgressGrade([
-      ...progressGrade!,
-      { gradeId, startAt: getTodayYYYYMMDD() },
+      ...progressGrade,
+      { gradeId: gradeId, startAt: getTodayYYYYMMDD() },
     ]);
   };
   const { mutate: scheduleMutation } = useMutation({
     mutationFn: async () =>
       await updateAttendeeSchedule({
         params: attendeeSchedules!,
-        attendanceBookId: selectedBook?.id!,
+        attendanceBookId: paramBookId,
         attendeeId,
       }),
     onSuccess: async () => {
-      // const response = await getBookCourse({
-      //   attendanceBookId: context?.selectedBook?.id!,
-      // });
       await updateBookProgress({
-        attendanceBookId: selectedBook?.id!,
+        attendanceBookId: paramBookId,
         params: {
           attendeeId: attendeeId,
-          progress: progressGrade!,
+          progresses: progressGrade!,
         },
+      });
+      await updateAttendeeVerify({
+        attendanceBookId: paramBookId,
+        params: {
+          attendeeId: attendeeId,
+        },
+      }).then((res) => {
+        if (res.status === 200) {
+          toast.success("학생 등록되었습니다.");
+          navigate(`/book/${bookId}/attendee${location.search}`);
+        }
       });
     },
     onError: () => {},
@@ -124,7 +134,7 @@ export default function AttendeeCreate() {
           alt="닫기 아이콘"
           width={32}
           height={32}
-          onClick={() => navigate("/book/roaster")}
+          onClick={() => navigate(`/book/${bookId}/attendee${location.search}`)}
         />
       </div>
 
@@ -156,7 +166,7 @@ export default function AttendeeCreate() {
               <div className="flex gap-4 w-full">
                 <button
                   type="button"
-                  onClick={() => handleStep2Change(false)}
+                  onClick={() => {}}
                   className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
                 >
                   이전으로
@@ -181,7 +191,10 @@ export default function AttendeeCreate() {
                     : "bg-bg-disabled text-text-disabled"
                 )}
                 disabled={!isStep1Valid}
-                onClick={() => handleStep2Change(true)}
+                onClick={() => {
+                  // handleStep2Change(true);
+                  attendeeMutation();
+                }}
               >
                 <p className="font-semibold text-lg">다음으로</p>
               </button>
