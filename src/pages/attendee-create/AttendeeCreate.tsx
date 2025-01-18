@@ -24,7 +24,6 @@ interface Step1FormState {
   birthDate: string;
   gender: GenderType;
   enrollmentDate: string;
-
   phoneNumber: string;
   address_1: string;
   school: string;
@@ -47,14 +46,14 @@ export default function AttendeeCreate() {
   const [isStep2, setIsStep2] = useState<boolean>(false);
   const [formData, setFormData] = useState<Step1FormState>({
     name: "",
-    actualName: "3344444",
+    actualName: "",
     birthDate: "",
     gender: "",
     enrollmentDate: "",
-    phoneNumber: "01027840955",
+    phoneNumber: "01000000000",
     address_1: "",
-    school: "범구초등학교",
-    description: "범범",
+    school: "",
+    description: "",
   });
 
   const handleStep2Change = (state: boolean) => {
@@ -72,6 +71,7 @@ export default function AttendeeCreate() {
         params: {
           ...formData,
           birthDate: formData.birthDate.replaceAll(".", "-"),
+          actualName: formData.name,
           enrollmentDate: formData.enrollmentDate.replaceAll(".", "-"),
         },
       }),
