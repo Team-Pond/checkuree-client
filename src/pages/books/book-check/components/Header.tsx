@@ -1,12 +1,15 @@
+import { updateRecordAll } from "@/api v2/RecordApiClient";
+import { useMutation } from "@tanstack/react-query";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 type HeaderProps = {
   title: string;
+  bookId: number;
 };
 
 export default function Header(props: HeaderProps) {
-  const { title } = props;
+  const { title, bookId } = props;
 
   const navigate = useNavigate();
   const SUB_HEADER = [
@@ -49,6 +52,19 @@ export default function Header(props: HeaderProps) {
     [0, 0.2],
     ["78px", "49px"]
   );
+
+  const { mutate: recordAllMutation } = useMutation({
+    mutationKey: [""],
+    mutationFn: async () =>
+      await updateRecordAll({
+        params: {
+          attendanceBookId: Number(bookId!),
+          attendDate: "",
+        },
+      }),
+    onSuccess: () => {},
+    onError: () => {},
+  });
 
   return (
     <div className="flex flex-col sticky top-0 z-50 bg-white">

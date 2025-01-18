@@ -121,7 +121,7 @@ export function getDayGroupFromInput(input: DaysType[]) {
   return days.join(", ");
 }
 
-function formatTime(time: string) {
+export function formatTime(time: string) {
   // time을 문자열로 변환하고 시간과 분을 분리
   const timeStr = time.padStart(4, "0");
   const hours = parseInt(timeStr.slice(0, 2), 10);
@@ -131,7 +131,7 @@ function formatTime(time: string) {
   const period = hours < 12 ? "오전" : "오후";
   const formattedHour = hours % 12 === 0 ? 12 : hours % 12;
 
-  return `${period} ${formattedHour}${minutes === "00" ? "" : `:${minutes}`}시`;
+  return `${period} ${formattedHour}${minutes === "00" ? "" : `${minutes}`}시`;
 }
 
 export function formatTimeRange(startTime: string, endTime: string) {
@@ -151,4 +151,20 @@ export function getTodayYYYYMMDD(): string {
   const day = String(today.getDate()).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
+}
+
+export function scheduleCheckformatTime(input: string) {
+  if (!input || typeof input !== "string") return "Invalid Input";
+
+  const [hourStr, minuteStr] = input.split(":");
+  let hour = parseInt(hourStr, 10);
+  const minute = parseInt(minuteStr, 10);
+
+  if (isNaN(hour) || isNaN(minute)) return "Invalid Time Format";
+
+  const period = hour >= 12 ? "오후" : "오전";
+  if (hour > 12) hour -= 12;
+  if (hour === 0) hour = 12;
+
+  return `${period} ${hour}:${minute.toString().padStart(2, "0")}`;
 }

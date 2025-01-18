@@ -21,7 +21,7 @@ const AttendeeCreate = lazy(
 );
 const BookCreate = lazy(() => import("@/pages/books/book-create/BookCreate"));
 const BookRoaster = lazy(
-  () => import("@/pages/books/book-roaster/BookRoaster")
+  () => import("@/pages/books/book-attendee/BookAttendee")
 );
 const KakaoSignIn = lazy(() => import("@/pages/kakao-auth/SignIn"));
 const CheckureeSignIn = lazy(() => import("@/pages/checkuree-auth/SignIn"));
