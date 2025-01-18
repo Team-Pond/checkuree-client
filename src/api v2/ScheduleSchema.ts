@@ -11,14 +11,14 @@ type ErrorResponse = ResponseBase & {
 export type ScheduleDataType = {
   content: {
     count: number;
-    startTime: Time;
-    endTime: Time;
+    startTime: string;
+    endTime: string;
     schedules: {
       scheduleId: number;
-      scheduleTime: Time;
+      scheduleTime: string;
       recordId: number;
-      recordTime: Time;
-      sortTime: Time;
+      recordTime: string;
+      sortTime: string;
       recordStatus: "PENDING" | "APPROVED" | "REJECTED" | string; // Adjust based on actual enum values
       attendeeId: number;
       name: string;
@@ -30,12 +30,6 @@ export type ScheduleDataType = {
   number: number;
   numberOfElements: number;
   empty: boolean;
-};
-type Time = {
-  hour: number;
-  minute: number;
-  second: number;
-  nano: number;
 };
 
 export type GetScheduleAttendeeResponse =
