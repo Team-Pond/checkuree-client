@@ -65,18 +65,12 @@ export type CreateRecordResponse =
   | ErrorResponse;
 
 // attendTime의 형태를 정의하는 타입
-export type AttendTime = {
-  hour: number;
-  minute: number;
-  second: number;
-  nano: number;
-};
 
 export type CreateRecordRequest = {
   attendanceBookId: number;
   attendeeId: number;
   scheduleId: number;
   attendDate: string; // "YYYY-MM-DD" 형태의 문자열로 전송
-  attendTime: AttendTime;
+  attendTime: string;
   status: STATUS;
 };
