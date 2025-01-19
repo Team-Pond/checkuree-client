@@ -89,7 +89,6 @@ export default function Step1({ formData, setFormData }: Step1Props) {
           }
         />
       </div>
-
       {/* 학생 생년월일/성별 */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
@@ -171,7 +170,6 @@ export default function Step1({ formData, setFormData }: Step1Props) {
           </div>
         </div>
       </div>
-
       {/* 학생 입학일 */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
@@ -249,8 +247,7 @@ export default function Step1({ formData, setFormData }: Step1Props) {
           </div>
         </div>
       </div>
-
-      {/* 학생 연락처 */}
+      {/* 학생 연락처
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
           <p className="font-bold text-m-medium">학생 연락처</p>
@@ -267,8 +264,7 @@ export default function Step1({ formData, setFormData }: Step1Props) {
             }))
           }
         />
-      </div>
-
+      </div> */}
       {/* 학생 주소 */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
@@ -288,7 +284,6 @@ export default function Step1({ formData, setFormData }: Step1Props) {
           }
         />
       </div>
-
       {/* 학교(선택) */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
@@ -307,7 +302,6 @@ export default function Step1({ formData, setFormData }: Step1Props) {
           }
         />
       </div>
-
       {/* 비고(선택) */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">

@@ -1,5 +1,7 @@
 import ApiClient from "./ApiClient";
 import {
+  CreateRecordRequest,
+  CreateRecordResponse,
   UpdateRecordAllRequest,
   UpdateRecordAllResponse,
   UpdateRecordLessonRequest,
@@ -63,5 +65,19 @@ export const updateRecordAll = async ({
     },
   });
 
+  return response.data;
+};
+
+// 출석부 기록 생성
+export const createRecord = async ({
+  params,
+}: {
+  params: CreateRecordRequest;
+}): Promise<CreateRecordResponse> => {
+  const response = await ApiClient.request({
+    method: "POST",
+    url: `/record`,
+    data: params,
+  });
   return response.data;
 };
