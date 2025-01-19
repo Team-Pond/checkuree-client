@@ -12,6 +12,7 @@ import {
 import toast from "react-hot-toast";
 import { BookContext } from "@/context/BookContext";
 import {
+  Associates,
   GenderType,
   UpdateAttendeeScheduleRequest,
 } from "@/api v2/AttendeeSchema";
@@ -24,10 +25,14 @@ interface Step1FormState {
   birthDate: string;
   gender: GenderType;
   enrollmentDate: string;
-  phoneNumber: string;
+
   address_1: string;
   school: string;
   description: string;
+  associates?: {
+    relationType: string;
+    phoneNumber: string;
+  }[];
 }
 
 interface progressGrade {
@@ -44,16 +49,25 @@ export default function AttendeeCreate() {
 
   const [attendeeId, setAttendeeId] = useState<number>(0);
   const [isStep2, setIsStep2] = useState<boolean>(false);
+  const [guardian, setGuardian] = useState<Associates>();
+
+  const onChangeGuardian = (key: string, value: string) => {
+    setGuardian((prev) => ({
+      ...prev!,
+      [key]: value,
+    }));
+  };
+
   const [formData, setFormData] = useState<Step1FormState>({
     name: "",
     actualName: "",
     birthDate: "",
     gender: "",
     enrollmentDate: "",
-    phoneNumber: "01000000000",
     address_1: "",
     school: "",
     description: "",
+    associates: [],
   });
 
   const handleStep2Change = (state: boolean) => {
@@ -73,6 +87,7 @@ export default function AttendeeCreate() {
           birthDate: formData.birthDate.replaceAll(".", "-"),
           actualName: formData.name,
           enrollmentDate: formData.enrollmentDate.replaceAll(".", "-"),
+          associates: guardian ? [guardian] : [],
         },
       }),
     onSuccess: (res) => {
@@ -158,9 +173,14 @@ export default function AttendeeCreate() {
                 onChangeGrade={onChangeGrade}
                 attendanceBookId={context?.selectedBook?.id!}
                 setAttendeeSchedules={setAttendeeSchedules}
+                attendeeSchedules={attendeeSchedules}
               />
             ) : (
-              <Step1 formData={formData} setFormData={setFormData} />
+              <Step1
+                formData={formData}
+                setFormData={setFormData}
+                onChangeGuardian={onChangeGuardian}
+              />
             )}
             {isStep2 ? (
               <div className="flex gap-4 w-full">
