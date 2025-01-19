@@ -1,15 +1,26 @@
-import { updateRecordAll } from "@/api v2/RecordApiClient";
-import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
+import dayjs, { Dayjs } from "dayjs";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 type HeaderProps = {
   title: string;
   bookId: number;
+  formattedDate: string;
+  handleNextDay: () => void;
+  handlePreviousDay: () => void;
+  currentDate: Dayjs;
 };
 
 export default function Header(props: HeaderProps) {
-  const { title, bookId } = props;
+  const {
+    title,
+    bookId,
+    currentDate,
+    handlePreviousDay,
+    handleNextDay,
+    formattedDate,
+  } = props;
 
   const navigate = useNavigate();
   const SUB_HEADER = [
@@ -27,17 +38,15 @@ export default function Header(props: HeaderProps) {
     },
   ];
 
-  // useScroll 훅을 사용하여 스크롤 진행도를 가져옵니다.
-  const { scrollYProgress } = useScroll();
+  const displayDate = currentDate.locale("ko").format("M월 D일"); // 텍스트 값
 
-  // useSpring을 사용하여 스크롤 값을 스무딩, 파라미터 조정
+  const { scrollYProgress } = useScroll();
   const smoothScrollYProgress = useSpring(scrollYProgress, {
-    stiffness: 300, // 스프링의 강성도를 높여 빠르게 반응
-    damping: 20, // 감쇠를 낮춰 덜 느리게
-    mass: 1, // 질량은 기본값 유지
+    stiffness: 300,
+    damping: 20,
+    mass: 1,
   });
 
-  // 애니메이션 정의
   const textY = useTransform(smoothScrollYProgress, [0, 0.15], [0, -8]);
   const iconY = useTransform(smoothScrollYProgress, [0, 0.15], [0, 8]);
   const iconOpacity = useTransform(smoothScrollYProgress, [0, 0.15], [1, 0]);
@@ -52,19 +61,6 @@ export default function Header(props: HeaderProps) {
     [0, 0.2],
     ["78px", "49px"]
   );
-
-  const { mutate: recordAllMutation } = useMutation({
-    mutationKey: [""],
-    mutationFn: async () =>
-      await updateRecordAll({
-        params: {
-          attendanceBookId: Number(bookId!),
-          attendDate: "",
-        },
-      }),
-    onSuccess: () => {},
-    onError: () => {},
-  });
 
   return (
     <div className="flex flex-col sticky top-0 z-50 bg-white">
@@ -86,13 +82,17 @@ export default function Header(props: HeaderProps) {
           alt="왼쪽 화살"
           width={9}
           height={9}
+          onClick={handlePreviousDay}
         />
-        <p className="text-xl font-bold">12월 10일</p>
+        <p className="text-xl font-bold" data-value={formattedDate}>
+          {displayDate}
+        </p>
         <img
           src="/images/icons/ico-arrow-right.svg"
           alt="오른쪽 화살"
           width={9}
           height={9}
+          onClick={handleNextDay}
         />
       </div>
       {/* SubHeader */}
