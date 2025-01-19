@@ -1,3 +1,5 @@
+import { STATUS } from "./RecordSchema";
+
 type ResponseBase = {
   message: string;
 };
@@ -19,7 +21,7 @@ export type ScheduleDataType = {
       recordId: number;
       recordTime: string;
       sortTime: string;
-      recordStatus: "PENDING" | "APPROVED" | "REJECTED" | string; // Adjust based on actual enum values
+      recordStatus: STATUS | string; // Adjust based on actual enum values
       attendeeId: number;
       name: string;
     }[];

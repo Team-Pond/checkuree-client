@@ -1,5 +1,5 @@
 export type GenderType = "MALE" | "FEMALE" | "";
-type Parent = "FATHER" | "MATHER";
+type Parent = string;
 type Status = "ATTENDING" | string;
 
 export type DaysType =
@@ -11,13 +11,13 @@ export type DaysType =
   | "SATURDAY"
   | "SUNDAY";
 
-interface Associates {
-  name: string;
-  gender: GenderType;
+export interface Associates {
+  name?: string;
+  gender?: GenderType;
   relationType: Parent;
   phoneNumber: string;
-  relationescription: string;
-  description: string;
+  relationescription?: string;
+  description?: string;
 }
 
 type ResponseBase = {
@@ -40,7 +40,6 @@ export type AttendeeNewRequest = {
   actualName: string;
   birthDate: string;
   enrollmentDate: string;
-  phoneNumber: string;
   description: string;
   school: string;
   attendeeId?: number;

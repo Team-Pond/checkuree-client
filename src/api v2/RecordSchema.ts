@@ -17,11 +17,13 @@ export type UpdateRecordStatusResponse =
     } & ResponseBase)
   | ErrorResponse;
 
+export type STATUS = "PENDING" | "ATTEND" | "ABSENT";
+
 export type UpdateRecordStatusRequest = {
   recordId: number;
   attendanceBookId: number;
   scheduleId: number;
-  status: "PENDING" | "APPROVED" | "REJECTED" | string;
+  status: STATUS | string;
 };
 
 export type UpdateRecordLessonResponse =
@@ -63,12 +65,12 @@ export type CreateRecordResponse =
   | ErrorResponse;
 
 // attendTime의 형태를 정의하는 타입
-interface AttendTime {
+export type AttendTime = {
   hour: number;
   minute: number;
   second: number;
   nano: number;
-}
+};
 
 export type CreateRecordRequest = {
   attendanceBookId: number;
@@ -76,5 +78,5 @@ export type CreateRecordRequest = {
   scheduleId: number;
   attendDate: string; // "YYYY-MM-DD" 형태의 문자열로 전송
   attendTime: AttendTime;
-  status: "PENDING";
+  status: STATUS;
 };
