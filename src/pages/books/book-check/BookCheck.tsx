@@ -31,7 +31,7 @@ export default function BookCheck() {
   };
 
   const { data: bookSchedules } = useQuery({
-    queryKey: ["book-schedules", bookId, currentDate],
+    queryKey: ["book-schedules", bookId, formattedDate],
     queryFn: async () =>
       await getScheduleAttendee({
         attendanceBookId: Number(bookId!),
@@ -58,6 +58,7 @@ export default function BookCheck() {
       />
       <MainContents
         bookSchedules={bookSchedules?.data as ScheduleDataType}
+        currentDate={formattedDate}
         bookId={Number(bookId!)}
       />
       <div className="flex justify-between px-[44px] items-center w-full h-[92px] bg-bg-secondary" />
