@@ -1,4 +1,6 @@
 import { GenderType } from "@/api v2/AttendeeSchema";
+import RelationshipSelect from "@/components/Select";
+import { Select } from "@radix-ui/react-select";
 import React from "react";
 
 interface Step1FormState {
@@ -8,7 +10,6 @@ interface Step1FormState {
   gender: GenderType;
   enrollmentDate: string;
   // admittedToday: boolean;
-  phoneNumber: string;
   address_1: string;
   school: string;
   description: string;
@@ -18,9 +19,14 @@ interface Step1FormState {
 interface Step1Props {
   formData: Step1FormState;
   setFormData: React.Dispatch<React.SetStateAction<Step1FormState>>;
+  onChangeGuardian: (key: string, value: string) => void;
 }
 
-export default function Step1({ formData, setFormData }: Step1Props) {
+export default function Step1({
+  formData,
+  setFormData,
+  onChangeGuardian,
+}: Step1Props) {
   const handleBirthdateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 1) 숫자만 남기기
     let input = e.target.value.replace(/\D/g, ""); // 숫자 이외 제거
@@ -247,24 +253,21 @@ export default function Step1({ formData, setFormData }: Step1Props) {
           </div>
         </div>
       </div>
-      {/* 학생 연락처
+      {/* 가족 연락처 */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
-          <p className="font-bold text-m-medium">학생 연락처</p>
+          <p className="font-bold text-m-medium">가족 연락처</p>
         </div>
-        <input
-          type="text"
-          placeholder="학생 연락처"
-          className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
-          value={formData.phoneNumber}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              phoneNumber: e.target.value,
-            }))
-          }
-        />
-      </div> */}
+        <div className="flex gap-2">
+          <RelationshipSelect onChangeGuardian={onChangeGuardian} />
+          <input
+            type="text"
+            placeholder="ex) 01012345678"
+            className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+            onChange={(e) => onChangeGuardian("phoneNumber", e.target.value)}
+          />
+        </div>
+      </div>
       {/* 학생 주소 */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
