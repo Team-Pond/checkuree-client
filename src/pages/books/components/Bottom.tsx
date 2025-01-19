@@ -12,7 +12,6 @@ export default function Bottom() {
 
   const { bookId } = useParams();
 
-  console.log(location.pathname);
   return (
     <div
       className="flex justify-between px-[44px] items-center fixed bottom-0 left-1/2 transform -translate-x-1/2 z-50 
