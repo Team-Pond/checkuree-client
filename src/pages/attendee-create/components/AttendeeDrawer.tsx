@@ -33,7 +33,8 @@ export default function AttendeeDrawer({
           {/* Drawer 상단 영역 */}
           <div className="text-left w-full h-10 border-b border-[#f6f6f6] flex items-center">
             <p className="text-s-semibold text-text-secondary">
-              ({dayOfWeek}) {hhmm} - {Number(hhmm.substring(0, 2)) + 1}:00
+              ({dayOfWeek}) {hhmm} - {Number(hhmm.substring(0, 2)) + 1}:
+              {hhmm.substring(3, 5)}
             </p>
           </div>
         </div>
@@ -50,7 +51,7 @@ export default function AttendeeDrawer({
           ))}
         </div>
 
-        <div className="flex gap-4 w-full">
+        <div className="flex gap-4 w-full fixed bottom-5 max-w-[357px]">
           <button
             type="button"
             onClick={() => onClose()}

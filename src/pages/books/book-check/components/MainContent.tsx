@@ -1,79 +1,87 @@
-import { statusCheckAttendee } from "@/api v2/AttendeeApiClient";
-import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 import { ScheduleDataType } from "@/api v2/ScheduleSchema";
-import { scheduleCheckformatTime } from "@/utils";
+import { getCurrentTimeParts, scheduleCheckformatTime } from "@/utils";
 import {
+  createRecord,
   updateRecordLesson,
   updateRecordStatus,
 } from "@/api v2/RecordApiClient";
-import { useMutation } from "@tanstack/react-query";
-
-const MOCK_DATA = [
-  {
-    id: 1,
-    time: "오후 3:00",
-    name: "배서윤",
-    status: null,
-  },
-  {
-    id: 2,
-    time: "오후 4:00",
-    name: "김범수",
-    status: null,
-  },
-  {
-    id: 3,
-    time: "오후 5:00",
-    name: "진정현",
-    status: null,
-  },
-  {
-    id: 4,
-    time: "오후 6:00",
-    name: "박상후",
-    status: "ATTENDING",
-  },
-  {
-    id: 5,
-    time: "오후 7:00",
-    name: "박상후",
-    status: "ATTENDING",
-  },
-];
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { STATUS } from "@/api v2/RecordSchema";
 
 type IProps = {
   bookSchedules: ScheduleDataType;
   bookId: number;
+  currentDate: string;
 };
 export default function MainContents(props: IProps) {
-  const { bookId, bookSchedules } = props;
+  const { bookId, bookSchedules, currentDate } = props;
 
-  console.log(bookSchedules);
-  const [attendees, setAttendees] = useState(MOCK_DATA);
+  // // TODO: 낙관적 업데이트 적용
+  // const checkAttendee = async (status: string, attendeeId: number) => {
+  //   await statusCheckAttendee({
+  //     attendanceBookId: bookId,
+  //     attendeeId,
+  //     status,
+  //   });
+  // };
 
-  // TODO: 낙관적 업데이트 적용
-  const checkAttendee = async (status: string, attendeeId: number) => {
-    await statusCheckAttendee({
-      attendanceBookId: bookId,
+  const queryClient = useQueryClient();
+
+  const { mutate: recordMutation } = useMutation({
+    mutationFn: async ({
       attendeeId,
+      scheduleId,
       status,
-    });
-  };
-
-  const { mutate: statusMutation } = useMutation({
-    mutationKey: [""],
-    mutationFn: async (status: string) =>
-      await updateRecordStatus({
+    }: {
+      attendeeId: number;
+      scheduleId: number;
+      status: STATUS;
+    }) =>
+      await createRecord({
         params: {
-          attendanceBookId: Number(bookId!),
-          status,
-          scheduleId: 0,
-          recordId: 0,
+          attendanceBookId: bookId,
+          attendeeId: attendeeId,
+          scheduleId: scheduleId,
+          attendDate: currentDate,
+          attendTime: `${getCurrentTimeParts().hour}:${
+            getCurrentTimeParts().minute
+          }`,
+          status: status,
         },
       }),
-    onSuccess: () => {},
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({
+        queryKey: ["book-schedules"],
+      });
+    },
+    onError: () => {},
+  });
+  const { mutate: statusMutation } = useMutation({
+    mutationKey: [""],
+    mutationFn: async ({
+      recordId,
+      scheduleId,
+      status,
+    }: {
+      recordId: number;
+      scheduleId: number;
+      status: STATUS;
+    }) =>
+      await updateRecordStatus({
+        params: {
+          attendanceBookId: bookId,
+          status,
+          scheduleId,
+          recordId,
+        },
+      }),
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({
+        queryKey: ["book-schedules"],
+      });
+    },
     onError: () => {},
   });
 
@@ -91,7 +99,6 @@ export default function MainContents(props: IProps) {
     onError: () => {},
   });
 
-  console.log(bookSchedules);
   return (
     <div className="w-full flex flex-col gap-4 justify-center items-center py-3 px-4 bg-bg-secondary scrollbar-hide custom-scrollbar-hide">
       {bookSchedules?.content?.map((content, index) => {
@@ -115,15 +122,27 @@ export default function MainContents(props: IProps) {
                     <div className="flex gap-2">
                       {/* TODO: 결석은 status명이 어떻게 되는지? */}
                       <button
-                        onClick={
-                          () =>
-                            // await checkAttendee("", schedule.attendeeId)
-                            statusMutation("REJECTED")
-                          // APPROVED
-                        }
+                        onClick={() => {
+                          // await checkAttendee("", schedule.attendeeId)
+                          // statusMutation("REJECTED");`
+
+                          if (schedule.recordId) {
+                            statusMutation({
+                              recordId: schedule.recordId,
+                              scheduleId: schedule.scheduleId,
+                              status: "ABSENT",
+                            });
+                          } else {
+                            recordMutation({
+                              attendeeId: schedule.attendeeId,
+                              scheduleId: schedule.scheduleId,
+                              status: "ABSENT",
+                            });
+                          }
+                        }}
                         className={twMerge(
                           "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
-                          schedule.recordStatus === "REJECTED"
+                          schedule.recordStatus === "ABSENT"
                             ? "bg-bg-destructive text-text-interactive-destructive"
                             : "bg-bg-disabled text-text-disabled"
                         )}
@@ -131,15 +150,24 @@ export default function MainContents(props: IProps) {
                         결석
                       </button>
                       <button
-                        onClick={
-                          () =>
-                            // await checkAttendee("", schedule.attendeeId)
-                            statusMutation("APPROVED")
-                          // APPROVED
-                        }
+                        onClick={() => {
+                          if (schedule.recordId) {
+                            statusMutation({
+                              recordId: schedule.recordId,
+                              scheduleId: schedule.scheduleId,
+                              status: "ATTEND",
+                            });
+                          } else {
+                            recordMutation({
+                              attendeeId: schedule.attendeeId,
+                              scheduleId: schedule.scheduleId,
+                              status: "ATTEND",
+                            });
+                          }
+                        }}
                         className={twMerge(
                           "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
-                          schedule.recordStatus === "APPROVED"
+                          schedule.recordStatus === "ATTEND"
                             ? "bg-bg-primary text-text-interactive-primary"
                             : "bg-bg-disabled text-text-disabled"
                         )}
@@ -150,17 +178,17 @@ export default function MainContents(props: IProps) {
                     <button
                       className={twMerge(
                         "w-8 h-8 flex items-center justify-center rounded-lg",
-                        schedule.recordStatus === "ATTENDING"
+                        schedule.recordStatus === "ATTEND"
                           ? "bg-bg-tertiary"
                           : "bg-bg-disabled"
                       )}
                       disabled={
-                        schedule.recordStatus === "ATTENDING" ? true : false
+                        schedule.recordStatus === "ATTEND" ? true : false
                       }
                     >
                       <img
                         src={`/images/icons/book-check/${
-                          schedule.recordStatus === "ATTENDING"
+                          schedule.recordStatus === "ATTEND"
                             ? "ico-note-active.svg"
                             : "ico-note.svg"
                         }`}

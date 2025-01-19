@@ -18,17 +18,19 @@ interface Step2Props {
   setAttendeeSchedules: React.Dispatch<
     React.SetStateAction<UpdateAttendeeScheduleRequest | undefined>
   >;
-
+  attendeeSchedules: UpdateAttendeeScheduleRequest | undefined;
   attendanceBookId: number;
   onChangeGrade: (gradeId: number) => void;
 }
 
 export default function Step2({
   setAttendeeSchedules,
+  attendeeSchedules,
   attendanceBookId,
   onChangeGrade,
 }: Step2Props) {
   const { bookId } = useParams();
+
   const [selectedSubject, setSelectedSubject] = useState<{
     id: number;
     title: string;
@@ -100,26 +102,25 @@ export default function Step2({
   }, [scheduleParams.dayOfWeek, scheduleParams.hhmm]);
 
   const handleAttendeeSchedules = (day: DaysType, hhmm: string) => {
+    // 기존 로직 (attendeeSchedules에 추가)
     setAttendeeSchedules((prev) => {
-      // prev가 없다면 기본값을 설정
       if (!prev) {
         return {
           schedules: [
             {
-              day: day,
-              hhmm: hhmm,
+              day,
+              hhmm,
             },
           ],
         };
       }
-      // 만약 prev가 이미 있다면, 기존 스케줄 + 새 스케줄
       return {
         ...prev,
         schedules: [
           ...prev.schedules,
           {
-            day: day,
-            hhmm: hhmm,
+            day,
+            hhmm,
           },
         ],
       };
@@ -128,9 +129,9 @@ export default function Step2({
 
   const { data: bookCourses } = useQuery({
     enabled: openDrawer,
-    queryKey: ["book-courses", attendanceBookId],
+    queryKey: ["book-courses", bookId || attendanceBookId],
     queryFn: async () => {
-      const res = await getBookCourse(String(attendanceBookId));
+      const res = await getBookCourse(String(bookId || attendanceBookId));
       if (res.status === 200) return res.data;
     },
   });
@@ -185,6 +186,7 @@ export default function Step2({
             endHhmm={scheduleTable?.endHhmm!}
             handleSchedule={handleSchedule}
             handleAttendeeBottomDrawer={handleAttendeeBottomDrawer}
+            attendeeSchedules={attendeeSchedules}
           />
         )}
       </div>

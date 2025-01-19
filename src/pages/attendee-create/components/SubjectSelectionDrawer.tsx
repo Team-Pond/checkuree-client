@@ -61,10 +61,10 @@ export default function SubjectSelectionDrawer({
                 <li
                   key={subject.id}
                   className={twMerge(
-                    "bg-white h-[52px]  flex items-center justify-center cursor-pointer",
+                    "bg-white h-[52px] flex items-center justify-center cursor-pointer",
                     isSelected
-                      ? "text-text-brand font-bold bg-bg-base text-[14px]"
-                      : "text-text-primary text-m-medium text-[14px]"
+                      ? "text-text-brand text-[14px] font-bold bg-bg-base"
+                      : "text-text-primary text-s-medium "
                   )}
                   onClick={() => {
                     setSelectedSubject(subject);

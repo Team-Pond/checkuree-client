@@ -1,3 +1,6 @@
+// ScheduleTable.tsx
+
+import { UpdateAttendeeScheduleRequest } from "@/api v2/AttendeeSchema";
 import React from "react";
 
 type DayOfWeek =
@@ -12,16 +15,18 @@ type DayOfWeek =
 interface ScheduleItem {
   dayOfWeek: DayOfWeek;
   scheduleCount: number[];
-  // 예) [12:00인덱스0, 12:30인덱스1, 13:00인덱스2, 13:30인덱스3, ...]
 }
 
 interface ScheduleProps {
   scheduleTable: ScheduleItem[];
-  startHhmm: string; // "12:00"
-  endHhmm: string; // "20:00"
+  startHhmm: string;
+  endHhmm: string;
   timeSlots: number;
   handleSchedule: (dayOfWeek: string, hhmm: string) => void;
   handleAttendeeBottomDrawer: (state: boolean) => void;
+  // ▼ 추가
+
+  attendeeSchedules: UpdateAttendeeScheduleRequest | undefined;
 }
 
 const dayMap: Record<DayOfWeek, string> = {
@@ -34,47 +39,38 @@ const dayMap: Record<DayOfWeek, string> = {
   SUNDAY: "일",
 };
 
-// ────────────────────────────────────────────────────────────────────────────────
-// 유틸: "12:00" → { hour: 12, minute: 0 }, "20:00" → { hour: 20, minute: 0 }
 function parseHhmm(hhmm: string) {
   const [hh, mm] = hhmm.split(":").map(Number);
   return { hour: hh, minute: mm };
 }
 
-// ────────────────────────────────────────────────────────────────────────────────
 const ScheduleTable: React.FC<ScheduleProps> = ({
   scheduleTable,
   startHhmm,
   endHhmm,
   handleSchedule,
-  handleAttendeeBottomDrawer,
+
+  attendeeSchedules,
 }) => {
-  const start = parseHhmm(startHhmm); // { hour: 12, minute: 0 }
-  const end = parseHhmm(endHhmm); // { hour: 20, minute: 0 }
+  const start = parseHhmm(startHhmm);
+  const end = parseHhmm(endHhmm);
 
-  // 예: 12시부터 19시까지 = 8시간
   const totalHours = end.hour - start.hour;
-  // 만약 분단위가 있을 경우 처리 더 필요 (예: 12:30 ~ 20:00)
-
-  // 시간 배열: [12, 13, 14, ..., 19]
   const hoursArray = Array.from(
     { length: totalHours },
     (_, i) => start.hour + i
   );
 
-  // 스케줄 테이블 렌더링
   return (
     <div className="max-w-4xl mx-auto overflow-x-auto">
       <table className="table-auto w-full text-center border-collapse">
         <thead>
           <tr>
-            {/* 시간 컬럼 */}
-            <th className="border border-text-tertiary w-[21px] h-2"></th>
-            {/* 요일 컬럼 */}
+            <th className="border border-[#f6f6f6] w-[21px] h-2"></th>
             {scheduleTable.map((dayData) => (
               <th
                 key={dayData.dayOfWeek}
-                className="border border-text-tertiary w-[54px] h-2 text-xs-medium text-text-tertiary"
+                className="border border-[#f6f6f6] w-[54px] h-2 text-xs-medium text-text-tertiary"
               >
                 {dayMap[dayData.dayOfWeek]}
               </th>
@@ -86,54 +82,76 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
             const slotIndex = hourIdx * 2;
             const secondSlotIndex = slotIndex + 1;
 
-            // 첫 번째 30분 줄
             const firstRow = (
               <tr key={`${hour}-first`}>
                 <td
-                  className="border border-text-tertiary text-xs-medium h-10 text-text-tertiary align-top"
+                  className="border border-[#f6f6f6] text-xs-medium h-10 text-text-tertiary align-top"
                   rowSpan={2}
                 >
                   {hour}
                 </td>
+
                 {scheduleTable.map((dayData) => {
                   const count = dayData.scheduleCount[slotIndex];
+                  const hhmm = `${hour}:00`;
+
+                  // ▼ dayOfWeek, hhmm이 selectedSchedules에 있는지 체크
+                  const isSelected = attendeeSchedules?.schedules.some(
+                    (schedule) =>
+                      schedule.day === dayData.dayOfWeek &&
+                      schedule.hhmm === hhmm
+                  );
+
                   return (
                     <td
                       key={`${dayData.dayOfWeek}-${slotIndex}`}
-                      className={`border border-text-tertiary text-sm w-[54px] h-[34px] align-middle ${
-                        count > 0
-                          ? "bg-bg-primary text-text-secondary text-xs-semibold"
-                          : "bg-white text-text-secondary text-xs-semibold"
-                      }`}
-                      onClick={() =>
-                        handleSchedule(dayData.dayOfWeek, `${hour}:00`)
-                      }
+                      // ▼ isSelected면 빨간색, 아니면 기존 로직
+                      className={`border border-[#f6f6f6] text-sm w-[54px] h-[34px] align-middle cursor-pointer
+                        ${
+                          isSelected
+                            ? "bg-bg-tertiary text-text-interactive-inverse text-xs-medium"
+                            : count > 0
+                            ? "bg-bg-primary text-text-secondary text-xs-medium"
+                            : "bg-bg-secondary text-text-secondary text-xs-medium"
+                        }
+                      `}
+                      onClick={() => handleSchedule(dayData.dayOfWeek, hhmm)}
                     >
-                      {count > 0 ? count : ""}
+                      {count}명
                     </td>
                   );
                 })}
               </tr>
             );
 
-            // 두 번째 30분 줄
             const secondRow = (
               <tr key={`${hour}-second`}>
                 {scheduleTable.map((dayData) => {
                   const count = dayData.scheduleCount[secondSlotIndex];
+                  const hhmm = `${hour}:30`;
+
+                  // ▼ dayOfWeek, hhmm이 selectedSchedules에 있는지 체크
+                  const isSelected = attendeeSchedules?.schedules.some(
+                    (schedule) =>
+                      schedule.day === dayData.dayOfWeek &&
+                      schedule.hhmm === hhmm
+                  );
+
                   return (
                     <td
                       key={`${dayData.dayOfWeek}-${secondSlotIndex}`}
-                      className={`border border-text-tertiary text-sm w-[54px] h-[34px] align-middle ${
-                        count > 0
-                          ? "bg-bg-primary text-text-secondary text-xs-semibold"
-                          : "bg-white text-text-secondary text-xs-semibold"
-                      }`}
-                      onClick={() =>
-                        handleSchedule(dayData.dayOfWeek, `${hour}:30`)
-                      }
+                      className={`border border-[#f6f6f6] text-sm w-[54px] h-[34px] align-middle cursor-pointer
+                        ${
+                          isSelected
+                            ? "bg-bg-tertiary text-text-interactive-inverse text-xs-medium"
+                            : count > 0
+                            ? "bg-bg-primary text-text-secondary text-xs-medium"
+                            : "bg-bg-secondary text-text-secondary text-xs-medium"
+                        }
+                      `}
+                      onClick={() => handleSchedule(dayData.dayOfWeek, hhmm)}
                     >
-                      {count > 0 ? count : ""}
+                      {count}명
                     </td>
                   );
                 })}
