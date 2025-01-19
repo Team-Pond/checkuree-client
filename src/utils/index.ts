@@ -168,3 +168,23 @@ export function scheduleCheckformatTime(input: string) {
 
   return `${period} ${hour}:${minute.toString().padStart(2, "0")}`;
 }
+
+export function getCurrentTimeParts() {
+  const now = new Date();
+
+  // Extract hours, minutes, and seconds
+  const hour = now.getHours();
+  const minute = now.getMinutes();
+  const second = now.getSeconds();
+
+  // Calculate nanoseconds using performance.now()
+  const millis = now.getMilliseconds();
+  const nano = millis * 1e6; // Convert milliseconds to nanoseconds
+
+  return {
+    hour,
+    minute,
+    second,
+    nano,
+  };
+}
