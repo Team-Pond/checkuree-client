@@ -87,15 +87,17 @@ export default function MainContents(props: IProps) {
 
   const { mutate: lessonMutation } = useMutation({
     mutationKey: [""],
-    mutationFn: async () =>
+    mutationFn: async ({ recordId }: { recordId: number }) =>
       await updateRecordLesson({
         params: {
-          attendanceBookId: Number(bookId!),
+          attendanceBookId: bookId,
           isTaught: true,
-          recordId: 0,
+          recordId,
         },
       }),
-    onSuccess: () => {},
+    onSuccess: (res) => {
+      console.log(res);
+    },
     onError: () => {},
   });
 
@@ -182,6 +184,11 @@ export default function MainContents(props: IProps) {
                           ? "bg-bg-tertiary"
                           : "bg-bg-disabled"
                       )}
+                      onClick={() => {
+                        lessonMutation({
+                          recordId: schedule.recordId,
+                        });
+                      }}
                       disabled={
                         schedule.recordStatus === "ATTEND" ? true : false
                       }
