@@ -36,7 +36,7 @@ export default function Step2(props: IProps) {
   }>();
 
   const [selectedSubjectItems, setSelectedSubjectItems] = useState<
-    { level: number; subjectItemId: number }[]
+    { level: number; subjectItemId: number; title: string }[]
   >([]);
 
   const { data: subjectItems } = useQuery({
@@ -69,6 +69,7 @@ export default function Step2(props: IProps) {
       });
   }, [subjects]);
 
+  const isCourseNameVaild = courseTitle.length > 0;
   return (
     <>
       <div
@@ -136,7 +137,7 @@ export default function Step2(props: IProps) {
                             className=""
                           />
                           <p className="px-[2px] mt-[1px]">
-                            {subjectItem.subjectItemId}
+                            {subjectItem.title}
                           </p>
                         </div>
                         <img
@@ -179,10 +180,15 @@ export default function Step2(props: IProps) {
 
             <button
               className={twMerge(
-                "max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl bg-bg-tertiary text-[#f1f8f3]"
+                "max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl bg-bg-tertiary text-[#f1f8f3]",
+                isCourseNameVaild
+                  ? "bg-bg-tertiary text-[#f1f8f3]"
+                  : "bg-bg-disabled text-text-disabled"
               )}
+              disabled={!isCourseNameVaild}
               onClick={() => {
                 setSelectedSubjectItems([]);
+                setCourseTitle("");
                 handleCourseChange({
                   title: courseTitle,
                   isPrimary: true,
@@ -270,6 +276,7 @@ export default function Step2(props: IProps) {
                             {
                               subjectItemId: subjectItem.id,
                               level: subjectItem.level,
+                              title: subjectItem.title,
                             },
                           ])
                         }
