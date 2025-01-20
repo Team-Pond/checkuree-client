@@ -44,13 +44,13 @@ export default function Books() {
           height={20}
         />
       </div>
-      <div className="flex-1 bg-bg-secondary justify-items-center flex justify-center">
+      <div className="flex-1 bg-bg-secondary flex flex-col items-center">
         <div className="w-full max-w-[340px]  border-spacing-0 py-5 grid grid-cols-2  gap-y-6 gap-x-4 ">
           {bookList?.data.map((attendance) => {
             return (
               <div
                 key={attendance.id}
-                className="max-w-[162px] h-[195px] w-full"
+                className="max-w-[162px] w-full"
                 onClick={() =>
                   handleNavigation(String(attendance.id), attendance.title)
                 }
@@ -64,7 +64,7 @@ export default function Books() {
                   className="w-full h-[97px] rounded-t-2xl"
                   alt=""
                 />
-                <div className="flex flex-col gap-2 px-3 py-4 text-left rounded-b-2xl bg-white">
+                <div className="flex flex-col gap-2 px-3 py-4 text-left rounded-b-2xl h-[98px] bg-white">
                   <div className="flex gap-2">
                     <p className="font-bold text-text-primary">
                       {attendance.title}

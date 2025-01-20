@@ -2,6 +2,9 @@ import { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateRecordAll } from "@/api v2/RecordApiClient";
+import toast from "react-hot-toast";
 
 type HeaderProps = {
   title: string;
@@ -23,21 +26,7 @@ export default function Header(props: HeaderProps) {
   } = props;
 
   const navigate = useNavigate();
-  const SUB_HEADER = [
-    {
-      src: "/images/icons/ico-zzz.svg",
-      name: "휴원하기",
-    },
-    {
-      src: "/images/icons/ico-user-add.svg",
-      name: "인원 추가",
-    },
-    {
-      src: "/images/icons/ico-check.svg",
-      name: "전체 출석",
-    },
-  ];
-
+  const queryClient = useQueryClient();
   const displayDate = currentDate.locale("ko").format("M월 D일"); // 텍스트 값
 
   const { scrollYProgress } = useScroll();
@@ -61,6 +50,44 @@ export default function Header(props: HeaderProps) {
     [0, 0.2],
     ["78px", "49px"]
   );
+
+  const { mutate: recordAllMutation } = useMutation({
+    mutationKey: [""],
+    mutationFn: async () =>
+      await updateRecordAll({
+        params: {
+          attendanceBookId: bookId,
+          attendDate: formattedDate,
+        },
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["book-schedules"],
+      });
+      toast.success("전체 출석 완료");
+    },
+    onError: () => {
+      toast.success("전체 출석 실패");
+    },
+  });
+
+  const SUB_HEADER = [
+    {
+      src: "/images/icons/ico-zzz.svg",
+      name: "휴원하기",
+      onClick: () => {},
+    },
+    {
+      src: "/images/icons/ico-user-add.svg",
+      name: "인원 추가",
+      onClick: () => {},
+    },
+    {
+      src: "/images/icons/ico-check.svg",
+      name: "전체 출석",
+      onClick: () => recordAllMutation(),
+    },
+  ];
 
   return (
     <div className="flex flex-col sticky top-0 z-50 bg-white">
@@ -126,12 +153,13 @@ export default function Header(props: HeaderProps) {
           </motion.p>
         </motion.div>
         <div className="flex gap-2">
-          {SUB_HEADER.map((item) => (
+          {SUB_HEADER.map((header) => (
             <motion.button
-              key={item.name}
+              key={header.name}
               style={{
                 height: headerHeight,
               }}
+              onClick={header.onClick}
               className="w-[77px] flex flex-col items-center justify-center bg-bg-secondary rounded-lg"
             >
               <motion.img
@@ -139,8 +167,8 @@ export default function Header(props: HeaderProps) {
                   y: iconY,
                   opacity: iconOpacity,
                 }}
-                src={item.src}
-                alt={item.name}
+                src={header.src}
+                alt={header.name}
                 width={16}
                 height={16}
               />
@@ -148,7 +176,7 @@ export default function Header(props: HeaderProps) {
                 className="text-xs font-medium"
                 style={{ y: textY, opacity: textOpacity }}
               >
-                {item.name}
+                {header.name}
               </motion.p>
             </motion.button>
           ))}

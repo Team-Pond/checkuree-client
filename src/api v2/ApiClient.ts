@@ -46,15 +46,9 @@ function getRefreshToken(): string | undefined {
   return Cookies.get(import.meta.env.VITE_REFRESH_TOKEN);
 }
 
-let isRefreshing = false;
-
 async function refresh(config: AxiosRequestConfig) {
   const refreshToken = getRefreshToken();
-  if (isRefreshing) {
-    return Promise.reject(new Error("이미 토큰 갱신 중"));
-  }
 
-  isRefreshing = true;
   if (!!refreshToken) {
     try {
       const refreshResult = await axios.request({
@@ -80,13 +74,11 @@ async function refresh(config: AxiosRequestConfig) {
         },
       });
     } catch (e) {
-      isRefreshing = false;
       clearTokens();
       console.error("토큰 갱신 실패:", e);
       window.location.href = "/auth/signin";
     }
   } else {
-    isRefreshing = false;
     clearTokens();
     window.location.href = "/auth/signin";
   }
