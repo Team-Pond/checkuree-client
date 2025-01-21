@@ -5,6 +5,8 @@ import {
   GetBookScheudleTableRequest,
   UpdateBookProgressRequest,
   UpdateBookProgressResponse,
+  UpdateBookStatusRequest,
+  UpdateBookStatusResponse,
 } from "./AttendanceBookSchema";
 import {
   CreateBookRequest,
@@ -90,6 +92,22 @@ export const updateBookProgress = async ({
   const response = await ApiClient.request({
     method: "PUT",
     url: `/book/${attendanceBookId}/progress`,
+    data: params,
+  });
+  return response.data;
+};
+
+// 출석부 해당 날짜 출석부 상태 수정 ex) 휴원원
+export const updateBookStatus = async ({
+  attendanceBookId,
+  params,
+}: {
+  attendanceBookId: number;
+  params: UpdateBookStatusRequest;
+}): Promise<UpdateBookStatusResponse> => {
+  const response = await ApiClient.request({
+    method: "PUT",
+    url: `/book/${attendanceBookId}/status`,
     data: params,
   });
   return response.data;
