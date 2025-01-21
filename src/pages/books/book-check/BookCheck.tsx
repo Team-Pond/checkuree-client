@@ -46,6 +46,7 @@ export default function BookCheck() {
       }),
   });
 
+  console.log(bookSchedules?.status === 200 && bookSchedules.data.content);
   return (
     <section className="flex flex-col w-full scrollbar-hide custom-scrollbar-hide">
       <Header

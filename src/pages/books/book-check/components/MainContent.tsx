@@ -18,15 +18,6 @@ type IProps = {
 export default function MainContents(props: IProps) {
   const { bookId, bookSchedules, currentDate } = props;
 
-  // // TODO: 낙관적 업데이트 적용
-  // const checkAttendee = async (status: string, attendeeId: number) => {
-  //   await statusCheckAttendee({
-  //     attendanceBookId: bookId,
-  //     attendeeId,
-  //     status,
-  //   });
-  // };
-
   const queryClient = useQueryClient();
 
   const { mutate: recordMutation } = useMutation({

@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateRecordAll } from "@/api v2/RecordApiClient";
 import toast from "react-hot-toast";
+import { statusCheckAttendee } from "@/api v2/AttendeeApiClient";
+import { updateBookStatus } from "@/api v2/AttendanceBookApiClient";
+import { BookStatus } from "@/api v2/AttendanceBookSchema";
 
 type HeaderProps = {
   title: string;
@@ -71,11 +74,25 @@ export default function Header(props: HeaderProps) {
     },
   });
 
+  const handleBookStatus = async (date: string, status: BookStatus) => {
+    const response = await updateBookStatus({
+      attendanceBookId: bookId,
+      params: {
+        date,
+        status,
+      },
+    });
+    // console.log(response);
+    // if (response.status === 200) {
+
+    // }
+  };
+
   const SUB_HEADER = [
     {
       src: "/images/icons/ico-zzz.svg",
       name: "휴원하기",
-      onClick: () => {},
+      onClick: async () => await handleBookStatus(formattedDate, "PAUSED"),
     },
     {
       src: "/images/icons/ico-user-add.svg",
