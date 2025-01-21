@@ -11,6 +11,8 @@ export type DaysType =
   | "SATURDAY"
   | "SUNDAY";
 
+export type BookStatus = "ACTIVE" | "PAUSED" | "VACATION";
+
 type SuccessResponse = ResponseBase & {
   status: 200;
   data: Record<string, unknown>;
@@ -123,6 +125,19 @@ export type UpdateBookProgressRequest = {
 export type UpdateBookProgressResponse = {
   status: 200;
   data: UpdateBookProgressDataType;
+} & ErrorResponse;
+
+export type UpdateBookStatusRequest = {
+  date: string;
+  status: BookStatus;
+  reason?: string;
+};
+
+export type UpdateBookStatusResponse = {
+  status: 200;
+  data: {
+    id: number;
+  };
 } & ErrorResponse;
 
 type Grade = {

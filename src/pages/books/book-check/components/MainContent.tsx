@@ -18,15 +18,6 @@ type IProps = {
 export default function MainContents(props: IProps) {
   const { bookId, bookSchedules, currentDate } = props;
 
-  // // TODO: 낙관적 업데이트 적용
-  // const checkAttendee = async (status: string, attendeeId: number) => {
-  //   await statusCheckAttendee({
-  //     attendanceBookId: bookId,
-  //     attendeeId,
-  //     status,
-  //   });
-  // };
-
   const queryClient = useQueryClient();
 
   const { mutate: recordMutation } = useMutation({
@@ -45,9 +36,11 @@ export default function MainContents(props: IProps) {
           attendeeId: attendeeId,
           scheduleId: scheduleId,
           attendDate: currentDate,
-          attendTime: `${getCurrentTimeParts().hour}:${
-            getCurrentTimeParts().minute
-          }`,
+          attendTime: `${
+            getCurrentTimeParts().hour < 10
+              ? "0" + getCurrentTimeParts().hour
+              : getCurrentTimeParts().hour
+          }:${getCurrentTimeParts().minute}`,
           status: status,
         },
       }),
@@ -87,16 +80,24 @@ export default function MainContents(props: IProps) {
 
   const { mutate: lessonMutation } = useMutation({
     mutationKey: [""],
-    mutationFn: async ({ recordId }: { recordId: number }) =>
+    mutationFn: async ({
+      recordId,
+      isTaught,
+    }: {
+      recordId: number;
+      isTaught: boolean;
+    }) =>
       await updateRecordLesson({
         params: {
           attendanceBookId: bookId,
-          isTaught: true,
+          isTaught,
           recordId,
         },
       }),
     onSuccess: (res) => {
-      console.log(res);
+      queryClient.invalidateQueries({
+        queryKey: ["book-schedules"],
+      });
     },
     onError: () => {},
   });
@@ -180,22 +181,21 @@ export default function MainContents(props: IProps) {
                     <button
                       className={twMerge(
                         "w-8 h-8 flex items-center justify-center rounded-lg",
-                        schedule.recordStatus === "ATTEND"
-                          ? "bg-bg-tertiary"
-                          : "bg-bg-disabled"
+                        schedule.isTaught ? "bg-bg-tertiary" : "bg-bg-disabled"
                       )}
                       onClick={() => {
                         lessonMutation({
                           recordId: schedule.recordId,
+                          isTaught: true,
                         });
                       }}
                       disabled={
-                        schedule.recordStatus === "ATTEND" ? true : false
+                        schedule.recordStatus === "ATTEND" ? false : true
                       }
                     >
                       <img
                         src={`/images/icons/book-check/${
-                          schedule.recordStatus === "ATTEND"
+                          schedule.isTaught
                             ? "ico-note-active.svg"
                             : "ico-note.svg"
                         }`}

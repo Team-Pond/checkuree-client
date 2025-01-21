@@ -72,7 +72,7 @@ export const statusCheckAttendee = async (
   const { attendanceBookId, attendeeId, status } = params;
 
   const response = await ApiClient.request({
-    method: "PATCH",
+    method: "PUT",
     url: `/book/${attendanceBookId}/attendee/status`,
     params: {
       attendeeId,

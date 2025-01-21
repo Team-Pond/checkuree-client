@@ -17,6 +17,7 @@ export type ScheduleDataType = {
     endTime: string;
     schedules: {
       scheduleId: number;
+      isTaught: boolean;
       scheduleTime: string;
       recordId: number;
       recordTime: string;
