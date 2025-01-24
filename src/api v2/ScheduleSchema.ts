@@ -35,12 +35,6 @@ export type ScheduleDataType = {
   empty: boolean;
 };
 
-export type ScheduleCountOfDateType = {
-  date: string;
-  totalCount: number;
-  checkedCount: number;
-};
-
 export type GetScheduleAttendeeResponse =
   | ({
       status: 200;
