@@ -56,14 +56,3 @@ export type GetScheduleAttendeeRequest = {
     sort: string[];
   };
 };
-
-export type GetScheduleCountOfDateRequest = {
-  date: string;
-};
-
-export type GetScheduleCountResponse =
-  | ({
-      status: 200;
-      data: ScheduleCountOfDateType;
-    } & ResponseBase)
-  | ErrorResponse;
