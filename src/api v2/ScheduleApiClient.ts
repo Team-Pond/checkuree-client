@@ -1,5 +1,10 @@
 import ApiClient from "./ApiClient";
-import { GetScheduleAttendeeRequest, GetScheduleAttendeeResponse } from "./ScheduleSchema";
+import {
+  GetScheduleAttendeeRequest,
+  GetScheduleAttendeeResponse,
+  GetScheduleCountOfDateRequest,
+  GetScheduleCountResponse,
+} from "./ScheduleSchema";
 
 export const getScheduleAttendee = async ({
   params,
@@ -21,9 +26,9 @@ export const getRecordCountOfDate = async ({
   params,
   attendanceBookId,
 }: {
-  params: GetScheduleAttendeeRequest;
+  params: GetScheduleCountOfDateRequest;
   attendanceBookId: number;
-}): Promise<GetScheduleAttendeeResponse> => {
+}): Promise<GetScheduleCountResponse> => {
   const response = await ApiClient.request({
     method: "GET",
     url: `/book/${attendanceBookId}/schedule/count?date=${params.date}`,

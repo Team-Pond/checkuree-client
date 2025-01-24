@@ -37,15 +37,15 @@ export type ScheduleDataType = {
 
 export type ScheduleCountOfDateType = {
   date: string;
-  totalCount: number
-  checkedCount: number
-}
+  totalCount: number;
+  checkedCount: number;
+};
 
 export type GetScheduleAttendeeResponse =
   | ({
-  status: 200;
-  data: ScheduleDataType;
-} & ResponseBase)
+      status: 200;
+      data: ScheduleDataType;
+    } & ResponseBase)
   | ErrorResponse;
 
 export type GetScheduleAttendeeRequest = {
@@ -59,11 +59,11 @@ export type GetScheduleAttendeeRequest = {
 
 export type GetScheduleCountOfDateRequest = {
   date: string;
-}
+};
 
 export type GetScheduleCountResponse =
   | ({
-  status: 200;
-  data: ScheduleCountOfDateType;
-} & ResponseBase)
+      status: 200;
+      data: ScheduleCountOfDateType;
+    } & ResponseBase)
   | ErrorResponse;
