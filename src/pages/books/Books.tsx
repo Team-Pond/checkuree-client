@@ -71,7 +71,7 @@ export default function Books() {
                     </p>
                     <p className="font-semibold text-text-secondary">
                       {/* TODO: roasterCount */}
-                      {12}
+                      {attendance.attendeeCount}
                     </p>
                   </div>
                   <div className="flex flex-col gap-1">
