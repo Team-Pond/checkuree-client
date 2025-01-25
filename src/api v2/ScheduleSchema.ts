@@ -17,7 +17,7 @@ export type ScheduleData = {
   recordId: number;
   recordTime: string;
   sortTime: string;
-  recordStatus: STATUS | string; // Adjust based on actual enum values
+  recordStatus: STATUS;
   attendeeId: number;
   name: string;
 };
