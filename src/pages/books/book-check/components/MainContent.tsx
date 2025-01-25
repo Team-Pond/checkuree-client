@@ -37,29 +37,32 @@ const handleStatusChange = (
   statusMutation: (params: { recordId: number; scheduleId: number; status: STATUS }) => void,
   recordMutation: (params: { attendeeId: number; scheduleId: number; status: STATUS }) => void,
 ) => {
-  if (schedule.recordId) {
-    // 이미 출석인 경우 다시 누르면 PENDING 상태로 수정
-    if (schedule.recordStatus === targetStatus) {
-      statusMutation({
-        recordId: schedule.recordId,
-        scheduleId: schedule.scheduleId,
-        status: "PENDING",
-      });
-    } else {
-      // ATTEND 상태가 아닌 경우 ATTEND 로 변경
-      statusMutation({
-        recordId: schedule.recordId,
-        scheduleId: schedule.scheduleId,
-        status: targetStatus as STATUS,
-      });
-    }
-  } else {
+  // 출석 기록이 없는 경우 출석 기록 생성
+  if (!schedule.recordId) {
     recordMutation({
       attendeeId: schedule.attendeeId,
       scheduleId: schedule.scheduleId,
       status: targetStatus as STATUS,
     });
+    return;
   }
+
+  // 이미 출석인 경우 다시 누르면 PENDING 상태로 수정
+  if (schedule.recordStatus === targetStatus) {
+    statusMutation({
+      recordId: schedule.recordId,
+      scheduleId: schedule.scheduleId,
+      status: "PENDING",
+    });
+    return;
+  }
+
+  // 출석 상태를 targetStatus로 변경
+  statusMutation({
+    recordId: schedule.recordId,
+    scheduleId: schedule.scheduleId,
+    status: targetStatus as STATUS,
+  });
 };
 
 export default function MainContents(props: IProps) {
