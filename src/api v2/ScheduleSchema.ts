@@ -10,22 +10,24 @@ type ErrorResponse = ResponseBase & {
   timeStamp: string;
 };
 
+export type ScheduleData = {
+  scheduleId: number;
+  isTaught: boolean;
+  scheduleTime: string;
+  recordId: number;
+  recordTime: string;
+  sortTime: string;
+  recordStatus: STATUS | string; // Adjust based on actual enum values
+  attendeeId: number;
+  name: string;
+};
+
 export type ScheduleDataType = {
   content: {
     count: number;
     startTime: string;
     endTime: string;
-    schedules: {
-      scheduleId: number;
-      isTaught: boolean;
-      scheduleTime: string;
-      recordId: number;
-      recordTime: string;
-      sortTime: string;
-      recordStatus: STATUS | string; // Adjust based on actual enum values
-      attendeeId: number;
-      name: string;
-    }[];
+    schedules: ScheduleData[];
   }[];
   first: boolean;
   last: boolean;
@@ -35,7 +37,20 @@ export type ScheduleDataType = {
   empty: boolean;
 };
 
+export type ScheduleCountOfDateType = {
+  date: string;
+  totalCount: number;
+  checkedCount: number;
+};
+
 export type GetScheduleAttendeeResponse =
+  | ({
+      status: 200;
+      data: ScheduleDataType;
+    } & ResponseBase)
+  | ErrorResponse;
+
+export type GetScheduleCountOfDateResponse =
   | ({
       status: 200;
       data: ScheduleDataType;
@@ -49,4 +64,8 @@ export type GetScheduleAttendeeRequest = {
     size: number;
     sort: string[];
   };
+};
+
+export type GetScheduleCountOfDateRequest = {
+  date: string;
 };
