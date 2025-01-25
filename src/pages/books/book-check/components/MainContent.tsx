@@ -172,7 +172,7 @@ export default function MainContents(props: IProps) {
                       <button
                         onClick={() => {
                           handleCheckedCountChange(schedule, "ATTEND", checkedScheduleCount, setCheckedCount);
-                          handleStatusChange(schedule, "ABSENT", statusMutation, recordMutation);
+                          handleStatusChange(schedule, "ATTEND", statusMutation, recordMutation);
                         }}
                         className={twMerge(
                           "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
