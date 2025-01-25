@@ -83,6 +83,7 @@ export type GetMyBooksDataType = {
   };
   availableDays: DaysType[];
   imageUrl: string;
+  attendeeCount:number;
 };
 type GetBookResponse = ResponseBase & {
   status: 200;

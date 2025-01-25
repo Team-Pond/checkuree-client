@@ -1,8 +1,5 @@
 import ApiClient from "./ApiClient";
-import {
-  GetScheduleAttendeeRequest,
-  GetScheduleAttendeeResponse,
-} from "./ScheduleSchema";
+import { GetScheduleAttendeeRequest, GetScheduleAttendeeResponse } from "./ScheduleSchema";
 
 export const getScheduleAttendee = async ({
   params,
