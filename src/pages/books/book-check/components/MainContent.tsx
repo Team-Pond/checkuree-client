@@ -5,6 +5,7 @@ import { getCurrentTimeParts, scheduleCheckformatTime } from "@/utils";
 import { createRecord, updateRecordLesson, updateRecordStatus } from "@/api v2/RecordApiClient";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { STATUS } from "@/api v2/RecordSchema";
+import { ScheduleData } from "../../../../api v2/ScheduleSchema";
 
 type IProps = {
   bookSchedules: ScheduleDataType;
@@ -14,15 +15,51 @@ type IProps = {
   setCheckedCount: (count: number) => void;
 };
 
-const handleStatusChange = (
-  currentStatus: STATUS,
+const handleCheckedCountChange = (
+  schedule: ScheduleData,
   targetStatus: Omit<STATUS, "PENDING">,
   checkedCount: number,
   setCheckedCount: (count: number) => void,
 ) => {
+  if (!schedule.recordId) {
+    setCheckedCount(checkedCount + 1);
+    return;
+  }
+  const currentStatus = schedule.recordStatus;
   // 상태 변화에 따른 checkedCount 조정
   const adjustment = currentStatus === targetStatus ? -1 : currentStatus === "PENDING" ? 1 : 0;
   setCheckedCount(checkedCount + adjustment);
+};
+
+const handleStatusChange = (
+  schedule: ScheduleData,
+  targetStatus: Omit<STATUS, "PENDING">,
+  statusMutation: (params: { recordId: number; scheduleId: number; status: STATUS }) => void,
+  recordMutation: (params: { attendeeId: number; scheduleId: number; status: STATUS }) => void,
+) => {
+  if (schedule.recordId) {
+    // 이미 출석인 경우 다시 누르면 PENDING 상태로 수정
+    if (schedule.recordStatus === targetStatus) {
+      statusMutation({
+        recordId: schedule.recordId,
+        scheduleId: schedule.scheduleId,
+        status: "PENDING",
+      });
+    } else {
+      // ATTEND 상태가 아닌 경우 ATTEND 로 변경
+      statusMutation({
+        recordId: schedule.recordId,
+        scheduleId: schedule.scheduleId,
+        status: targetStatus as STATUS,
+      });
+    }
+  } else {
+    recordMutation({
+      attendeeId: schedule.attendeeId,
+      scheduleId: schedule.scheduleId,
+      status: targetStatus as STATUS,
+    });
+  }
 };
 
 export default function MainContents(props: IProps) {
@@ -117,32 +154,8 @@ export default function MainContents(props: IProps) {
                         onClick={() => {
                           // await checkAttendee("", schedule.attendeeId)
                           // statusMutation("REJECTED");`
-
-                          if (schedule.recordId) {
-                            handleStatusChange(schedule.recordStatus, "ABSENT", checkedScheduleCount, setCheckedCount);
-                            if (schedule.recordStatus === "ABSENT") {
-                              statusMutation({
-                                recordId: schedule.recordId,
-                                scheduleId: schedule.scheduleId,
-                                status: "PENDING",
-                              });
-                            } else {
-                              statusMutation({
-                                recordId: schedule.recordId,
-                                scheduleId: schedule.scheduleId,
-                                status: "ABSENT",
-                              });
-                            }
-                          } else {
-                            // recordId 가 없는 경우 이므로 무조건 checkedScheduleCount + 1
-                            setCheckedCount(checkedScheduleCount + 1);
-
-                            recordMutation({
-                              attendeeId: schedule.attendeeId,
-                              scheduleId: schedule.scheduleId,
-                              status: "ABSENT",
-                            });
-                          }
+                          handleCheckedCountChange(schedule, "ABSENT", checkedScheduleCount, setCheckedCount);
+                          handleStatusChange(schedule, "ABSENT", statusMutation, recordMutation);
                         }}
                         className={twMerge(
                           "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
@@ -155,33 +168,8 @@ export default function MainContents(props: IProps) {
                       </button>
                       <button
                         onClick={() => {
-                          if (schedule.recordId) {
-                            handleStatusChange(schedule.recordStatus, "ATTEND", checkedScheduleCount, setCheckedCount);
-                            // 이미 출석인 경우 다시 누르면 PENDING 상태로 수정
-                            if (schedule.recordStatus === "ATTEND") {
-                              statusMutation({
-                                recordId: schedule.recordId,
-                                scheduleId: schedule.scheduleId,
-                                status: "PENDING",
-                              });
-                            } else {
-                              // ATTEND 상태가 아닌 경우 ATTEND 로 변경
-                              statusMutation({
-                                recordId: schedule.recordId,
-                                scheduleId: schedule.scheduleId,
-                                status: "ATTEND",
-                              });
-                            }
-                          } else {
-                            // recordId 가 없는 경우 이므로 무조건 checkedScheduleCount + 1
-                            setCheckedCount(checkedScheduleCount + 1);
-
-                            recordMutation({
-                              attendeeId: schedule.attendeeId,
-                              scheduleId: schedule.scheduleId,
-                              status: "ATTEND",
-                            });
-                          }
+                          handleCheckedCountChange(schedule, "ATTEND", checkedScheduleCount, setCheckedCount);
+                          handleStatusChange(schedule, "ABSENT", statusMutation, recordMutation);
                         }}
                         className={twMerge(
                           "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
