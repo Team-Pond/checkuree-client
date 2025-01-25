@@ -217,7 +217,11 @@ export default function MainContents(props: IProps) {
                     <button
                       className={twMerge(
                         "w-8 h-8 flex items-center justify-center rounded-lg",
-                        schedule.isTaught ? "bg-bg-tertiary" : "bg-bg-disabled",
+                        schedule.recordStatus !== "ATTEND"
+                          ? "bg-bg-disabled"
+                          : schedule.isTaught
+                            ? "bg-bg-tertiary"
+                            : "bg-bg-base", // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?
                       )}
                       onClick={() => {
                         lessonMutation({
