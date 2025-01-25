@@ -9,7 +9,6 @@ import { getScheduleAttendee } from "@/api v2/ScheduleApiClient";
 import { ScheduleDataType } from "@/api v2/ScheduleSchema";
 import dayjs from "dayjs";
 import Bottom from "../components/Bottom";
-import { getScheduleCountOfDate } from "../../../api v2/ScheduleApiClient.ts";
 
 export default function BookCheck() {
   const context = useContext(BookContext);
@@ -21,8 +20,6 @@ export default function BookCheck() {
   const [currentDate, setCurrentDate] = useState(dayjs()); // dayjs로 초기화
   const [checkedScheduleCount, setCheckedScheduleCount] = useState<number>(0);
   const [totalScheduleCount, setTotalScheduleCount] = useState<number>(0);
-
-  // const [checkedCount, setCheckedCount] = useState(0);
 
   const formattedDate = currentDate.format("YYYY-MM-DD"); // 데이터 값
 
@@ -36,7 +33,7 @@ export default function BookCheck() {
   };
 
   // 전체 데이터를 가지고 왔다고 가정
-  // checkedCount 상태 추가
+  // checkedScheduleCount 상태 추가
   const { data: bookSchedules } = useQuery({
     queryKey: ["book-schedules", bookId, formattedDate],
     queryFn: async () =>
@@ -53,35 +50,20 @@ export default function BookCheck() {
       }),
   });
 
-  const { data: scheduleCount } = useQuery({
-    queryKey: ["schedule-count", bookId, formattedDate],
-    queryFn: async () =>
-      await getScheduleCountOfDate({
-        attendanceBookId: Number(bookId!),
-        params: {
-          date: formattedDate,
-        },
-      }),
-  });
-
-  // useEffect(() => {
-  //   if (scheduleCount?.data) {
-  //     setTotalScheduleCount(scheduleCount.data.totalCount);
-  //     setCheckedScheduleCount(scheduleCount.data.checkedCount);
-  //   }
-  // }, [scheduleCount]);
-
   useEffect(() => {
-    if (bookSchedules?.data) {
-      setTotalScheduleCount(bookSchedules.data.numberOfElements);
-      const checkedCount = bookSchedules.data.content.reduce((total, schedules) => {
+    if (bookSchedules?.status === 200) {
+      // CODE-REVIEW 이렇게 as 로 Casting 하지 않으면 타입 에러가 발생합니다..
+      const scheduleData = bookSchedules.data as ScheduleDataType;
+
+      setTotalScheduleCount(scheduleData.numberOfElements);
+      const checkedCount = scheduleData.content.reduce((total, schedules) => {
         return total + schedules.schedules.filter((schedule) => schedule.recordStatus !== "PENDING").length;
       }, 0);
       setCheckedScheduleCount(checkedCount);
     }
-  }, [scheduleCount]);
+  }, [bookSchedules]);
 
-  // console.log(bookSchedules?.status === 200 && bookSchedules.data.content);
+  // console.log(bookSchedules?.status === 200 && scheduleData.content);
 
   return (
     <section className="flex flex-col w-full scrollbar-hide custom-scrollbar-hide">
