@@ -15,28 +15,38 @@ type IProps = {
   setCheckedCount: (count: number) => void;
 };
 
-const handleCheckedCountChange = (
-  schedule: ScheduleData,
-  targetStatus: Omit<STATUS, "PENDING">,
-  checkedCount: number,
-  setCheckedCount: (count: number) => void,
-) => {
+const handleCheckedCountChange = ({
+  schedule,
+  targetStatus,
+  checkedScheduleCount,
+  setCheckedCount,
+}: {
+  schedule: ScheduleData;
+  targetStatus: Omit<STATUS, "PENDING">;
+  checkedScheduleCount: number;
+  setCheckedCount: (count: number) => void;
+}) => {
   if (!schedule.recordId) {
-    setCheckedCount(checkedCount + 1);
+    setCheckedCount(checkedScheduleCount + 1);
     return;
   }
   const currentStatus = schedule.recordStatus;
-  // 상태 변화에 따른 checkedCount 조정
+  // 상태 변화에 따른 checkedScheduleCount 조정
   const adjustment = currentStatus === targetStatus ? -1 : currentStatus === "PENDING" ? 1 : 0;
-  setCheckedCount(checkedCount + adjustment);
+  setCheckedCount(checkedScheduleCount + adjustment);
 };
 
-const handleStatusChange = (
-  schedule: ScheduleData,
-  targetStatus: Omit<STATUS, "PENDING">,
-  statusMutation: (params: { recordId: number; scheduleId: number; status: STATUS }) => void,
-  recordMutation: (params: { attendeeId: number; scheduleId: number; status: STATUS }) => void,
-) => {
+const handleStatusChange = ({
+  schedule,
+  targetStatus,
+  statusMutation,
+  recordMutation,
+}: {
+  schedule: ScheduleData;
+  targetStatus: Omit<STATUS, "PENDING">;
+  statusMutation: (params: { recordId: number; scheduleId: number; status: STATUS }) => void;
+  recordMutation: (params: { attendeeId: number; scheduleId: number; status: STATUS }) => void;
+}) => {
   // 출석 기록이 없는 경우 출석 기록 생성
   if (!schedule.recordId) {
     recordMutation({
@@ -157,8 +167,18 @@ export default function MainContents(props: IProps) {
                         onClick={() => {
                           // await checkAttendee("", schedule.attendeeId)
                           // statusMutation("REJECTED");`
-                          handleCheckedCountChange(schedule, "ABSENT", checkedScheduleCount, setCheckedCount);
-                          handleStatusChange(schedule, "ABSENT", statusMutation, recordMutation);
+                          handleCheckedCountChange({
+                            schedule,
+                            targetStatus: "ABSENT",
+                            checkedScheduleCount,
+                            setCheckedCount,
+                          });
+                          handleStatusChange({
+                            schedule,
+                            targetStatus: "ABSENT",
+                            statusMutation,
+                            recordMutation,
+                          });
                         }}
                         className={twMerge(
                           "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
@@ -171,8 +191,18 @@ export default function MainContents(props: IProps) {
                       </button>
                       <button
                         onClick={() => {
-                          handleCheckedCountChange(schedule, "ATTEND", checkedScheduleCount, setCheckedCount);
-                          handleStatusChange(schedule, "ATTEND", statusMutation, recordMutation);
+                          handleCheckedCountChange({
+                            schedule,
+                            targetStatus: "ATTEND",
+                            checkedScheduleCount,
+                            setCheckedCount,
+                          });
+                          handleStatusChange({
+                            schedule,
+                            targetStatus: "ATTEND",
+                            statusMutation,
+                            recordMutation,
+                          });
                         }}
                         className={twMerge(
                           "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
