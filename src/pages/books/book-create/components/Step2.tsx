@@ -64,17 +64,13 @@ export default function Step2(props: IProps) {
 
   const isCourseNameVaild = courseTitle.length > 0;
 
-  const removeItemsAndAdjustLevels = (selectedSubjectItems: GradeItem[], targetIndex: number) => {
-    return [
-      ...selectedSubjectItems.slice(0, targetIndex),
-      ...selectedSubjectItems.slice(targetIndex + 1).map((item) => {
-        return {
-          ...item,
-          level: item.level - 1,
-        };
-      }),
-    ];
-  };
+  const removeItemsAndAdjustLevels = (selectedSubjectItems: GradeItem[], targetIndex: number): GradeItem[] =>
+    selectedSubjectItems
+      .filter((_, index) => index !== targetIndex) // targetIndex를 제외한 나머지 아이템 필터링
+      .map((item, index) => ({
+        ...item,
+        level: index + 1, // index에 따라 level을 재정렬
+      }));
 
   return (
     <>
