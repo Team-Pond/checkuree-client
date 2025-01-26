@@ -12,6 +12,8 @@ export type IProps = {
   isCurriculum: boolean;
 };
 
+export type GradeItem = { level: number; subjectItemId: number; title: string };
+
 export default function Step2(props: IProps) {
   const { handleCourseChange, courseCreateParam, handleCurriculum, isCurriculum } = props;
 
@@ -30,9 +32,7 @@ export default function Step2(props: IProps) {
     title: string;
   }>();
 
-  const [selectedSubjectItems, setSelectedSubjectItems] = useState<
-    { level: number; subjectItemId: number; title: string }[]
-  >([]);
+  const [selectedSubjectItems, setSelectedSubjectItems] = useState<GradeItem[]>([]);
 
   const { data: subjectItems } = useQuery({
     enabled: !!selectedSubject?.id,
@@ -63,6 +63,19 @@ export default function Step2(props: IProps) {
   }, [subjects]);
 
   const isCourseNameVaild = courseTitle.length > 0;
+
+  const removeItemsAndAdjustLevels = (selectedSubjectItems: GradeItem[], targetIndex: number) => {
+    return [
+      ...selectedSubjectItems.slice(0, targetIndex),
+      ...selectedSubjectItems.slice(targetIndex + 1).map((item) => {
+        return {
+          ...item,
+          level: item.level - 1,
+        };
+      }),
+    ];
+  };
+
   return (
     <>
       <div key={"step2"} className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
@@ -134,22 +147,13 @@ export default function Step2(props: IProps) {
                           width={32}
                           height={32}
                           onClick={() => {
-                            // TODO : level 변경 처리 필요
                             const targetIndex = selectedSubjectItems.findIndex(
                               (item) => item.subjectItemId === subjectItem.subjectItemId,
                             );
                             // 변경이 없는 경우
                             if (targetIndex === -1) return;
                             // 변경 사항이 있는 경우
-                            const convertedItems = [
-                              ...selectedSubjectItems.slice(0, targetIndex),
-                              ...selectedSubjectItems.slice(targetIndex + 1).map((item) => {
-                                return {
-                                  ...item,
-                                  level: item.level - 1,
-                                };
-                              }),
-                            ];
+                            const convertedItems = removeItemsAndAdjustLevels(selectedSubjectItems, targetIndex);
                             setSelectedSubjectItems(convertedItems);
                           }}
                         />
