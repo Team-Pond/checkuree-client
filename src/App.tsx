@@ -13,6 +13,7 @@ import { lazy, Suspense } from "react";
 import ScrollToTop from "./components/ScrollToTop";
 import BookLayout from "./layouts/BookLayout";
 import NotFound from "./pages/404";
+import BookAttendeeDetail from "./pages/books/book-attendee-detail/BookAttendeeDetail";
 
 // Lazy load components
 const Books = lazy(() => import("@/pages/books/Books"));
@@ -38,6 +39,7 @@ const routes: RouteType[] = [
   { path: "/book/:bookId/attendee/create", element: <AttendeeCreate /> }, // 출석부 생성
   { path: "/book/:bookId", element: <BookCheck /> }, // 출석부 출석
   { path: "/book/:bookId/attendee", element: <BookRoaster /> }, // 출석부 명단
+  { path: "/book/:bookId/attendee/detail", element: <BookAttendeeDetail /> }, // 출석부 명단
 ];
 
 function App() {
