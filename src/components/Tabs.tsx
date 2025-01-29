@@ -1,31 +1,70 @@
 import { Root, List, Trigger, Content } from "@radix-ui/react-tabs";
 
-export default function CommonTabs() {
-  return (
-    <Root defaultValue="account">
-      <List className="flex gap-3">
-        <Trigger value="1">학생관리</Trigger>
-        <Trigger value="2">출석관리</Trigger>
-        <Trigger value="3">학습관리</Trigger>
-        <Trigger value="4">상담관리</Trigger>
-      </List>
+import "./tabStyles.css";
+import AttendanceManage from "@/pages/books/book-attendee-detail/components/AttendanceManage";
+import StudentManage from "@/pages/books/book-attendee-detail/components/StudentManage";
+import LearningManage from "@/pages/books/book-attendee-detail/components/LearningManage";
+import CounselManage from "@/pages/books/book-attendee-detail/components/CounselManage";
 
-      <div>
-        <Content value="1">
-          <span>학생관리</span>
-        </Content>
+const CommonTabs = () => (
+  <Root
+    className="TabsRoot"
+    defaultValue="tab1"
+    style={{
+      width: "100%",
+    }}
+  >
+    <List className="TabsList" aria-label="Manage your account">
+      <Trigger className="TabsTrigger" value="tab1">
+        학생관리
+      </Trigger>
+      <Trigger className="TabsTrigger" value="tab2">
+        출석관리
+      </Trigger>
+      <Trigger className="TabsTrigger" value="tab3">
+        학습관리
+      </Trigger>
+      <Trigger className="TabsTrigger" value="tab4">
+        상담관리
+      </Trigger>
+    </List>
+    <Content
+      className="TabsContent"
+      value="tab1"
+      style={{
+        background: "#f6f6f6",
+      }}
+    >
+      <StudentManage />
+    </Content>
+    <Content
+      className="TabsContent"
+      value="tab2"
+      style={{
+        background: "#f6f6f6",
+      }}
+    >
+      <AttendanceManage />
+    </Content>
+    <Content
+      className="TabsContent"
+      value="tab3"
+      style={{
+        background: "#f6f6f6",
+      }}
+    >
+      <LearningManage />
+    </Content>
+    <Content
+      className="TabsContent"
+      value="tab4"
+      style={{
+        background: "#f6f6f6",
+      }}
+    >
+      <CounselManage />
+    </Content>
+  </Root>
+);
 
-        <Content value="2">
-          <span>출석관리</span>
-        </Content>
-
-        <Content value="3">
-          <span>학습관리</span>
-        </Content>
-        <Content value="4">
-          <span>상담관리</span>
-        </Content>
-      </div>
-    </Root>
-  );
-}
+export default CommonTabs;
