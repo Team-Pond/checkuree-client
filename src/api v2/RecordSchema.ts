@@ -74,3 +74,23 @@ export type CreateRecordRequest = {
   attendTime: string;
   status: STATUS;
 };
+
+export type GetRecordMonthAttendeeRequest = {
+  year: number;
+  month: number;
+};
+
+export type GetRecordMonthAttendeeResponse = {
+  id: number;
+  attendeeId: number;
+  attendeeDate: string;
+  attendeeTime: {
+    hour: number;
+    minute: number;
+    second: number;
+    nano: number;
+  };
+  status: STATUS;
+  taughtBy: number;
+  taught: boolean;
+}[];
