@@ -188,3 +188,15 @@ export function getCurrentTimeParts() {
     nano,
   };
 }
+
+/**
+ * hh:mm:ss 형식의 시간 문자열을 받아서 오전/오후 hh:mm 형식으로 변환합니다.
+ */
+export const formatLocalTimeString = (time: string) => {
+  let [hour, minute] = time.split(":");
+
+  const period = hour >= '12' ? "오후" : "오전";
+  if (parseInt(hour) > 12) hour = String(parseInt(hour) - 12).padStart(2,"0");
+  if (parseInt(hour) === 0) hour = '12';
+  return `${period} ${hour}:${minute}`;
+}
