@@ -1,7 +1,5 @@
-/* reset */
-button,
-fieldset,
-input {
+reset button,
+fieldset {
   all: unset;
 }
 
@@ -15,7 +13,7 @@ input {
 .TabsList {
   flex-shrink: 0;
   display: flex;
-  border-bottom: 1px solid var(--mauve-6);
+  /* border-bottom: 1px solid var(--mauve-6); */
 }
 
 .TabsTrigger {
@@ -45,11 +43,6 @@ input {
   color: var(--violet-11);
   box-shadow: inset 0 -1px 0 0 currentColor, 0 1px 0 0 currentColor;
 }
-.TabsTrigger:focus {
-  position: relative;
-  /* outline: none; */
-  /* box-shadow: none; */
-}
 
 .TabsContent {
   flex-grow: 1;
@@ -58,9 +51,7 @@ input {
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   outline: none;
-}
-.TabsContent:focus {
-  box-shadow: 0 0 0 2px black;
+  border: 0px;
 }
 
 .Text {
@@ -88,20 +79,6 @@ input {
   user-select: none;
 }
 
-.Input {
-  flex: 1 0 auto;
-  border-radius: 4px;
-  padding: 0 10px;
-  font-size: 15px;
-  line-height: 1;
-  color: var(--violet-11);
-  box-shadow: 0 0 0 1px var(--violet-7);
-  height: 35px;
-}
-.Input:focus {
-  box-shadow: 0 0 0 2px var(--violet-8);
-}
-
 .Button {
   display: inline-flex;
   align-items: center;
@@ -119,7 +96,4 @@ input {
 }
 .Button.green:hover {
   background-color: var(--green-5);
-}
-.Button.green:focus {
-  box-shadow: 0 0 0 2px var(--green-7);
 }
