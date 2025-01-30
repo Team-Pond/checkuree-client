@@ -188,3 +188,30 @@ export function getCurrentTimeParts() {
     nano,
   };
 }
+
+type ScheduleItem = {
+  id: number;
+  day: string;
+  time: string;
+};
+
+export const formatSchedule = (schedule: ScheduleItem[]): string[] => {
+  const daysInKorean: Record<string, string> = {
+    MONDAY: "월",
+    TUESDAY: "화",
+    WEDNESDAY: "수",
+    THURSDAY: "목",
+    FRIDAY: "금",
+    SATURDAY: "토",
+    SUNDAY: "일",
+  };
+
+  return schedule?.map(({ day, time }) => {
+    const [hour, minute] = time.split(":").map(Number);
+    const period = hour >= 12 ? "오후" : "오전";
+    const formattedHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour; // 12시간제 변환
+    return `(${daysInKorean[day]}) ${period} ${formattedHour}:${minute
+      .toString()
+      .padStart(2, "0")}`;
+  });
+};
