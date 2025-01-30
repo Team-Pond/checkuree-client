@@ -163,7 +163,7 @@ export default function MainContents(props: IProps) {
                   <div className="flex flex-col items-start">
                     <p className="font-bold text-text-primary">{schedule.name}</p>
                     {schedule.recordStatus === "ATTEND" && (
-                      <p className="text-sm text-text-secondary">{formatLocalTimeString(schedule.recordTime) + ' 출석'}</p>
+                      <p className="text-[12px] text-[#59996B] font-medium leading-[14.98px]">{formatLocalTimeString(schedule.recordTime) + ' 출석'}</p>
                     )}
                   </div>
 
