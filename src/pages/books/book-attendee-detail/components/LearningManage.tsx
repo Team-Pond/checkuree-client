@@ -1,4 +1,34 @@
-export default function LearningManage() {
+import { getAttendeeProgressLog } from "@/api v2/AttendeeApiClient";
+import { Progresses } from "@/api v2/AttendeeSchema";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import NextProgressModal from "./NextProgressModal";
+import { useState } from "react";
+
+type IProps = {
+  studentInfo: {
+    name: string;
+    age: number;
+    grade: string;
+    scheduleDays: string;
+  };
+  progresses: Progresses;
+};
+
+export default function LearningManage(props: IProps) {
+  const { progresses, studentInfo } = props;
+
+  const { bookId, attendeeId } = useParams();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const { data: progressLog } = useQuery({
+    queryKey: [""],
+    queryFn: async () =>
+      await getAttendeeProgressLog({
+        attendanceBookId: Number(bookId),
+        attendeeId: Number(attendeeId),
+      }).then((res) => res.data),
+  });
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-8 items-center w-full h-[81px] rounded-2xl bg-white">
@@ -12,12 +42,17 @@ export default function LearningManage() {
         <div className="flex flex-col gap-2 text-left">
           <div className="flex flex-col gap-1">
             <p className="text-m-bold">
-              <span className="text-text-primary">배서윤</span>
+              <span className="text-text-primary">{studentInfo.name}</span>
               <span className="text-text-secondary text-m-semibold ml-2">
-                12
+                {studentInfo.age}
               </span>
             </p>
-            <p className="text-s-medium text-text-secondary">010-1234-5678</p>
+            <p className="text-s-medium">
+              <span className="text-text-brand">
+                {studentInfo.scheduleDays}
+              </span>{" "}
+              <span className="text-[#b0b0b0]"> {studentInfo.grade}</span>
+            </p>
           </div>
         </div>
       </div>
@@ -26,63 +61,54 @@ export default function LearningManage() {
         <p className="flex text-s-bold text-[#5d5d5d]">
           커리큘럼 정보 <img src="" alt="" />
         </p>
-        <div className="flex items-center justify-between text-s-semibold">
-          <p className="text-text-tertiary">커리큘럼 1</p>
-          <p className="text-text-primary">체르니 50</p>
-          <button
-            className="max-w-[109px] w-full h-[33px] rounded-lg bg-[#f6f6f6] text-s-medium text-text-secondary"
-            type="button"
-          >
-            다음 과정으로
-          </button>
-        </div>
-        <div className="flex items-center justify-between text-s-semibold">
-          <p className="text-text-tertiary">시작일</p>
-          <p className="text-text-primary">2024.12.01</p>
-        </div>
-
-        <div className="flex items-center justify-between text-s-semibold">
-          <p className="text-text-tertiary">커리큘럼 2</p>
-          <p className="text-text-primary">재즈 1단계</p>
-          <button
-            className="max-w-[109px] w-full h-[33px] rounded-lg bg-[#f6f6f6] text-s-medium text-text-secondary"
-            type="button"
-          >
-            다음 과정으로
-          </button>
-        </div>
-        <div className="flex items-center justify-between text-s-semibold">
-          <p className="text-text-tertiary">시작일</p>
-          <p className="text-text-primary">2024.12.01</p>
-        </div>
+        {progresses?.map((progress) => {
+          return (
+            <>
+              <div className="flex items-center justify-between text-s-semibold">
+                <p className="text-text-tertiary">커리큘럼 1</p>
+                <p className="text-text-primary">{progress.courseTitle}</p>
+                <button
+                  className="max-w-[109px] w-full h-8 rounded-lg bg-[#f6f6f6] text-s-medium text-text-secondary"
+                  type="button"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  다음 과정으로
+                </button>
+              </div>
+              <div className="flex items-center justify-between text-s-semibold">
+                <p className="text-text-tertiary">시작일</p>
+                <p className="text-text-primary">{progress.startDate}</p>
+              </div>
+            </>
+          );
+        })}
       </div>
 
       <div className="w-full rounded-2xl bg-white p-4 flex flex-col gap-5">
         <p className="flex text-s-bold text-[#5d5d5d]">성장 이력</p>
-
-        <div className="flex justify-between">
-          <div className="flex flex-col justify-center gap-4 text-s-semibold">
+        <div className="flex flex-col justify-between">
+          <div className="flex justify-between gap-4 text-s-semibold">
             <div className="text-[#B0B0B0]">과정명</div>
-            <div>체르니 40</div>
-            <div>체르니 100</div>
-          </div>
-          <div className="flex flex-col justify-center gap-4 text-s-semibold">
             <div className="text-[#B0B0B0]">소요 기간</div>
-            <div>11.01-11.29</div>
-            <div>10.11-10.28</div>
-          </div>
-          <div className="flex flex-col justify-center gap-4 text-s-semibold">
             <div className="text-[#B0B0B0]">소요 레슨</div>
-            <div>9회</div>
-            <div>6회</div>
-          </div>
-          <div className="flex flex-col justify-center gap-4 text-s-semibold">
             <div className="text-[#B0B0B0]">소요 일자</div>
-            <div>4주</div>
-            <div>3주</div>
           </div>
+          {/* {progressLog?.map((progress) => {
+            return (
+              <div className="flex items-center justify-between gap-4 text-s-semibold">
+                <div>테스트</div>
+                <div>테스트</div>
+                <div>테스트</div>
+                <div>테스트</div>
+              </div>
+            );
+          })} */}
         </div>
       </div>
+      <NextProgressModal
+        onClose={() => setIsModalOpen(false)}
+        isOpen={isModalOpen}
+      />
     </div>
   );
 }
