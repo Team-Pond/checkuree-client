@@ -1,17 +1,28 @@
 import CommonModal from "@/components/CommonModal";
 import React, { useState } from "react";
 import NextProgressSelect from "./NextProgressSelect";
+import { updateProgressPromote } from "@/api v2/AttendeeApiClient";
+import { QueryClient, useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
+  attendeeProgressId: number;
+  bookId: number;
 }
 
-const NextProgressModal: React.FC<Props> = ({ isOpen, onClose }) => {
+const NextProgressModal: React.FC<Props> = ({
+  isOpen,
+  onClose,
+  attendeeProgressId,
+  bookId,
+}) => {
+  const { attendeeId } = useParams();
   const [formData, setFormData] = useState({
-    endDate: "",
-    startDate: "",
-    courseTitle: "",
+    completeAt: "",
+    startAt: "",
   });
   const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let input = e.target.value.replace(/\D/g, "");
@@ -30,7 +41,7 @@ const NextProgressModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
     setFormData((prev) => ({
       ...prev,
-      startDate: input,
+      startAt: input,
     }));
   };
 
@@ -51,9 +62,29 @@ const NextProgressModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
     setFormData((prev) => ({
       ...prev,
-      endDate: input,
+      completeAt: input,
     }));
   };
+
+  const queryClinet = new QueryClient();
+  const { mutate: progressMutation } = useMutation({
+    mutationFn: async () =>
+      await updateProgressPromote({
+        attendanceBookId: Number(bookId),
+        params: {
+          attendeeProgressId: attendeeProgressId,
+          completedAt: formData.completeAt.replaceAll(".", "-"),
+          startAt: formData.startAt.replaceAll(".", "-"),
+        },
+      }).then((res) => res.data),
+    onSuccess: () => {
+      toast.success("다음 과정이 저장되었습니다.");
+      queryClinet.invalidateQueries({
+        queryKey: ["attendee-detail", attendeeId],
+      });
+      onClose();
+    },
+  });
 
   return (
     <CommonModal
@@ -73,7 +104,7 @@ const NextProgressModal: React.FC<Props> = ({ isOpen, onClose }) => {
             type="text"
             placeholder="YYYY.MM.DD"
             className="outline-none bg-white border border-[#E7E7E7] rounded-xl  w-full h-12 flex items-center pl-4"
-            value={formData.endDate}
+            value={formData.completeAt}
             onChange={handleEndDateChange}
           />
         </div>
@@ -87,7 +118,7 @@ const NextProgressModal: React.FC<Props> = ({ isOpen, onClose }) => {
             type="text"
             placeholder="YYYY.MM.DD"
             className="outline-none bg-white border border-[#E7E7E7] rounded-xl w-full h-12 flex items-center pl-4"
-            value={formData.startDate}
+            value={formData.startAt}
             onChange={handleStartDateChange}
           />
         </div>
@@ -102,12 +133,12 @@ const NextProgressModal: React.FC<Props> = ({ isOpen, onClose }) => {
           </button>
           <button
             onClick={() => {
-              // scheduleMutation();
+              progressMutation();
             }}
             type="button"
             className="w-full h-12 flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
           >
-            생성하기
+            저장하기
           </button>
         </div>
       </div>
