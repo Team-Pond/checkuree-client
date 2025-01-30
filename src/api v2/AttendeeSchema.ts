@@ -259,3 +259,16 @@ export type GetAttendeeProgressLogReseponse = {
   status: 200;
   data: ProgressLog[];
 } & ErrorResponse;
+
+export type UpdateProgressPromoteRequest = {
+  attendeeProgressId: number;
+  completedAt: string;
+  startAt: string;
+};
+
+export type UpdateProgressPromoteResponse = {
+  status: 200;
+  data: {
+    id: number;
+  };
+} & ErrorResponse;
