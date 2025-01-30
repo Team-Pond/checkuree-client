@@ -18,6 +18,10 @@ import {
   UpdateBookProgressRequest,
   UpdateAttendeeVerifyRequest,
   UpdateAttendeeVerifyResponse,
+  GetAttendeeDetailRequest,
+  GetAttendeeDetailResponse,
+  GetAttendeeProgressLogRequest,
+  GetAttendeeProgressLogReseponse,
 } from "./AttendeeSchema";
 
 export const createAttendee = async ({
@@ -149,6 +153,34 @@ export const updateAttendeeVerify = async ({
     method: "POST",
     url: `/book/${attendanceBookId}/attendee/verify`,
     data: params,
+  });
+
+  return response.data;
+};
+
+//
+export const getAttendeeDetail = async (
+  params: GetAttendeeDetailRequest
+): Promise<GetAttendeeDetailResponse> => {
+  const { attendanceBookId, attendeeId } = params;
+
+  const response = await ApiClient.request({
+    method: "GET",
+    url: `/book/${attendanceBookId}/attendee/${attendeeId}`,
+  });
+
+  return response.data;
+};
+
+// 학생 진도
+export const getAttendeeProgressLog = async (
+  params: GetAttendeeProgressLogRequest
+): Promise<GetAttendeeProgressLogReseponse> => {
+  const { attendanceBookId, attendeeId } = params;
+
+  const response = await ApiClient.request({
+    method: "GET",
+    url: `/book/${attendanceBookId}/attendee/progress/log?attendeeId=${attendeeId}`,
   });
 
   return response.data;
