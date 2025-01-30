@@ -39,7 +39,10 @@ const routes: RouteType[] = [
   { path: "/book/:bookId/attendee/create", element: <AttendeeCreate /> }, // 출석부 생성
   { path: "/book/:bookId", element: <BookCheck /> }, // 출석부 출석
   { path: "/book/:bookId/attendee", element: <BookRoaster /> }, // 출석부 명단
-  { path: "/book/:bookId/attendee/detail", element: <BookAttendeeDetail /> }, // 출석부 명단
+  {
+    path: "/book/:bookId/attendee/:attendeeId",
+    element: <BookAttendeeDetail />,
+  },
 ];
 
 function App() {
