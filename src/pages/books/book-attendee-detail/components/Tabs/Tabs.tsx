@@ -8,10 +8,13 @@ import CounselManage from "@/pages/books/book-attendee-detail/components/Counsel
 import { useQuery } from "@tanstack/react-query";
 
 import { getAttendeeDetail } from "@/api v2/AttendeeApiClient";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 const CommonTabs = () => {
   const { bookId, attendeeId } = useParams();
+  const [searchParams] = useSearchParams();
+  const scheduleDays = searchParams.get("scheduleDays");
+  const grade = searchParams.get("grade");
   const { data: attendeeDetail } = useQuery({
     enabled: attendeeId !== null,
     queryKey: ["attendee-detail", attendeeId],
@@ -21,7 +24,7 @@ const CommonTabs = () => {
         attendeeId: Number(attendeeId),
       }).then((res) => res.data),
   });
-  console.log(attendeeDetail);
+
   return (
     <Root
       className="TabsRoot"
@@ -85,7 +88,15 @@ const CommonTabs = () => {
           background: "#f6f6f6",
         }}
       >
-        <LearningManage progresses={attendeeDetail?.progresses!} />
+        <LearningManage
+          progresses={attendeeDetail?.progresses!}
+          studentInfo={{
+            name: attendeeDetail?.name!,
+            age: Number(attendeeDetail?.age),
+            grade: grade!,
+            scheduleDays: scheduleDays!,
+          }}
+        />
       </Content>
       <Content
         className="TabsContent"
@@ -94,7 +105,14 @@ const CommonTabs = () => {
           background: "#f6f6f6",
         }}
       >
-        <CounselManage />
+        <CounselManage
+          studentInfo={{
+            name: attendeeDetail?.name!,
+            age: Number(attendeeDetail?.age),
+            grade: grade!,
+            scheduleDays: scheduleDays!,
+          }}
+        />
       </Content>
     </Root>
   );
