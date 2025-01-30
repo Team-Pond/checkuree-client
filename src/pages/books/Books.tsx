@@ -70,7 +70,7 @@ export default function Books() {
                       {attendance.title}
                     </p>
                     <p className="font-semibold text-text-secondary">
-                      {/* TODO: roasterCount */}
+                
                       {attendance.attendeeCount}
                     </p>
                   </div>
