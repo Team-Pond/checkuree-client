@@ -104,7 +104,14 @@ const CommonTabs = () => {
             background: "#f6f6f6",
           }}
         >
-          <AttendanceManage />
+          <AttendanceManage
+            studentInfo={{
+              name: attendeeDetail?.name!,
+              age: Number(attendeeDetail?.age),
+              grade: grade!,
+              scheduleDays: scheduleDays!,
+            }}
+          />
         </Content>
         <Content
           className="TabsContent"

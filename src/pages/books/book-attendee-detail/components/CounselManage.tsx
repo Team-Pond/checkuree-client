@@ -1,4 +1,4 @@
-export type IProps = {
+type IProps = {
   studentInfo: {
     name: string;
     age: number;
