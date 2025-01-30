@@ -25,13 +25,17 @@ type IProps = {
     description: string;
   };
   scheduleItems: ScheduleItem;
+  associates?: {
+    relation?: string | "";
+    phoneNumber?: string | "";
+  };
 };
 
 export default function StudentManage(props: IProps) {
-  const { student, lessonInfo, registerInfo, scheduleItems } = props;
+  const { student, registerInfo, scheduleItems, associates } = props;
 
   const response = scheduleItems?.length > 0 && formatSchedule(scheduleItems);
-  console.log(response);
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-8 items-center w-full h-[120px] rounded-2xl bg-white">
@@ -101,7 +105,10 @@ export default function StudentManage(props: IProps) {
         </div>
         <div className="flex justify-between text-s-semibold">
           <p className="text-text-tertiary">가족 연락처</p>
-          <p className="text-text-primary">{registerInfo.phoneNumber} (모)</p>
+          <p className="text-text-primary">
+            {associates?.phoneNumber}{" "}
+            {associates?.relation === "MOTHER" ? "(모)" : "(부)"}
+          </p>
         </div>
         <div className="flex justify-between text-s-semibold">
           <p className="text-text-tertiary">비고</p>
