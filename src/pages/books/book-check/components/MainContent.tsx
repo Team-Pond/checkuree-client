@@ -2,7 +2,11 @@ import { twMerge } from "tailwind-merge";
 
 import { ScheduleDataType } from "@/api v2/ScheduleSchema";
 import { getCurrentTimeParts, scheduleCheckformatTime } from "@/utils";
-import { createRecord, updateRecordLesson, updateRecordStatus } from "@/api v2/RecordApiClient";
+import {
+  createRecord,
+  updateRecordLesson,
+  updateRecordStatus,
+} from "@/api v2/RecordApiClient";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { STATUS } from "@/api v2/RecordSchema";
 import { ScheduleData } from "../../../../api v2/ScheduleSchema";
@@ -32,7 +36,8 @@ const handleCheckedCountChange = ({
   }
   const currentStatus = schedule.recordStatus;
   // 상태 변화에 따른 checkedScheduleCount 조정
-  const adjustment = currentStatus === targetStatus ? -1 : currentStatus === "PENDING" ? 1 : 0;
+  const adjustment =
+    currentStatus === targetStatus ? -1 : currentStatus === "PENDING" ? 1 : 0;
   setCheckedCount(checkedScheduleCount + adjustment);
 };
 
@@ -44,8 +49,16 @@ const handleStatusChange = ({
 }: {
   schedule: ScheduleData;
   targetStatus: Omit<STATUS, "PENDING">;
-  statusMutation: (params: { recordId: number; scheduleId: number; status: STATUS }) => void;
-  recordMutation: (params: { attendeeId: number; scheduleId: number; status: STATUS }) => void;
+  statusMutation: (params: {
+    recordId: number;
+    scheduleId: number;
+    status: STATUS;
+  }) => void;
+  recordMutation: (params: {
+    attendeeId: number;
+    scheduleId: number;
+    status: STATUS;
+  }) => void;
 }) => {
   // 출석 기록이 없는 경우 출석 기록 생성
   if (!schedule.recordId) {
@@ -76,7 +89,13 @@ const handleStatusChange = ({
 };
 
 export default function MainContents(props: IProps) {
-  const { bookId, bookSchedules, currentDate, checkedScheduleCount, setCheckedCount } = props;
+  const {
+    bookId,
+    bookSchedules,
+    currentDate,
+    checkedScheduleCount,
+    setCheckedCount,
+  } = props;
 
   const queryClient = useQueryClient();
 
@@ -97,7 +116,9 @@ export default function MainContents(props: IProps) {
           scheduleId: scheduleId,
           attendDate: currentDate,
           attendTime: `${
-            getCurrentTimeParts().hour < 10 ? "0" + getCurrentTimeParts().hour : getCurrentTimeParts().hour
+            getCurrentTimeParts().hour < 10
+              ? "0" + getCurrentTimeParts().hour
+              : getCurrentTimeParts().hour
           }:${getCurrentTimeParts().minute}`,
           status: status,
         },
@@ -111,7 +132,15 @@ export default function MainContents(props: IProps) {
   });
   const { mutate: statusMutation } = useMutation({
     mutationKey: [""],
-    mutationFn: async ({ recordId, scheduleId, status }: { recordId: number; scheduleId: number; status: STATUS }) =>
+    mutationFn: async ({
+      recordId,
+      scheduleId,
+      status,
+    }: {
+      recordId: number;
+      scheduleId: number;
+      status: STATUS;
+    }) =>
       await updateRecordStatus({
         params: {
           attendanceBookId: bookId,
@@ -130,7 +159,13 @@ export default function MainContents(props: IProps) {
 
   const { mutate: lessonMutation } = useMutation({
     mutationKey: [""],
-    mutationFn: async ({ recordId, isTaught }: { recordId: number; isTaught: boolean }) =>
+    mutationFn: async ({
+      recordId,
+      isTaught,
+    }: {
+      recordId: number;
+      isTaught: boolean;
+    }) =>
       await updateRecordLesson({
         params: {
           attendanceBookId: bookId,
@@ -150,15 +185,23 @@ export default function MainContents(props: IProps) {
     <div className="w-full flex flex-col gap-4 justify-center items-center py-3 px-4 bg-bg-secondary scrollbar-hide custom-scrollbar-hide">
       {bookSchedules?.content?.map((content, index) => {
         return (
-          <div key={index} className="w-full text-left rounded-2xl bg-white px-6 pt-1 flex flex-col">
+          <div
+            key={index}
+            className="w-full text-left rounded-2xl bg-white px-6 pt-1 flex flex-col"
+          >
             <p className="text-s-bold text-text-secondary h-12 flex items-center">
               {scheduleCheckformatTime(content.startTime)}
             </p>
 
             {content.schedules.map((schedule) => {
               return (
-                <div className="w-full h-[56px] flex items-center justify-between px-2 ">
-                  <p className="font-bold  text-text-primary">{schedule.name}</p>
+                <div
+                  key={schedule.attendeeId}
+                  className="w-full h-[56px] flex items-center justify-between px-2 "
+                >
+                  <p className="font-bold  text-text-primary">
+                    {schedule.name}
+                  </p>
 
                   <div className="flex gap-4">
                     <div className="flex gap-2">
@@ -184,7 +227,7 @@ export default function MainContents(props: IProps) {
                           "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
                           schedule.recordStatus === "ABSENT"
                             ? "bg-bg-destructive text-text-interactive-destructive"
-                            : "bg-bg-disabled text-text-disabled",
+                            : "bg-bg-disabled text-text-disabled"
                         )}
                       >
                         결석
@@ -208,7 +251,7 @@ export default function MainContents(props: IProps) {
                           "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
                           schedule.recordStatus === "ATTEND"
                             ? "bg-bg-primary text-text-interactive-primary"
-                            : "bg-bg-disabled text-text-disabled",
+                            : "bg-bg-disabled text-text-disabled"
                         )}
                       >
                         출석
@@ -220,8 +263,8 @@ export default function MainContents(props: IProps) {
                         schedule.recordStatus !== "ATTEND"
                           ? "bg-bg-disabled"
                           : schedule.isTaught
-                            ? "bg-bg-tertiary"
-                            : "bg-bg-base", // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?
+                          ? "bg-bg-tertiary"
+                          : "bg-bg-base" // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?
                       )}
                       onClick={() => {
                         lessonMutation({
@@ -229,10 +272,16 @@ export default function MainContents(props: IProps) {
                           isTaught: !schedule.isTaught,
                         });
                       }}
-                      disabled={schedule.recordStatus === "ATTEND" ? false : true}
+                      disabled={
+                        schedule.recordStatus === "ATTEND" ? false : true
+                      }
                     >
                       <img
-                        src={`/images/icons/book-check/${schedule.isTaught ? "ico-note-active.svg" : "ico-note.svg"}`}
+                        src={`/images/icons/book-check/${
+                          schedule.isTaught
+                            ? "ico-note-active.svg"
+                            : "ico-note.svg"
+                        }`}
                         alt=""
                       />
                     </button>

@@ -26,7 +26,7 @@ export default function AttendanceManage(props: IProps) {
   });
 
   return (
-    <div className="p-4 flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <div className="flex gap-8 items-center w-full h-[81px] rounded-2xl bg-white">
         <img
           src="/images/icons/book-roaster/ico-student.svg"
