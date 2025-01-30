@@ -113,7 +113,7 @@ const NextProgressModal: React.FC<Props> = ({
             <p className="font-bold text-m-medium">다음 과정 시작</p>
             <p className="text-text-danger">*</p>
           </div>
-          <NextProgressSelect />
+          {/* <NextProgressSelect /> */}
           <input
             type="text"
             placeholder="YYYY.MM.DD"
