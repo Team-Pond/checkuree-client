@@ -24,6 +24,8 @@ import {
   GetAttendeeProgressLogReseponse,
   UpdateProgressPromoteRequest,
   UpdateProgressPromoteResponse,
+  UpdateAttendeeDetailRequest,
+  UpdateAttendeeDetailResponse,
 } from "./AttendeeSchema";
 
 export const createAttendee = async ({
@@ -199,6 +201,25 @@ export const updateProgressPromote = async ({
   const response = await ApiClient.request({
     method: "POST",
     url: `/book/${attendanceBookId}/progress/promote`,
+    data: params,
+  });
+
+  return response.data;
+};
+
+// 학생 정보 수정
+export const updateAttendeeDetail = async ({
+  params,
+  attendanceBookId,
+  attendeeId,
+}: {
+  params: UpdateAttendeeDetailRequest;
+  attendanceBookId: number;
+  attendeeId: number;
+}): Promise<UpdateAttendeeDetailResponse> => {
+  const response = await ApiClient.request({
+    method: "PATCH",
+    url: `/book/${attendanceBookId}/attendee/${attendeeId}`,
     data: params,
   });
 
