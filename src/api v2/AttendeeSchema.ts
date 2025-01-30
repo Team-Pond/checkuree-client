@@ -190,3 +190,72 @@ export type UpdateAttendeeVerifyResponse = {
     id: number;
   };
 } & ErrorResponse;
+
+export type GetAttendeeDetailRequest = {
+  attendanceBookId: number;
+  attendeeId: number;
+};
+
+export type Progresses = {
+  id: number;
+  courseId: number;
+  gradeId: number;
+  gradeTitle: string;
+  courseTitle: string;
+  startDate: string;
+}[];
+
+export type GetAttendeeDetailResponse = {
+  status: 200;
+  data: {
+    id: number;
+    name: string;
+    gender: GenderType;
+    birthDate: string;
+    enrollmentDate: string;
+    age: number;
+    status: Status;
+    phoneNumber: string;
+    description: string;
+    school: string;
+    familyId: number;
+    associates?: Associates[];
+    siblings: {
+      id: number;
+      name: string;
+      gender: GenderType;
+      age: number;
+    }[];
+    address_1: string;
+    address_2: string;
+    schedules: {
+      id: number;
+      day: DaysType;
+      time: string;
+    }[];
+    progresses: Progresses;
+  };
+} & ErrorResponse;
+
+export type GetAttendeeProgressLogRequest = {
+  attendanceBookId: number;
+  attendeeId: number;
+};
+
+type ProgressLog = {
+  progress_log_id: number;
+  status: "IN_PROGRESS" | "COMPLETED" | "CANCELLED"; // 상태 값이 여러 개일 가능성을 고려
+  startedAt: string; // ISO 형식의 날짜 문자열
+  endedAt: string; // ISO 형식의 날짜 문자열
+  attendeeId: number;
+  gradeId: number;
+  gradeTitle: string;
+  attendanceCount: number;
+  lessonCount: number;
+  ageAtStart: number;
+};
+
+export type GetAttendeeProgressLogReseponse = {
+  status: 200;
+  data: ProgressLog[];
+} & ErrorResponse;

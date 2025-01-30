@@ -1,5 +1,6 @@
 import { GetAttendeeListResponse } from "@/api v2/AttendeeSchema";
 import { getDayGroupFromInput } from "@/utils";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 type IProps = {
   roaster: GetAttendeeListResponse;
@@ -7,6 +8,9 @@ type IProps = {
 };
 export default function MainContent(props: IProps) {
   const { roaster, getGrades } = props;
+  const { bookId } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   return (
     <div className="w-full px-[17px]">
       <p className="text-left text-s-semibold text-text-secondary mb-1">전체</p>
@@ -14,7 +18,15 @@ export default function MainContent(props: IProps) {
       <div className="border-t border-[#F6F6F6]">
         {roaster?.data.content.length > 0 ? (
           roaster.data.content.map((student) => (
-            <div key={student.id} className="py-4 px-2 flex gap-4">
+            <div
+              key={student.id}
+              className="py-4 px-2 flex gap-4"
+              onClick={() =>
+                navigate(
+                  `/book/${bookId}/attendee/${student.id}${location.search}`
+                )
+              }
+            >
               <img
                 src="/images/icons/book-roaster/ico-student.svg"
                 alt="학생 아이콘"

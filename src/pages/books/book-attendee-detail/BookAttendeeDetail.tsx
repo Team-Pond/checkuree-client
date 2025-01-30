@@ -1,4 +1,4 @@
-import CommonTabs from "@/components/Tabs";
+import CommonTabs from "./components/Tabs/Tabs";
 
 export default function BookAttendeeDetail() {
   return (

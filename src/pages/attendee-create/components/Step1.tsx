@@ -1,6 +1,5 @@
 import { GenderType } from "@/api v2/AttendeeSchema";
 import RelationshipSelect from "@/components/Select";
-import { Select } from "@radix-ui/react-select";
 import React from "react";
 
 interface Step1FormState {
