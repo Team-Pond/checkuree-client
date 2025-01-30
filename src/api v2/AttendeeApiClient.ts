@@ -18,6 +18,12 @@ import {
   UpdateBookProgressRequest,
   UpdateAttendeeVerifyRequest,
   UpdateAttendeeVerifyResponse,
+  GetAttendeeDetailRequest,
+  GetAttendeeDetailResponse,
+  GetAttendeeProgressLogRequest,
+  GetAttendeeProgressLogReseponse,
+  UpdateProgressPromoteRequest,
+  UpdateProgressPromoteResponse,
 } from "./AttendeeSchema";
 
 export const createAttendee = async ({
@@ -148,6 +154,51 @@ export const updateAttendeeVerify = async ({
   const response = await ApiClient.request({
     method: "POST",
     url: `/book/${attendanceBookId}/attendee/verify`,
+    data: params,
+  });
+
+  return response.data;
+};
+
+//
+export const getAttendeeDetail = async (
+  params: GetAttendeeDetailRequest
+): Promise<GetAttendeeDetailResponse> => {
+  const { attendanceBookId, attendeeId } = params;
+
+  const response = await ApiClient.request({
+    method: "GET",
+    url: `/book/${attendanceBookId}/attendee/${attendeeId}`,
+  });
+
+  return response.data;
+};
+
+// 학생 진도
+export const getAttendeeProgressLog = async (
+  params: GetAttendeeProgressLogRequest
+): Promise<GetAttendeeProgressLogReseponse> => {
+  const { attendanceBookId, attendeeId } = params;
+
+  const response = await ApiClient.request({
+    method: "GET",
+    url: `/book/${attendanceBookId}/attendee/progress/log?attendeeId=${attendeeId}`,
+  });
+
+  return response.data;
+};
+
+// 학생 진도 진급
+export const updateProgressPromote = async ({
+  params,
+  attendanceBookId,
+}: {
+  params: UpdateProgressPromoteRequest;
+  attendanceBookId: number;
+}): Promise<UpdateProgressPromoteResponse> => {
+  const response = await ApiClient.request({
+    method: "POST",
+    url: `/book/${attendanceBookId}/progress/promote`,
     data: params,
   });
 
