@@ -1,4 +1,5 @@
 import {
+  Associates,
   DaysType,
   GenderType,
   Progresses,
@@ -8,6 +9,9 @@ import { formatSchedule, getTodayYYYYMMDD } from "@/utils";
 import { useState } from "react";
 import CurriculumModify from "./CurriculumModify";
 import { useParams } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { updateAttendeeDetail } from "@/api v2/AttendeeApiClient";
+import AttendeeModify from "./AttendeeModify";
 
 type ScheduleItem = {
   id: number;
@@ -43,6 +47,14 @@ interface progressGrade {
   startAt: string;
   gradeId: number;
 }
+
+interface AttendeeModifyFormState {
+  birthDate: string;
+  gender: GenderType;
+  address_1: string;
+  description: string;
+}
+
 export default function StudentManage(props: IProps) {
   const { student, registerInfo, scheduleItems, associates, lessonInfo } =
     props;
@@ -50,6 +62,7 @@ export default function StudentManage(props: IProps) {
   const response = scheduleItems?.length > 0 && formatSchedule(scheduleItems);
 
   const [isCourseModify, setIsCourseModify] = useState<boolean>(false);
+  const [isAttendeeModify, setIsAttendeeModify] = useState<boolean>(false);
   const [progressGrade, setProgressGrade] = useState<progressGrade[] | []>([]);
   const onChangeGrade = (gradeId: number) => {
     setProgressGrade([
@@ -62,6 +75,28 @@ export default function StudentManage(props: IProps) {
   const [attendeeSchedules, setAttendeeSchedules] = useState<
     UpdateAttendeeScheduleRequest | undefined
   >();
+
+  const { mutate } = useMutation({
+    mutationFn: async () =>
+      await updateAttendeeDetail({
+        attendanceBookId: Number(bookId),
+        attendeeId: Number(0),
+        params: {
+          birthDate: "string",
+          gender: "FEMALE",
+          address_1: "string",
+          description: "string",
+        },
+      }),
+    onSuccess: () => {},
+  });
+
+  const [formData, setFormData] = useState<AttendeeModifyFormState>({
+    birthDate: "",
+    gender: "",
+    address_1: "",
+    description: "",
+  });
 
   return (
     <div className="flex flex-col gap-4">
@@ -97,6 +132,8 @@ export default function StudentManage(props: IProps) {
           attendeeSchedules={attendeeSchedules}
           setIsCourseModify={setIsCourseModify}
         />
+      ) : isAttendeeModify ? (
+        <AttendeeModify formData={formData} setFormData={setFormData} />
       ) : (
         <>
           <div className="w-full rounded-2xl bg-white p-4 flex flex-col gap-5">
@@ -107,7 +144,10 @@ export default function StudentManage(props: IProps) {
                 width={20}
                 height={20}
                 alt=""
-                onClick={() => setIsCourseModify(true)}
+                onClick={() => {
+                  setIsCourseModify(true);
+                  setIsAttendeeModify(false);
+                }}
               />
             </p>
             <div className="flex justify-between text-s-semibold">
@@ -143,6 +183,10 @@ export default function StudentManage(props: IProps) {
                 width={20}
                 height={20}
                 alt=""
+                onClick={() => {
+                  setIsAttendeeModify(true);
+                  setIsCourseModify(false);
+                }}
               />
             </p>
             <div className="flex justify-between text-s-semibold">
