@@ -23,7 +23,11 @@ export default function MainContent(props: IProps) {
               className="py-4 px-2 flex gap-4"
               onClick={() =>
                 navigate(
-                  `/book/${bookId}/attendee/${student.id}${location.search}`
+                  `/book/${bookId}/attendee/${student.id}${
+                    location.search
+                  }&scheduleDays=${getDayGroupFromInput(
+                    student.scheduleDays
+                  )}&grade=${getGrades(student.grades)}`
                 )
               }
             >
