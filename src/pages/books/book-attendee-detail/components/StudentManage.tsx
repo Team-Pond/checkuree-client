@@ -70,10 +70,10 @@ export default function StudentManage(props: IProps) {
             <p>재즈1 &gt; 재즈 1단계</p>
           </div>
         </div>
-        <div className="flex justify-between text-s-semibold">
-          <p className="text-text-tertiary">클래스</p>
-          <div className="flex flex-col text-text-primary">
-            <p>
+        <div className="flex items-center justify-between text-s-semibold">
+          <p className="text-text-tertiary w-12">클래스</p>
+          <div className="flex flex-col text-text-primary text-xs">
+            <p className="break-keep text-left">
               {response
                 ? response?.map((day, index) => {
                     return <span key={index}>{day} &nbsp;</span>;

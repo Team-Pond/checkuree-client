@@ -1,4 +1,13 @@
-export default function CounselManage() {
+export type IProps = {
+  studentInfo: {
+    name: string;
+    age: number;
+    grade: string;
+    scheduleDays: string;
+  };
+};
+export default function CounselManage(props: IProps) {
+  const { studentInfo } = props;
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-8 items-center w-full h-[81px] rounded-2xl bg-white">
@@ -12,12 +21,17 @@ export default function CounselManage() {
         <div className="flex flex-col gap-2 text-left">
           <div className="flex flex-col gap-1">
             <p className="text-m-bold">
-              <span className="text-text-primary">배서윤</span>
+              <span className="text-text-primary">{studentInfo.name}</span>
               <span className="text-text-secondary text-m-semibold ml-2">
-                12
+                {studentInfo.age}
               </span>
             </p>
-            <p className="text-s-medium text-text-secondary">010-1234-5678</p>
+            <p className="text-s-medium">
+              <span className="text-text-brand">
+                {studentInfo.scheduleDays}
+              </span>{" "}
+              <span className="text-[#b0b0b0]"> {studentInfo.grade}</span>
+            </p>
           </div>
         </div>
       </div>
