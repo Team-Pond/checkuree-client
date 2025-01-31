@@ -1,5 +1,8 @@
+import { updateAttendeeDetail } from "@/api v2/AttendeeApiClient";
 import { GenderType } from "@/api v2/AttendeeSchema";
+import { QueryClient, useMutation } from "@tanstack/react-query";
 import React from "react";
+import toast from "react-hot-toast";
 
 interface AttendeeModifyFormState {
   birthDate: string;
@@ -11,12 +14,18 @@ interface AttendeeModifyFormState {
 // Step1에서 받을 props 정의
 interface AttendeeModifyProps {
   formData: AttendeeModifyFormState;
+  setIsAttendeeModify: React.Dispatch<React.SetStateAction<boolean>>;
   setFormData: React.Dispatch<React.SetStateAction<AttendeeModifyFormState>>;
+  bookId: number;
+  attendeeId: number;
 }
 
 export default function AttendeeModify({
   formData,
   setFormData,
+  setIsAttendeeModify,
+  attendeeId,
+  bookId,
 }: AttendeeModifyProps) {
   const handleBirthdateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 1) 숫자만 남기기
@@ -43,8 +52,30 @@ export default function AttendeeModify({
     }));
   };
 
+  const queryClinet = new QueryClient();
+  const { mutate: attendeeMutation } = useMutation({
+    mutationFn: async () =>
+      await updateAttendeeDetail({
+        attendanceBookId: Number(bookId),
+        attendeeId: Number(attendeeId),
+        params: {
+          birthDate: formData.birthDate.replaceAll(".", "-"),
+          gender: formData.gender,
+          address_1: formData.address_1,
+          description: formData.description,
+        },
+      }),
+    onSuccess: () => {
+      toast.success("학생 정보가 저장되었습니다.");
+      setIsAttendeeModify(false);
+      queryClinet.invalidateQueries({
+        queryKey: ["attendee-detail", attendeeId],
+      });
+    },
+  });
+
   return (
-    <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
+    <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full bg-white p-5 rounded-2xl">
       {/* 학생 생년월일/성별 */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
@@ -57,7 +88,7 @@ export default function AttendeeModify({
           <input
             type="text"
             placeholder="YYYY.MM.DD"
-            className="outline-none bg-white border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12 flex items-center pl-4"
+            className="outline-none bg-white border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12 flex items-center pl-3"
             value={formData.birthDate}
             onChange={handleBirthdateChange}
           />
@@ -87,7 +118,7 @@ export default function AttendeeModify({
                   <span className="absolute bg-bg-tertiary w-3 h-3 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
                 </label>
                 <label
-                  className="ml-2 text-text-primary text-s-bold cursor-pointer"
+                  className="ml-1  w-7 text-text-primary text-s-semibold cursor-pointer"
                   htmlFor="male"
                 >
                   남성
@@ -116,7 +147,7 @@ export default function AttendeeModify({
                   <span className="absolute bg-bg-tertiary w-3 h-3 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
                 </label>
                 <label
-                  className="ml-2 text-text-primary text-s-bold cursor-pointer"
+                  className="ml-1 w-7 text-text-primary text-s-semibold cursor-pointer"
                   htmlFor="female"
                 >
                   여성
@@ -164,6 +195,26 @@ export default function AttendeeModify({
             }))
           }
         />
+      </div>
+      <div className="flex gap-4 w-full">
+        <button
+          type="button"
+          onClick={() => {
+            setIsAttendeeModify(false);
+          }}
+          className="w-full h-12 flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
+        >
+          취소
+        </button>
+        <button
+          onClick={() => {
+            attendeeMutation();
+          }}
+          type="button"
+          className="w-full h-12 flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
+        >
+          저장하기
+        </button>
       </div>
     </div>
   );
