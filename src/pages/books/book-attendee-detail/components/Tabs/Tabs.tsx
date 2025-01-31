@@ -16,20 +16,24 @@ const CommonTabs = () => {
   const [searchParams] = useSearchParams();
   const scheduleDays = searchParams.get("scheduleDays");
   const grade = searchParams.get("grade");
+
   const { data: attendeeDetail } = useQuery({
     enabled: attendeeId !== null,
-    queryKey: ["attendee-detail", attendeeId],
+    queryKey: ["attendee-detail", String(attendeeId)],
     queryFn: async () =>
       await getAttendeeDetail({
         attendanceBookId: Number(bookId),
         attendeeId: Number(attendeeId),
       }).then((res) => res.data),
+    refetchOnMount: true,
+    staleTime: 0,
   });
 
   const studentAssociate = attendeeDetail?.associates?.filter(
     (fam) => fam.relationType === "MOTHER" || fam.relationType === "FATHER"
   );
 
+  console.log(attendeeDetail);
   return (
     <>
       <div className="w-full h-[64px] flex items-center px-4 py-5 bg-white">

@@ -23,7 +23,6 @@ export default function BookCheck() {
 
   const formattedDate = currentDate.format("YYYY-MM-DD"); // 데이터 값
 
-  // 날짜 변경 핸들러
   const handlePreviousDay = () => {
     setCurrentDate((prev) => prev.subtract(1, "day"));
   };
@@ -32,8 +31,6 @@ export default function BookCheck() {
     setCurrentDate((prev) => prev.add(1, "day"));
   };
 
-  // 전체 데이터를 가지고 왔다고 가정
-  // checkedScheduleCount 상태 추가
   const { data: bookSchedules } = useQuery({
     queryKey: ["book-schedules", bookId, formattedDate],
     queryFn: async () =>
@@ -48,6 +45,9 @@ export default function BookCheck() {
           },
         },
       }),
+    refetchInterval: 5000,
+    refetchIntervalInBackground: true,
+    enabled: !!bookId && !!formattedDate,
   });
 
   useEffect(() => {
@@ -57,13 +57,16 @@ export default function BookCheck() {
 
       setTotalScheduleCount(scheduleData.numberOfElements);
       const checkedCount = scheduleData.content.reduce((total, schedules) => {
-        return total + schedules.schedules.filter((schedule) => schedule.recordStatus !== "PENDING").length;
+        return (
+          total +
+          schedules.schedules.filter(
+            (schedule) => schedule.recordStatus !== "PENDING"
+          ).length
+        );
       }, 0);
       setCheckedScheduleCount(checkedCount);
     }
   }, [bookSchedules]);
-
-  // console.log(bookSchedules?.status === 200 && scheduleData.content);
 
   return (
     <section className="flex flex-col w-full scrollbar-hide custom-scrollbar-hide">

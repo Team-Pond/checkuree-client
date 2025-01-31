@@ -80,7 +80,7 @@ const NextProgressModal: React.FC<Props> = ({
     onSuccess: () => {
       toast.success("다음 과정이 저장되었습니다.");
       queryClinet.invalidateQueries({
-        queryKey: ["attendee-detail", attendeeId],
+        queryKey: ["attendee-detail", String(attendeeId)],
       });
       onClose();
     },
