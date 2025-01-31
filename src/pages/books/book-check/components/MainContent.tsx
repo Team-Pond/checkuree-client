@@ -10,7 +10,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { STATUS } from "@/api v2/RecordSchema";
 import { ScheduleData } from "../../../../api v2/ScheduleSchema";
-import { formatLocalTimeString, formatTime } from '../../../../utils';
+import { formatLocalTimeString } from "../../../../utils";
 
 type IProps = {
   bookSchedules: ScheduleDataType;
@@ -187,7 +187,7 @@ export default function MainContents(props: IProps) {
       {bookSchedules?.content?.map((content, index) => {
         return (
           <div
-            key={index}
+            key={content.schedules + `${index}`}
             className="w-full text-left rounded-2xl bg-white px-6 pt-1 flex flex-col"
           >
             <p className="text-s-bold text-text-secondary h-12 flex items-center">
@@ -196,13 +196,16 @@ export default function MainContents(props: IProps) {
 
             {content.schedules.map((schedule) => {
               return (
-
-                 <div className="w-full h-[56px] flex items-center justify-between px-2 ">
+                <div className="w-full h-[56px] flex items-center justify-between px-2 ">
                   {/*<p className="font-bold  text-text-primary">{schedule.name}</p>*/}
                   <div className="flex flex-col items-start">
-                    <p className="font-bold text-text-primary">{schedule.name}</p>
+                    <p className="font-bold text-text-primary">
+                      {schedule.name}
+                    </p>
                     {schedule.recordStatus === "ATTEND" && (
-                      <p className="text-[12px] text-[#59996B] font-medium leading-[14.98px]">{formatLocalTimeString(schedule.recordTime) + ' 출석'}</p>
+                      <p className="text-[12px] text-[#59996B] font-medium leading-[14.98px]">
+                        {formatLocalTimeString(schedule.recordTime) + " 출석"}
+                      </p>
                     )}
                   </div>
                   <div className="flex gap-4">
