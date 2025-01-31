@@ -1,5 +1,4 @@
 import {
-  Associates,
   DaysType,
   GenderType,
   Progresses,
@@ -9,8 +8,6 @@ import { formatSchedule, getTodayYYYYMMDD } from "@/utils";
 import { useState } from "react";
 import CurriculumModify from "./CurriculumModify";
 import { useParams } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
-import { updateAttendeeDetail } from "@/api v2/AttendeeApiClient";
 import AttendeeModify from "./AttendeeModify";
 
 type ScheduleItem = {
@@ -70,26 +67,11 @@ export default function StudentManage(props: IProps) {
       { gradeId: gradeId, startAt: getTodayYYYYMMDD() },
     ]);
   };
-  const { bookId } = useParams();
+  const { bookId, attendeeId } = useParams();
 
   const [attendeeSchedules, setAttendeeSchedules] = useState<
     UpdateAttendeeScheduleRequest | undefined
   >();
-
-  const { mutate } = useMutation({
-    mutationFn: async () =>
-      await updateAttendeeDetail({
-        attendanceBookId: Number(bookId),
-        attendeeId: Number(0),
-        params: {
-          birthDate: "string",
-          gender: "FEMALE",
-          address_1: "string",
-          description: "string",
-        },
-      }),
-    onSuccess: () => {},
-  });
 
   const [formData, setFormData] = useState<AttendeeModifyFormState>({
     birthDate: "",
@@ -133,7 +115,13 @@ export default function StudentManage(props: IProps) {
           setIsCourseModify={setIsCourseModify}
         />
       ) : isAttendeeModify ? (
-        <AttendeeModify formData={formData} setFormData={setFormData} />
+        <AttendeeModify
+          bookId={Number(bookId)}
+          formData={formData}
+          setFormData={setFormData}
+          setIsAttendeeModify={setIsAttendeeModify}
+          attendeeId={Number(attendeeId)}
+        />
       ) : (
         <>
           <div className="w-full rounded-2xl bg-white p-4 flex flex-col gap-5">
