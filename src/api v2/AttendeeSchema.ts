@@ -272,3 +272,17 @@ export type UpdateProgressPromoteResponse = {
     id: number;
   };
 } & ErrorResponse;
+
+export type UpdateAttendeeDetailRequest = {
+  birthDate: string;
+  gender: GenderType;
+  address_1: string;
+  description: string;
+};
+
+export type UpdateAttendeeDetailResponse = {
+  status: 200;
+  data: {
+    id: number;
+  };
+} & ErrorResponse;

@@ -1,5 +1,14 @@
-import { DaysType, GenderType, Progresses } from "@/api v2/AttendeeSchema";
-import { formatSchedule } from "@/utils";
+import {
+  DaysType,
+  GenderType,
+  Progresses,
+  UpdateAttendeeScheduleRequest,
+} from "@/api v2/AttendeeSchema";
+import { formatSchedule, getTodayYYYYMMDD } from "@/utils";
+import { useState } from "react";
+import CurriculumModify from "./CurriculumModify";
+import { useParams } from "react-router-dom";
+import AttendeeModify from "./AttendeeModify";
 
 type ScheduleItem = {
   id: number;
@@ -31,10 +40,45 @@ type IProps = {
   };
 };
 
+interface progressGrade {
+  startAt: string;
+  gradeId: number;
+}
+
+interface AttendeeModifyFormState {
+  birthDate: string;
+  gender: GenderType;
+  address_1: string;
+  description: string;
+}
+
 export default function StudentManage(props: IProps) {
-  const { student, registerInfo, scheduleItems, associates } = props;
+  const { student, registerInfo, scheduleItems, associates, lessonInfo } =
+    props;
 
   const response = scheduleItems?.length > 0 && formatSchedule(scheduleItems);
+
+  const [isCourseModify, setIsCourseModify] = useState<boolean>(false);
+  const [isAttendeeModify, setIsAttendeeModify] = useState<boolean>(false);
+  const [progressGrade, setProgressGrade] = useState<progressGrade[] | []>([]);
+  const onChangeGrade = (gradeId: number) => {
+    setProgressGrade([
+      ...progressGrade,
+      { gradeId: gradeId, startAt: getTodayYYYYMMDD() },
+    ]);
+  };
+  const { bookId, attendeeId } = useParams();
+
+  const [attendeeSchedules, setAttendeeSchedules] = useState<
+    UpdateAttendeeScheduleRequest | undefined
+  >();
+
+  const [formData, setFormData] = useState<AttendeeModifyFormState>({
+    birthDate: "",
+    gender: "",
+    address_1: "",
+    description: "",
+  });
 
   return (
     <div className="flex flex-col gap-4">
@@ -62,59 +106,102 @@ export default function StudentManage(props: IProps) {
           </p>
         </div>
       </div>
-
-      <div className="w-full rounded-2xl bg-white p-4 flex flex-col gap-5">
-        <p className="flex text-s-bold text-[#5d5d5d]">
-          수업 정보 <img src="" alt="" />
-        </p>
-        <div className="flex justify-between text-s-semibold">
-          <p className="text-text-tertiary">커리큘럼</p>
-          <div className="flex flex-col text-text-primary">
-            <p>체르니 &gt; 체르니50</p>
-            <p>재즈1 &gt; 재즈 1단계</p>
-          </div>
-        </div>
-        <div className="flex items-center justify-between text-s-semibold">
-          <p className="text-text-tertiary w-12">클래스</p>
-          <div className="flex flex-col text-text-primary text-xs">
-            <p className="break-keep text-left">
-              {response
-                ? response?.map((day, index) => {
-                    return <span key={index}>{day} &nbsp;</span>;
-                  })
-                : ""}
+      {isCourseModify ? (
+        <CurriculumModify
+          onChangeGrade={onChangeGrade}
+          attendanceBookId={Number(bookId)}
+          setAttendeeSchedules={setAttendeeSchedules}
+          attendeeSchedules={attendeeSchedules}
+          setIsCourseModify={setIsCourseModify}
+        />
+      ) : isAttendeeModify ? (
+        <AttendeeModify
+          bookId={Number(bookId)}
+          formData={formData}
+          setFormData={setFormData}
+          setIsAttendeeModify={setIsAttendeeModify}
+          attendeeId={Number(attendeeId)}
+        />
+      ) : (
+        <>
+          <div className="w-full rounded-2xl bg-white p-4 flex flex-col gap-5">
+            <p className="flex text-s-bold text-[#5d5d5d]">
+              <span>수업 정보</span>{" "}
+              <img
+                src="/images/icons/ico-pencil.svg"
+                width={20}
+                height={20}
+                alt=""
+                onClick={() => {
+                  setIsCourseModify(true);
+                  setIsAttendeeModify(false);
+                }}
+              />
             </p>
+            <div className="flex justify-between text-s-semibold">
+              <p className="text-text-tertiary">커리큘럼</p>
+              <div className="flex flex-col text-text-primary">
+                {lessonInfo?.map((course) => {
+                  return (
+                    <p key={course.id}>
+                      {course.courseTitle} &gt; {course.gradeTitle}
+                    </p>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="flex items-center justify-between text-s-semibold">
+              <p className="text-text-tertiary w-12">클래스</p>
+              <div className="flex flex-col text-text-primary text-xs">
+                <p className="break-keep text-left">
+                  {response
+                    ? response?.map((day, index) => {
+                        return <span key={index}>{day} &nbsp;</span>;
+                      })
+                    : ""}
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-
-      <div className="w-full rounded-2xl bg-white p-4 flex flex-col gap-5">
-        <p className="flex text-s-bold text-[#5d5d5d]">
-          등록 정보 <img src="" alt="" />
-        </p>
-        <div className="flex justify-between text-s-semibold">
-          <p className="text-text-tertiary">기본 정보</p>
-          <p className="text-text-primary">
-            {registerInfo.birthDate?.replaceAll("-", ".")},{" "}
-            {registerInfo.gender === "MALE" ? "남성" : "여성"}
-          </p>
-        </div>
-        <div className="flex justify-between text-s-semibold">
-          <p className="text-text-tertiary">학생 주소</p>
-          <p className="text-text-primary">{registerInfo.address_1}</p>
-        </div>
-        <div className="flex justify-between text-s-semibold">
-          <p className="text-text-tertiary">가족 연락처</p>
-          <p className="text-text-primary">
-            {associates?.phoneNumber}{" "}
-            {associates?.relation === "MOTHER" ? "(모)" : "(부)"}
-          </p>
-        </div>
-        <div className="flex justify-between text-s-semibold">
-          <p className="text-text-tertiary">비고</p>
-          <p className="text-text-primary">{registerInfo.description}</p>
-        </div>
-      </div>
+          <div className="w-full rounded-2xl bg-white p-4 flex flex-col gap-5">
+            <p className="flex text-s-bold text-[#5d5d5d]">
+              <span>등록 정보</span>{" "}
+              <img
+                src="/images/icons/ico-pencil.svg"
+                width={20}
+                height={20}
+                alt=""
+                onClick={() => {
+                  setIsAttendeeModify(true);
+                  setIsCourseModify(false);
+                }}
+              />
+            </p>
+            <div className="flex justify-between text-s-semibold">
+              <p className="text-text-tertiary">기본 정보</p>
+              <p className="text-text-primary">
+                {registerInfo.birthDate?.replaceAll("-", ".")},{" "}
+                {registerInfo.gender === "MALE" ? "남성" : "여성"}
+              </p>
+            </div>
+            <div className="flex justify-between text-s-semibold">
+              <p className="text-text-tertiary">학생 주소</p>
+              <p className="text-text-primary">{registerInfo.address_1}</p>
+            </div>
+            <div className="flex justify-between text-s-semibold">
+              <p className="text-text-tertiary">가족 연락처</p>
+              <p className="text-text-primary">
+                {associates?.phoneNumber}{" "}
+                {associates?.relation === "MOTHER" ? "(모)" : "(부)"}
+              </p>
+            </div>
+            <div className="flex justify-between text-s-semibold">
+              <p className="text-text-tertiary">비고</p>
+              <p className="text-text-primary">{registerInfo.description}</p>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
