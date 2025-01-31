@@ -117,10 +117,8 @@ export default function MainContents(props: IProps) {
           scheduleId: scheduleId,
           attendDate: currentDate,
           attendTime: `${
-            getCurrentTimeParts().hour < 10
-              ? "0" + getCurrentTimeParts().hour
-              : getCurrentTimeParts().hour
-          }:${getCurrentTimeParts().minute}`,
+            getCurrentTimeParts().hour.toString().padStart(2, '0')
+          }:${getCurrentTimeParts().minute.toString().padStart(2, '0')}`,
           status: status,
         },
       }),
