@@ -16,7 +16,7 @@ export const getScheduleAttendee = async ({
   const { date, pageable } = params;
   const response = await ApiClient.request({
     method: "GET",
-    url: `/book/${attendanceBookId}/schedule?date=${date}&page=${pageable.page}&size=${pageable.page}&sort=${pageable.sort}`,
+    url: `/book/${attendanceBookId}/schedule?date=${date}&page=${pageable.page}&size=${pageable.size}&sort=${pageable.sort}`,
   });
 
   return response.data;
