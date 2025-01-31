@@ -10,6 +10,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { STATUS } from "@/api v2/RecordSchema";
 import { ScheduleData } from "../../../../api v2/ScheduleSchema";
+import { formatLocalTimeString, formatTime } from '../../../../utils';
 
 type IProps = {
   bookSchedules: ScheduleDataType;
@@ -195,14 +196,15 @@ export default function MainContents(props: IProps) {
 
             {content.schedules.map((schedule) => {
               return (
-                <div
-                  key={schedule.attendeeId}
-                  className="w-full h-[56px] flex items-center justify-between px-2 "
-                >
-                  <p className="font-bold  text-text-primary">
-                    {schedule.name}
-                  </p>
 
+                 <div className="w-full h-[56px] flex items-center justify-between px-2 ">
+                  {/*<p className="font-bold  text-text-primary">{schedule.name}</p>*/}
+                  <div className="flex flex-col items-start">
+                    <p className="font-bold text-text-primary">{schedule.name}</p>
+                    {schedule.recordStatus === "ATTEND" && (
+                      <p className="text-[12px] text-[#59996B] font-medium leading-[14.98px]">{formatLocalTimeString(schedule.recordTime) + ' 출석'}</p>
+                    )}
+                  </div>
                   <div className="flex gap-4">
                     <div className="flex gap-2">
                       {/* TODO: 결석은 status명이 어떻게 되는지? */}

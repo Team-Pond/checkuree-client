@@ -12,13 +12,10 @@ export type IProps = {
   isCurriculum: boolean;
 };
 
+export type GradeItem = { level: number; subjectItemId: number; title: string };
+
 export default function Step2(props: IProps) {
-  const {
-    handleCourseChange,
-    courseCreateParam,
-    handleCurriculum,
-    isCurriculum,
-  } = props;
+  const { handleCourseChange, courseCreateParam, handleCurriculum, isCurriculum } = props;
 
   const { data: subjects } = useQuery({
     queryKey: ["subjects"],
@@ -35,21 +32,17 @@ export default function Step2(props: IProps) {
     title: string;
   }>();
 
-  const [selectedSubjectItems, setSelectedSubjectItems] = useState<
-    { level: number; subjectItemId: number; title: string }[]
-  >([]);
+  const [selectedSubjectItems, setSelectedSubjectItems] = useState<GradeItem[]>([]);
 
   const { data: subjectItems } = useQuery({
     enabled: !!selectedSubject?.id,
     queryKey: ["subject-items", selectedSubject?.title],
     queryFn: async () =>
-      await getSubjectItems({ subjectId: String(selectedSubject?.id) }).then(
-        (res) => {
-          if (res.status === 200) {
-            return res.data;
-          }
+      await getSubjectItems({ subjectId: String(selectedSubject?.id) }).then((res) => {
+        if (res.status === 200) {
+          return res.data;
         }
-      ),
+      }),
   });
 
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
@@ -70,12 +63,18 @@ export default function Step2(props: IProps) {
   }, [subjects]);
 
   const isCourseNameVaild = courseTitle.length > 0;
+
+  const removeItemsAndAdjustLevels = (selectedSubjectItems: GradeItem[], targetIndex: number): GradeItem[] =>
+    selectedSubjectItems
+      .filter((_, index) => index !== targetIndex) // targetIndex를 제외한 나머지 아이템 필터링
+      .map((item, index) => ({
+        ...item,
+        level: index + 1, // index에 따라 level을 재정렬
+      }));
+
   return (
     <>
-      <div
-        key={"step2"}
-        className="flex flex-col justify-center gap-6 max-w-[342px] w-full"
-      >
+      <div key={"step2"} className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
         {/* 커리큘럼 추가된 것 */}
         {courseCreateParam.map((course) => {
           return (
@@ -136,24 +135,23 @@ export default function Step2(props: IProps) {
                             height={24}
                             className=""
                           />
-                          <p className="px-[2px] mt-[1px]">
-                            {subjectItem.title}
-                          </p>
+                          <p className="px-[2px] mt-[1px]">{subjectItem.title}</p>
                         </div>
                         <img
                           src="/images/icons/book-create/ico-close-gray.svg"
                           alt="닫기 아이콘"
                           width={32}
                           height={32}
-                          onClick={() =>
-                            setSelectedSubjectItems(
-                              selectedSubjectItems.filter(
-                                (item) =>
-                                  item.subjectItemId !==
-                                  subjectItem.subjectItemId
-                              )
-                            )
-                          }
+                          onClick={() => {
+                            const targetIndex = selectedSubjectItems.findIndex(
+                              (item) => item.subjectItemId === subjectItem.subjectItemId,
+                            );
+                            // 변경이 없는 경우
+                            if (targetIndex === -1) return;
+                            // 변경 사항이 있는 경우
+                            const convertedItems = removeItemsAndAdjustLevels(selectedSubjectItems, targetIndex);
+                            setSelectedSubjectItems(convertedItems);
+                          }}
                         />
                       </li>
                     );
@@ -170,9 +168,7 @@ export default function Step2(props: IProps) {
                       height={15}
                       className=""
                     />
-                    <p className="text-s-medium text-border-secondary-hover">
-                      과목 추가하기
-                    </p>
+                    <p className="text-s-medium text-border-secondary-hover">과목 추가하기</p>
                   </div>
                 </ul>
               </div>
@@ -181,9 +177,7 @@ export default function Step2(props: IProps) {
             <button
               className={twMerge(
                 "max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl bg-bg-tertiary text-[#f1f8f3]",
-                isCourseNameVaild
-                  ? "bg-bg-tertiary text-[#f1f8f3]"
-                  : "bg-bg-disabled text-text-disabled"
+                isCourseNameVaild ? "bg-bg-tertiary text-[#f1f8f3]" : "bg-bg-disabled text-text-disabled",
               )}
               disabled={!isCourseNameVaild}
               onClick={() => {
@@ -206,12 +200,7 @@ export default function Step2(props: IProps) {
             className="w-full h-10 flex justify-center items-center bg-bg-secondary"
             onClick={() => handleCurriculum(true)}
           >
-            <img
-              src={"/images/icons/book-create/ico-plus.svg"}
-              alt="이미지 추가 아이콘"
-              width={24}
-              height={24}
-            />
+            <img src={"/images/icons/book-create/ico-plus.svg"} alt="이미지 추가 아이콘" width={24} height={24} />
             <p className="text-m-medium text-[#B0B0B0]">커리큘럼 추가하기 </p>
           </button>
         )}
@@ -246,7 +235,7 @@ export default function Step2(props: IProps) {
                         "bg-white h-[52px] flex items-center justify-center",
                         selectedSubject?.title === subject.title
                           ? "text-text-brand font-bold bg-bg-base"
-                          : "text-text-primary text-m-medium"
+                          : "text-text-primary text-m-medium",
                       )}
                       onClick={() => setSelectedSubject(subject)}
                     >
@@ -258,13 +247,8 @@ export default function Step2(props: IProps) {
               <ul className="w-full overflow-y-scroll bg-[#f6f6f6] px-[14px] rounded-tr-lg">
                 {subjectItems?.map((subjectItem) => {
                   return (
-                    <li
-                      key={subjectItem.level}
-                      className="h-[52px] flex items-center justify-between"
-                    >
-                      <p className="text-text-primary text-s-semibold">
-                        {subjectItem.title}
-                      </p>
+                    <li key={subjectItem.level} className="h-[52px] flex items-center justify-between">
+                      <p className="text-text-primary text-s-semibold">{subjectItem.title}</p>
                       <img
                         src="/images/icons/book-create/ico-plus.svg"
                         alt="플러스 아이콘"
@@ -275,7 +259,7 @@ export default function Step2(props: IProps) {
                             ...selectedSubjectItems,
                             {
                               subjectItemId: subjectItem.id,
-                              level: subjectItem.level,
+                              level: selectedSubjectItems.length + 1,
                               title: subjectItem.title,
                             },
                           ])
