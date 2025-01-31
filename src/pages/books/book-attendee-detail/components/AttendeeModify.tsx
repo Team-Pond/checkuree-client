@@ -3,6 +3,7 @@ import { GenderType } from "@/api v2/AttendeeSchema";
 import { QueryClient, useMutation } from "@tanstack/react-query";
 import React from "react";
 import toast from "react-hot-toast";
+import { twMerge } from "tailwind-merge";
 
 interface AttendeeModifyFormState {
   birthDate: string;
@@ -66,13 +67,17 @@ export default function AttendeeModify({
         },
       }),
     onSuccess: () => {
+      queryClinet.invalidateQueries({
+        queryKey: ["attendee-detail", String(attendeeId)],
+      });
+
       toast.success("학생 정보가 저장되었습니다.");
       setIsAttendeeModify(false);
-      queryClinet.invalidateQueries({
-        queryKey: ["attendee-detail", attendeeId],
-      });
     },
   });
+
+  const isFormInvalid =
+    !formData.address_1 || !formData.birthDate || !formData.gender;
 
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full bg-white p-5 rounded-2xl">
@@ -88,7 +93,7 @@ export default function AttendeeModify({
           <input
             type="text"
             placeholder="YYYY.MM.DD"
-            className="outline-none bg-white border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12 flex items-center pl-3"
+            className="outline-none bg-white border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12 flex items-center pl-[10px]"
             value={formData.birthDate}
             onChange={handleBirthdateChange}
           />
@@ -210,8 +215,14 @@ export default function AttendeeModify({
           onClick={() => {
             attendeeMutation();
           }}
+          disabled={isFormInvalid}
           type="button"
-          className="w-full h-12 flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
+          className={twMerge(
+            "w-full h-12 flex justify-center items-center rounded-2xl bg-bg-tertiary font-semibold text-[18px]",
+            !isFormInvalid
+              ? "bg-bg-tertiary text-[white]"
+              : "bg-bg-disabled text-text-disabled"
+          )}
         >
           저장하기
         </button>
