@@ -1,10 +1,10 @@
-import CommonModal from '@/components/CommonModal';
-import React, { useState } from 'react';
-import { updateProgressPromote } from '@/api v2/AttendeeApiClient';
-import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
-import { useParams } from 'react-router-dom';
-import { getBookCourse } from '../../../../api v2/AttendanceBookApiClient';
+import CommonModal from "@/components/CommonModal";
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+
+import { getBookCourse } from "@/api v2/AttendanceBookApiClient";
+import { useBookCourses, useProgressPromote } from "../querys";
 
 interface Props {
   isOpen: boolean;
@@ -26,19 +26,23 @@ const NextProgressModal: React.FC<Props> = ({
     nextGradeId: "",
   });
 
-  const { data: bookCourses } = useQuery({
-    queryKey: ["book-courses", bookId],
-    queryFn: async () => {
-      const res = await getBookCourse(String(bookId));
-      if (res.status === 200) return res.data;
-    },
+  // const { data: bookCourses } = useQuery({
+  //   queryKey: ["book-courses", bookId],
+  //   queryFn: async () => {
+  //     const res = await getBookCourse(String(bookId));
+  //     if (res.status === 200) return res.data;
+  //   },
+  // });
+
+  const { data: bookCourses } = useBookCourses({
+    bookId: String(bookId),
+    openDrawer: isOpen,
   });
 
-  const totalBookGrades:any[] = []
-  bookCourses?.courses.forEach(course => {
-    totalBookGrades.push(...course.grades)
-  })
-
+  const totalBookGrades: any[] = [];
+  bookCourses?.courses.forEach((course) => {
+    totalBookGrades.push(...course.grades);
+  });
 
   const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let input = e.target.value.replace(/\D/g, "");
@@ -92,27 +96,13 @@ const NextProgressModal: React.FC<Props> = ({
     });
   };
 
-  const queryClient = new QueryClient();
-  const { mutate: progressMutation } = useMutation({
-    mutationFn: async () =>
-      await updateProgressPromote({
-        attendanceBookId: Number(bookId),
-        params: {
-          attendeeProgressId: attendeeProgressId,
-          completedAt: formData.completeAt.replaceAll(".", "-"),
-          startAt: formData.startAt.replaceAll(".", "-"),
-          nextGradeId: !!formData.nextGradeId ? Number(formData.nextGradeId) : undefined, // "" 빈 문자열일 경우 보내지 않음
-        },
-      }).then((res) => res.data),
-    onSuccess: () => {
-      toast.success("다음 과정이 저장되었습니다.");
-      queryClient.invalidateQueries({
-        queryKey: ["attendee-detail", String(attendeeId)],
-      });
-      onClose();
-    },
+  const { mutate: progressMutation } = useProgressPromote({
+    bookId,
+    attendeeProgressId,
+    formData,
+    attendeeId: Number(attendeeId),
+    onClose,
   });
-
   return (
     <CommonModal
       isOpen={isOpen}
@@ -146,10 +136,10 @@ const NextProgressModal: React.FC<Props> = ({
             onChange={handleSelectChange}
             className="outline-none bg-white border border-[#E7E7E7] rounded-xl w-full h-12 pl-4 text-m-medium"
           >
-            <option value="">
-              과정을 선택하세요
-            </option>
-            {(bookCourses?.courses.flatMap(course => course.grades) || []).map((grade) => (
+            <option value="">과정을 선택하세요</option>
+            {(
+              bookCourses?.courses.flatMap((course) => course.grades) || []
+            ).map((grade) => (
               <option key={grade.id} value={grade.id}>
                 {grade.title}
               </option>

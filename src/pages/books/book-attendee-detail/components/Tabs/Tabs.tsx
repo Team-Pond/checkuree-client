@@ -5,10 +5,8 @@ import AttendanceManage from "@/pages/books/book-attendee-detail/components/Atte
 import StudentManage from "@/pages/books/book-attendee-detail/components/StudentManage";
 import LearningManage from "@/pages/books/book-attendee-detail/components/LearningManage";
 import CounselManage from "@/pages/books/book-attendee-detail/components/CounselManage";
-import { useQuery } from "@tanstack/react-query";
-
-import { getAttendeeDetail } from "@/api v2/AttendeeApiClient";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useAttendeeDetail } from "../../querys";
 
 const CommonTabs = () => {
   const { bookId, attendeeId } = useParams();
@@ -17,18 +15,10 @@ const CommonTabs = () => {
   const scheduleDays = searchParams.get("scheduleDays");
   const grade = searchParams.get("grade");
 
-  const { data: attendeeDetail } = useQuery({
-    enabled: attendeeId !== null,
-    queryKey: ["attendee-detail", String(attendeeId)],
-    queryFn: async () =>
-      await getAttendeeDetail({
-        attendanceBookId: Number(bookId),
-        attendeeId: Number(attendeeId),
-      }).then((res) => res.data),
-    refetchOnMount: true,
-    staleTime: 0,
+  const { data: attendeeDetail } = useAttendeeDetail({
+    attendeeId: Number(attendeeId),
+    bookId: Number(bookId),
   });
-
   const studentAssociate = attendeeDetail?.associates?.filter(
     (fam) => fam.relationType === "MOTHER" || fam.relationType === "FATHER"
   );

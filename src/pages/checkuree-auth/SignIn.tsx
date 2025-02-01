@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 import { setTokens } from "@/lib/auth";
 import { SignIn } from "@/api v2/AuthApiClient";
+import { useAuthLogin } from "./querys";
 
 export interface LoginDataType {
   username: string;
@@ -36,25 +37,7 @@ export default function CheckureeSignIn() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const { mutate: loginMutation } = useMutation({
-    mutationKey: ["user"],
-    mutationFn: async (params: LoginDataType) => await SignIn(params),
-    onSuccess: (response) => {
-      const accessToken = response.data.accessToken;
-      const refreshToken = response.data.refreshToken;
-      const token = response.data.accessToken;
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      setTokens({
-        accessToken: accessToken as string,
-        refreshToken: refreshToken as string,
-      });
-      toast.success("로그인 되었습니다.");
-      navigate("/");
-    },
-    onError: () => {
-      toast.error("아이디 및 비밀번호가 일치하지 않습니다.");
-    },
-  });
+  const { mutate: loginMutation } = useAuthLogin();
 
   useEffect(() => {
     if (accessToken) {

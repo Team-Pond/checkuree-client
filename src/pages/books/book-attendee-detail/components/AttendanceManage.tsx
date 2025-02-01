@@ -12,18 +12,6 @@ type IProps = {
 
 export default function AttendanceManage(props: IProps) {
   const { studentInfo } = props;
-  const { data: attendeeMonth } = useQuery({
-    queryKey: [""],
-    queryFn: async () =>
-      getRecordMonthAttendee({
-        params: {
-          year: 2025,
-          month: 1,
-        },
-        attendanceBookId: 5,
-        attendeeId: 0,
-      }),
-  });
 
   return (
     <div className="flex flex-col gap-4">

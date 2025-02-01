@@ -1,11 +1,9 @@
 import { Dayjs } from "dayjs";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateRecordAll } from "@/api v2/RecordApiClient";
-import toast from "react-hot-toast";
 import { updateBookStatus } from "@/api v2/AttendanceBookApiClient";
 import { BookStatus } from "@/api v2/AttendanceBookSchema";
+import { useRecordAllUpdate } from "../querys";
 
 type HeaderProps = {
   title: string;
@@ -31,7 +29,6 @@ export default function Header(props: HeaderProps) {
   } = props;
 
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const displayDate = currentDate.locale("ko").format("M월 D일"); // 텍스트 값
 
   const { scrollYProgress } = useScroll();
@@ -56,24 +53,9 @@ export default function Header(props: HeaderProps) {
     ["78px", "49px"]
   );
 
-  const { mutate: recordAllMutation } = useMutation({
-    mutationKey: [""],
-    mutationFn: async () =>
-      await updateRecordAll({
-        params: {
-          attendanceBookId: bookId,
-          attendDate: formattedDate,
-        },
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["book-schedules"],
-      });
-      toast.success("전체 출석 완료");
-    },
-    onError: () => {
-      toast.success("전체 출석 실패");
-    },
+  const { mutate: recordAllMutation } = useRecordAllUpdate({
+    bookId,
+    formattedDate,
   });
 
   const handleBookStatus = async (date: string, status: BookStatus) => {

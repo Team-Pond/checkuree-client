@@ -1,25 +1,14 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { getMeBooks } from "@/api v2/AttendanceBookApiClient";
-import { useQuery } from "@tanstack/react-query";
 import { formatTimeRange, getDayGroupFromInput } from "@/utils";
 import { BookContext } from "@/context/BookContext";
+import { useBookList } from "./querys";
 
 export default function Books() {
   const navigate = useNavigate();
   const context = useContext(BookContext);
 
-  const { data: bookList } = useQuery({
-    queryKey: ["books"],
-    queryFn: async () => {
-      const response = await getMeBooks();
-      if (response.status === 200) {
-        return response;
-      } else {
-        console.log(response); // 에러 바운더리 추가
-      }
-    },
-  });
+  const { data: bookList } = useBookList();
 
   const { setSelectedBook } = context!;
 
@@ -70,7 +59,6 @@ export default function Books() {
                       {attendance.title}
                     </p>
                     <p className="font-semibold text-text-secondary">
-                
                       {attendance.attendeeCount}
                     </p>
                   </div>
