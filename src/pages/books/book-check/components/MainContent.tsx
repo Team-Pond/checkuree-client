@@ -1,16 +1,11 @@
 import { twMerge } from "tailwind-merge";
 
 import { ScheduleDataType } from "@/api v2/ScheduleSchema";
-import { getCurrentTimeParts, scheduleCheckformatTime } from "@/utils";
-import {
-  createRecord,
-  updateRecordLesson,
-  updateRecordStatus,
-} from "@/api v2/RecordApiClient";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { scheduleCheckformatTime } from "@/utils";
 import { STATUS } from "@/api v2/RecordSchema";
 import { ScheduleData } from "../../../../api v2/ScheduleSchema";
 import { formatLocalTimeString } from "../../../../utils";
+import { useLessonUpdate, useRecordCreate, useStatusUpdate } from "../querys";
 
 type IProps = {
   bookSchedules: ScheduleDataType;
@@ -98,88 +93,15 @@ export default function MainContents(props: IProps) {
     setCheckedCount,
   } = props;
 
-  const queryClient = useQueryClient();
-
-  const { mutate: recordMutation } = useMutation({
-    mutationFn: async ({
-      attendeeId,
-      scheduleId,
-      status,
-    }: {
-      attendeeId: number;
-      scheduleId: number;
-      status: STATUS;
-    }) =>
-      await createRecord({
-        params: {
-          attendanceBookId: bookId,
-          attendeeId: attendeeId,
-          scheduleId: scheduleId,
-          attendDate: currentDate,
-          attendTime: `${
-            getCurrentTimeParts().hour < 10
-              ? "0" + getCurrentTimeParts().hour
-              : getCurrentTimeParts().hour
-          }:${getCurrentTimeParts().minute}`,
-          status: status,
-        },
-      }),
-    onSuccess: (res) => {
-      queryClient.invalidateQueries({
-        queryKey: ["book-schedules"],
-      });
-    },
-    onError: () => {},
-  });
-  const { mutate: statusMutation } = useMutation({
-    mutationKey: [""],
-    mutationFn: async ({
-      recordId,
-      scheduleId,
-      status,
-    }: {
-      recordId: number;
-      scheduleId: number;
-      status: STATUS;
-    }) =>
-      await updateRecordStatus({
-        params: {
-          attendanceBookId: bookId,
-          status,
-          scheduleId,
-          recordId,
-        },
-      }),
-    onSuccess: (res) => {
-      queryClient.invalidateQueries({
-        queryKey: ["book-schedules"],
-      });
-    },
-    onError: () => {},
+  const { mutate: recordMutation } = useRecordCreate({
+    bookId,
+    currentDate,
   });
 
-  const { mutate: lessonMutation } = useMutation({
-    mutationKey: [""],
-    mutationFn: async ({
-      recordId,
-      isTaught,
-    }: {
-      recordId: number;
-      isTaught: boolean;
-    }) =>
-      await updateRecordLesson({
-        params: {
-          attendanceBookId: bookId,
-          isTaught,
-          recordId,
-        },
-      }),
-    onSuccess: (res) => {
-      queryClient.invalidateQueries({
-        queryKey: ["book-schedules"],
-      });
-    },
-    onError: () => {},
+  const { mutate: statusMutation } = useStatusUpdate({ bookId });
+
+  const { mutate: lessonMutation } = useLessonUpdate({
+    bookId,
   });
 
   return (

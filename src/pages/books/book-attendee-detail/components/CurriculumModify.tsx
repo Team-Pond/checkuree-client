@@ -1,18 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-
-import {
-  getBookCourse,
-  getBookScheduleTable,
-} from "@/api v2/AttendanceBookApiClient";
-import { getScheduleAttendee } from "@/api v2/AttendeeApiClient";
-
 import { DaysType } from "@/api v2/AttendanceBookSchema";
 import { UpdateAttendeeScheduleRequest } from "@/api v2/AttendeeSchema";
 import { useParams } from "react-router-dom";
 import ScheduleTable from "./ScheduleTable";
 import SubjectSelectionDrawer from "./SubjectSelectionDrawer";
 import AttendeeDrawer from "./AttendeeDrawer";
+import {
+  useBookCourses,
+  useScheduleData,
+  useScheduleTimeTable,
+} from "../querys";
 
 interface CurriculumModifyProps {
   setAttendeeSchedules: React.Dispatch<
@@ -72,29 +69,14 @@ export default function CurriculumModify({
     handleAttendeeBottomDrawer(true);
   };
 
-  // 선택된 스케줄에 따라 수강생 목록 가져오기
-  const { data: scheduleData } = useQuery({
-    enabled: !!scheduleParams.dayOfWeek && !!scheduleParams.hhmm,
-    queryKey: ["table-attendee", scheduleParams.dayOfWeek, scheduleParams.hhmm],
-    queryFn: async () => {
-      const res = await getScheduleAttendee({
-        attendanceBookId: Number(bookId)!,
-        dayOfWeek: scheduleParams.dayOfWeek,
-        hhmm: scheduleParams.hhmm,
-      });
-      if (res.status === 200) return res.data;
-    },
+  const { data: scheduleData } = useScheduleData({
+    dayOfWeek: scheduleParams.dayOfWeek,
+    hhmm: scheduleParams.hhmm,
+    bookId: Number(bookId),
   });
-
   // 시간표 정보 가져오기
-  const { data: scheduleTable } = useQuery({
-    queryKey: ["table-schedule"],
-    queryFn: async () => {
-      const res = await getBookScheduleTable({
-        attendanceBookId: Number(bookId)!,
-      });
-      if (res.status === 200) return res.data;
-    },
+  const { data: scheduleTimeTable } = useScheduleTimeTable({
+    bookId: Number(bookId),
   });
 
   // 일정 클릭 시 자동으로 수강생 Drawer 열기
@@ -129,13 +111,9 @@ export default function CurriculumModify({
     });
   };
 
-  const { data: bookCourses } = useQuery({
-    enabled: openDrawer,
-    queryKey: ["book-courses", bookId || attendanceBookId],
-    queryFn: async () => {
-      const res = await getBookCourse(String(bookId || attendanceBookId));
-      if (res.status === 200) return res.data;
-    },
+  const { data: bookCourses } = useBookCourses({
+    openDrawer,
+    bookId: bookId!,
   });
 
   useEffect(() => {
@@ -180,12 +158,12 @@ export default function CurriculumModify({
           <p className="text-text-danger">*</p>
         </div>
 
-        {scheduleTable && (
+        {scheduleTimeTable && (
           <ScheduleTable
-            scheduleTable={scheduleTable?.scheduleTable!}
-            timeSlots={scheduleTable?.timeSlots!}
-            startHhmm={scheduleTable?.startHhmm!}
-            endHhmm={scheduleTable?.endHhmm!}
+            scheduleTable={scheduleTimeTable?.scheduleTable!}
+            timeSlots={scheduleTimeTable?.timeSlots!}
+            startHhmm={scheduleTimeTable?.startHhmm!}
+            endHhmm={scheduleTimeTable?.endHhmm!}
             handleSchedule={handleSchedule}
             handleAttendeeBottomDrawer={handleAttendeeBottomDrawer}
             attendeeSchedules={attendeeSchedules}

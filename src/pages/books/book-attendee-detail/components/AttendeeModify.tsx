@@ -1,9 +1,7 @@
-import { updateAttendeeDetail } from "@/api v2/AttendeeApiClient";
 import { GenderType } from "@/api v2/AttendeeSchema";
-import { QueryClient, useMutation } from "@tanstack/react-query";
 import React from "react";
-import toast from "react-hot-toast";
 import { twMerge } from "tailwind-merge";
+import { useAttendeeUpdate } from "../querys";
 
 interface AttendeeModifyFormState {
   birthDate: string;
@@ -53,27 +51,11 @@ export default function AttendeeModify({
     }));
   };
 
-  const queryClinet = new QueryClient();
-  const { mutate: attendeeMutation } = useMutation({
-    mutationFn: async () =>
-      await updateAttendeeDetail({
-        attendanceBookId: Number(bookId),
-        attendeeId: Number(attendeeId),
-        params: {
-          birthDate: formData.birthDate.replaceAll(".", "-"),
-          gender: formData.gender,
-          address_1: formData.address_1,
-          description: formData.description,
-        },
-      }),
-    onSuccess: () => {
-      queryClinet.invalidateQueries({
-        queryKey: ["attendee-detail", String(attendeeId)],
-      });
-
-      toast.success("학생 정보가 저장되었습니다.");
-      setIsAttendeeModify(false);
-    },
+  const { mutate: attendeeMutation } = useAttendeeUpdate({
+    bookId,
+    attendeeId,
+    formData,
+    setIsAttendeeModify,
   });
 
   const isFormInvalid =

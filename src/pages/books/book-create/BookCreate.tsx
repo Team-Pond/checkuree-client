@@ -6,10 +6,7 @@ import { twMerge } from "tailwind-merge";
 import { getSubjects } from "@/api v2/CourseApiClient";
 import { CourseData, CreateBookRequest } from "@/api v2/AttendanceBookSchema";
 import { useForm, useWatch } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
-import { createBook } from "@/api v2/AttendanceBookApiClient";
-import toast from "react-hot-toast";
-import axios from "axios";
+import { useBookCreate } from "./querys";
 
 export default function BookCreate() {
   const navigate = useNavigate();
@@ -43,31 +40,7 @@ export default function BookCreate() {
       shouldUnregister: false, // 데이터 유지
     });
 
-  const { mutate: bookMutation } = useMutation({
-    mutationKey: ["book"],
-    mutationFn: async () =>
-      await createBook({
-        title: getValues("title"),
-        imageUrl: JSON.stringify(getValues("imageUrl")),
-        availableDays: getValues("availableDays"),
-        availableFrom: getValues("availableFrom"),
-        availableTo: getValues("availableTo"),
-        courses: courseCreateParam,
-      }),
-    onSuccess: () => {
-      toast.success("출석부를 생성하였습니다.");
-      navigate("/book");
-    },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        console.log(error.response?.data);
-        toast.error(error.response?.data?.data || "An error occurred");
-      } else {
-        console.log(error);
-        toast.error("An unexpected error occurred");
-      }
-    },
-  });
+  const { mutate: bookMutation } = useBookCreate();
 
   // 특정 필드만 감시
   const { title, availableDays, availableFrom, availableTo } = useWatch({
@@ -84,7 +57,14 @@ export default function BookCreate() {
     <form
       className="flex flex-col gap-7 w-full pb-[30px]"
       onSubmit={handleSubmit(() => {
-        bookMutation();
+        bookMutation({
+          title: getValues("title"),
+          imageUrl: JSON.stringify(getValues("imageUrl")),
+          availableDays: getValues("availableDays"),
+          availableFrom: getValues("availableFrom"),
+          availableTo: getValues("availableTo"),
+          courses: courseCreateParam,
+        });
       })}
     >
       <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">

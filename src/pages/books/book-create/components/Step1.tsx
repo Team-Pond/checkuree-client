@@ -69,18 +69,10 @@ export default function Step1(props: IProps) {
   };
 
   const transfer = (time: { period: string; hour: string; minute: string }) => {
-    let data = "";
-    if (time.period === "오후") {
-      data = String(Number(time.hour) + 12) + time.minute;
-    } else {
-      if (Number(time.hour) < 10) {
-        data = "0" + time.hour + time.minute;
-      } else {
-        data = time.hour + time.minute;
-      }
-    }
+    const hourInt = Number(time.hour) + time.period === "오후" ? 12 : 0;
+    const minuteInt = Number(time.minute);
 
-    return data;
+    return hourInt.toString().padStart(2, "0") + minuteInt.toString().padStart(2, "0");
   };
   const handleStartTimeChange = (time: {
     period: string;

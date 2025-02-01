@@ -67,7 +67,7 @@ export const getAttendee = async (
     method: "GET",
     url: `/book/${attendanceBookId}/attendee?age.min=0&age.max=100&scheduleDays=${scheduleDays}&gender=${
       filter.gender || ""
-    }&status=ATTENDING`,
+    }&status=ATTENDING&size=100`,
   });
 
   return response.data;

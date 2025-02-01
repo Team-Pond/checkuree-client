@@ -1,11 +1,9 @@
 import { Dayjs } from "dayjs";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateRecordAll } from "@/api v2/RecordApiClient";
-import toast from "react-hot-toast";
 import { updateBookStatus } from "@/api v2/AttendanceBookApiClient";
 import { BookStatus } from "@/api v2/AttendanceBookSchema";
+import { useRecordAllUpdate } from "../querys";
 
 type HeaderProps = {
   title: string;
@@ -31,7 +29,6 @@ export default function Header(props: HeaderProps) {
   } = props;
 
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const displayDate = currentDate.locale("ko").format("M월 D일"); // 텍스트 값
 
   const { scrollYProgress } = useScroll();
@@ -45,27 +42,20 @@ export default function Header(props: HeaderProps) {
   const iconY = useTransform(smoothScrollYProgress, [0, 0.15], [0, 8]);
   const iconOpacity = useTransform(smoothScrollYProgress, [0, 0.15], [1, 0]);
   const textOpacity = useTransform(smoothScrollYProgress, [0, 0.15], [1, 1]);
-  const headerHeight = useTransform(smoothScrollYProgress, [0, 0.2], ["46px", "25px"]);
-  const headerContainerHeight = useTransform(smoothScrollYProgress, [0, 0.2], ["78px", "49px"]);
+  const headerHeight = useTransform(
+    smoothScrollYProgress,
+    [0, 0.2],
+    ["46px", "25px"]
+  );
+  const headerContainerHeight = useTransform(
+    smoothScrollYProgress,
+    [0, 0.2],
+    ["78px", "49px"]
+  );
 
-  const { mutate: recordAllMutation } = useMutation({
-    mutationKey: [""],
-    mutationFn: async () =>
-      await updateRecordAll({
-        params: {
-          attendanceBookId: bookId,
-          attendDate: formattedDate,
-        },
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["book-schedules"],
-      });
-      toast.success("전체 출석 완료");
-    },
-    onError: () => {
-      toast.success("전체 출석 실패");
-    },
+  const { mutate: recordAllMutation } = useRecordAllUpdate({
+    bookId,
+    formattedDate,
   });
 
   const handleBookStatus = async (date: string, status: BookStatus) => {
@@ -76,10 +66,6 @@ export default function Header(props: HeaderProps) {
         status,
       },
     });
-    // console.log(response);
-    // if (response.status === 200) {
-
-    // }
   };
 
   const SUB_HEADER = [
@@ -106,15 +92,32 @@ export default function Header(props: HeaderProps) {
         <p className="text-[22px] font-bold" onClick={() => navigate("/book")}>
           {title}
         </p>
-        <img src="/images/icons/ico-settings.svg" alt="설정 아이콘" width={32} height={32} />
+        <img
+          src="/images/icons/ico-settings.svg"
+          alt="설정 아이콘"
+          width={32}
+          height={32}
+        />
       </div>
       {/* Calendar */}
       <div className="w-full flex h-10 justify-between items-center px-4 border-b border-bg-disabled">
-        <img src="/images/icons/ico-arrow-left.svg" alt="왼쪽 화살" width={9} height={9} onClick={handlePreviousDay} />
+        <img
+          src="/images/icons/ico-arrow-left.svg"
+          alt="왼쪽 화살"
+          width={9}
+          height={9}
+          onClick={handlePreviousDay}
+        />
         <p className="text-xl font-bold" data-value={formattedDate}>
           {displayDate}
         </p>
-        <img src="/images/icons/ico-arrow-right.svg" alt="오른쪽 화살" width={9} height={9} onClick={handleNextDay} />
+        <img
+          src="/images/icons/ico-arrow-right.svg"
+          alt="오른쪽 화살"
+          width={9}
+          height={9}
+          onClick={handleNextDay}
+        />
       </div>
       {/* SubHeader */}
       <motion.div
@@ -167,7 +170,10 @@ export default function Header(props: HeaderProps) {
                 width={16}
                 height={16}
               />
-              <motion.p className="text-xs font-medium" style={{ y: textY, opacity: textOpacity }}>
+              <motion.p
+                className="text-xs font-medium"
+                style={{ y: textY, opacity: textOpacity }}
+              >
                 {header.name}
               </motion.p>
             </motion.button>
