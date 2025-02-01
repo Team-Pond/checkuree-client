@@ -44,7 +44,7 @@ export default function MainContent(props: IProps) {
                     {student.name}
                   </p>
                   <p className="text-m-semibold text-text-secondary">
-                    {student.age}
+                    {student.age + '세'}
                   </p>
                 </div>
                 <div className="flex gap-2">
