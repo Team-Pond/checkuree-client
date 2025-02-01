@@ -1,18 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-
-import {
-  getBookCourse,
-  getBookScheduleTable,
-} from "@/api v2/AttendanceBookApiClient";
-import { getScheduleAttendee } from "@/api v2/AttendeeApiClient";
+import { useParams } from "react-router-dom";
 
 import ScheduleTable from "./ScheduleTable";
 import SubjectSelectionDrawer from "./SubjectSelectionDrawer";
 import AttendeeDrawer from "./AttendeeDrawer";
 import { DaysType } from "@/api v2/AttendanceBookSchema";
 import { UpdateAttendeeScheduleRequest } from "@/api v2/AttendeeSchema";
-import { useParams } from "react-router-dom";
+import {
+  useBookCourses,
+  useScheduleAttendee,
+  useScheduleTable,
+} from "../querys";
 
 interface Step2Props {
   setAttendeeSchedules: React.Dispatch<
@@ -35,13 +33,11 @@ export default function Step2({
     id: number;
     title: string;
   }>();
-
   const [selectedSubjectItems, setSelectedSubjectItems] = useState<{
     level: number;
     subjectItemId: number;
     title: string;
   }>();
-
   const [scheduleParams, setScheduleParams] = useState<{
     dayOfWeek: string;
     hhmm: string;
@@ -49,18 +45,14 @@ export default function Step2({
     dayOfWeek: "",
     hhmm: "",
   });
-
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [attendeeOpenDrawer, setAttendeeOpenDrawer] = useState<boolean>(false);
 
-  // 커리큘럼 선택 시 Drawer 열고/닫는 핸들러
+  // Drawer 관련 핸들러들
   const handleBottomDrawer = (open: boolean) => setOpenDrawer(open);
   const onDrawerChange = () => setOpenDrawer(!openDrawer);
-
-  // 수강생 Drawer 열고/닫는 핸들러
   const handleAttendeeBottomDrawer = (open: boolean) =>
     setAttendeeOpenDrawer(open);
-
   const onAttendeeDrawerChange = () =>
     setAttendeeOpenDrawer(!attendeeOpenDrawer);
 
@@ -70,39 +62,35 @@ export default function Step2({
     handleAttendeeBottomDrawer(true);
   };
 
-  // 선택된 스케줄에 따라 수강생 목록 가져오기
-  const { data: scheduleData } = useQuery({
-    enabled: !!scheduleParams.dayOfWeek && !!scheduleParams.hhmm,
-    queryKey: ["table-attendee", scheduleParams.dayOfWeek, scheduleParams.hhmm],
-    queryFn: async () => {
-      const res = await getScheduleAttendee({
-        attendanceBookId: Number(bookId)!,
-        dayOfWeek: scheduleParams.dayOfWeek,
-        hhmm: scheduleParams.hhmm,
-      });
-      if (res.status === 200) return res.data;
-    },
-  });
+  // bookId가 string일 수 있으므로 number로 변환하여 사용
+  const attendanceBookIdNumber = Number(bookId) || attendanceBookId;
 
-  // 시간표 정보 가져오기
-  const { data: scheduleTable } = useQuery({
-    queryKey: ["table-schedule"],
-    queryFn: async () => {
-      const res = await getBookScheduleTable({
-        attendanceBookId: Number(bookId)!,
-      });
-      if (res.status === 200) return res.data;
-    },
-  });
+  // 수강생 데이터
+  const { data: scheduleData } = useScheduleAttendee(
+    attendanceBookIdNumber,
+    scheduleParams.dayOfWeek,
+    scheduleParams.hhmm,
+    !!(scheduleParams.dayOfWeek && scheduleParams.hhmm)
+  );
 
-  // 일정 클릭 시 자동으로 수강생 Drawer 열기
+  // 시간표 데이터
+  const { data: scheduleTable } = useScheduleTable(attendanceBookIdNumber);
+
+  // 커리큘럼 데이터를 가져옴
+  const { data: bookCourses } = useBookCourses(
+    attendanceBookIdNumber,
+    openDrawer
+  );
+
   useEffect(() => {
-    if (scheduleParams.dayOfWeek && scheduleParams.hhmm) {
+    if (openDrawer) {
+      setAttendeeOpenDrawer(false);
+    } else if (attendeeOpenDrawer) {
+      setOpenDrawer(false);
     }
-  }, [scheduleParams.dayOfWeek, scheduleParams.hhmm]);
+  }, [openDrawer, attendeeOpenDrawer]);
 
   const handleAttendeeSchedules = (day: DaysType, hhmm: string) => {
-    // 기존 로직 (attendeeSchedules에 추가)
     setAttendeeSchedules((prev) => {
       if (!prev) {
         return {
@@ -127,32 +115,13 @@ export default function Step2({
     });
   };
 
-  const { data: bookCourses } = useQuery({
-    enabled: openDrawer,
-    queryKey: ["book-courses", bookId || attendanceBookId],
-    queryFn: async () => {
-      const res = await getBookCourse(String(bookId || attendanceBookId));
-      if (res.status === 200) return res.data;
-    },
-  });
-
-  useEffect(() => {
-    if (openDrawer) {
-      setAttendeeOpenDrawer(false);
-    } else if (attendeeOpenDrawer) {
-      setOpenDrawer(false);
-    }
-  }, [openDrawer, attendeeOpenDrawer]);
-
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
-      {/* 커리큘럼 선택 영역 */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
           <p className="font-bold text-m-medium">커리큘럼</p>
           <p className="text-text-danger">*</p>
         </div>
-
         <div
           className="w-full flex justify-center"
           onClick={() => handleBottomDrawer(true)}
@@ -162,7 +131,7 @@ export default function Step2({
             placeholder="커리큘럼 선택"
             value={
               selectedSubject && selectedSubjectItems
-                ? `${selectedSubject?.title} > ${selectedSubjectItems?.title}`
+                ? `${selectedSubject.title} > ${selectedSubjectItems.title}`
                 : ""
             }
             className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#5D5D5D] text-left"
@@ -170,20 +139,17 @@ export default function Step2({
           />
         </div>
       </div>
-
-      {/* 클래스 일정 영역 */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
           <p className="font-bold text-m-medium">클래스 일정</p>
           <p className="text-text-danger">*</p>
         </div>
-
         {scheduleTable && (
           <ScheduleTable
-            scheduleTable={scheduleTable?.scheduleTable!}
-            timeSlots={scheduleTable?.timeSlots!}
-            startHhmm={scheduleTable?.startHhmm!}
-            endHhmm={scheduleTable?.endHhmm!}
+            scheduleTable={scheduleTable.scheduleTable}
+            timeSlots={scheduleTable.timeSlots}
+            startHhmm={scheduleTable.startHhmm}
+            endHhmm={scheduleTable.endHhmm}
             handleSchedule={handleSchedule}
             handleAttendeeBottomDrawer={handleAttendeeBottomDrawer}
             attendeeSchedules={attendeeSchedules}

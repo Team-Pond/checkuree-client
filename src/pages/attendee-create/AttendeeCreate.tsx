@@ -3,21 +3,14 @@ import { twMerge } from "tailwind-merge";
 import Step1 from "./components/Step1";
 import { useContext, useState } from "react";
 import Step2 from "./components/Step2";
-import { useMutation } from "@tanstack/react-query";
-import {
-  createAttendee,
-  updateAttendeeSchedule,
-  updateAttendeeVerify,
-} from "@/api v2/AttendeeApiClient";
-import toast from "react-hot-toast";
 import { BookContext } from "@/context/BookContext";
 import {
   Associates,
   GenderType,
   UpdateAttendeeScheduleRequest,
 } from "@/api v2/AttendeeSchema";
-import { updateBookProgress } from "@/api v2/AttendanceBookApiClient";
 import { getTodayYYYYMMDD } from "@/utils";
+import { useAttendeeCreate, useScheduleUpdate } from "./querys";
 
 interface Step1FormState {
   name: string;
@@ -25,7 +18,6 @@ interface Step1FormState {
   birthDate: string;
   gender: GenderType;
   enrollmentDate: string;
-
   address_1: string;
   school: string;
   description: string;
@@ -73,30 +65,20 @@ export default function AttendeeCreate() {
   const handleStep2Change = (state: boolean) => {
     setIsStep2(state);
   };
+  const handleAttendeeId = (id: number) => {
+    setAttendeeId(id);
+  };
 
   const isStep1Valid =
     formData.name.length > 2 && formData.address_1.length > 0;
 
-  const { mutate: attendeeMutation } = useMutation({
-    mutationKey: ["book"],
-    mutationFn: async () =>
-      await createAttendee({
-        attendanceBookId: Number(bookId) || selectedBook?.id!,
-        params: {
-          ...formData,
-          birthDate: formData.birthDate.replaceAll(".", "-"),
-          actualName: formData.name,
-          enrollmentDate: formData.enrollmentDate.replaceAll(".", "-"),
-          associates: guardian ? [guardian] : [],
-        },
-      }),
-    onSuccess: (res) => {
-      setAttendeeId(res.data.id);
-      handleStep2Change(true);
-    },
-    onError: (error) => {},
+  const { mutate: attendeeMutation } = useAttendeeCreate({
+    bookId: Number(bookId),
+    formData,
+    guardian: guardian!,
+    handleAttendeeId,
+    handleStep2Change,
   });
-
   const [attendeeSchedules, setAttendeeSchedules] = useState<
     UpdateAttendeeScheduleRequest | undefined
   >();
@@ -104,40 +86,19 @@ export default function AttendeeCreate() {
   const [progressGrade, setProgressGrade] = useState<progressGrade[] | []>([]);
 
   const paramBookId = Number(bookId) || selectedBook?.id!;
+
   const onChangeGrade = (gradeId: number) => {
     setProgressGrade([
       ...progressGrade,
       { gradeId: gradeId, startAt: getTodayYYYYMMDD() },
     ]);
   };
-  const { mutate: scheduleMutation } = useMutation({
-    mutationFn: async () =>
-      await updateAttendeeSchedule({
-        params: attendeeSchedules!,
-        attendanceBookId: paramBookId,
-        attendeeId,
-      }),
-    onSuccess: async () => {
-      await updateBookProgress({
-        attendanceBookId: paramBookId,
-        params: {
-          attendeeId: attendeeId,
-          progresses: progressGrade!,
-        },
-      });
-      await updateAttendeeVerify({
-        attendanceBookId: paramBookId,
-        params: {
-          attendeeId: attendeeId,
-        },
-      }).then((res) => {
-        if (res.status === 200) {
-          toast.success("학생 등록되었습니다.");
-          navigate(`/book/${bookId}/attendee${location.search}`);
-        }
-      });
-    },
-    onError: () => {},
+
+  const { mutate: scheduleMutation } = useScheduleUpdate({
+    paramBookId,
+    attendeeId,
+    attendeeSchedules: attendeeSchedules!,
+    progressGrade,
   });
 
   return (

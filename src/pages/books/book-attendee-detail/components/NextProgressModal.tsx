@@ -1,10 +1,7 @@
 import CommonModal from "@/components/CommonModal";
 import React, { useState } from "react";
-import NextProgressSelect from "./NextProgressSelect";
-import { updateProgressPromote } from "@/api v2/AttendeeApiClient";
-import { QueryClient, useMutation } from "@tanstack/react-query";
-import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
+import { useProgressPromote } from "../querys";
 
 interface Props {
   isOpen: boolean;
@@ -66,26 +63,13 @@ const NextProgressModal: React.FC<Props> = ({
     }));
   };
 
-  const queryClinet = new QueryClient();
-  const { mutate: progressMutation } = useMutation({
-    mutationFn: async () =>
-      await updateProgressPromote({
-        attendanceBookId: Number(bookId),
-        params: {
-          attendeeProgressId: attendeeProgressId,
-          completedAt: formData.completeAt.replaceAll(".", "-"),
-          startAt: formData.startAt.replaceAll(".", "-"),
-        },
-      }).then((res) => res.data),
-    onSuccess: () => {
-      toast.success("다음 과정이 저장되었습니다.");
-      queryClinet.invalidateQueries({
-        queryKey: ["attendee-detail", String(attendeeId)],
-      });
-      onClose();
-    },
+  const { mutate: progressMutation } = useProgressPromote({
+    bookId,
+    attendeeProgressId,
+    formData,
+    attendeeId: Number(attendeeId),
+    onClose,
   });
-
   return (
     <CommonModal
       isOpen={isOpen}

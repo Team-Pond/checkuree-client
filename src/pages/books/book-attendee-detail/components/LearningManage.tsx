@@ -1,9 +1,8 @@
-import { getAttendeeProgressLog } from "@/api v2/AttendeeApiClient";
 import { Progresses } from "@/api v2/AttendeeSchema";
-import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import NextProgressModal from "./NextProgressModal";
 import { Fragment, useState } from "react";
+import { useProgressLog } from "../querys";
 
 type IProps = {
   studentInfo: {
@@ -21,13 +20,9 @@ export default function LearningManage(props: IProps) {
   const { bookId, attendeeId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { data: progressLog } = useQuery({
-    queryKey: ["progressLog", bookId, attendeeId],
-    queryFn: async () =>
-      await getAttendeeProgressLog({
-        attendanceBookId: Number(bookId),
-        attendeeId: Number(attendeeId),
-      }).then((res) => res.data),
+  const { data: progressLog } = useProgressLog({
+    bookId: Number(bookId),
+    attendeeId: Number(attendeeId),
   });
   const [attendeeProgressId, setAttendeeProgressId] = useState<number>(0);
   return (

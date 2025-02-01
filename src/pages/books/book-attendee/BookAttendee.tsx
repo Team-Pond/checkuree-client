@@ -10,6 +10,7 @@ import { GenderType } from "@/api v2/AttendeeSchema";
 import MainContent from "./components/MainContent";
 import { BookContext } from "@/context/BookContext";
 import { useParams, useSearchParams } from "react-router-dom";
+import { useAttendeeList } from "./querys";
 
 const DaysMatch: Record<string, DaysType> = {
   월: "MONDAY",
@@ -47,24 +48,11 @@ export default function BookRoaster() {
   const onChangeGender = (selectGender: GenderType) => {
     setGender(gender === selectGender ? "" : selectGender);
   };
-  const { data: roaster } = useQuery({
-    queryKey: ["roaster", bookId, dayArrays, gender],
-    queryFn: async () => {
-      const response = await getAttendee({
-        attendanceBookId: Number(bookId) || selectedBook?.id!,
-        filter: {
-          age: {
-            min: 30,
-            max: 1,
-          },
-          gradeIds: [0],
-          scheduleDays: dayArrays,
-          gender: gender,
-          status: "ATTENDING",
-        },
-      });
-      if (response.status === 200) return response;
-    },
+
+  const { data: attendeeList } = useAttendeeList({
+    bookId: Number(bookId) || context?.selectedBook?.id!,
+    dayArrays,
+    gender,
   });
 
   const getGrades = (grades: { id: number; name: string }[]) => {
@@ -83,7 +71,7 @@ export default function BookRoaster() {
         onDrawerChange={onDrawerChange}
         onChangeSearch={onChangeSearch}
       />
-      <MainContent roaster={roaster!} getGrades={getGrades} />
+      <MainContent roaster={attendeeList!} getGrades={getGrades} />
       <BottomFilter
         openFilter={openFilter}
         onDrawerChange={onDrawerChange}
