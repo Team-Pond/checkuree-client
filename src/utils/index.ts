@@ -227,3 +227,11 @@ export const formatLocalTimeString = (time: string) => {
   if (parseInt(hour) === 0) hour = '12';
   return `${period} ${hour}:${minute}`;
 }
+
+
+/**
+ * yyyy-MM-dd 형식의 날짜 문자열을 받아서 일 수 차이를 반환합니다.
+ */
+export const getDateDifference = (date1: string, date2: string): number  => {
+  return dayjs(date1).diff(dayjs(date2), "day");
+}

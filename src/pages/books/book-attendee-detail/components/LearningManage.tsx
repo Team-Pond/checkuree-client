@@ -1,9 +1,10 @@
-import { getAttendeeProgressLog } from "@/api v2/AttendeeApiClient";
-import { Progresses } from "@/api v2/AttendeeSchema";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
-import NextProgressModal from "./NextProgressModal";
-import { Fragment, useState } from "react";
+import { getAttendeeProgressLog } from '@/api v2/AttendeeApiClient';
+import { Progresses } from '@/api v2/AttendeeSchema';
+import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
+import NextProgressModal from './NextProgressModal';
+import { Fragment, useState } from 'react';
+import { getDateDifference } from '../../../../utils';
 
 type IProps = {
   studentInfo: {
@@ -112,7 +113,7 @@ export default function LearningManage(props: IProps) {
                 {progress.endedAt.substring(5).replaceAll("-", ".")}
               </div>
               <div className="text-center">{progress.lessonCount}</div>
-              <div className="text-center">2주</div>
+              <div className="text-center">{Math.trunc(getDateDifference(progress.endedAt, progress.startedAt) / 7) + 1 + '주'}</div>
             </div>
           ))}
         </div>
