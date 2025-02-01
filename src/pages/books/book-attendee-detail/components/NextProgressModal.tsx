@@ -1,10 +1,10 @@
-import CommonModal from "@/components/CommonModal";
-import React, { useState } from "react";
-import NextProgressSelect from "./NextProgressSelect";
-import { updateProgressPromote } from "@/api v2/AttendeeApiClient";
-import { QueryClient, useMutation } from "@tanstack/react-query";
-import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import CommonModal from '@/components/CommonModal';
+import React, { useState } from 'react';
+import { updateProgressPromote } from '@/api v2/AttendeeApiClient';
+import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
+import { useParams } from 'react-router-dom';
+import { getBookCourse } from '../../../../api v2/AttendanceBookApiClient';
 
 interface Props {
   isOpen: boolean;
@@ -23,7 +23,23 @@ const NextProgressModal: React.FC<Props> = ({
   const [formData, setFormData] = useState({
     completeAt: "",
     startAt: "",
+    nextGradeId: "",
   });
+
+  const { data: bookCourses } = useQuery({
+    queryKey: ["book-courses", bookId],
+    queryFn: async () => {
+      const res = await getBookCourse(String(bookId));
+      if (res.status === 200) return res.data;
+    },
+  });
+
+  const totalBookGrades:any[] = []
+  bookCourses?.courses.forEach(course => {
+    totalBookGrades.push(...course.grades)
+  })
+
+
   const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let input = e.target.value.replace(/\D/g, "");
 
@@ -66,7 +82,17 @@ const NextProgressModal: React.FC<Props> = ({
     }));
   };
 
-  const queryClinet = new QueryClient();
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData((prev) => {
+      let newVar = {
+        ...prev,
+        nextGradeId: e.target.value,
+      };
+      return newVar;
+    });
+  };
+
+  const queryClient = new QueryClient();
   const { mutate: progressMutation } = useMutation({
     mutationFn: async () =>
       await updateProgressPromote({
@@ -75,11 +101,12 @@ const NextProgressModal: React.FC<Props> = ({
           attendeeProgressId: attendeeProgressId,
           completedAt: formData.completeAt.replaceAll(".", "-"),
           startAt: formData.startAt.replaceAll(".", "-"),
+          nextGradeId: !!formData.nextGradeId ? Number(formData.nextGradeId) : undefined, // "" 빈 문자열일 경우 보내지 않음
         },
       }).then((res) => res.data),
     onSuccess: () => {
       toast.success("다음 과정이 저장되었습니다.");
-      queryClinet.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ["attendee-detail", String(attendeeId)],
       });
       onClose();
@@ -100,6 +127,7 @@ const NextProgressModal: React.FC<Props> = ({
             <p className="text-text-danger">*</p>
           </div>
 
+          {/*여기에 드롭박스를 추가해줘*/}
           <input
             type="text"
             placeholder="YYYY.MM.DD"
@@ -110,7 +138,27 @@ const NextProgressModal: React.FC<Props> = ({
         </div>
         <div className="flex flex-col gap-2 w-full">
           <div className="flex gap-1 items-center">
-            <p className="font-bold text-m-medium">다음 과정 시작</p>
+            <p className="font-bold text-m-medium">다음 과정 선택</p>
+            <p className="text-text-danger">*</p>
+          </div>
+          <select
+            value={formData.nextGradeId}
+            onChange={handleSelectChange}
+            className="outline-none bg-white border border-[#E7E7E7] rounded-xl w-full h-12 pl-4 text-m-medium"
+          >
+            <option value="">
+              과정을 선택하세요
+            </option>
+            {(bookCourses?.courses.flatMap(course => course.grades) || []).map((grade) => (
+              <option key={grade.id} value={grade.id}>
+                {grade.title}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex flex-col gap-2 w-full">
+          <div className="flex gap-1 items-center">
+            <p className="font-bold text-m-medium">다음 과정 시작일</p>
             <p className="text-text-danger">*</p>
           </div>
           {/* <NextProgressSelect /> */}
