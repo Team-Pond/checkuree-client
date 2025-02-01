@@ -153,19 +153,27 @@ export default function StudentManage(props: IProps) {
             <div className="flex items-center justify-between text-s-semibold">
               <p className="text-text-tertiary w-12">클래스</p>
               <div className="flex flex-col text-text-primary text-xs">
-                <p className="break-keep text-left">
-                  {response
-                    ? response?.map((day, index) => {
-                        return <span key={index}>{day} &nbsp;</span>;
-                      })
-                    : ""}
-                </p>
+                {response
+                  ? response
+                    .reduce<string[][]>((acc, cur, index) => {
+                      if (index % 3 === 0) acc.push([]); // 3개 단위로 배열 생성
+                      acc[acc.length - 1].push(cur);
+                      return acc;
+                    }, [])
+                    .map((row, rowIndex) => (
+                      <p key={rowIndex} className="break-keep text-left">
+                        {row.map((day, index) => (
+                          <span key={index}>{day} &nbsp;</span>
+                        ))}
+                      </p>
+                    ))
+                  : ''}
               </div>
             </div>
           </div>
           <div className="w-full rounded-2xl bg-white p-4 flex flex-col gap-5">
             <p className="flex text-s-bold text-[#5d5d5d]">
-              <span>등록 정보</span>{" "}
+              <span>등록 정보</span>{' '}
               <img
                 src="/images/icons/ico-pencil.svg"
                 width={20}
@@ -186,13 +194,13 @@ export default function StudentManage(props: IProps) {
             </div>
             <div className="flex justify-between text-s-semibold">
               <p className="text-text-tertiary">학생 주소</p>
-              <p className="text-text-primary">{registerInfo.address_1}</p>
+              <p className="text-text-primary max-w-[250px] overflow-wrap break-word">{registerInfo.address_1}</p>
             </div>
             <div className="flex justify-between text-s-semibold">
               <p className="text-text-tertiary">가족 연락처</p>
               <p className="text-text-primary">
-                {associates?.phoneNumber}{" "}
                 {associates?.relation === "MOTHER" ? "(모)" : "(부)"}
+                {associates?.phoneNumber}{" "}
               </p>
             </div>
             <div className="flex justify-between text-s-semibold">
