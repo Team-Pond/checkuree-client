@@ -149,7 +149,7 @@ const NextProgressModal: React.FC<Props> = ({
             <option value="">
               과정을 선택하세요
             </option>
-            {totalBookGrades.map((grade) => (
+            {(bookCourses?.courses.flatMap(course => course.grades) || []).map((grade) => (
               <option key={grade.id} value={grade.id}>
                 {grade.title}
               </option>
