@@ -243,7 +243,7 @@ export type GetAttendeeProgressLogRequest = {
 };
 
 type ProgressLog = {
-  progress_log_id: number;
+  progressLogId: number;
   status: "IN_PROGRESS" | "COMPLETED" | "CANCELLED"; // 상태 값이 여러 개일 가능성을 고려
   startedAt: string; // ISO 형식의 날짜 문자열
   endedAt: string; // ISO 형식의 날짜 문자열
@@ -264,6 +264,7 @@ export type UpdateProgressPromoteRequest = {
   attendeeProgressId: number;
   completedAt: string;
   startAt: string;
+  nextGradeId?: number;
 };
 
 export type UpdateProgressPromoteResponse = {
