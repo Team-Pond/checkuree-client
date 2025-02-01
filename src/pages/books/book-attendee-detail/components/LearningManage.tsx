@@ -68,13 +68,13 @@ export default function LearningManage(props: IProps) {
             <Fragment key={progress.id}>
               <div className="flex items-center justify-between text-s-semibold">
                 <p className="text-text-tertiary">커리큘럼 1</p>
-                <p className="text-text-primary">{progress.courseTitle}</p>
+                <p className="text-text-primary">{progress.gradeTitle}</p>
                 <button
                   className="max-w-[109px] w-full h-8 rounded-lg bg-[#f6f6f6] text-s-medium text-text-secondary"
                   type="button"
                   onClick={() => {
                     setIsModalOpen(true);
-                    setAttendeeProgressId(Number(progress.courseId));
+                    setAttendeeProgressId(Number(progress.id));
                   }}
                 >
                   다음 과정으로
@@ -103,7 +103,7 @@ export default function LearningManage(props: IProps) {
         <div className="flex flex-col gap-3">
           {progressLog?.map((progress) => (
             <div
-              key={progress.progress_log_id}
+              key={progress.progressLogId}
               className="grid grid-cols-4 gap-4 text-[11px] font-semibold"
             >
               <div className="text-center truncate">{progress.gradeTitle}</div>
