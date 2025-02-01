@@ -33,7 +33,6 @@ const CommonTabs = () => {
     (fam) => fam.relationType === "MOTHER" || fam.relationType === "FATHER"
   );
 
-  console.log(attendeeDetail);
   return (
     <>
       <div className="w-full h-[64px] flex items-center px-4 py-5 bg-white">
