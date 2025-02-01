@@ -1,4 +1,4 @@
-// src/queryKeys/courseQueryKeys.ts
+import { createQueryKeys } from "@lukemorales/query-key-factory";
 
 export const courseQueryKeys = {
   subjects: ["subjects"] as const,
