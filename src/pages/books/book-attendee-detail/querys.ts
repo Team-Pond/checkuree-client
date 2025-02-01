@@ -175,23 +175,28 @@ export const useProgressPromote = ({
   formData: {
     completeAt: string;
     startAt: string;
+    nextGradeId: string;
   };
   attendeeId: number;
   onClose: () => void;
 }) => {
+  const queryClient = new QueryClient();
   return useMutation({
     mutationFn: async () =>
       await updateProgressPromote({
-        attendanceBookId: bookId,
+        attendanceBookId: Number(bookId),
         params: {
           attendeeProgressId: attendeeProgressId,
           completedAt: formData.completeAt.replaceAll(".", "-"),
           startAt: formData.startAt.replaceAll(".", "-"),
+          nextGradeId: !!formData.nextGradeId
+            ? Number(formData.nextGradeId)
+            : undefined, // "" 빈 문자열일 경우 보내지 않음
         },
       }).then((res) => res.data),
     onSuccess: () => {
       toast.success("다음 과정이 저장되었습니다.");
-      queryClinet.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ["attendee-detail", String(attendeeId)],
       });
       onClose();
