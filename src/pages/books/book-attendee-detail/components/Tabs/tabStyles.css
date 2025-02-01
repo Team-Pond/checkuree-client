@@ -41,7 +41,7 @@ fieldset {
 }
 .TabsTrigger[data-state="active"] {
   color: var(--violet-11);
-  box-shadow: inset 0 -1px 0 0 currentColor, 0 1px 0 0 currentColor;
+  border-bottom: 1px solid #59996b;
 }
 
 .TabsContent {
