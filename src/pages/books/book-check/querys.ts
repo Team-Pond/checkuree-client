@@ -82,10 +82,12 @@ export const useRecordCreate = ({
       attendeeId,
       scheduleId,
       status,
+      attendTime,
     }: {
       attendeeId: number;
       scheduleId?: number;
       status: STATUS;
+      attendTime?: string;
     }) =>
       await createRecord({
         params: {
@@ -93,7 +95,7 @@ export const useRecordCreate = ({
           attendeeId: attendeeId,
           scheduleId: scheduleId,
           attendDate: currentDate,
-          attendTime: `${getCurrentTimeParts()
+          attendTime: attendTime ?? `${getCurrentTimeParts()
             .hour.toString()
             .padStart(2, "0")}:${getCurrentTimeParts()
             .minute.toString()
