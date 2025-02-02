@@ -231,7 +231,7 @@ export const searchAttendee = async (params: SearchAttendeeRequest) => {
   const { attendanceBookId, name } = params;
   const response = await ApiClient.request({
     method: 'GET',
-    url: `/book/${attendanceBookId}/attendee/search?name=${name}&size=100`,
+    url: `/book/${attendanceBookId}/attendee/search?searchName=${name}&size=100`,
   });
 
   return response.data;
