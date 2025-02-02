@@ -69,7 +69,7 @@ export type CreateRecordResponse =
 export type CreateRecordRequest = {
   attendanceBookId: number;
   attendeeId: number;
-  scheduleId: number;
+  scheduleId?: number;
   attendDate: string; // "YYYY-MM-DD" 형태의 문자열로 전송
   attendTime: string;
   status: STATUS;

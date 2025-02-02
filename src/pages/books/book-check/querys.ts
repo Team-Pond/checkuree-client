@@ -72,11 +72,9 @@ export const useRecordAllUpdate = ({
 export const useRecordCreate = ({
   bookId,
   currentDate,
-  attendTime
 }: {
   bookId: number;
   currentDate: string;
-  attendTime?:string;
 }) => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -86,7 +84,7 @@ export const useRecordCreate = ({
       status,
     }: {
       attendeeId: number;
-      scheduleId: number;
+      scheduleId?: number;
       status: STATUS;
     }) =>
       await createRecord({
@@ -95,7 +93,7 @@ export const useRecordCreate = ({
           attendeeId: attendeeId,
           scheduleId: scheduleId,
           attendDate: currentDate,
-          attendTime: attendTime ?? `${getCurrentTimeParts()
+          attendTime: `${getCurrentTimeParts()
             .hour.toString()
             .padStart(2, "0")}:${getCurrentTimeParts()
             .minute.toString()
