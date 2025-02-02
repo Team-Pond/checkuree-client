@@ -18,6 +18,7 @@ import {
 } from "@/api v2/AttendeeSchema";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { attendeeKeys } from "@/queryKeys";
 
 // 일정(요일, 시간)에 따른 수강생 데이터를 가져오는 커스텀 훅
 export const useScheduleAttendee = (
@@ -44,7 +45,8 @@ export const useScheduleAttendee = (
 // 시간표 데이터를 가져오는 커스텀 훅
 export const useScheduleTable = (attendanceBookId: number) => {
   return useQuery({
-    queryKey: ["table-schedule", attendanceBookId],
+    // queryKey: ["table-schedule", attendanceBookId],
+    queryKey: attendeeKeys.schedule(attendanceBookId).queryKey,
     queryFn: async () => {
       const res = await getBookScheduleTable({ attendanceBookId });
       if (res.status === 200) return res.data;
@@ -57,7 +59,8 @@ export const useScheduleTable = (attendanceBookId: number) => {
 export const useBookCourses = (id: number, enabled: boolean) => {
   return useQuery({
     enabled,
-    queryKey: ["book-courses", id],
+    // ["book-courses", id],
+    queryKey: attendeeKeys.courses(id).queryKey,
     queryFn: async () => {
       const res = await getBookCourse(String(id));
       if (res.status === 200) return res.data;
