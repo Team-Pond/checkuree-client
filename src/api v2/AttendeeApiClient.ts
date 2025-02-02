@@ -25,7 +25,7 @@ import {
   UpdateProgressPromoteRequest,
   UpdateProgressPromoteResponse,
   UpdateAttendeeDetailRequest,
-  UpdateAttendeeDetailResponse, SearchAttendeeRequest,
+  UpdateAttendeeDetailResponse, SearchAttendeeRequest, SearchAttendeeResponse, SearchAttendeeDataType,
 } from './AttendeeSchema';
 
 export const createAttendee = async ({
@@ -227,7 +227,7 @@ export const updateAttendeeDetail = async ({
 };
 
 // 학생 이름 검색 API (
-export const searchAttendee = async (params: SearchAttendeeRequest) => {
+export const searchAttendee = async (params: SearchAttendeeRequest):Promise<SearchAttendeeResponse> => {
   const { attendanceBookId, name } = params;
   const response = await ApiClient.request({
     method: 'GET',
