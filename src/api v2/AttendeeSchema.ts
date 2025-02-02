@@ -237,6 +237,21 @@ export type GetAttendeeDetailResponse = {
   };
 } & ErrorResponse;
 
+export type SearchAttendeeRequest = {
+  attendanceBookId: number;
+  name: string;
+}
+
+export type SearcgAttendeeResponse = {
+  status: 200;
+  data: {
+    id: number;
+    name: string;
+    gender: GenderType;
+    age: number;
+  }[]
+} & ErrorResponse;
+
 export type GetAttendeeProgressLogRequest = {
   attendanceBookId: number;
   attendeeId: number;
@@ -255,7 +270,7 @@ type ProgressLog = {
   ageAtStart: number;
 };
 
-export type GetAttendeeProgressLogReseponse = {
+export type GetAttendeeProgressLogResponse = {
   status: 200;
   data: ProgressLog[];
 } & ErrorResponse;

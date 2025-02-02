@@ -21,12 +21,12 @@ import {
   GetAttendeeDetailRequest,
   GetAttendeeDetailResponse,
   GetAttendeeProgressLogRequest,
-  GetAttendeeProgressLogReseponse,
+  GetAttendeeProgressLogResponse,
   UpdateProgressPromoteRequest,
   UpdateProgressPromoteResponse,
   UpdateAttendeeDetailRequest,
-  UpdateAttendeeDetailResponse,
-} from "./AttendeeSchema";
+  UpdateAttendeeDetailResponse, SearchAttendeeRequest,
+} from './AttendeeSchema';
 
 export const createAttendee = async ({
   attendanceBookId,
@@ -179,7 +179,7 @@ export const getAttendeeDetail = async (
 // 학생 진도
 export const getAttendeeProgressLog = async (
   params: GetAttendeeProgressLogRequest
-): Promise<GetAttendeeProgressLogReseponse> => {
+): Promise<GetAttendeeProgressLogResponse> => {
   const { attendanceBookId, attendeeId } = params;
 
   const response = await ApiClient.request({
@@ -221,6 +221,17 @@ export const updateAttendeeDetail = async ({
     method: "PATCH",
     url: `/book/${attendanceBookId}/attendee/${attendeeId}`,
     data: params,
+  });
+
+  return response.data;
+};
+
+// 학생 검색 API
+export const searchAttendee = async (params: SearchAttendeeRequest) => {
+  const { attendanceBookId, name } = params;
+  const response = await ApiClient.request({
+    method: 'GET',
+    url: `/book/${attendanceBookId}/attendee/search?name=${name}&size=100`,
   });
 
   return response.data;
