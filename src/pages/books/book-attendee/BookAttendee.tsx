@@ -1,16 +1,14 @@
-import { useContext, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getAttendee } from "@/api v2/AttendeeApiClient";
+import { useContext, useState } from 'react';
 
-import { DaysType } from "@/api v2/AttendanceBookSchema";
-import Header from "./components/Header";
-import Bottom from "../components/Bottom";
-import BottomFilter from "./components/BottomFilter";
-import { GenderType } from "@/api v2/AttendeeSchema";
-import MainContent from "./components/MainContent";
-import { BookContext } from "@/context/BookContext";
-import { useParams, useSearchParams } from "react-router-dom";
-import { useAttendeeList } from "./querys";
+import { DaysType } from '@/api v2/AttendanceBookSchema';
+import Header from './components/Header';
+import Bottom from '../components/Bottom';
+import BottomFilter from './components/BottomFilter';
+import { GenderType } from '@/api v2/AttendeeSchema';
+import MainContent from './components/MainContent';
+import { BookContext } from '@/context/BookContext';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { useAttendeeList } from './querys';
 
 const DaysMatch: Record<string, DaysType> = {
   월: "MONDAY",
