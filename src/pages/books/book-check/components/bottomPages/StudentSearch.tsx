@@ -6,10 +6,11 @@ import { GenderType } from '../../../../../api v2/AttendeeSchema';
 interface Props {
   attendanceBookId: number;
   onSelectStudent: (student: { id: number; name: string }) => void;
+  search: string;
+  setSearch: (search: string) => void;
 }
 
-export const StudentSearchView = ({ attendanceBookId, onSelectStudent }: Props) => {
-  const [search, setSearch] = useState("");
+export const StudentSearchView = ({ attendanceBookId, onSelectStudent, search, setSearch }: Props) => {
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
   // 디바운싱 적용
