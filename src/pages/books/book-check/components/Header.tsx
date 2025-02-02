@@ -6,6 +6,7 @@ import { updateRecordAll } from "@/api v2/RecordApiClient";
 import toast from "react-hot-toast";
 import { updateBookStatus } from "@/api v2/AttendanceBookApiClient";
 import { BookStatus } from "@/api v2/AttendanceBookSchema";
+import { Dispatch, SetStateAction } from 'react';
 
 type HeaderProps = {
   title: string;
@@ -16,6 +17,7 @@ type HeaderProps = {
   currentDate: Dayjs;
   checkedScheduleCount: number;
   totalScheduleCount: number;
+  setOpenFilter: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function Header(props: HeaderProps) {
@@ -28,6 +30,7 @@ export default function Header(props: HeaderProps) {
     formattedDate,
     checkedScheduleCount,
     totalScheduleCount,
+    setOpenFilter
   } = props;
 
   const navigate = useNavigate();
@@ -95,7 +98,9 @@ export default function Header(props: HeaderProps) {
     {
       src: "/images/icons/ico-user-add.svg",
       name: "인원 추가",
-      onClick: () => {},
+      onClick: () => {
+        setOpenFilter(true);
+      },
     },
     {
       src: "/images/icons/ico-check.svg",

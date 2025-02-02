@@ -9,6 +9,7 @@ import { getScheduleAttendee } from "@/api v2/ScheduleApiClient";
 import { ScheduleDataType } from "@/api v2/ScheduleSchema";
 import dayjs from "dayjs";
 import Bottom from "../components/Bottom";
+import { BottomAddRecord } from './components/BottomAddRecord';
 
 export default function BookCheck() {
   const context = useContext(BookContext);
@@ -20,8 +21,13 @@ export default function BookCheck() {
   const [currentDate, setCurrentDate] = useState(dayjs()); // dayjs로 초기화
   const [checkedScheduleCount, setCheckedScheduleCount] = useState<number>(0);
   const [totalScheduleCount, setTotalScheduleCount] = useState<number>(0);
+  const [openFilter, setOpenFilter] = useState<boolean>(false);
 
   const formattedDate = currentDate.format("YYYY-MM-DD"); // 데이터 값
+
+  const onDrawerChange = () => {
+    setOpenFilter(!openFilter);
+  };
 
   const handlePreviousDay = () => {
     setCurrentDate((prev) => prev.subtract(1, "day"));
@@ -79,6 +85,7 @@ export default function BookCheck() {
         formattedDate={formattedDate}
         checkedScheduleCount={checkedScheduleCount}
         totalScheduleCount={totalScheduleCount}
+        setOpenFilter={setOpenFilter}
       />
       <MainContents
         bookSchedules={bookSchedules?.data as ScheduleDataType}
@@ -87,6 +94,7 @@ export default function BookCheck() {
         checkedScheduleCount={checkedScheduleCount}
         setCheckedCount={setCheckedScheduleCount}
       />
+      <BottomAddRecord openFilter={openFilter} onDrawerChange={onDrawerChange}/>
       <div className="flex justify-between px-[44px] items-center w-full h-[92px] bg-bg-secondary" />
       <Bottom />
     </section>
