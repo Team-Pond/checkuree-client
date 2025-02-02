@@ -6,6 +6,9 @@ import { GenderType } from '../../../../api v2/AttendeeSchema';
 import { BookContext } from '@/context/BookContext';
 import dayjs from 'dayjs';
 import { twMerge } from 'tailwind-merge';
+import { useRecordCreate } from '../querys';
+import { useParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 type IProps = {
   openFilter: boolean;
@@ -16,6 +19,7 @@ type IProps = {
 export const BottomAddRecord = (props:IProps) => {
   const context = useContext(BookContext);
 
+  const { bookId } = useParams();
   const { selectedBook } = context!;
 
   const {openFilter, onDrawerChange, attendanceBookId} = props;
@@ -32,6 +36,11 @@ export const BottomAddRecord = (props:IProps) => {
     setSelectedStudent(null);
     setSelectedTime('');
   }
+
+  const { mutate: recordMutation } = useRecordCreate({
+    bookId: Number(bookId!),
+    currentDate : dayjs().format('YYYY-MM-DD'),
+  });
 
   // 수업 시간 슬롯 생성
   const slots = [];
@@ -54,7 +63,7 @@ export const BottomAddRecord = (props:IProps) => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(search);
-    }, 300); // 300ms 디바운싱 적용
+    }, 500); // 300ms 디바운싱 적용
 
     return () => {
       clearTimeout(handler);
@@ -194,7 +203,23 @@ export const BottomAddRecord = (props:IProps) => {
               </button>
               <button
                 className="w-full h-[54px] bg-bg-tertiary text-[#f1f8f3] rounded-2xl text-l-semibold"
-                onClick={onDrawerChange}
+                onClick={async () => {
+                  try {
+                    recordMutation({
+                      attendeeId: selectedStudent.id,
+                      status: 'PENDING',
+                      attendTime: selectedTime,
+                    })
+                    toast.success(`${selectedStudent.name} 학생의 스케쥴이 \n${selectedTime}에 추가되었습니다.`);
+                    setSearch('')
+                    unsetSelectedStudent();
+                    onDrawerChange();
+                  } catch (e) {
+                    toast.error('출석 추가에 실패했습니다.');
+                    console.error(e);
+                  }
+                }
+                }
               >
                 추가하기
               </button>
