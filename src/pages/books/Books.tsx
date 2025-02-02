@@ -13,8 +13,8 @@ export default function Books() {
   const { setSelectedBook } = context!;
 
   const handleNavigation = (id: string, title: string) => {
-    navigate(`/book/${id}?bookName=${title}`);
     setSelectedBook({ title, id: Number(id) });
+    navigate(`/book/${id}?bookName=${title}`);
   };
 
   return (
