@@ -79,7 +79,11 @@ export default function BookCheck() {
         checkedScheduleCount={checkedScheduleCount}
         setCheckedCount={setCheckedScheduleCount}
       />
-      <BottomAddRecord openFilter={openFilter} onDrawerChange={onDrawerChange} attendanceBookId={Number(bookId)}/>
+      <BottomAddRecord
+        openFilter={openFilter}
+        onDrawerChange={onDrawerChange}
+        attendanceBookId={Number(bookId)}
+        currentDate={currentDate.format('YYYY-MM-DD')} />
       <div className="flex justify-between px-[44px] items-center w-full h-[92px] bg-bg-secondary" />
       {!openFilter && (
         <>

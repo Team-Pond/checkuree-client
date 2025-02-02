@@ -14,6 +14,7 @@ type IProps = {
   openFilter: boolean;
   onDrawerChange: () => void;
   attendanceBookId: number;
+  currentDate: string;
 }
 
 export const BottomAddRecord = (props:IProps) => {
@@ -39,7 +40,7 @@ export const BottomAddRecord = (props:IProps) => {
 
   const { mutate: recordMutation } = useRecordCreate({
     bookId: Number(bookId!),
-    currentDate : dayjs().format('YYYY-MM-DD'),
+    currentDate: props.currentDate,
   });
 
   // 수업 시간 슬롯 생성
@@ -63,7 +64,7 @@ export const BottomAddRecord = (props:IProps) => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(search);
-    }, 500); // 300ms 디바운싱 적용
+    }, 300); // 300ms 디바운싱 적용
 
     return () => {
       clearTimeout(handler);
