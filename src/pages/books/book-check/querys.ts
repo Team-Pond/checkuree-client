@@ -6,6 +6,7 @@ import {
 } from "@/api v2/RecordApiClient";
 import { STATUS } from "@/api v2/RecordSchema";
 import { getScheduleAttendee } from "@/api v2/ScheduleApiClient";
+import { bookKeys } from "@/queryKeys";
 import { getCurrentTimeParts } from "@/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -18,7 +19,7 @@ export const useBookSchedules = ({
   formattedDate: string;
 }) => {
   return useQuery({
-    queryKey: ["book-schedules", bookId, formattedDate],
+    queryKey: bookKeys.schedules(bookId, formattedDate).queryKey,
     queryFn: async () =>
       await getScheduleAttendee({
         attendanceBookId: Number(bookId!),
@@ -55,7 +56,7 @@ export const useRecordAllUpdate = ({
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["book-schedules"],
+        queryKey: bookKeys.schedules._def,
       });
       toast.success("전체 출석 완료");
     },
@@ -99,7 +100,7 @@ export const useRecordCreate = ({
       }),
     onSuccess: (res) => {
       queryClient.invalidateQueries({
-        queryKey: ["book-schedules"],
+        queryKey: bookKeys.schedules._def,
       });
     },
     onError: () => {},
@@ -109,7 +110,6 @@ export const useRecordCreate = ({
 export const useStatusUpdate = ({ bookId }: { bookId: number }) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: [""],
     mutationFn: async ({
       recordId,
       scheduleId,
@@ -129,7 +129,7 @@ export const useStatusUpdate = ({ bookId }: { bookId: number }) => {
       }),
     onSuccess: (res) => {
       queryClient.invalidateQueries({
-        queryKey: ["book-schedules"],
+        queryKey: bookKeys.schedules._def,
       });
     },
     onError: () => {},
@@ -139,7 +139,6 @@ export const useStatusUpdate = ({ bookId }: { bookId: number }) => {
 export const useLessonUpdate = ({ bookId }: { bookId: number }) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: [""],
     mutationFn: async ({
       recordId,
       isTaught,
@@ -156,7 +155,7 @@ export const useLessonUpdate = ({ bookId }: { bookId: number }) => {
       }),
     onSuccess: (res) => {
       queryClient.invalidateQueries({
-        queryKey: ["book-schedules"],
+        queryKey: bookKeys.schedules._def,
       });
     },
     onError: () => {},

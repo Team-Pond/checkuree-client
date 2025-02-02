@@ -9,7 +9,6 @@ import { SignIn } from "@/api v2/AuthApiClient";
 export const useAuthLogin = () => {
   const navigate = useNavigate();
   return useMutation({
-    mutationKey: ["user"],
     mutationFn: async (params: LoginDataType) => await SignIn(params),
     onSuccess: (response) => {
       const accessToken = response.data.accessToken;

@@ -1,9 +1,10 @@
 import { getMeBooks } from "@/api v2/AttendanceBookApiClient";
+import { bookKeys } from "@/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 
 export const useBookList = () => {
   return useQuery({
-    queryKey: ["books"],
+    queryKey: bookKeys.list._def,
     queryFn: async () => {
       const response = await getMeBooks();
       if (response.status === 200) {
