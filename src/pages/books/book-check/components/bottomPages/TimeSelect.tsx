@@ -34,7 +34,7 @@ export const TimeSelectionView = ({ student, onBack, onConfirm, setSelectedTime,
 
   return (
     <div className="flex flex-col gap-4 max-h-[300px] overflow-y-auto pt-0">
-      <p className="text-m-bold text-text-primary text-left mt-0">수업 시간 선택 - {student.name}</p>
+      <p className="text-m-bold text-text-primary text-left mt-0">수업 시간 선택</p>
       <div className="grid grid-cols-4 gap-2">
         {slots.map((time) => (
           <button

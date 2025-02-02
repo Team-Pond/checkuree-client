@@ -42,10 +42,16 @@ export const BottomAddRecord = (props:IProps) => {
   }
 
   return (
-    <BottomDrawer isOpen={openFilter} onClose={() => { closeDrawer() }}>
-      <div className="flex flex-col gap-4 p-1 min-h-[300px] max-h-[80vh] overflow-y-auto">
+    <BottomDrawer isOpen={openFilter} onClose={() => {
+      closeDrawer()
+    }}>
+      <div className="flex flex-col gap-0 p-1 min-h-[300px] max-h-[80vh] overflow-y-auto">
         {!selectedStudent ? (
-          <StudentSearchView attendanceBookId={attendanceBookId} onSelectStudent={setSelectedStudent} search={search} setSearch={setSearch}/>
+          <StudentSearchView
+            attendanceBookId={attendanceBookId}
+            onSelectStudent={setSelectedStudent}
+            search={search}
+            setSearch={setSearch} />
         ) : (
           <TimeSelectionView
             student={selectedStudent}
