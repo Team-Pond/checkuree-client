@@ -75,12 +75,8 @@ export type GetMyBooksDataType = {
   id: number;
   title: string;
   description?: string;
-  availableFrom?: {
-    hhmm: string;
-  };
-  availableTo?: {
-    hhmm: string;
-  };
+  availableFrom: string;
+  availableTo: string;
   availableDays: DaysType[];
   imageUrl: string;
   attendeeCount:number;

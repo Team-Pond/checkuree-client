@@ -1,8 +1,9 @@
-import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { formatTimeRange, getDayGroupFromInput } from "@/utils";
-import { BookContext } from "@/context/BookContext";
-import { useBookList } from "./querys";
+import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { formatTimeRange, getDayGroupFromInput } from '@/utils';
+import { BookContext } from '@/context/BookContext';
+import { useBookList } from './querys';
+import { DayOfWeek } from '../../utils';
 
 export default function Books() {
   const navigate = useNavigate();
@@ -12,9 +13,23 @@ export default function Books() {
 
   const { setSelectedBook } = context!;
 
-  const handleNavigation = (id: string, title: string) => {
-    setSelectedBook({ title, id: Number(id) });
-    navigate(`/book/${id}?bookName=${title}`);
+  const handleNavigation = (args:{
+    id:number,
+    title:string,
+    attendeeCount:number,
+    availableDays:DayOfWeek[],
+    availableFrom:string,
+    availableTo:string
+  }) => {
+    setSelectedBook({
+      id: args.id,
+      title:args.title,
+      attendeeCount:args.attendeeCount,
+      availableDays:args.availableDays,
+      availableFrom:args.availableFrom,
+      availableTo:args.availableTo,
+    });
+    navigate(`/book/${args.id}?bookName=${args.title}`);
   };
 
   return (
@@ -40,9 +55,16 @@ export default function Books() {
               <div
                 key={attendance.id}
                 className="max-w-[162px] w-full"
-                onClick={() =>
-                  handleNavigation(String(attendance.id), attendance.title)
-                }
+                onClick={() => {
+                  handleNavigation({
+                    id:attendance.id,
+                    title:attendance.title,
+                    attendeeCount:attendance.attendeeCount,
+                    availableDays:attendance.availableDays,
+                    availableFrom:attendance.availableFrom,
+                    availableTo:attendance.availableTo
+                  });
+                }}
               >
                 <img
                   src={
