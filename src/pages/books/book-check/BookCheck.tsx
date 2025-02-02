@@ -4,11 +4,10 @@ import MainContents from "./components/MainContent";
 import { useContext, useEffect, useState } from "react";
 import { BookContext } from "@/context/BookContext";
 import { useParams, useSearchParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getScheduleAttendee } from "@/api v2/ScheduleApiClient";
 import { ScheduleDataType } from "@/api v2/ScheduleSchema";
 import dayjs from "dayjs";
 import Bottom from "../components/Bottom";
+import { useBookSchedules } from "./querys";
 import { BottomAddRecord } from './components/BottomAddRecord';
 
 export default function BookCheck() {
@@ -37,23 +36,9 @@ export default function BookCheck() {
     setCurrentDate((prev) => prev.add(1, "day"));
   };
 
-  const { data: bookSchedules } = useQuery({
-    queryKey: ["book-schedules", bookId, formattedDate],
-    queryFn: async () =>
-      await getScheduleAttendee({
-        attendanceBookId: Number(bookId!),
-        params: {
-          date: formattedDate,
-          pageable: {
-            page: 0,
-            size: 100,
-            sort: ["asc"],
-          },
-        },
-      }),
-    refetchInterval: 5000,
-    refetchIntervalInBackground: true,
-    enabled: !!bookId && !!formattedDate,
+  const { data: bookSchedules } = useBookSchedules({
+    bookId: Number(bookId),
+    formattedDate: formattedDate,
   });
 
   useEffect(() => {

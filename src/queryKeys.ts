@@ -1,8 +1,15 @@
-// src/queryKeys/courseQueryKeys.ts
+// src/queryKeys.ts
+import { createQueryKeys } from "@lukemorales/query-key-factory";
 
-export const courseQueryKeys = {
-  subjects: ["subjects"] as const,
-
-  subjectItems: (subjectTitle?: string) =>
-    ["subject-items", subjectTitle] as const,
-};
+// 수강생 데이터를 위한 키
+export const attendeeKeys = createQueryKeys("attendee", {
+  detail: () => ["table-attendee"] as const,
+  schedule: (attendanceBookId: number) => ({
+    queryKey: [attendanceBookId],
+  }),
+  courses: (bookId: number) => ({
+    queryKey: [bookId],
+  }),
+  // byDayAndTime: (dayOfWeek: string, hhmm: string) z=>
+  //   [...scheduleAttendeeKeys.all(), dayOfWeek, hhmm] as const,
+});

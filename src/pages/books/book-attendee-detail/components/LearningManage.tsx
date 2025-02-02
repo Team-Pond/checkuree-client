@@ -1,10 +1,8 @@
-import { getAttendeeProgressLog } from '@/api v2/AttendeeApiClient';
-import { Progresses } from '@/api v2/AttendeeSchema';
-import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
-import NextProgressModal from './NextProgressModal';
-import { Fragment, useState } from 'react';
-import { getDateDifference } from '../../../../utils';
+import { Progresses } from "@/api v2/AttendeeSchema";
+import { useParams } from "react-router-dom";
+import { Fragment, useState } from "react";
+import NextProgressModal from "./NextProgressModal";
+import { useProgressLog } from "../querys";
 
 type IProps = {
   studentInfo: {
@@ -18,17 +16,11 @@ type IProps = {
 
 export default function LearningManage(props: IProps) {
   const { progresses, studentInfo } = props;
-
   const { bookId, attendeeId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  const { data: progressLog } = useQuery({
-    queryKey: ["progressLog", bookId, attendeeId],
-    queryFn: async () =>
-      await getAttendeeProgressLog({
-        attendanceBookId: Number(bookId),
-        attendeeId: Number(attendeeId),
-      }).then((res) => res.data),
+  const { data: progressLog } = useProgressLog({
+    bookId: Number(bookId),
+    attendeeId: Number(attendeeId),
   });
   const [attendeeProgressId, setAttendeeProgressId] = useState<number>(0);
   return (
@@ -113,7 +105,7 @@ export default function LearningManage(props: IProps) {
                 {progress.endedAt.substring(5).replaceAll("-", ".")}
               </div>
               <div className="text-center">{progress.lessonCount}</div>
-              <div className="text-center">{Math.trunc(getDateDifference(progress.endedAt, progress.startedAt) / 7) + 1 + '주'}</div>
+              <div className="text-center">2주</div>
             </div>
           ))}
         </div>
