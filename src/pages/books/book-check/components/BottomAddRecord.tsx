@@ -6,10 +6,11 @@ import { searchAttendee } from '../../../../api v2/AttendeeApiClient';
 type IProps = {
   openFilter: boolean;
   onDrawerChange: () => void;
+  attendanceBookId: number;
 }
 
 export const BottomAddRecord = (props:IProps) => {
-  const {openFilter, onDrawerChange} = props;
+  const {openFilter, onDrawerChange, attendanceBookId} = props;
 
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -31,14 +32,15 @@ export const BottomAddRecord = (props:IProps) => {
     queryFn: async () => {
       if (debouncedSearch.length > 0) {
         return await searchAttendee({
-          attendanceBookId: 1, // 실제 bookId를 넘겨야 함
+          attendanceBookId, // 실제 bookId를 넘겨야 함
           name: debouncedSearch,
-        });
+        }).then((res) => res.data);
       }
       return [];
     },
     enabled: debouncedSearch.length > 0, // 1글자 이상 입력되었을 때만 실행
   });
+  console.log(searchResults)
 
 
 
@@ -72,8 +74,8 @@ export const BottomAddRecord = (props:IProps) => {
 
             {/* 검색 결과 리스트 */}
             <div className="flex flex-col gap-2 max-h-[300px] overflow-y-auto">
-              {searchResults?.length > 0 ? (
-                searchResults.map((student: { id: number; name: string }) => (
+              {searchResults?.content?.length > 0 ? (
+                searchResults.content.map((student: { id: number; name: string }) => (
                   <div key={student.id} className="p-2 border-b border-gray-200">
                     {student.name}
                   </div>
