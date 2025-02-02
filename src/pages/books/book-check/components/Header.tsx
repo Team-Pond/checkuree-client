@@ -3,7 +3,7 @@ import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { updateBookStatus } from "@/api v2/AttendanceBookApiClient";
 import { BookStatus } from "@/api v2/AttendanceBookSchema";
-import { useRecordAllUpdate } from "../querys";
+import { useRecordAllUpdate } from "../queries";
 
 type HeaderProps = {
   title: string;

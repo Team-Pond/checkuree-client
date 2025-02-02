@@ -5,7 +5,7 @@ import { scheduleCheckformatTime } from "@/utils";
 import { STATUS } from "@/api v2/RecordSchema";
 import { ScheduleData } from "../../../../api v2/ScheduleSchema";
 import { formatLocalTimeString } from "../../../../utils";
-import { useLessonUpdate, useRecordCreate, useStatusUpdate } from "../querys";
+import { useLessonUpdate, useRecordCreate, useStatusUpdate } from "../queries";
 
 type IProps = {
   bookSchedules: ScheduleDataType;

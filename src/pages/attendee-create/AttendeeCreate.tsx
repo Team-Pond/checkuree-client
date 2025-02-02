@@ -10,7 +10,7 @@ import {
   UpdateAttendeeScheduleRequest,
 } from "@/api v2/AttendeeSchema";
 import { getTodayYYYYMMDD } from "@/utils";
-import { useAttendeeCreate, useScheduleUpdate } from "./querys";
+import { useAttendeeCreate, useScheduleUpdate } from "./queries";
 
 interface Step1FormState {
   name: string;

@@ -7,7 +7,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { ScheduleDataType } from "@/api v2/ScheduleSchema";
 import dayjs from "dayjs";
 import Bottom from "../components/Bottom";
-import { useBookSchedules } from "./querys";
+import { useBookSchedules } from "./queries";
 
 export default function BookCheck() {
   const context = useContext(BookContext);
