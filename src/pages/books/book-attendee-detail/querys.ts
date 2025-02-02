@@ -11,6 +11,8 @@ import {
 } from "@/api v2/AttendeeApiClient";
 import { GenderType } from "@/api v2/AttendeeSchema";
 import { getRecordMonthAttendee } from "@/api v2/RecordApiClient";
+import { attendeeKeys } from "@/queryKeys";
+
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
@@ -75,7 +77,7 @@ export const useBookCourses = ({
 }) => {
   return useQuery({
     enabled: openDrawer,
-    queryKey: ["book-courses", bookId],
+    queryKey: attendeeKeys.courses(Number(bookId)).queryKey,
     queryFn: async () => {
       const res = await getBookCourse(bookId);
       if (res.status === 200) return res.data;
