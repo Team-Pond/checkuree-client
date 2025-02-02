@@ -81,7 +81,12 @@ export default function BookCheck() {
       />
       <BottomAddRecord openFilter={openFilter} onDrawerChange={onDrawerChange}/>
       <div className="flex justify-between px-[44px] items-center w-full h-[92px] bg-bg-secondary" />
-      <Bottom />
+      {!openFilter && (
+        <>
+          <div className="flex justify-between px-[44px] items-center w-full h-[92px]" />
+          <Bottom />
+        </>
+      )}
     </section>
   );
 }

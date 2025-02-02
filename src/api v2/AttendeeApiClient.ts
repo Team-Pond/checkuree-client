@@ -226,7 +226,7 @@ export const updateAttendeeDetail = async ({
   return response.data;
 };
 
-// 학생 검색 API
+// 학생 이름 검색 API (
 export const searchAttendee = async (params: SearchAttendeeRequest) => {
   const { attendanceBookId, name } = params;
   const response = await ApiClient.request({
