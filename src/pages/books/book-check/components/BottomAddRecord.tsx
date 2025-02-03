@@ -1,6 +1,6 @@
 import BottomDrawer from '../../../../components/BottomDrawer';
 import React, { useState } from 'react';
-import { useRecordCreate } from '../querys';
+import { useRecordCreate } from '../queries';
 import { useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { TimeSelectionView } from './bottomPages/TimeSelect';
