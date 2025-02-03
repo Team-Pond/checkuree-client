@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 
 export const dateFormat = (
   date: Date | string,
-  type: "slash" | "dash" | "dot" | "fullDash" | "fullDot"
+  type: "slash" | "dash" | "dot" | "fullDash" | "fullDot",
 ): string => {
   const formattedDate = dayjs(date); // dayjs로 날짜 객체 생성
 
@@ -71,7 +71,7 @@ export type DayOfWeek =
 // 요일 순서 정렬을 위한 비교 함수 (ex - weekdays: ["MONDAY", "TUESDAY"])
 export function sortWeekdays(weekdays: string[]): DayOfWeek[] {
   return weekdays.sort(
-    (a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b)
+    (a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b),
   ) as DayOfWeek[];
 }
 
@@ -222,16 +222,43 @@ export const formatSchedule = (schedule: ScheduleItem[]): string[] => {
 export const formatLocalTimeString = (time: string) => {
   let [hour, minute] = time.split(":");
 
-  const period = hour >= '12' ? "오후" : "오전";
-  if (parseInt(hour) > 12) hour = String(parseInt(hour) - 12).padStart(2,"0");
-  if (parseInt(hour) === 0) hour = '12';
+  const period = hour >= "12" ? "오후" : "오전";
+  if (parseInt(hour) > 12) hour = String(parseInt(hour) - 12).padStart(2, "0");
+  if (parseInt(hour) === 0) hour = "12";
   return `${period} ${hour}:${minute}`;
-}
-
+};
 
 /**
  * yyyy-MM-dd 형식의 날짜 문자열을 받아서 일 수 차이를 반환합니다.
  */
-export const getDateDifference = (date1: string, date2: string): number  => {
+export const getDateDifference = (date1: string, date2: string): number => {
   return dayjs(date1).diff(dayjs(date2), "day");
+};
+
+/**
+ * hh:mm 형식의 시간을 받아 30분 단위로 내림
+ *
+ * @example
+ * floor30Minute("10:15") // "10:00"
+ * floor30Minute("10:45") // "10:30"
+ */
+export function floor30Minute(hhmm: string) {
+  const dayTime = dayjs("2000-01-01 " + hhmm, "HH:mm");
+  return dayTime.subtract(dayTime.minute() % 30, "minute");
+}
+
+/**
+ * hh:mm 형식의 시간을 받아 30분 단위로 올림
+ *
+ * @example
+ * floor30Minute("10:15") // "10:30"
+ * floor30Minute("10:45") // "11:00"
+ */
+export function ceil30Minute(hhmm: string) {
+  const dayTime = dayjs("2000-01-01 " + hhmm, "HH:mm");
+  const remainder = dayTime.minute() % 30;
+  if (remainder === 0) {
+    return dayTime;
+  }
+  return dayTime.subtract(remainder).add(30, "minute");
 }
