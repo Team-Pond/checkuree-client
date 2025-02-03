@@ -29,7 +29,8 @@ export const useScheduleAttendee = (
 ) => {
   return useQuery({
     enabled: enabled && dayOfWeek !== "" && hhmm !== "",
-    queryKey: ["table-attendee", dayOfWeek, hhmm],
+    queryKey: attendeeKeys.schedules(attendanceBookId, dayOfWeek, hhmm)
+      .queryKey,
     queryFn: async () => {
       const res = await getScheduleAttendee({
         attendanceBookId,
@@ -46,7 +47,7 @@ export const useScheduleAttendee = (
 export const useScheduleTable = (attendanceBookId: number) => {
   return useQuery({
     // queryKey: ["table-schedule", attendanceBookId],
-    queryKey: attendeeKeys.schedule(attendanceBookId).queryKey,
+    queryKey: attendeeKeys.schedules(attendanceBookId).queryKey,
     queryFn: async () => {
       const res = await getBookScheduleTable({ attendanceBookId });
       if (res.status === 200) return res.data;
@@ -59,7 +60,6 @@ export const useScheduleTable = (attendanceBookId: number) => {
 export const useBookCourses = (id: number, enabled: boolean) => {
   return useQuery({
     enabled,
-    // ["book-courses", id],
     queryKey: attendeeKeys.courses(id).queryKey,
     queryFn: async () => {
       const res = await getBookCourse(String(id));
@@ -98,7 +98,6 @@ export const useAttendeeCreate = ({
   handleStep2Change: (state: boolean) => void;
 }) => {
   return useMutation({
-    mutationKey: ["book"],
     mutationFn: async () =>
       await createAttendee({
         attendanceBookId: bookId,

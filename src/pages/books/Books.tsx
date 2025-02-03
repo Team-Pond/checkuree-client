@@ -4,12 +4,15 @@ import { formatTimeRange, getDayGroupFromInput } from '@/utils';
 import { BookContext } from '@/context/BookContext';
 import { useBookList } from './querys';
 import { DayOfWeek } from '../../utils';
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { formatTimeRange, getDayGroupFromInput } from "@/utils";
+import { BookContext } from "@/context/BookContext";
+import { useBookList } from "./queries";
 
 export default function Books() {
   const navigate = useNavigate();
   const context = useContext(BookContext);
-
-  const { data: bookList } = useBookList();
 
   const { setSelectedBook } = context!;
 
@@ -31,6 +34,8 @@ export default function Books() {
     });
     navigate(`/book/${args.id}?bookName=${args.title}`);
   };
+
+  const { data: bookList } = useBookList();
 
   return (
     <section className="relative flex flex-col w-full min-h-screen">

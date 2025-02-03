@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { CourseData } from "@/api v2/AttendanceBookSchema";
 import { twMerge } from "tailwind-merge";
 import BottomDrawer from "@/components/BottomDrawer";
-import { useSubjectItems, useSubjects } from "../querys";
+import { useSubjectItems, useSubjects } from "../queries";
 
 export type IProps = {
   handleCourseChange: (params: CourseData) => void;
@@ -34,7 +34,6 @@ export default function Step2(props: IProps) {
 
   const { data: subjectItems } = useSubjectItems({
     subjectId: selectedSubject?.id!,
-    subjectTitle: selectedSubject?.title!,
   });
 
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);

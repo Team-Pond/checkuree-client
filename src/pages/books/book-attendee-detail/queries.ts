@@ -44,7 +44,7 @@ export const useScheduleData = ({
 }) => {
   return useQuery({
     enabled: !!dayOfWeek && !!hhmm,
-    queryKey: ["table-attendee", dayOfWeek, hhmm],
+    queryKey: attendeeKeys.schedules(bookId, dayOfWeek, hhmm).queryKey,
     queryFn: async () => {
       const res = await getScheduleAttendee({
         attendanceBookId: bookId,
@@ -58,7 +58,7 @@ export const useScheduleData = ({
 
 export const useScheduleTimeTable = ({ bookId }: { bookId: number }) => {
   return useQuery({
-    queryKey: ["table-schedule"],
+    queryKey: attendeeKeys.schedules(bookId).queryKey,
     queryFn: async () => {
       const res = await getBookScheduleTable({
         attendanceBookId: bookId,
@@ -93,7 +93,7 @@ export const useProgressLog = ({
   attendeeId: number;
 }) => {
   return useQuery({
-    queryKey: ["progressLog", bookId, attendeeId],
+    queryKey: attendeeKeys.progressLog(bookId, attendeeId).queryKey,
     queryFn: async () =>
       await getAttendeeProgressLog({
         attendanceBookId: Number(bookId),
@@ -111,7 +111,7 @@ export const useAttendeeDetail = ({
 }) => {
   return useQuery({
     enabled: attendeeId !== null,
-    queryKey: ["attendee-detail", attendeeId],
+    queryKey: attendeeKeys.detail(attendeeId).queryKey,
     queryFn: async () =>
       await getAttendeeDetail({
         attendanceBookId: bookId,
@@ -156,7 +156,7 @@ export const useAttendeeUpdate = ({
       }),
     onSuccess: () => {
       queryClinet.invalidateQueries({
-        queryKey: ["attendee-detail", String(attendeeId)],
+        queryKey: attendeeKeys.detail(attendeeId).queryKey,
       });
 
       toast.success("학생 정보가 저장되었습니다.");
@@ -199,7 +199,7 @@ export const useProgressPromote = ({
     onSuccess: () => {
       toast.success("다음 과정이 저장되었습니다.");
       queryClient.invalidateQueries({
-        queryKey: ["attendee-detail", String(attendeeId)],
+        queryKey: attendeeKeys.detail(attendeeId).queryKey,
       });
       onClose();
     },

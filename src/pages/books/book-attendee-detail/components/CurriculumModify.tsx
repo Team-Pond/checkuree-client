@@ -9,7 +9,7 @@ import {
   useBookCourses,
   useScheduleData,
   useScheduleTimeTable,
-} from "../querys";
+} from "../queries";
 
 interface CurriculumModifyProps {
   setAttendeeSchedules: React.Dispatch<
