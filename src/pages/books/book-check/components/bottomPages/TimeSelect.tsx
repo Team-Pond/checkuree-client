@@ -1,7 +1,9 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { twMerge } from "tailwind-merge";
-import dayjs from "dayjs";
 import { BookContext } from "../../../../../context/BookContext";
+import { useBookDetail } from "../../../queries";
+import { useParams } from "react-router-dom";
+import { ceil30Minute, floor30Minute } from "../../../../../utils";
 
 interface Props {
   student: { id: number; name: string };
@@ -11,6 +13,25 @@ interface Props {
   setSelectedTime: (time: string) => void;
 }
 
+const createSlots = (availableFrom: string, availableTo: string): string[] => {
+  // availableFrom: 30분 단위로 내림 (floor)
+  const availableStart = floor30Minute(availableFrom);
+
+  // availableTo: 30분 단위로 올림 (ceil)
+  const availableEnd = ceil30Minute(availableTo).subtract(1, "hour");
+
+  const result = [];
+
+  for (
+    let time = availableStart;
+    !time.isAfter(availableEnd);
+    time = time.add(30, "minute")
+  ) {
+    result.push(time.format("HH:mm"));
+  }
+  return result;
+};
+
 export const TimeSelectionView = ({
   student,
   onBack,
@@ -19,37 +40,26 @@ export const TimeSelectionView = ({
   selectedTime,
 }: Props) => {
   const context = useContext(BookContext);
+  const { bookId } = useParams();
 
-  const { selectedBook } = context!;
+  let { selectedBook } = context!;
 
   // 수업 시간 슬롯 생성
   const slots = [];
-  if (selectedBook?.availableFrom && selectedBook?.availableTo) {
-    // availableFrom: 30분 단위로 내림 (floor)
-    const availableFromTime = dayjs(
-      "2024-01-01 " + selectedBook.availableFrom,
-      "HH:mm",
-    );
-    const floor30From = availableFromTime.subtract(
-      availableFromTime.minute() % 30,
-    );
 
-    // availableTo: 30분 단위로 올림 (ceil)
-    const availableToTime = dayjs(
-      "2024-01-01 " + selectedBook.availableTo,
-      "HH:mm",
-    );
-    const ceil30To = availableToTime
-      .add(30 - (availableToTime.minute() % 30))
-      .subtract(1, "hour");
+  // 선택된 책이 없을 경우, 책 상세 정보를 가져옴
+  const { data: bookDetailResult } = !selectedBook
+    ? useBookDetail(Number(bookId))
+    : { data: null }; // monad 유지
 
-    for (
-      let time = floor30From;
-      !time.isAfter(ceil30To);
-      time = time.add(30, "minute")
-    ) {
-      slots.push(time.format("HH:mm"));
-    }
+  // timeSloe 생성
+  const availableFrom =
+    selectedBook?.availableFrom ?? bookDetailResult?.data?.availableFrom;
+  const availableTo =
+    selectedBook?.availableTo ?? bookDetailResult?.data?.availableTo;
+
+  if (availableFrom && availableTo) {
+    slots.push(...createSlots(availableFrom, availableTo));
   }
 
   return (
