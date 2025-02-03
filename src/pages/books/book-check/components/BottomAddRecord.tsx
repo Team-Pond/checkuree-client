@@ -46,27 +46,29 @@ export const BottomAddRecord = (props:IProps) => {
       closeDrawer()
     }}>
       <div className="flex flex-col gap-0 p-1 min-h-[300px] max-h-[80vh] overflow-y-auto">
-        {!selectedStudent ? (
-          <StudentSearchView
-            attendanceBookId={attendanceBookId}
-            onSelectStudent={setSelectedStudent}
-            search={search}
-            setSearch={setSearch} />
-        ) : (
-          <TimeSelectionView
-            student={selectedStudent}
-            selectedTime={selectedTime}
-            setSelectedTime={setSelectedTime}
-            onBack={() => {
-              unsetSelectedStudent()
-            }}
-            onConfirm={(time) => {
-              recordMutation({ attendeeId: selectedStudent.id, status: "PENDING", attendTime: time });
-              toast.success(`${selectedStudent.name} 학생의 스케쥴이 \n${time}에 추가되었습니다.`);
-              closeDrawer()
-            }}
-          />
-        )}
+        <div className="min-h-[350px] flex flex-col">
+          {!selectedStudent ? (
+            <StudentSearchView
+              attendanceBookId={attendanceBookId}
+              onSelectStudent={setSelectedStudent}
+              search={search}
+              setSearch={setSearch} />
+          ) : (
+            <TimeSelectionView
+              student={selectedStudent}
+              selectedTime={selectedTime}
+              setSelectedTime={setSelectedTime}
+              onBack={() => {
+                unsetSelectedStudent();
+              }}
+              onConfirm={(time) => {
+                recordMutation({ attendeeId: selectedStudent.id, status: 'PENDING', attendTime: time });
+                toast.success(`${selectedStudent.name} 학생의 스케쥴이 \n${time}에 추가되었습니다.`);
+                closeDrawer();
+              }}
+            />
+          )}
+        </div>
       </div>
     </BottomDrawer>
   );
