@@ -4,14 +4,13 @@ import dayjs from 'dayjs';
 import { BookContext } from '../../../../../context/BookContext';
 
 interface Props {
-  student: { id: number; name: string };
   onBack: () => void;
   onConfirm: (time: string) => void;
   selectedTime: string;
   setSelectedTime: (time: string) => void;
 }
 
-export const TimeSelectionView = ({ student, onBack, onConfirm, setSelectedTime, selectedTime }: Props) => {
+export const TimeSelectionView = ({ onBack, onConfirm, setSelectedTime, selectedTime }: Props) => {
   const context = useContext(BookContext);
 
   const { selectedBook } = context!;
