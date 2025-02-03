@@ -1,6 +1,8 @@
 import ApiClient from "./ApiClient";
 import {
   GetBookCourseResponse,
+  GetBookDetailRequest,
+  GetBookDetailResponse,
   GetBookScheduleTableResponse,
   GetBookScheudleTableRequest,
   UpdateBookProgressRequest,
@@ -22,7 +24,7 @@ import {
 
 // 출석부 생성
 export const createBook = async (
-  params: CreateBookRequest
+  params: CreateBookRequest,
 ): Promise<CreateBookResponse> => {
   const response = await ApiClient.request({
     method: "POST",
@@ -35,7 +37,7 @@ export const createBook = async (
 
 // 출석부 조회
 export const getBooks = async (
-  attendanceBookId: GetBooksRequest
+  attendanceBookId: GetBooksRequest,
 ): Promise<GetBooksResponse> => {
   const response = await ApiClient.request({
     method: "GET",
@@ -46,7 +48,7 @@ export const getBooks = async (
 
 // 출석부 삭제
 export const deleteBook = async (
-  attendanceBookId: DeleteBookRequest
+  attendanceBookId: DeleteBookRequest,
 ): Promise<DeleteBookResponse> => {
   const response = await ApiClient.request({
     method: "DELETE",
@@ -76,6 +78,18 @@ export const getMeBooks = async (): Promise<GetMyBooksResponse> => {
   const response = await ApiClient.request({
     method: "GET",
     url: "/book/my",
+  });
+
+  return response.data;
+};
+
+// 출석부 상세 조회
+export const getBookDetail = async (
+  bookId: GetBookDetailRequest,
+): Promise<GetBookDetailResponse> => {
+  const response = await ApiClient.request({
+    method: "GET",
+    url: `/book/${bookId}`,
   });
 
   return response.data;
@@ -128,7 +142,7 @@ export const getBookScheduleTable = async ({
 
 // 출석부 조회
 export const getBookCourse = async (
-  attendanceBookId: GetBooksRequest
+  attendanceBookId: GetBooksRequest,
 ): Promise<GetBookCourseResponse> => {
   const response = await ApiClient.request({
     method: "GET",

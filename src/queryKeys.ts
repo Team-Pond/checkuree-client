@@ -29,6 +29,9 @@ export const bookKeys = createQueryKeys("book", {
   list: () => ({
     queryKey: [""],
   }),
+  detail: (bookId: number) => ({
+    queryKey: [bookId],
+  }),
   subjects: () => ({
     queryKey: [""],
   }),
