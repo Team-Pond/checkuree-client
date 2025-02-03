@@ -66,6 +66,10 @@ export const useRecordAllUpdate = ({
   });
 };
 
+/**
+ * @param attendTime : 'HH:mm' 형식으로 입력
+ * attendTime 을 입력하지 않을 경우 현재 시간이 자동으로 입력됨
+ */
 export const useRecordCreate = ({
   bookId,
   currentDate,
@@ -79,10 +83,12 @@ export const useRecordCreate = ({
       attendeeId,
       scheduleId,
       status,
+      attendTime,
     }: {
       attendeeId: number;
-      scheduleId: number;
+      scheduleId?: number;
       status: STATUS;
+      attendTime?: string;
     }) =>
       await createRecord({
         params: {
@@ -90,7 +96,7 @@ export const useRecordCreate = ({
           attendeeId: attendeeId,
           scheduleId: scheduleId,
           attendDate: currentDate,
-          attendTime: `${getCurrentTimeParts()
+          attendTime: attendTime ?? `${getCurrentTimeParts()
             .hour.toString()
             .padStart(2, "0")}:${getCurrentTimeParts()
             .minute.toString()

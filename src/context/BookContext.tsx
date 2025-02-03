@@ -1,9 +1,14 @@
 // src/context/BookContext.tsx
 import React, { createContext, useState, ReactNode } from "react";
+import { DayOfWeek } from '../utils';
 
-interface Book {
+export interface Book {
   title: string;
   id: number;
+  attendeeCount:number;
+  availableDays:DayOfWeek[];
+  availableFrom:string;
+  availableTo:string;
 }
 
 interface BookContextType {
