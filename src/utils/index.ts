@@ -229,6 +229,18 @@ export const formatLocalTimeString = (time: string) => {
 };
 
 /**
+ * hh:mm 형식의 시간 문자열을 받아서 12시간제의 h:mm 형식으로 변환합니다.
+ */
+export const formatTimeWith12Hour = (time: string): string => {
+  const [hour, minute] = time.split(":");
+
+  if (hour <= "12") return time;
+
+  const formattedHour = String(parseInt(hour) - 12);
+  return `${formattedHour}:${minute}`;
+};
+
+/**
  * yyyy-MM-dd 형식의 날짜 문자열을 받아서 일 수 차이를 반환합니다.
  */
 export const getDateDifference = (date1: string, date2: string): number => {
