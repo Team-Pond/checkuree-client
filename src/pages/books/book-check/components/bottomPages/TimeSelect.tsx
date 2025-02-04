@@ -48,9 +48,6 @@ export const TimeSelectionView = ({
 
   let { selectedBook } = context!;
 
-  // 수업 시간 슬롯 생성
-  const slots = [];
-
   // 선택된 책이 없을 경우, 책 상세 정보를 가져옴
   const { data: bookDetailResult } = !selectedBook
     ? useBookDetail(Number(bookId))
@@ -62,9 +59,9 @@ export const TimeSelectionView = ({
   const availableTo =
     selectedBook?.availableTo ?? bookDetailResult?.data?.availableTo;
 
-  if (availableFrom && availableTo) {
-    slots.push(...createSlots(availableFrom, availableTo));
-  }
+  // 수업 시간 슬롯 생성
+  const timeSlots =
+    availableFrom && availableTo ? createSlots(availableFrom, availableTo) : [];
 
   return (
     <div className="flex flex-col gap-4 max-h-[300px] overflow-y-auto pt-0 h-full">
@@ -74,11 +71,11 @@ export const TimeSelectionView = ({
           {student.name} 학생을 어떤 수업에 추가할까요?
         </p>
         <div className="mt-4">
-          {slots.filter((time) => time < "12:00").length > 0 ? (
+          {timeSlots.filter((time) => time < "12:00").length > 0 ? (
             <>
               <p className="text-m text-text-secondary mb-2 text-left">오전</p>
               <div className="grid grid-cols-5 gap-2">
-                {slots
+                {timeSlots
                   .filter((time) => time < "12:00")
                   .map((time) => (
                     <button
@@ -106,11 +103,11 @@ export const TimeSelectionView = ({
         </div>
 
         <div className="mt-4">
-          {slots.filter((time) => time >= "12:00").length > 0 ? (
+          {timeSlots.filter((time) => time >= "12:00").length > 0 ? (
             <>
               <p className="text-m text-text-secondary mb-2 text-left">오후</p>
               <div className="grid grid-cols-5 gap-2 ">
-                {slots
+                {timeSlots
                   .filter((time) => time >= "12:00")
                   .map((time) => (
                     <button
