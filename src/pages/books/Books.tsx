@@ -1,21 +1,36 @@
+import { DayOfWeek } from '../../utils';
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatTimeRange, getDayGroupFromInput } from "@/utils";
 import { BookContext } from "@/context/BookContext";
-import { useBookList } from "./querys";
+import { useBookList } from "./queries";
 
 export default function Books() {
   const navigate = useNavigate();
   const context = useContext(BookContext);
 
-  const { data: bookList } = useBookList();
-
   const { setSelectedBook } = context!;
 
-  const handleNavigation = (id: string, title: string) => {
-    navigate(`/book/${id}?bookName=${title}`);
-    setSelectedBook({ title, id: Number(id) });
+  const handleNavigation = (args:{
+    id:number,
+    title:string,
+    attendeeCount:number,
+    availableDays:DayOfWeek[],
+    availableFrom:string,
+    availableTo:string
+  }) => {
+    setSelectedBook({
+      id: args.id,
+      title:args.title,
+      attendeeCount:args.attendeeCount,
+      availableDays:args.availableDays,
+      availableFrom:args.availableFrom,
+      availableTo:args.availableTo,
+    });
+    navigate(`/book/${args.id}?bookName=${args.title}`);
   };
+
+  const { data: bookList } = useBookList();
 
   return (
     <section className="relative flex flex-col w-full min-h-screen">
@@ -40,9 +55,16 @@ export default function Books() {
               <div
                 key={attendance.id}
                 className="max-w-[162px] w-full"
-                onClick={() =>
-                  handleNavigation(String(attendance.id), attendance.title)
-                }
+                onClick={() => {
+                  handleNavigation({
+                    id:attendance.id,
+                    title:attendance.title,
+                    attendeeCount:attendance.attendeeCount,
+                    availableDays:attendance.availableDays,
+                    availableFrom:attendance.availableFrom,
+                    availableTo:attendance.availableTo
+                  });
+                }}
               >
                 <img
                   src={

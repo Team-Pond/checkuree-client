@@ -1,18 +1,12 @@
 import { twMerge } from "tailwind-merge";
-import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { Formik } from "formik";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-
-import { setTokens } from "@/lib/auth";
-import { SignIn } from "@/api v2/AuthApiClient";
-import { useAuthLogin } from "./querys";
+import { useAuthLogin } from "./queries";
 
 export interface LoginDataType {
   username: string;

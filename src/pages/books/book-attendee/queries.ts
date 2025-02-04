@@ -1,5 +1,6 @@
 import { getAttendee } from "@/api v2/AttendeeApiClient";
 import { DaysType, GenderType } from "@/api v2/AttendeeSchema";
+import { attendeeKeys } from "@/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 
 export const useAttendeeList = ({
@@ -12,7 +13,7 @@ export const useAttendeeList = ({
   gender: GenderType;
 }) => {
   return useQuery({
-    queryKey: ["roaster", bookId, dayArrays, gender],
+    queryKey: attendeeKeys.list(bookId, dayArrays, gender).queryKey,
     queryFn: async () => {
       const response = await getAttendee({
         attendanceBookId: Number(bookId),

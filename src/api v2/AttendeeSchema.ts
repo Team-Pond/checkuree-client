@@ -237,6 +237,47 @@ export type GetAttendeeDetailResponse = {
   };
 } & ErrorResponse;
 
+export type SearchAttendeeRequest = {
+  attendanceBookId: number;
+  name: string;
+}
+
+export type SearchAttendeeDataType = {
+  content: {
+    id: number;
+    name: string;
+    gender: GenderType;
+    age: number;
+  }[];
+  empty: boolean;
+  first: boolean;
+  last: boolean;
+  number: number;
+  numberOfElements: number;
+  size: number;
+  pageable: {
+    offset: number;
+    pageNumber: number;
+    pageSize: number;
+    paged: boolean;
+    sort: {
+      empty: boolean;
+      sorted: boolean;
+      unsorted: boolean;
+    };
+  };
+  sort: {
+    emply: boolean;
+    sorted: boolean;
+    unsorted: boolean;
+  };
+}
+
+export type SearchAttendeeResponse = {
+  status: 200;
+  data: SearchAttendeeDataType
+} & ErrorResponse;
+
 export type GetAttendeeProgressLogRequest = {
   attendanceBookId: number;
   attendeeId: number;
@@ -255,7 +296,7 @@ type ProgressLog = {
   ageAtStart: number;
 };
 
-export type GetAttendeeProgressLogReseponse = {
+export type GetAttendeeProgressLogResponse = {
   status: 200;
   data: ProgressLog[];
 } & ErrorResponse;

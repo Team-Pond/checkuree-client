@@ -6,7 +6,7 @@ import StudentManage from "@/pages/books/book-attendee-detail/components/Student
 import LearningManage from "@/pages/books/book-attendee-detail/components/LearningManage";
 import CounselManage from "@/pages/books/book-attendee-detail/components/CounselManage";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { useAttendeeDetail } from "../../querys";
+import { useAttendeeDetail } from "../../queries";
 
 const CommonTabs = () => {
   const { bookId, attendeeId } = useParams();

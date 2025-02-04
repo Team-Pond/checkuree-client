@@ -1,9 +1,16 @@
 import { Dayjs } from "dayjs";
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useSpring,
+  useTransform,
+  useMotionValue,
+} from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { updateBookStatus } from "@/api v2/AttendanceBookApiClient";
 import { BookStatus } from "@/api v2/AttendanceBookSchema";
-import { useRecordAllUpdate } from "../querys";
+import { useRecordAllUpdate } from "../queries";
+import { Dispatch, SetStateAction } from "react";
 
 type HeaderProps = {
   title: string;
@@ -14,6 +21,7 @@ type HeaderProps = {
   currentDate: Dayjs;
   checkedScheduleCount: number;
   totalScheduleCount: number;
+  setOpenFilter: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function Header(props: HeaderProps) {
@@ -26,32 +34,58 @@ export default function Header(props: HeaderProps) {
     formattedDate,
     checkedScheduleCount,
     totalScheduleCount,
+    setOpenFilter,
   } = props;
 
   const navigate = useNavigate();
-  const displayDate = currentDate.locale("ko").format("M월 D일"); // 텍스트 값
+  const displayDate = currentDate.locale("ko").format("M월 D일");
 
+  // 스크롤 관련 훅 설정
   const { scrollYProgress } = useScroll();
   const smoothScrollYProgress = useSpring(scrollYProgress, {
     stiffness: 300,
-    damping: 20,
+    damping: 10,
     mass: 1,
   });
 
-  const textY = useTransform(smoothScrollYProgress, [0, 0.15], [0, -8]);
-  const iconY = useTransform(smoothScrollYProgress, [0, 0.15], [0, 8]);
-  const iconOpacity = useTransform(smoothScrollYProgress, [0, 0.15], [1, 0]);
-  const textOpacity = useTransform(smoothScrollYProgress, [0, 0.15], [1, 1]);
-  const headerHeight = useTransform(
+  // 스크롤 가능 여부 체크 (초기 렌더링 시)
+  const isScrollable =
+    document.documentElement.scrollHeight > window.innerHeight;
+
+  // 항상 훅을 호출하여 MotionValue 를 생성한 후,
+  // 스크롤 가능 여부에 따라 fallback MotionValue를 미리 생성해둡니다.
+  const _textY = useTransform(smoothScrollYProgress, [0, 0.05], [0, -8]);
+  const _iconY = useTransform(smoothScrollYProgress, [0, 0.05], [0, 8]);
+  const _iconOpacity = useTransform(smoothScrollYProgress, [0, 0.05], [1, 0]);
+  const _textOpacity = useTransform(smoothScrollYProgress, [0, 0.05], [1, 1]);
+  const _headerHeight = useTransform(
     smoothScrollYProgress,
-    [0, 0.2],
+    [0, 0.05],
     ["46px", "25px"]
   );
-  const headerContainerHeight = useTransform(
+  const _headerContainerHeight = useTransform(
     smoothScrollYProgress,
-    [0, 0.2],
+    [0, 0.05],
     ["78px", "49px"]
   );
+
+  // fallback 모션 값들을 생성 (항상 훅은 호출)
+  const fallbackTextY = useMotionValue(0);
+  const fallbackIconY = useMotionValue(0);
+  const fallbackIconOpacity = useMotionValue(1);
+  const fallbackTextOpacity = useMotionValue(1);
+  const fallbackHeaderHeight = useMotionValue("46px");
+  const fallbackHeaderContainerHeight = useMotionValue("78px");
+
+  // 스크롤이 가능하면 계산된 모션 값을, 아니면 fallback 값을 사용
+  const textY = isScrollable ? _textY : fallbackTextY;
+  const iconY = isScrollable ? _iconY : fallbackIconY;
+  const iconOpacity = isScrollable ? _iconOpacity : fallbackIconOpacity;
+  const textOpacity = isScrollable ? _textOpacity : fallbackTextOpacity;
+  const headerHeight = isScrollable ? _headerHeight : fallbackHeaderHeight;
+  const headerContainerHeight = isScrollable
+    ? _headerContainerHeight
+    : fallbackHeaderContainerHeight;
 
   const { mutate: recordAllMutation } = useRecordAllUpdate({
     bookId,
@@ -59,7 +93,7 @@ export default function Header(props: HeaderProps) {
   });
 
   const handleBookStatus = async (date: string, status: BookStatus) => {
-    const response = await updateBookStatus({
+    await updateBookStatus({
       attendanceBookId: bookId,
       params: {
         date,
@@ -77,7 +111,9 @@ export default function Header(props: HeaderProps) {
     {
       src: "/images/icons/ico-user-add.svg",
       name: "인원 추가",
-      onClick: () => {},
+      onClick: () => {
+        setOpenFilter(true);
+      },
     },
     {
       src: "/images/icons/ico-check.svg",
@@ -147,7 +183,6 @@ export default function Header(props: HeaderProps) {
             }}
           >
             {checkedScheduleCount + "/" + totalScheduleCount}
-            {/*110/123*/}
           </motion.p>
         </motion.div>
         <div className="flex gap-2">

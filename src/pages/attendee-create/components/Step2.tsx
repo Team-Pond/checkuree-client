@@ -10,7 +10,7 @@ import {
   useBookCourses,
   useScheduleAttendee,
   useScheduleTable,
-} from "../querys";
+} from "../queries";
 
 interface Step2Props {
   setAttendeeSchedules: React.Dispatch<

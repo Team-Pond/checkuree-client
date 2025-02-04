@@ -6,7 +6,7 @@ import { twMerge } from "tailwind-merge";
 import { getSubjects } from "@/api v2/CourseApiClient";
 import { CourseData, CreateBookRequest } from "@/api v2/AttendanceBookSchema";
 import { useForm, useWatch } from "react-hook-form";
-import { useBookCreate } from "./querys";
+import { useBookCreate } from "./queries";
 
 export default function BookCreate() {
   const navigate = useNavigate();

@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
 import { getBookCourse } from "@/api v2/AttendanceBookApiClient";
-import { useBookCourses, useProgressPromote } from "../querys";
+import { useBookCourses, useProgressPromote } from "../queries";
 
 interface Props {
   isOpen: boolean;
@@ -25,14 +25,6 @@ const NextProgressModal: React.FC<Props> = ({
     startAt: "",
     nextGradeId: "",
   });
-
-  // const { data: bookCourses } = useQuery({
-  //   queryKey: ["book-courses", bookId],
-  //   queryFn: async () => {
-  //     const res = await getBookCourse(String(bookId));
-  //     if (res.status === 200) return res.data;
-  //   },
-  // });
 
   const { data: bookCourses } = useBookCourses({
     bookId: String(bookId),
