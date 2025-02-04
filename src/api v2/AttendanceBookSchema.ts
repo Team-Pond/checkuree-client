@@ -79,11 +79,19 @@ export type GetMyBooksDataType = {
   availableTo: string;
   availableDays: DaysType[];
   imageUrl: string;
-  attendeeCount:number;
+  attendeeCount: number;
 };
+
 type GetBookResponse = ResponseBase & {
   status: 200;
   data: GetMyBooksDataType[];
+};
+
+export type GetBookDetailRequest = number;
+
+export type GetBookDetailResponse = ResponseBase & {
+  status: 200;
+  data: GetMyBooksDataType;
 };
 
 export type GetMyBooksResponse = GetBookResponse | ErrorResponse;

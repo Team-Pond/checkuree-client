@@ -31,8 +31,9 @@ export const StudentSearchView = ({ attendanceBookId, onSelectStudent, search, s
   });
 
   return (
-    <div className="flex flex-col gap-2 max-h-[300px] overflow-y-auto">
+    <div className="flex flex-col gap-2 max-h-[300px] overflow-y-auto pt-0 h-full">
       {/* 검색 입력창 */}
+      <p className="text-m-bold text-left">인원 추가</p>
       <div className="relative">
         <input
           type="text"
@@ -53,8 +54,10 @@ export const StudentSearchView = ({ attendanceBookId, onSelectStudent, search, s
       {/* 검색 결과 리스트 */}
       {searchResults?.content?.length ? (
         searchResults.content.map((student: { id: number; name: string; age: number; gender: GenderType }) => (
-          <div key={student.id} className="py-1 px-2 flex gap-4 cursor-pointer" onClick={() => onSelectStudent(student)}>
-            <img src="/images/icons/book-roaster/ico-student.svg" alt="학생 아이콘" width={40} height={40} className="rounded-full" />
+          <div key={student.id} className="py-1 px-2 flex gap-4 cursor-pointer"
+               onClick={() => onSelectStudent(student)}>
+            <img src="/images/icons/book-roaster/ico-student.svg" alt="학생 아이콘" width={40} height={40}
+                 className="rounded-full" />
             <div className="flex items-center gap-2 text-left">
               <p className="text-m-bold text-text-primary">{student.name}</p>
               <p className="text-m-semibold text-text-secondary">{student.age}세</p>
