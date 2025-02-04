@@ -3,7 +3,11 @@ import { twMerge } from "tailwind-merge";
 import { BookContext } from "../../../../../context/BookContext";
 import { useBookDetail } from "../../../queries";
 import { useParams } from "react-router-dom";
-import { ceil30Minute, floor30Minute } from "../../../../../utils";
+import {
+  ceil30Minute,
+  floor30Minute,
+  formatTimeWith12Hour,
+} from "../../../../../utils";
 
 interface Props {
   student: { id: number; name: string };
@@ -85,7 +89,13 @@ export const TimeSelectionView = ({
                           ? "border-border-brand text-text-brand bg-bg-tertiary text-white"
                           : "text-border-secondary-hover",
                       )}
-                      onClick={() => setSelectedTime(time)}
+                      onClick={() => {
+                        if (selectedTime === time) {
+                          setSelectedTime("");
+                          return;
+                        }
+                        setSelectedTime(time);
+                      }}
                     >
                       {time}
                     </button>
@@ -102,13 +112,6 @@ export const TimeSelectionView = ({
               <div className="grid grid-cols-5 gap-2 ">
                 {slots
                   .filter((time) => time >= "12:00")
-                  .map((time) => {
-                    const [hour, minute] = time.split(":");
-                    if (hour == "12") {
-                      return time;
-                    }
-                    return parseInt(hour) - 12 + ":" + minute;
-                  })
                   .map((time) => (
                     <button
                       key={time}
@@ -126,7 +129,7 @@ export const TimeSelectionView = ({
                         setSelectedTime(time);
                       }}
                     >
-                      {time}
+                      {formatTimeWith12Hour(time)}
                     </button>
                   ))}
               </div>
