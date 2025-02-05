@@ -28,7 +28,6 @@ const initailValues = {
 
 export default function CheckureeSignIn() {
   const accessToken = Cookies.get("accessToken");
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const { mutate: loginMutation } = useAuthLogin();
