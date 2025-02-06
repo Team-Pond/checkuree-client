@@ -7,6 +7,44 @@ import { getSubjects } from "@/api v2/CourseApiClient";
 import { CourseData, CreateBookRequest } from "@/api v2/AttendanceBookSchema";
 import { useForm, useWatch } from "react-hook-form";
 import { useBookCreate } from "./queries";
+import { z } from "zod";
+
+const bookSchema = z.object({
+  title: z.string().min(3, "제목은 최소 3자 이상이어야 합니다."),
+  description: z.string().optional(),
+  availableFrom: z.string().nonempty("시작 날짜를 입력하세요."),
+  availableTo: z.string().nonempty("종료 날짜를 입력하세요."),
+  availableDays: z
+    .array(
+      z.enum([
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+        "SUNDAY",
+      ])
+    )
+    .min(1, "적어도 하나의 요일을 선택해야 합니다."),
+  imageUrl: z.string().optional(),
+  courses: z
+    .array(
+      z.object({
+        title: z.string(),
+        isPrimary: z.boolean(),
+        grades: z.array(
+          z.object({
+            subjectItemId: z.number(),
+            level: z.number(),
+          })
+        ),
+      })
+    )
+    .optional(),
+});
+
+export type CreateBookSchema = z.infer<typeof bookSchema>;
 
 export default function BookCreate() {
   const navigate = useNavigate();
@@ -35,14 +73,19 @@ export default function BookCreate() {
     setCourseCreateParams([...courseCreateParam, params]);
   };
 
-  const { getValues, setValue, register, handleSubmit, control } =
-    useForm<CreateBookRequest>({
-      shouldUnregister: false, // 데이터 유지
-    });
+  const {
+    getValues,
+    setValue,
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<CreateBookSchema>({
+    shouldUnregister: false,
+  });
 
   const { mutate: bookMutation } = useBookCreate();
 
-  // 특정 필드만 감시
   const { title, availableDays, availableFrom, availableTo } = useWatch({
     control,
   });
@@ -103,6 +146,7 @@ export default function BookCreate() {
                 register={register}
                 setValue={setValue}
                 getValues={getValues}
+                errors={errors}
               />
             )}
 
