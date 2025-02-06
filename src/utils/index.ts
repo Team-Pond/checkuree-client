@@ -91,7 +91,9 @@ export function getDayGroupFromInput(input: DaysType[]) {
   const allDays = ["월", "화", "수", "목", "금", "토", "일"];
 
   // Input을 한글 요일로 변환
-  const days = input.map((item) => DayTransfer[item]);
+  const days = input
+    .sort((a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b))
+    .map((item) => DayTransfer[item]);
 
   // 매일
   if (
