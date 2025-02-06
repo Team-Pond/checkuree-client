@@ -29,7 +29,7 @@ export const ScheduleModify = () => {
       setAttendeeSchedules({
         schedules: attendeeDetail.data.schedules.map((schedule) => ({
           day: schedule.day,
-          hhmm: schedule.time,
+          hhmm: schedule.time.substring(0, 5),
         })),
       });
     }
