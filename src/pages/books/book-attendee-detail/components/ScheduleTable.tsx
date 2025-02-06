@@ -1,7 +1,9 @@
 // ScheduleTable.tsx
 
 import { UpdateAttendeeScheduleRequest } from "@/api v2/AttendeeSchema";
-import React from "react";
+import React, { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useBookDetail } from "../../queries";
 
 type DayOfWeek =
   | "MONDAY"
@@ -49,16 +51,32 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
   startHhmm,
   endHhmm,
   handleSchedule,
-
   attendeeSchedules,
 }) => {
+  const { bookId } = useParams();
+
+  const { data: bookDetail } = useBookDetail(Number(bookId));
+
   const start = parseHhmm(startHhmm);
   const end = parseHhmm(endHhmm);
 
   const totalHours = end.hour - start.hour;
   const hoursArray = Array.from(
     { length: totalHours },
-    (_, i) => start.hour + i
+    (_, i) => start.hour + i,
+  );
+
+  const availableDaysSet = new Set([
+    "MONDAY",
+    "TUESDAY",
+    "WEDNESDAY",
+    "THURSDAY",
+    "FRIDAY",
+    ...bookDetail!.data?.availableDays,
+  ]);
+
+  const filteredScheduleTable = scheduleTable.filter((daySchedule) =>
+    availableDaysSet.has(daySchedule.dayOfWeek),
   );
 
   return (
@@ -67,14 +85,15 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
         <thead>
           <tr>
             <th className="border border-[#f6f6f6] w-[21px] h-2"></th>
-            {scheduleTable.map((dayData) => (
-              <th
-                key={dayData.dayOfWeek}
-                className="border border-[#f6f6f6] w-[54px] h-2 text-xs-medium text-text-tertiary"
-              >
-                {dayMap[dayData.dayOfWeek]}
-              </th>
-            ))}
+            {filteredScheduleTable &&
+              filteredScheduleTable.map((dayData, idx) => (
+                <th
+                  key={dayData.dayOfWeek}
+                  className="border border-[#f6f6f6] w-[54px] h-2 text-xs-medium text-text-tertiary"
+                >
+                  {dayMap[dayData.dayOfWeek]}
+                </th>
+              ))}
           </tr>
         </thead>
         <tbody>
@@ -91,7 +110,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                   {hour}
                 </td>
 
-                {scheduleTable.map((dayData) => {
+                {filteredScheduleTable.map((dayData) => {
                   const count = dayData.scheduleCount[slotIndex];
                   const hhmm = `${hour}:00`;
 
@@ -99,7 +118,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                   const isSelected = attendeeSchedules?.schedules.some(
                     (schedule) =>
                       schedule.day === dayData.dayOfWeek &&
-                      schedule.hhmm === hhmm
+                      schedule.hhmm === hhmm,
                   );
 
                   return (
@@ -111,8 +130,8 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                           isSelected
                             ? "bg-bg-tertiary text-text-interactive-inverse text-xs-medium"
                             : count > 0
-                            ? "bg-bg-primary text-text-secondary text-xs-medium"
-                            : "bg-bg-secondary text-text-secondary text-xs-medium"
+                              ? "bg-bg-primary text-text-secondary text-xs-medium"
+                              : "bg-bg-secondary text-text-secondary text-xs-medium"
                         }
                       `}
                       onClick={() => handleSchedule(dayData.dayOfWeek, hhmm)}
@@ -126,7 +145,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
 
             const secondRow = (
               <tr key={`${hour}-second`}>
-                {scheduleTable.map((dayData) => {
+                {filteredScheduleTable.map((dayData) => {
                   const count = dayData.scheduleCount[secondSlotIndex];
                   const hhmm = `${hour}:30`;
 
@@ -134,7 +153,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                   const isSelected = attendeeSchedules?.schedules.some(
                     (schedule) =>
                       schedule.day === dayData.dayOfWeek &&
-                      schedule.hhmm === hhmm
+                      schedule.hhmm === hhmm,
                   );
 
                   return (
@@ -145,8 +164,8 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                           isSelected
                             ? "bg-bg-tertiary text-text-interactive-inverse text-xs-medium"
                             : count > 0
-                            ? "bg-bg-primary text-text-secondary text-xs-medium"
-                            : "bg-bg-secondary text-text-secondary text-xs-medium"
+                              ? "bg-bg-primary text-text-secondary text-xs-medium"
+                              : "bg-bg-secondary text-text-secondary text-xs-medium"
                         }
                       `}
                       onClick={() => handleSchedule(dayData.dayOfWeek, hhmm)}
