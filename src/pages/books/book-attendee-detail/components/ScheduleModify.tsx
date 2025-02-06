@@ -62,7 +62,9 @@ export const ScheduleModify = () => {
             <div className="flex gap-4 w-full">
               <button
                 type="button"
-                onClick={() => {}}
+                onClick={() => {
+                  navigate(-1);
+                }}
                 className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
               >
                 이전으로
