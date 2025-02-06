@@ -11,6 +11,7 @@ import {
   useScheduleAttendee,
   useScheduleTable,
 } from "../queries";
+import { getSub30MinuteHhmm } from "../../../utils";
 
 interface Step2Props {
   setAttendeeSchedules: React.Dispatch<
@@ -41,9 +42,11 @@ export default function Step2({
   const [scheduleParams, setScheduleParams] = useState<{
     dayOfWeek: string;
     hhmm: string;
+    isSelected: boolean;
   }>({
     dayOfWeek: "",
     hhmm: "",
+    isSelected: false,
   });
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [attendeeOpenDrawer, setAttendeeOpenDrawer] = useState<boolean>(false);
@@ -57,8 +60,12 @@ export default function Step2({
     setAttendeeOpenDrawer(!attendeeOpenDrawer);
 
   // 스케줄 클릭 시 선택된 요일/시간 저장
-  const handleSchedule = (dayOfWeek: string, hhmm: string) => {
-    setScheduleParams({ dayOfWeek, hhmm });
+  const handleSchedule = (
+    dayOfWeek: string,
+    hhmm: string,
+    isSelected: boolean = false,
+  ) => {
+    setScheduleParams({ dayOfWeek, hhmm, isSelected });
     handleAttendeeBottomDrawer(true);
   };
 
@@ -70,7 +77,7 @@ export default function Step2({
     attendanceBookIdNumber,
     scheduleParams.dayOfWeek,
     scheduleParams.hhmm,
-    !!(scheduleParams.dayOfWeek && scheduleParams.hhmm)
+    !!(scheduleParams.dayOfWeek && scheduleParams.hhmm),
   );
 
   // 시간표 데이터
@@ -79,7 +86,7 @@ export default function Step2({
   // 커리큘럼 데이터를 가져옴
   const { data: bookCourses } = useBookCourses(
     attendanceBookIdNumber,
-    openDrawer
+    openDrawer,
   );
 
   useEffect(() => {
@@ -112,6 +119,52 @@ export default function Step2({
           },
         ],
       };
+    });
+  };
+
+  const handleRemoveAttendeeSchedules = (day: DaysType, hhmm: string) => {
+    setAttendeeSchedules((prev) => {
+      // prev가 없는 경우
+      if (!prev) {
+        return {
+          schedules: [],
+        };
+      }
+
+      // prev 가 존재하는 경우 로직 시작
+      // 해당 시간이 존재하는지 확인
+      const isExist = prev.schedules.some(
+        (schedule) => schedule.day === day && schedule.hhmm === hhmm,
+      );
+
+      // 존재하는 경우 삭제
+      if (isExist) {
+        return {
+          ...prev,
+          schedules: prev.schedules.filter(
+            (schedule) => schedule.day !== day && schedule.hhmm !== hhmm,
+          ),
+        };
+      }
+
+      // 존재하지 않는 경우 30분 전의 시간이 존재하는지 확인
+      const beforeHhmm = getSub30MinuteHhmm(hhmm);
+      const isExistBefore = prev.schedules.some(
+        (schedule) => schedule.day === day && schedule.hhmm === beforeHhmm,
+      );
+
+      // 30분 전의 시간이 존재하는 경우 삭제
+      if (isExistBefore) {
+        return {
+          ...prev,
+          schedules: prev.schedules.filter(
+            (schedule) => schedule.day !== day && schedule.hhmm !== beforeHhmm,
+          ),
+        };
+      }
+
+      // 30분 전도 없으면 ... ? 넌 나가라 그냥
+      return prev;
     });
   };
 
@@ -176,6 +229,7 @@ export default function Step2({
         scheduleParams={scheduleParams}
         scheduleData={scheduleData}
         handleAttendeeSchedules={handleAttendeeSchedules}
+        handleRemoveAttendeeSchedules={handleRemoveAttendeeSchedules}
       />
     </div>
   );
