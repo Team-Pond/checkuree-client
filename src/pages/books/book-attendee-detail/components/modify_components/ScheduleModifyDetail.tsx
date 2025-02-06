@@ -128,7 +128,7 @@ export default function ScheduleModifyDetail({
         return {
           ...prev,
           schedules: prev.schedules.filter(
-            (schedule) => schedule.day !== day && schedule.hhmm !== hhmm,
+            (schedule) => schedule.day !== day || schedule.hhmm !== hhmm,
           ),
         };
       }
@@ -144,7 +144,7 @@ export default function ScheduleModifyDetail({
         return {
           ...prev,
           schedules: prev.schedules.filter(
-            (schedule) => schedule.day !== day && schedule.hhmm !== beforeHhmm,
+            (schedule) => schedule.day !== day || schedule.hhmm !== beforeHhmm,
           ),
         };
       }
