@@ -292,3 +292,13 @@ export function ceil30Minute(hhmm: string) {
   }
   return dayTime.subtract(remainder).add(30, "minute");
 }
+
+/**
+ * hh:mm 형식의 시간을 받아 30분을 뺀 시간을 반환합니다.
+ * 00:00 이전인 경우 00:00을 반환합니다.
+ */
+export const getSub30MinuteHhmm = (hhmm: string) => {
+  const dayTime = dayjs("2000-01-01 " + hhmm);
+  const sub30Minute = dayTime.subtract(30, "minute");
+  return sub30Minute.format("HH:mm");
+};
