@@ -95,7 +95,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto overflow-x-auto">
-      <table className="table-auto w-full text-center border-collapse">
+      <table className="table-fixed w-full text-center border-collapse">
         <thead>
           <tr>
             <th className="border border-[#f6f6f6] w-[21px] h-2"></th>
