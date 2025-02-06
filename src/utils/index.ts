@@ -195,6 +195,10 @@ type ScheduleItem = {
   time: string;
 };
 
+/**
+ * ScheduleItem 배열을 받아서 요일(월~일) 순서대로 정렬한 후 시간을 한글로 변환하여 반환합니다.
+ *
+ */
 export const formatSchedule = (schedule: ScheduleItem[]): string[] => {
   const daysInKorean: Record<string, string> = {
     MONDAY: "월",
@@ -206,14 +210,26 @@ export const formatSchedule = (schedule: ScheduleItem[]): string[] => {
     SUNDAY: "일",
   };
 
-  return schedule?.map(({ day, time }) => {
-    const [hour, minute] = time.split(":").map(Number);
-    const period = hour >= 12 ? "오후" : "오전";
-    const formattedHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour; // 12시간제 변환
-    return `(${daysInKorean[day]}) ${period} ${formattedHour}:${minute
-      .toString()
-      .padStart(2, "0")}`;
-  });
+  const dayOrder: Record<string, number> = {
+    MONDAY: 1,
+    TUESDAY: 2,
+    WEDNESDAY: 3,
+    THURSDAY: 4,
+    FRIDAY: 5,
+    SATURDAY: 6,
+    SUNDAY: 7,
+  };
+
+  return schedule
+    ?.sort((a, b) => dayOrder[a.day] - dayOrder[b.day])
+    .map(({ day, time }) => {
+      const [hour, minute] = time.split(":").map(Number);
+      const period = hour >= 12 ? "오후" : "오전";
+      const formattedHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour; // 12시간제 변환
+      return `(${daysInKorean[day]}) ${period} ${formattedHour}:${minute
+        .toString()
+        .padStart(2, "0")}`;
+    });
 };
 
 /**
