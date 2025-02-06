@@ -178,17 +178,16 @@ export default function StudentManage(props: IProps) {
           </div>
           <div className="w-full rounded-2xl bg-white p-4 flex flex-col gap-5">
             <p className="flex text-s-bold text-[#5d5d5d]">
-              <span>등록 정보</span>{" "}
-              <img
-                src="/images/icons/ico-pencil.svg"
-                width={20}
-                height={20}
-                alt=""
-                onClick={() => {
-                  setIsAttendeeModify(true);
-                  setIsCourseModify(false);
-                }}
-              />
+              <span>등록 정보</span> {/*<img*/}
+              {/*  src="/images/icons/ico-pencil.svg"*/}
+              {/*  width={20}*/}
+              {/*  height={20}*/}
+              {/*  alt=""*/}
+              {/*  onClick={() => {*/}
+              {/*    setIsAttendeeModify(true);*/}
+              {/*    setIsCourseModify(false);*/}
+              {/*  }}*/}
+              {/*/>*/}
             </p>
             <div className="flex justify-between text-s-semibold">
               <p className="text-text-tertiary">기본 정보</p>
