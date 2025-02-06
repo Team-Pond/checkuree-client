@@ -4,12 +4,24 @@ import {
   useScheduleAttendee,
   useScheduleTable,
 } from "../../../../attendee-create/queries";
-import { DaysType } from "../../../../../api v2/AttendeeSchema";
+import {
+  DaysType,
+  UpdateAttendeeScheduleRequest,
+} from "../../../../../api v2/AttendeeSchema";
 import AttendeeDrawer from "../../../../attendee-create/components/AttendeeDrawer";
 import ScheduleTable from "../ScheduleTable";
 import { getSub30MinuteHhmm } from "../../../../../utils";
 
-export default function ScheduleTableDetail() {
+interface IProps {
+  setAttendeeSchedules: React.Dispatch<
+    React.SetStateAction<UpdateAttendeeScheduleRequest | undefined>
+  >;
+  attendeeSchedules: UpdateAttendeeScheduleRequest | undefined;
+}
+export default function ScheduleTableDetail({
+  setAttendeeSchedules,
+  attendeeSchedules,
+}: IProps) {
   const { bookId, attendeeId } = useParams();
 
   const [scheduleParams, setScheduleParams] = useState<{
@@ -23,12 +35,6 @@ export default function ScheduleTableDetail() {
   });
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [attendeeOpenDrawer, setAttendeeOpenDrawer] = useState<boolean>(false);
-  const [attendeeSchedules, setAttendeeSchedules] = useState<{
-    schedules: {
-      day: DaysType;
-      hhmm: string;
-    }[];
-  }>({ schedules: [] });
 
   // Drawer 관련 핸들러들
   const handleAttendeeBottomDrawer = (open: boolean) =>
