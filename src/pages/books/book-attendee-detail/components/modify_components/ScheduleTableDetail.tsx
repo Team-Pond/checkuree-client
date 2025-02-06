@@ -3,11 +3,11 @@ import { useParams } from "react-router-dom";
 import {
   useScheduleAttendee,
   useScheduleTable,
-} from "../../../../attendee-create/queries.ts";
-import { useBookCourses } from "../../queries.ts";
-import { DaysType } from "../../../../../api v2/AttendeeSchema.ts";
-import AttendeeDrawer from "../../../../attendee-create/components/AttendeeDrawer.tsx";
-import ScheduleTable from "../ScheduleTable.tsx";
+} from "../../../../attendee-create/queries";
+import { DaysType } from "../../../../../api v2/AttendeeSchema";
+import AttendeeDrawer from "../../../../attendee-create/components/AttendeeDrawer";
+import ScheduleTable from "../ScheduleTable";
+import { getSub30MinuteHhmm } from "../../../../../utils";
 
 export default function ScheduleTableDetail() {
   const { bookId, attendeeId } = useParams();
@@ -15,9 +15,11 @@ export default function ScheduleTableDetail() {
   const [scheduleParams, setScheduleParams] = useState<{
     dayOfWeek: string;
     hhmm: string;
+    isSelected: boolean;
   }>({
     dayOfWeek: "",
     hhmm: "",
+    isSelected: false,
   });
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [attendeeOpenDrawer, setAttendeeOpenDrawer] = useState<boolean>(false);
@@ -29,16 +31,18 @@ export default function ScheduleTableDetail() {
   }>({ schedules: [] });
 
   // Drawer 관련 핸들러들
-  const handleBottomDrawer = (open: boolean) => setOpenDrawer(open);
-  const onDrawerChange = () => setOpenDrawer(!openDrawer);
   const handleAttendeeBottomDrawer = (open: boolean) =>
     setAttendeeOpenDrawer(open);
   const onAttendeeDrawerChange = () =>
     setAttendeeOpenDrawer(!attendeeOpenDrawer);
 
   // 스케줄 클릭 시 선택된 요일/시간 저장
-  const handleSchedule = (dayOfWeek: string, hhmm: string) => {
-    setScheduleParams({ dayOfWeek, hhmm });
+  const handleSchedule = (
+    dayOfWeek: string,
+    hhmm: string,
+    isSelected: boolean = false,
+  ) => {
+    setScheduleParams({ dayOfWeek, hhmm, isSelected });
     handleAttendeeBottomDrawer(true);
   };
 
@@ -76,6 +80,15 @@ export default function ScheduleTableDetail() {
           ],
         };
       }
+
+      const isExist = prev.schedules.some(
+        (schedule) => schedule.day === day && schedule.hhmm === hhmm,
+      );
+
+      // 이미 존재하는 경우 return
+      if (isExist) return prev;
+
+      // 존재하지 않는 경우
       return {
         ...prev,
         schedules: [
@@ -86,6 +99,52 @@ export default function ScheduleTableDetail() {
           },
         ],
       };
+    });
+  };
+
+  const handleRemoveAttendeeSchedules = (day: DaysType, hhmm: string) => {
+    setAttendeeSchedules((prev) => {
+      // prev가 없는 경우
+      if (!prev) {
+        return {
+          schedules: [],
+        };
+      }
+
+      // prev 가 존재하는 경우 로직 시작
+      // 해당 시간이 존재하는지 확인
+      const isExist = prev.schedules.some(
+        (schedule) => schedule.day === day && schedule.hhmm === hhmm,
+      );
+
+      // 존재하는 경우 삭제
+      if (isExist) {
+        return {
+          ...prev,
+          schedules: prev.schedules.filter(
+            (schedule) => schedule.day !== day && schedule.hhmm !== hhmm,
+          ),
+        };
+      }
+
+      // 존재하지 않는 경우 30분 전의 시간이 존재하는지 확인
+      const beforeHhmm = getSub30MinuteHhmm(hhmm);
+      const isExistBefore = prev.schedules.some(
+        (schedule) => schedule.day === day && schedule.hhmm === beforeHhmm,
+      );
+
+      // 30분 전의 시간이 존재하는 경우 삭제
+      if (isExistBefore) {
+        return {
+          ...prev,
+          schedules: prev.schedules.filter(
+            (schedule) => schedule.day !== day && schedule.hhmm !== beforeHhmm,
+          ),
+        };
+      }
+
+      // 30분 전도 없으면 ... ? 넌 나가라 그냥
+      return prev;
     });
   };
 
@@ -116,6 +175,7 @@ export default function ScheduleTableDetail() {
         scheduleParams={scheduleParams}
         scheduleData={scheduleData}
         handleAttendeeSchedules={handleAttendeeSchedules}
+        handleRemoveAttendeeSchedules={handleRemoveAttendeeSchedules}
       />
     </div>
   );
