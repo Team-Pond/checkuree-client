@@ -113,12 +113,16 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                 {filteredScheduleTable.map((dayData) => {
                   const count = dayData.scheduleCount[slotIndex];
                   const hhmm = `${hour}:00`;
+                  const beforeHhmm =
+                    hour >= 1
+                      ? `${String(hour - 1).padStart(2, "0")}:30`
+                      : "00:00";
 
                   // ▼ dayOfWeek, hhmm이 selectedSchedules에 있는지 체크
                   const isSelected = attendeeSchedules?.schedules.some(
                     (schedule) =>
                       schedule.day === dayData.dayOfWeek &&
-                      schedule.hhmm === hhmm,
+                      (schedule.hhmm === hhmm || schedule.hhmm === beforeHhmm),
                   );
 
                   return (
@@ -149,11 +153,13 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                   const count = dayData.scheduleCount[secondSlotIndex];
                   const hhmm = `${hour}:30`;
 
+                  const beforeHhmm = `${hour}:00`;
+
                   // ▼ dayOfWeek, hhmm이 selectedSchedules에 있는지 체크
                   const isSelected = attendeeSchedules?.schedules.some(
                     (schedule) =>
                       schedule.day === dayData.dayOfWeek &&
-                      schedule.hhmm === hhmm,
+                      (schedule.hhmm === hhmm || schedule.hhmm === beforeHhmm),
                   );
 
                   return (
