@@ -7,7 +7,7 @@ import {
 import { formatSchedule, getTodayYYYYMMDD } from "@/utils";
 import { useState } from "react";
 import CurriculumModify from "./CurriculumModify";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AttendeeModify from "./AttendeeModify";
 
 type ScheduleItem = {
@@ -55,6 +55,10 @@ interface AttendeeModifyFormState {
 export default function StudentManage(props: IProps) {
   const { student, registerInfo, scheduleItems, associates, lessonInfo } =
     props;
+
+  const location = useLocation();
+
+  const navigate = useNavigate();
 
   const response = scheduleItems?.length > 0 && formatSchedule(scheduleItems);
 
@@ -144,8 +148,9 @@ export default function StudentManage(props: IProps) {
                 height={20}
                 alt=""
                 onClick={() => {
-                  setIsCourseModify(true);
-                  setIsAttendeeModify(false);
+                  navigate(
+                    `/book/${bookId}/attendee/${attendeeId}/schedule${location.search}`,
+                  );
                 }}
               />
             </p>

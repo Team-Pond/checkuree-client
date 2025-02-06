@@ -1,14 +1,7 @@
-import Step2 from "../../../attendee-create/components/Step2";
-import { useNavigate, useParams } from "react-router-dom";
-import ScheduleTableDetail from "./modify_components/ScheduleTableDetail.tsx";
+import { useNavigate } from "react-router-dom";
+import ScheduleTableDetail from "./modify_components/ScheduleTableDetail";
 
-interface IProps {
-  bookId: string;
-  attendeeId: number;
-}
 export const ScheduleModify = () => {
-  const { bookId, attendeeId } = useParams();
-
   const navigate = useNavigate();
 
   return (
@@ -20,7 +13,7 @@ export const ScheduleModify = () => {
           alt="닫기 아이콘"
           width={32}
           height={32}
-          onClick={() => navigate(`/book/${bookId}/attendee${location.search}`)}
+          onClick={() => navigate(-1)}
         />
       </div>
 
@@ -31,14 +24,6 @@ export const ScheduleModify = () => {
 
         <div className="flex w-full justify-center">
           <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
-            {/*<Step2*/}
-            {/*  // Step2로 내려줄 함수*/}
-            {/*  // setBookProgress={setBookProgress}*/}
-            {/*  onChangeGrade={() => {}}*/}
-            {/*  attendanceBookId={12}*/}
-            {/*  setAttendeeSchedules={() => {}}*/}
-            {/*  attendeeSchedules={undefined}*/}
-            {/*/>*/}
             <ScheduleTableDetail />
             <div className="flex gap-4 w-full">
               <button
@@ -49,13 +34,13 @@ export const ScheduleModify = () => {
                 이전으로
               </button>
               <button
-                // onClick={() => {
-                //   scheduleMutation();
-                // }}
+                onClick={() => {
+                  // scheduleMutation();
+                }}
                 type="button"
                 className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
               >
-                생성하기
+                수정하기
               </button>
             </div>
           </div>

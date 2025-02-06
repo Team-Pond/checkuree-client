@@ -1,6 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-import { getRecordMonthAttendee } from "@/api v2/RecordApiClient";
-
 type IProps = {
   studentInfo: {
     name: string;

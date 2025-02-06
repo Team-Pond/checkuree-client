@@ -5,12 +5,18 @@ import AttendanceManage from "@/pages/books/book-attendee-detail/components/Atte
 import StudentManage from "@/pages/books/book-attendee-detail/components/StudentManage";
 import LearningManage from "@/pages/books/book-attendee-detail/components/LearningManage";
 import CounselManage from "@/pages/books/book-attendee-detail/components/CounselManage";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useAttendeeDetail } from "../../queries";
 
 const CommonTabs = () => {
   const { bookId, attendeeId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const scheduleDays = searchParams.get("scheduleDays");
   const grade = searchParams.get("grade");
@@ -20,7 +26,7 @@ const CommonTabs = () => {
     bookId: Number(bookId),
   });
   const studentAssociate = attendeeDetail?.associates?.filter(
-    (fam) => fam.relationType === "MOTHER" || fam.relationType === "FATHER"
+    (fam) => fam.relationType === "MOTHER" || fam.relationType === "FATHER",
   );
 
   return (
@@ -31,7 +37,12 @@ const CommonTabs = () => {
           alt="닫기 아이콘"
           width={14}
           height={14}
-          onClick={() => navigate(-1)}
+          onClick={() =>
+            navigate(
+              location.state?.from ||
+                `/book/${bookId}/attendee${location.search}`,
+            )
+          }
         />
       </div>
       <Root
