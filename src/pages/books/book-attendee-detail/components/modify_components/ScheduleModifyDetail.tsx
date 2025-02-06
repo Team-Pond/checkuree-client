@@ -18,7 +18,7 @@ interface IProps {
   >;
   attendeeSchedules: UpdateAttendeeScheduleRequest | undefined;
 }
-export default function ScheduleTableDetail({
+export default function ScheduleModifyDetail({
   setAttendeeSchedules,
   attendeeSchedules,
 }: IProps) {
