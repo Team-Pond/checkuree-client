@@ -12,6 +12,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { useAttendeeDetail } from "../../queries";
+import { useEffect } from "react";
 
 const CommonTabs = () => {
   const { bookId, attendeeId } = useParams();
@@ -21,10 +22,17 @@ const CommonTabs = () => {
   const scheduleDays = searchParams.get("scheduleDays");
   const grade = searchParams.get("grade");
 
-  const { data: attendeeDetail } = useAttendeeDetail({
+  const { data: attendeeDetail, refetch } = useAttendeeDetail({
     attendeeId: Number(attendeeId),
     bookId: Number(bookId),
   });
+
+  // 뒤로가기 후 데이터를 강제로 다시 불러오기
+  // 커리큘럼/클래스(스케쥴) 수정 후 뒤로가기 시 데이터 갱신
+  useEffect(() => {
+    refetch(); // React Query의 refetch 기능 실행
+  }, []);
+
   const studentAssociate = attendeeDetail?.associates?.filter(
     (fam) => fam.relationType === "MOTHER" || fam.relationType === "FATHER",
   );
