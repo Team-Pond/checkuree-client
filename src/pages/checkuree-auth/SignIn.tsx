@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { useNavigate } from "react-router-dom";
+
 import { useAuthLogin } from "./queries";
 
 export interface LoginDataType {
@@ -28,7 +28,6 @@ const initailValues = {
 
 export default function CheckureeSignIn() {
   const accessToken = Cookies.get("accessToken");
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const { mutate: loginMutation } = useAuthLogin();
