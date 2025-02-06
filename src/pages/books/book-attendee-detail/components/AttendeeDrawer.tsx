@@ -1,5 +1,6 @@
 import { DaysType } from "@/api v2/AttendanceBookSchema";
 import BottomDrawer from "@/components/BottomDrawer";
+import { convertEngDayToKorDay } from "../../../../utils";
 
 type Attendee = {
   name: string;
@@ -33,8 +34,8 @@ export default function AttendeeDrawer({
           {/* Drawer 상단 영역 */}
           <div className="text-left w-full h-10 border-b border-[#f6f6f6] flex items-center">
             <p className="text-s-semibold text-text-secondary">
-              ({dayOfWeek}) {hhmm} - {Number(hhmm.substring(0, 2)) + 1}:
-              {hhmm.substring(3, 5)}
+              ({convertEngDayToKorDay(dayOfWeek)}) {hhmm} -
+              {Number(hhmm.substring(0, 2)) + 1}:{hhmm.substring(3, 5)}
             </p>
           </div>
         </div>
