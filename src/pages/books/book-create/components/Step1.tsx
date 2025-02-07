@@ -1,13 +1,9 @@
-import { CreateBookRequest, DaysType } from "@/api v2/AttendanceBookSchema";
+import { DaysType } from "@/api v2/AttendanceBookSchema";
 import TimePicker from "@/components/TimePicker";
-
 import { ChangeEvent, useRef, useState } from "react";
-import {
-  UseFormGetValues,
-  UseFormRegister,
-  UseFormSetValue,
-} from "react-hook-form";
+import { FieldErrors, useFormContext } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
+import { CreateBookSchema } from "../BookCreate";
 
 const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
 
@@ -21,26 +17,30 @@ const DaysMatch: Record<string, DaysType> = {
   일: "SUNDAY",
 };
 
-type IProps = {
-  register: UseFormRegister<CreateBookRequest>;
-  setValue: UseFormSetValue<CreateBookRequest>;
-  getValues: UseFormGetValues<CreateBookRequest>;
+type Time = {
+  period: string;
+  hour: string;
+  minute: string;
 };
-export default function Step1(props: IProps) {
-  const { register, setValue, getValues } = props;
+
+export default function Step1() {
+  const {
+    setValue,
+    register,
+    watch,
+    formState: { errors },
+  } = useFormContext<CreateBookSchema>();
   const [imageSrc, setImageSrc] = useState<string | null>(null);
 
-  const currentDays = getValues("availableDays") ?? [];
+  const currentDays = watch("availableDays", []);
+
   const onDaysChange = (day: DaysType) => {
-    // 이미 선택되어 있다면 제거
     if (currentDays.includes(DaysMatch[day])) {
       setValue(
         "availableDays",
-        currentDays.filter((item) => item !== DaysMatch[day])
+        currentDays.filter((item: any) => item !== DaysMatch[day])
       );
-    }
-    // 선택되어 있지 않다면 추가
-    else {
+    } else {
       setValue("availableDays", [...currentDays, DaysMatch[day]]);
     }
   };
@@ -68,30 +68,25 @@ export default function Step1(props: IProps) {
     fileRef.current?.click();
   };
 
-  const transfer = (time: { period: string; hour: string; minute: string }) => {
+  const transfer = (time: Time) => {
     const hourInt = Number(time.hour) + time.period === "오후" ? 12 : 0;
     const minuteInt = Number(time.minute);
 
-    return hourInt.toString().padStart(2, "0") + minuteInt.toString().padStart(2, "0");
+    return (
+      hourInt.toString().padStart(2, "0") +
+      minuteInt.toString().padStart(2, "0")
+    );
   };
-  const handleStartTimeChange = (time: {
-    period: string;
-    hour: string;
-    minute: string;
-  }) => {
+  const handleStartTimeChange = (time: Time) => {
     setStartTime(time);
     setValue("availableFrom", transfer(time));
-    setIsStartPickerOpen(false); // TimePicker 닫기
+    setIsStartPickerOpen(false);
   };
 
-  const handleEndTimeChange = (time: {
-    period: string;
-    hour: string;
-    minute: string;
-  }) => {
+  const handleEndTimeChange = (time: Time) => {
     setEndTime(time);
     setValue("availableTo", transfer(time));
-    setIsEndPickerOpen(false); // TimePicker 닫기
+    setIsEndPickerOpen(false);
   };
 
   const handleOpenStartTimePicker = () => {
@@ -102,17 +97,9 @@ export default function Step1(props: IProps) {
     setIsEndPickerOpen(true);
   };
 
-  const [startTime, setStartTime] = useState<{
-    period: string;
-    hour: string;
-    minute: string;
-  } | null>(null);
+  const [startTime, setStartTime] = useState<Time | null>(null);
 
-  const [endTime, setEndTime] = useState<{
-    period: string;
-    hour: string;
-    minute: string;
-  } | null>(null);
+  const [endTime, setEndTime] = useState<Time | null>(null);
 
   const [isStartPickerOpen, setIsStartPickerOpen] = useState<boolean>(false);
   const [isEndPickerOpen, setIsEndPickerOpen] = useState<boolean>(false);
@@ -136,6 +123,7 @@ export default function Step1(props: IProps) {
       handleOpen: handleOpenEndTimePicker,
     },
   ];
+
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
       {/* 출석부 이름 */}
@@ -146,11 +134,16 @@ export default function Step1(props: IProps) {
         </div>
 
         <input
-          {...register("title", { required: true })}
+          {...register("title", {
+            required: "출석부는 최소 4글자 이상 입력해주세요.",
+          })}
           type="text"
           placeholder="출석부 이름"
           className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />
+        {errors.title && (
+          <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
+        )}
       </div>
 
       {/* 수업 요일 */}
@@ -178,7 +171,16 @@ export default function Step1(props: IProps) {
             );
           })}
         </div>
+        {errors.availableDays && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.availableDays.message}
+          </p>
+        )}
       </div>
+      <input
+        type="hidden"
+        {...register("availableDays", { required: "필수" })}
+      />
 
       {/* 수업 시간 */}
       <div className="flex flex-col gap-2">
@@ -209,6 +211,16 @@ export default function Step1(props: IProps) {
             );
           })}
         </div>
+        {errors.availableFrom && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.availableFrom.message}
+          </p>
+        )}
+        {errors.availableTo && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.availableTo.message}
+          </p>
+        )}
       </div>
 
       {/* 커버 이미지 */}
