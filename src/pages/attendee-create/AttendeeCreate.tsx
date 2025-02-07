@@ -120,7 +120,7 @@ export default function AttendeeCreate() {
           <div
             className={twMerge(
               "border-[2px]  max-w-[174px] w-full rounded-full",
-              isStep2 ? "border-bg-tertiary" : "border-[#DDEEDF]"
+              isStep2 ? "border-bg-tertiary" : "border-[#DDEEDF]",
             )}
           />
         </div>
@@ -169,7 +169,7 @@ export default function AttendeeCreate() {
                   "max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl",
                   isStep1Valid
                     ? "bg-bg-tertiary text-[#f1f8f3]"
-                    : "bg-bg-disabled text-text-disabled"
+                    : "bg-bg-disabled text-text-disabled",
                 )}
                 disabled={!isStep1Valid}
                 onClick={() => {

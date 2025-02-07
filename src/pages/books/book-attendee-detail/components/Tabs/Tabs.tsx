@@ -5,22 +5,36 @@ import AttendanceManage from "@/pages/books/book-attendee-detail/components/Atte
 import StudentManage from "@/pages/books/book-attendee-detail/components/StudentManage";
 import LearningManage from "@/pages/books/book-attendee-detail/components/LearningManage";
 import CounselManage from "@/pages/books/book-attendee-detail/components/CounselManage";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useAttendeeDetail } from "../../queries";
+import { useEffect } from "react";
 
 const CommonTabs = () => {
   const { bookId, attendeeId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const scheduleDays = searchParams.get("scheduleDays");
   const grade = searchParams.get("grade");
 
-  const { data: attendeeDetail } = useAttendeeDetail({
+  const { data: attendeeDetail, refetch } = useAttendeeDetail({
     attendeeId: Number(attendeeId),
     bookId: Number(bookId),
   });
+
+  // 뒤로가기 후 데이터를 강제로 다시 불러오기
+  // 커리큘럼/클래스(스케쥴) 수정 후 뒤로가기 시 데이터 갱신
+  useEffect(() => {
+    refetch(); // React Query의 refetch 기능 실행
+  }, []);
+
   const studentAssociate = attendeeDetail?.associates?.filter(
-    (fam) => fam.relationType === "MOTHER" || fam.relationType === "FATHER"
+    (fam) => fam.relationType === "MOTHER" || fam.relationType === "FATHER",
   );
 
   return (
@@ -31,7 +45,12 @@ const CommonTabs = () => {
           alt="닫기 아이콘"
           width={14}
           height={14}
-          onClick={() => navigate(-1)}
+          onClick={() =>
+            navigate(
+              location.state?.from ||
+                `/book/${bookId}/attendee${location.search}`,
+            )
+          }
         />
       </div>
       <Root

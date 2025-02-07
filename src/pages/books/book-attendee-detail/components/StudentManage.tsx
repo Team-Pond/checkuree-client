@@ -7,7 +7,7 @@ import {
 import { formatSchedule, getTodayYYYYMMDD } from "@/utils";
 import { useState } from "react";
 import CurriculumModify from "./CurriculumModify";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AttendeeModify from "./AttendeeModify";
 
 type ScheduleItem = {
@@ -56,6 +56,10 @@ export default function StudentManage(props: IProps) {
   const { student, registerInfo, scheduleItems, associates, lessonInfo } =
     props;
 
+  const location = useLocation();
+
+  const navigate = useNavigate();
+
   const response = scheduleItems?.length > 0 && formatSchedule(scheduleItems);
 
   const [isCourseModify, setIsCourseModify] = useState<boolean>(false);
@@ -82,7 +86,7 @@ export default function StudentManage(props: IProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex gap-8 items-center w-full h-[120px] rounded-2xl bg-white">
+      <div className="flex gap-8 items-center w-full rounded-2xl bg-white">
         <img
           src="/images/icons/book-roaster/ico-student.svg"
           alt="학생 아이콘"
@@ -91,10 +95,12 @@ export default function StudentManage(props: IProps) {
           className="rounded-full ml-[23px]"
         />
         <div className="flex flex-col gap-2 text-left">
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 mt-4">
             <p className="text-xl-bold">
               <span className="text-text-primary">{student.name}</span>
-              <span className="text-text-secondary ml-2">{student.age + '세'}</span>
+              <span className="text-text-secondary ml-2">
+                {student.age + "세"}
+              </span>
             </p>
             <p className="text-m-bold text-text-secondary">
               {student.phoneNumber}
@@ -103,6 +109,15 @@ export default function StudentManage(props: IProps) {
           <p className="text-s-medium text-text-tertiary">
             <span>입학일자</span>{" "}
             <span>{student.enrollDate?.replaceAll("-", ".")}</span>
+          </p>
+          <p className="text-s-medium text-text-primary mb-4">
+            {lessonInfo?.map((course) => {
+              return (
+                <p key={course.id}>
+                  {course.courseTitle} &gt; {course.gradeTitle}
+                </p>
+              );
+            })}
           </p>
         </div>
       </div>
@@ -133,57 +148,46 @@ export default function StudentManage(props: IProps) {
                 height={20}
                 alt=""
                 onClick={() => {
-                  setIsCourseModify(true);
-                  setIsAttendeeModify(false);
+                  navigate(
+                    `/book/${bookId}/attendee/${attendeeId}/schedule${location.search}`,
+                  );
                 }}
               />
             </p>
-            <div className="flex justify-between text-s-semibold">
-              <p className="text-text-tertiary">커리큘럼</p>
-              <div className="flex flex-col text-text-primary">
-                {lessonInfo?.map((course) => {
-                  return (
-                    <p key={course.id}>
-                      {course.courseTitle} &gt; {course.gradeTitle}
-                    </p>
-                  );
-                })}
-              </div>
-            </div>
             <div className="flex items-center justify-between text-s-semibold">
               <p className="text-text-tertiary w-12">클래스</p>
               <div className="flex flex-col text-text-primary text-xs">
                 {response
                   ? response
-                    .reduce<string[][]>((acc, cur, index) => {
-                      if (index % 3 === 0) acc.push([]); // 3개 단위로 배열 생성
-                      acc[acc.length - 1].push(cur);
-                      return acc;
-                    }, [])
-                    .map((row, rowIndex) => (
-                      <p key={rowIndex} className="break-keep text-left">
-                        {row.map((day, index) => (
-                          <span key={index}>{day} &nbsp;</span>
-                        ))}
-                      </p>
-                    ))
-                  : ''}
+                      .sort((a, b) => a[0].localeCompare(b[0]))
+                      .reduce<string[][]>((acc, cur, index) => {
+                        if (index % 3 === 0) acc.push([]); // 3개 단위로 배열 생성
+                        acc[acc.length - 1].push(cur);
+                        return acc;
+                      }, [])
+                      .map((row, rowIndex) => (
+                        <p key={rowIndex} className="break-keep text-left">
+                          {row.map((day, index) => (
+                            <span key={index}>{day} &nbsp;</span>
+                          ))}
+                        </p>
+                      ))
+                  : ""}
               </div>
             </div>
           </div>
           <div className="w-full rounded-2xl bg-white p-4 flex flex-col gap-5">
             <p className="flex text-s-bold text-[#5d5d5d]">
-              <span>등록 정보</span>{' '}
-              <img
-                src="/images/icons/ico-pencil.svg"
-                width={20}
-                height={20}
-                alt=""
-                onClick={() => {
-                  setIsAttendeeModify(true);
-                  setIsCourseModify(false);
-                }}
-              />
+              <span>등록 정보</span> {/*<img*/}
+              {/*  src="/images/icons/ico-pencil.svg"*/}
+              {/*  width={20}*/}
+              {/*  height={20}*/}
+              {/*  alt=""*/}
+              {/*  onClick={() => {*/}
+              {/*    setIsAttendeeModify(true);*/}
+              {/*    setIsCourseModify(false);*/}
+              {/*  }}*/}
+              {/*/>*/}
             </p>
             <div className="flex justify-between text-s-semibold">
               <p className="text-text-tertiary">기본 정보</p>
@@ -194,7 +198,9 @@ export default function StudentManage(props: IProps) {
             </div>
             <div className="flex justify-between text-s-semibold">
               <p className="text-text-tertiary">학생 주소</p>
-              <p className="text-text-primary max-w-[250px] overflow-wrap break-word">{registerInfo.address_1}</p>
+              <p className="text-text-primary max-w-[250px] overflow-wrap break-word">
+                {registerInfo.address_1}
+              </p>
             </div>
             <div className="flex justify-between text-s-semibold">
               <p className="text-text-tertiary">가족 연락처</p>
