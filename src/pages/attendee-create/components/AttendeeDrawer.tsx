@@ -1,5 +1,6 @@
 import { DaysType } from "@/api v2/AttendanceBookSchema";
 import BottomDrawer from "@/components/BottomDrawer";
+import { convertEngDayToKorDay } from "../../../utils";
 
 type Attendee = {
   name: string;
@@ -12,9 +13,11 @@ interface AttendeeDrawerProps {
   scheduleParams: {
     dayOfWeek: string;
     hhmm: string;
+    isSelected: boolean;
   };
   scheduleData?: Attendee[];
   handleAttendeeSchedules: (day: DaysType, hhmm: string) => void;
+  handleRemoveAttendeeSchedules: (day: DaysType, hhmm: string) => void;
 }
 
 export default function AttendeeDrawer({
@@ -23,18 +26,19 @@ export default function AttendeeDrawer({
   scheduleParams,
   scheduleData,
   handleAttendeeSchedules,
+  handleRemoveAttendeeSchedules,
 }: AttendeeDrawerProps) {
-  const { dayOfWeek, hhmm } = scheduleParams;
+  const { dayOfWeek, hhmm, isSelected } = scheduleParams;
 
   return (
     <BottomDrawer isOpen={isOpen} onClose={onClose}>
-      <div className="flex flex-col gap-4 items-center h-[249px]">
+      <div className="flex flex-col gap-4 items-center h-[249px] overflow-auto">
         <div className="px-4 w-full">
           {/* Drawer 상단 영역 */}
           <div className="text-left w-full h-10 border-b border-[#f6f6f6] flex items-center">
             <p className="text-s-semibold text-text-secondary">
-              ({dayOfWeek}) {hhmm} - {Number(hhmm.substring(0, 2)) + 1}:
-              {hhmm.substring(3, 5)}
+              ({convertEngDayToKorDay(dayOfWeek)}) {hhmm} -{" "}
+              {Number(hhmm.substring(0, 2)) + 1}:{hhmm.substring(3, 5)}
             </p>
           </div>
         </div>
@@ -63,14 +67,18 @@ export default function AttendeeDrawer({
             type="button"
             className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
             onClick={() => {
-              handleAttendeeSchedules(dayOfWeek as DaysType, hhmm);
-              onClose();
+              !isSelected
+                ? handleAttendeeSchedules(dayOfWeek as DaysType, hhmm)
+                : handleRemoveAttendeeSchedules(dayOfWeek as DaysType, hhmm),
+                onClose();
             }}
           >
-            추가하기
+            {isSelected ? "삭제하기" : "추가하기"}
           </button>
         </div>
       </div>
+      {/*</div>*/}
+      {/*</div>*/}
     </BottomDrawer>
   );
 }

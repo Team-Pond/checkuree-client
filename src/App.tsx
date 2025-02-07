@@ -14,15 +14,16 @@ import ScrollToTop from "./components/ScrollToTop";
 import BookLayout from "./layouts/BookLayout";
 import NotFound from "./pages/404";
 import BookAttendeeDetail from "./pages/books/book-attendee-detail/BookAttendeeDetail";
+import { ScheduleModify } from "./pages/books/book-attendee-detail/components/ScheduleModify";
 
 // Lazy load components
 const Books = lazy(() => import("@/pages/books/Books"));
 const AttendeeCreate = lazy(
-  () => import("@/pages/attendee-create/AttendeeCreate")
+  () => import("@/pages/attendee-create/AttendeeCreate"),
 );
 const BookCreate = lazy(() => import("@/pages/books/book-create/BookCreate"));
 const BookRoaster = lazy(
-  () => import("@/pages/books/book-attendee/BookAttendee")
+  () => import("@/pages/books/book-attendee/BookAttendee"),
 );
 const KakaoSignIn = lazy(() => import("@/pages/kakao-auth/SignIn"));
 const CheckureeSignIn = lazy(() => import("@/pages/checkuree-auth/SignIn"));
@@ -36,12 +37,16 @@ interface RouteType {
 const routes: RouteType[] = [
   { path: "/book", element: <Books /> }, // 출석부 목록
   { path: "/book/create", element: <BookCreate /> }, // 출석부 생성
-  { path: "/book/:bookId/attendee/create", element: <AttendeeCreate /> }, // 출석부 생성
+  { path: "/book/:bookId/attendee/create", element: <AttendeeCreate /> }, // 학생 생성
   { path: "/book/:bookId", element: <BookCheck /> }, // 출석부 출석
   { path: "/book/:bookId/attendee", element: <BookRoaster /> }, // 출석부 명단
   {
     path: "/book/:bookId/attendee/:attendeeId",
     element: <BookAttendeeDetail />,
+  },
+  {
+    path: "/book/:bookId/attendee/:attendeeId/schedule",
+    element: <ScheduleModify />,
   },
 ];
 

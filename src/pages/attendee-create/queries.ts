@@ -25,7 +25,7 @@ export const useScheduleAttendee = (
   attendanceBookId: number,
   dayOfWeek: string,
   hhmm: string,
-  enabled: boolean = false
+  enabled: boolean = false,
 ) => {
   return useQuery({
     enabled: enabled && dayOfWeek !== "" && hhmm !== "",
@@ -121,6 +121,31 @@ interface progressGrade {
   startAt: string;
   gradeId: number;
 }
+
+export const useOnlyScheduleUpdate = ({
+  paramBookId,
+  attendeeId,
+  attendeeSchedules,
+}: {
+  paramBookId: number;
+  attendeeId: number;
+  attendeeSchedules: UpdateAttendeeScheduleRequest;
+}) => {
+  return useMutation({
+    mutationFn: async () =>
+      await updateAttendeeSchedule({
+        params: attendeeSchedules!,
+        attendanceBookId: paramBookId,
+        attendeeId,
+      }),
+    onSuccess: () => {
+      toast.success("수강생 일정이 수정되었습니다.");
+    },
+    onError: () => {
+      toast.error("클래스 일정 수정에 실패했습니다.");
+    },
+  });
+};
 
 export const useScheduleUpdate = ({
   paramBookId,

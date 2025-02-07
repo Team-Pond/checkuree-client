@@ -91,7 +91,9 @@ export function getDayGroupFromInput(input: DaysType[]) {
   const allDays = ["월", "화", "수", "목", "금", "토", "일"];
 
   // Input을 한글 요일로 변환
-  const days = input.map((item) => DayTransfer[item]);
+  const days = input
+    .sort((a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b))
+    .map((item) => DayTransfer[item]);
 
   // 매일
   if (
@@ -195,6 +197,10 @@ type ScheduleItem = {
   time: string;
 };
 
+/**
+ * ScheduleItem 배열을 받아서 요일(월~일) 순서대로 정렬한 후 시간을 한글로 변환하여 반환합니다.
+ *
+ */
 export const formatSchedule = (schedule: ScheduleItem[]): string[] => {
   const daysInKorean: Record<string, string> = {
     MONDAY: "월",
@@ -206,14 +212,26 @@ export const formatSchedule = (schedule: ScheduleItem[]): string[] => {
     SUNDAY: "일",
   };
 
-  return schedule?.map(({ day, time }) => {
-    const [hour, minute] = time.split(":").map(Number);
-    const period = hour >= 12 ? "오후" : "오전";
-    const formattedHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour; // 12시간제 변환
-    return `(${daysInKorean[day]}) ${period} ${formattedHour}:${minute
-      .toString()
-      .padStart(2, "0")}`;
-  });
+  const dayOrder: Record<string, number> = {
+    MONDAY: 1,
+    TUESDAY: 2,
+    WEDNESDAY: 3,
+    THURSDAY: 4,
+    FRIDAY: 5,
+    SATURDAY: 6,
+    SUNDAY: 7,
+  };
+
+  return schedule
+    ?.sort((a, b) => dayOrder[a.day] - dayOrder[b.day])
+    .map(({ day, time }) => {
+      const [hour, minute] = time.split(":").map(Number);
+      const period = hour >= 12 ? "오후" : "오전";
+      const formattedHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour; // 12시간제 변환
+      return `(${daysInKorean[day]}) ${period} ${formattedHour}:${minute
+        .toString()
+        .padStart(2, "0")}`;
+    });
 };
 
 /**
@@ -274,3 +292,13 @@ export function ceil30Minute(hhmm: string) {
   }
   return dayTime.subtract(remainder).add(30, "minute");
 }
+
+/**
+ * hh:mm 형식의 시간을 받아 30분을 뺀 시간을 반환합니다.
+ * 00:00 이전인 경우 00:00을 반환합니다.
+ */
+export const getSub30MinuteHhmm = (hhmm: string) => {
+  const dayTime = dayjs("2000-01-01 " + hhmm);
+  const sub30Minute = dayTime.subtract(30, "minute");
+  return sub30Minute.format("HH:mm");
+};
