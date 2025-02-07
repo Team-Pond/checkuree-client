@@ -24,8 +24,17 @@ export const useAuthLogin = () => {
       toast.success("로그인 되었습니다.");
       navigate("/");
     },
-    onError: () => {
-      toast.error("아이디 및 비밀번호가 일치하지 않습니다.");
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        console.log(error.response?.data);
+        toast.error(
+          error.response?.data.message ||
+            "서버에 오류가 있습니다. 잠시 후에 생성해주세요."
+        );
+      } else {
+        console.log(error);
+        toast.error("서버에 오류가 있습니다. 잠시 후에 생성해주세요.");
+      }
     },
   });
 };
