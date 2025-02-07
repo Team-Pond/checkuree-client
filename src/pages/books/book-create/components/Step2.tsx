@@ -53,7 +53,8 @@ export default function Step2(props: IProps) {
       });
   }, [subjects]);
 
-  const isCourseNameVaild = courseTitle.length > 0;
+  const isCourseNameVaild =
+    courseTitle.length > 0 && selectedSubjectItems.length > 0;
 
   const removeItemsAndAdjustLevels = (
     selectedSubjectItems: GradeItem[],

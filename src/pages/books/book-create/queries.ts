@@ -41,10 +41,13 @@ export const useBookCreate = () => {
     onError: (error) => {
       if (axios.isAxiosError(error)) {
         console.log(error.response?.data);
-        toast.error(error.response?.data?.data || "An error occurred");
+        toast.error(
+          error.response?.data.description ||
+            "서버에 오류가 있습니다. 잠시 후에 생성해주세요."
+        );
       } else {
         console.log(error);
-        toast.error("An unexpected error occurred");
+        toast.error("서버에 오류가 있습니다. 잠시 후에 생성해주세요.");
       }
     },
   });

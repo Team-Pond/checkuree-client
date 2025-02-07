@@ -1,14 +1,14 @@
 // src/context/BookContext.tsx
 import React, { createContext, useState, ReactNode } from "react";
-import { DayOfWeek } from '../utils';
+import { DayOfWeek } from "../utils";
 
 export interface Book {
   title: string;
   id: number;
-  attendeeCount:number;
-  availableDays:DayOfWeek[];
-  availableFrom:string;
-  availableTo:string;
+  attendeeCount: number;
+  availableDays: DayOfWeek[];
+  availableFrom: string;
+  availableTo: string;
 }
 
 interface BookContextType {
@@ -16,13 +16,9 @@ interface BookContextType {
   setSelectedBook: (book: Book) => void;
 }
 
-export const BookContext = createContext<BookContextType | undefined>(
-  undefined
-);
+const BookContext = createContext<BookContextType | undefined>(undefined);
 
-export const BookProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
+const BookProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
   return (
@@ -31,3 +27,5 @@ export const BookProvider: React.FC<{ children: ReactNode }> = ({
     </BookContext.Provider>
   );
 };
+
+export { BookProvider, BookContext };

@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { useNavigate } from "react-router-dom";
+
 import { useAuthLogin } from "./queries";
 
 export interface LoginDataType {
