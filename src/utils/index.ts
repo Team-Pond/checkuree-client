@@ -302,3 +302,15 @@ export const getSub30MinuteHhmm = (hhmm: string) => {
   const sub30Minute = dayTime.subtract(30, "minute");
   return sub30Minute.format("HH:mm");
 };
+
+/**
+ * hh:mm 형식의 시간을 받아 입력한 시간을 더한 후 hh:mm 형식으로 반환합니다.
+ * 24:00 이후인 경우 24:00을 반환합니다.
+ */
+export const getAddMinuteHhmm = (hhmm: string, minute: number) => {
+  const dayTime = dayjs("2000-01-01 " + hhmm);
+  const addedTime = dayTime.add(minute, "minute");
+  return addedTime.isBefore(dayjs("2000-01-02 00:00:00"))
+    ? addedTime.format("HH:mm")
+    : "24:00";
+};
