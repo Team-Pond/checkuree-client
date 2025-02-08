@@ -32,6 +32,7 @@ type IProps = {
     gender: GenderType;
     phoneNumber: string;
     description: string;
+    school: string;
   };
   scheduleItems: ScheduleItem;
   associates?: {
@@ -179,6 +180,7 @@ export default function StudentManage(props: IProps) {
           <div className="w-full rounded-2xl bg-white p-4 flex flex-col gap-5">
             <p className="flex text-s-bold text-[#5d5d5d]">
               <span>등록 정보</span> {/*<img*/}
+              {/*현재 수정 불가능하기 때문에 임시 주석처리*/}
               {/*  src="/images/icons/ico-pencil.svg"*/}
               {/*  width={20}*/}
               {/*  height={20}*/}
@@ -193,8 +195,12 @@ export default function StudentManage(props: IProps) {
               <p className="text-text-tertiary">기본 정보</p>
               <p className="text-text-primary">
                 {registerInfo.birthDate?.replaceAll("-", ".")},{" "}
-                {registerInfo.gender === "MALE" ? "남성" : "여성"}
+                {registerInfo.gender === "MALE" ? "남" : "여"}
               </p>
+            </div>
+            <div className="flex justify-between text-s-semibold">
+              <p className="text-text-tertiary">학교</p>
+              <p className="text-text-primary">{registerInfo.school}</p>
             </div>
             <div className="flex justify-between text-s-semibold">
               <p className="text-text-tertiary">학생 주소</p>
