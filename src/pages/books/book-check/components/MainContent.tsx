@@ -239,9 +239,7 @@ export default function MainContents(props: IProps) {
                           isTaught: !schedule.isTaught,
                         });
                       }}
-                      disabled={
-                        schedule.recordStatus === "ATTEND" ? false : true
-                      }
+                      disabled={schedule.recordStatus !== "ATTEND"}
                     >
                       <img
                         src={`/images/icons/book-check/${
