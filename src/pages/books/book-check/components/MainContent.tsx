@@ -17,75 +17,6 @@ type IProps = {
   setCheckedCount: (count: number) => void;
 };
 
-const handleCheckedCountChange = ({
-  schedule,
-  targetStatus,
-  checkedScheduleCount,
-  setCheckedCount,
-}: {
-  schedule: ScheduleData;
-  targetStatus: Omit<STATUS, "PENDING">;
-  checkedScheduleCount: number;
-  setCheckedCount: (count: number) => void;
-}) => {
-  if (!schedule.recordId) {
-    setCheckedCount(checkedScheduleCount + 1);
-    return;
-  }
-  const currentStatus = schedule.recordStatus;
-  // 상태 변화에 따른 checkedScheduleCount 조정
-  const adjustment =
-    currentStatus === targetStatus ? -1 : currentStatus === "PENDING" ? 1 : 0;
-  setCheckedCount(checkedScheduleCount + adjustment);
-};
-
-const handleStatusChange = ({
-  schedule,
-  targetStatus,
-  statusMutation,
-  recordMutation,
-}: {
-  schedule: ScheduleData;
-  targetStatus: Omit<STATUS, "PENDING">;
-  statusMutation: (params: {
-    recordId: number;
-    scheduleId: number;
-    status: STATUS;
-  }) => void;
-  recordMutation: (params: {
-    attendeeId: number;
-    scheduleId: number;
-    status: STATUS;
-  }) => void;
-}) => {
-  // 출석 기록이 없는 경우 출석 기록 생성
-  if (!schedule.recordId) {
-    recordMutation({
-      attendeeId: schedule.attendeeId,
-      scheduleId: schedule.scheduleId,
-      status: targetStatus as STATUS,
-    });
-    return;
-  }
-
-  // 이미 출석인 경우 다시 누르면 PENDING 상태로 수정
-  if (schedule.recordStatus === targetStatus) {
-    statusMutation({
-      recordId: schedule.recordId,
-      scheduleId: schedule.scheduleId,
-      status: "PENDING",
-    });
-    return;
-  }
-
-  // 출석 상태를 targetStatus로 변경
-  statusMutation({
-    recordId: schedule.recordId,
-    scheduleId: schedule.scheduleId,
-    status: targetStatus as STATUS,
-  });
-};
-
 export default function MainContents(props: IProps) {
   const {
     bookId,
@@ -107,9 +38,67 @@ export default function MainContents(props: IProps) {
   });
 
   const [isOpen, setIsOpen] = useState(false);
+
+  // 확인 모달창의 메시지 내용, 저장버튼 클릭 시 실행할 함수
   const [confirmMessage, setConfirmMessage] = useState("");
   const [onSave, setOnSave] = useState(() => () => {});
 
+  // 출석체크 화면의 체크 인원 수 변경
+  const handleCheckedCountChange = ({
+    schedule,
+    targetStatus,
+  }: {
+    schedule: ScheduleData;
+    targetStatus: Omit<STATUS, "PENDING">;
+  }) => {
+    if (!schedule.recordId) {
+      setCheckedCount(checkedScheduleCount + 1);
+      return;
+    }
+    const currentStatus = schedule.recordStatus;
+    // 상태 변화에 따른 checkedScheduleCount 조정
+    const adjustment =
+      currentStatus === targetStatus ? -1 : currentStatus === "PENDING" ? 1 : 0;
+    setCheckedCount(checkedScheduleCount + adjustment);
+  };
+
+  // 출석체크 상태 변경
+  const handleStatusChange = ({
+    schedule,
+    targetStatus,
+  }: {
+    schedule: ScheduleData;
+    targetStatus: Omit<STATUS, "PENDING">;
+  }) => {
+    // 출석 기록이 없는 경우 출석 기록 생성
+    if (!schedule.recordId) {
+      recordMutation({
+        attendeeId: schedule.attendeeId,
+        scheduleId: schedule.scheduleId,
+        status: targetStatus as STATUS,
+      });
+      return;
+    }
+
+    // 이미 출석인 경우 다시 누르면 PENDING 상태로 수정
+    if (schedule.recordStatus === targetStatus) {
+      statusMutation({
+        recordId: schedule.recordId,
+        scheduleId: schedule.scheduleId,
+        status: "PENDING",
+      });
+      return;
+    }
+
+    // 출석 상태를 targetStatus로 변경
+    statusMutation({
+      recordId: schedule.recordId,
+      scheduleId: schedule.scheduleId,
+      status: targetStatus as STATUS,
+    });
+  };
+
+  // 확인 모달에서 띄울 메시지 설정
   const handleConfirmMessage = (
     schedule: ScheduleData,
     targetStatus: "ATTEND" | "ABSENT",
@@ -128,7 +117,7 @@ export default function MainContents(props: IProps) {
     }
   };
 
-  const handleExtracted = (
+  const handleAttendanceStatusWithConfirmation = (
     targetStatus: "ATTEND" | "ABSENT",
     schedule: ScheduleData,
   ) => {
@@ -139,14 +128,10 @@ export default function MainContents(props: IProps) {
         handleCheckedCountChange({
           schedule,
           targetStatus,
-          checkedScheduleCount,
-          setCheckedCount,
         });
         handleStatusChange({
           schedule,
           targetStatus,
-          statusMutation,
-          recordMutation,
         });
       });
       setIsOpen(true);
@@ -157,14 +142,10 @@ export default function MainContents(props: IProps) {
     handleCheckedCountChange({
       schedule,
       targetStatus,
-      checkedScheduleCount,
-      setCheckedCount,
     });
     handleStatusChange({
       schedule,
       targetStatus,
-      statusMutation,
-      recordMutation,
     });
   };
 
@@ -199,7 +180,10 @@ export default function MainContents(props: IProps) {
                       {/* TODO: 결석은 status명이 어떻게 되는지? */}
                       <button
                         onClick={() => {
-                          handleExtracted("ABSENT", schedule);
+                          handleAttendanceStatusWithConfirmation(
+                            "ABSENT",
+                            schedule,
+                          );
                         }}
                         className={twMerge(
                           "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
@@ -212,7 +196,10 @@ export default function MainContents(props: IProps) {
                       </button>
                       <button
                         onClick={() => {
-                          handleExtracted("ATTEND", schedule);
+                          handleAttendanceStatusWithConfirmation(
+                            "ATTEND",
+                            schedule,
+                          );
                         }}
                         className={twMerge(
                           "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
