@@ -6,6 +6,8 @@ import { STATUS } from "@/api v2/RecordSchema";
 import { ScheduleData } from "../../../../api v2/ScheduleSchema";
 import { formatLocalTimeString } from "../../../../utils";
 import { useLessonUpdate, useRecordCreate, useStatusUpdate } from "../queries";
+import { useState } from "react";
+import { ConfirmModal } from "./ConfirmModal";
 
 type IProps = {
   bookSchedules: ScheduleDataType;
@@ -104,6 +106,46 @@ export default function MainContents(props: IProps) {
     bookId,
   });
 
+  const [isOpen, setIsOpen] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState("");
+  const [onSave, setOnSave] = useState(() => () => {});
+
+  const handleTotalStatusChange = (
+    targetStatus: "ABSENT" | "ATTEND",
+    schedule: ScheduleData,
+  ) => {
+    handleCheckedCountChange({
+      schedule,
+      targetStatus,
+      checkedScheduleCount,
+      setCheckedCount,
+    });
+    handleStatusChange({
+      schedule,
+      targetStatus,
+      statusMutation,
+      recordMutation,
+    });
+  };
+
+  const handleConfirmMessage = (
+    schedule: ScheduleData,
+    targetStatus: "ATTEND" | "ABSENT",
+  ) => {
+    if (schedule.recordStatus === targetStatus) {
+      setConfirmMessage("출석체크를 취소하시겠어요?");
+      return;
+    }
+    if (targetStatus === "ATTEND") {
+      setConfirmMessage("출석상태로 변경하시겠어요?");
+      return;
+    }
+    if (targetStatus === "ABSENT") {
+      setConfirmMessage("결석상태로 변경하시겠어요?");
+      return;
+    }
+  };
+
   return (
     <div className="w-full flex flex-col gap-4 justify-center items-center py-3 px-4 bg-bg-secondary scrollbar-hide custom-scrollbar-hide">
       {bookSchedules?.content?.map((content, index) => {
@@ -135,50 +177,44 @@ export default function MainContents(props: IProps) {
                       {/* TODO: 결석은 status명이 어떻게 되는지? */}
                       <button
                         onClick={() => {
-                          // await checkAttendee("", schedule.attendeeId)
-                          // statusMutation("REJECTED");`
-                          handleCheckedCountChange({
-                            schedule,
-                            targetStatus: "ABSENT",
-                            checkedScheduleCount,
-                            setCheckedCount,
-                          });
-                          handleStatusChange({
-                            schedule,
-                            targetStatus: "ABSENT",
-                            statusMutation,
-                            recordMutation,
-                          });
+                          if (schedule.recordStatus !== "PENDING") {
+                            handleConfirmMessage(schedule, "ABSENT");
+                            setOnSave(
+                              () => () =>
+                                handleTotalStatusChange("ABSENT", schedule),
+                            );
+                            setIsOpen(true);
+                          } else {
+                            handleTotalStatusChange("ABSENT", schedule);
+                          }
                         }}
                         className={twMerge(
                           "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
                           schedule.recordStatus === "ABSENT"
                             ? "bg-bg-destructive text-text-interactive-destructive"
-                            : "bg-bg-disabled text-text-disabled"
+                            : "bg-bg-disabled text-text-disabled",
                         )}
                       >
                         결석
                       </button>
                       <button
                         onClick={() => {
-                          handleCheckedCountChange({
-                            schedule,
-                            targetStatus: "ATTEND",
-                            checkedScheduleCount,
-                            setCheckedCount,
-                          });
-                          handleStatusChange({
-                            schedule,
-                            targetStatus: "ATTEND",
-                            statusMutation,
-                            recordMutation,
-                          });
+                          if (schedule.recordStatus !== "PENDING") {
+                            handleConfirmMessage(schedule, "ATTEND");
+                            setOnSave(
+                              () => () =>
+                                handleTotalStatusChange("ATTEND", schedule),
+                            );
+                            setIsOpen(true);
+                          } else {
+                            handleTotalStatusChange("ATTEND", schedule);
+                          }
                         }}
                         className={twMerge(
                           "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
                           schedule.recordStatus === "ATTEND"
                             ? "bg-bg-primary text-text-interactive-primary"
-                            : "bg-bg-disabled text-text-disabled"
+                            : "bg-bg-disabled text-text-disabled",
                         )}
                       >
                         출석
@@ -190,8 +226,8 @@ export default function MainContents(props: IProps) {
                         schedule.recordStatus !== "ATTEND"
                           ? "bg-bg-disabled"
                           : schedule.isTaught
-                          ? "bg-bg-tertiary"
-                          : "bg-bg-base" // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?
+                            ? "bg-bg-tertiary"
+                            : "bg-bg-base", // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?
                       )}
                       onClick={() => {
                         lessonMutation({
@@ -219,6 +255,17 @@ export default function MainContents(props: IProps) {
           </div>
         );
       })}
+      <ConfirmModal
+        isOpen={isOpen}
+        onClose={() => {
+          setIsOpen(false);
+        }}
+        onSave={() => {
+          onSave();
+          setIsOpen(false);
+        }}
+        message={confirmMessage}
+      />
     </div>
   );
 }
