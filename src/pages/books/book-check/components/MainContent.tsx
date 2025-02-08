@@ -110,24 +110,6 @@ export default function MainContents(props: IProps) {
   const [confirmMessage, setConfirmMessage] = useState("");
   const [onSave, setOnSave] = useState(() => () => {});
 
-  const handleTotalStatusChange = (
-    targetStatus: "ABSENT" | "ATTEND",
-    schedule: ScheduleData,
-  ) => {
-    handleCheckedCountChange({
-      schedule,
-      targetStatus,
-      checkedScheduleCount,
-      setCheckedCount,
-    });
-    handleStatusChange({
-      schedule,
-      targetStatus,
-      statusMutation,
-      recordMutation,
-    });
-  };
-
   const handleConfirmMessage = (
     schedule: ScheduleData,
     targetStatus: "ATTEND" | "ABSENT",
@@ -144,6 +126,46 @@ export default function MainContents(props: IProps) {
       setConfirmMessage("결석상태로 변경하시겠어요?");
       return;
     }
+  };
+
+  const handleExtracted = (
+    targetStatus: "ATTEND" | "ABSENT",
+    schedule: ScheduleData,
+  ) => {
+    // 출석기록이 이미 있는 경우 확인 메시지 출력
+    if (schedule.recordStatus !== "PENDING") {
+      handleConfirmMessage(schedule, targetStatus);
+      setOnSave(() => () => {
+        handleCheckedCountChange({
+          schedule,
+          targetStatus,
+          checkedScheduleCount,
+          setCheckedCount,
+        });
+        handleStatusChange({
+          schedule,
+          targetStatus,
+          statusMutation,
+          recordMutation,
+        });
+      });
+      setIsOpen(true);
+      return;
+    }
+
+    // 출석기록이 없는 경우 바로 상태 변경
+    handleCheckedCountChange({
+      schedule,
+      targetStatus,
+      checkedScheduleCount,
+      setCheckedCount,
+    });
+    handleStatusChange({
+      schedule,
+      targetStatus,
+      statusMutation,
+      recordMutation,
+    });
   };
 
   return (
@@ -177,16 +199,7 @@ export default function MainContents(props: IProps) {
                       {/* TODO: 결석은 status명이 어떻게 되는지? */}
                       <button
                         onClick={() => {
-                          if (schedule.recordStatus !== "PENDING") {
-                            handleConfirmMessage(schedule, "ABSENT");
-                            setOnSave(
-                              () => () =>
-                                handleTotalStatusChange("ABSENT", schedule),
-                            );
-                            setIsOpen(true);
-                          } else {
-                            handleTotalStatusChange("ABSENT", schedule);
-                          }
+                          handleExtracted("ABSENT", schedule);
                         }}
                         className={twMerge(
                           "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
@@ -199,16 +212,7 @@ export default function MainContents(props: IProps) {
                       </button>
                       <button
                         onClick={() => {
-                          if (schedule.recordStatus !== "PENDING") {
-                            handleConfirmMessage(schedule, "ATTEND");
-                            setOnSave(
-                              () => () =>
-                                handleTotalStatusChange("ATTEND", schedule),
-                            );
-                            setIsOpen(true);
-                          } else {
-                            handleTotalStatusChange("ATTEND", schedule);
-                          }
+                          handleExtracted("ATTEND", schedule);
                         }}
                         className={twMerge(
                           "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
