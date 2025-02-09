@@ -2,7 +2,7 @@ import {
   createRecord,
   updateRecordAll,
   updateRecordLesson,
-  updateRecordStatus,
+  updateRecord,
 } from "@/api v2/RecordApiClient";
 import { STATUS } from "@/api v2/RecordSchema";
 import { getScheduleAttendee } from "@/api v2/ScheduleApiClient";
@@ -66,6 +66,40 @@ export const useRecordAllUpdate = ({
   });
 };
 
+export const useRecordUpdate = ({
+  bookId,
+  recordId,
+  formattedTime,
+}: {
+  bookId: number;
+  recordId: number;
+  formattedTime: string;
+}) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async () =>
+      await updateRecord({
+        params: {
+          attendanceBookId: bookId,
+          attendTime: formattedTime
+            .split(":")
+            .map((time) => time.padStart(2, "0"))
+            .join(":"),
+          recordId,
+        },
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: bookKeys.schedules._def,
+      });
+      toast.success("출석시간 변경 완료");
+    },
+    onError: () => {
+      toast.error("출석시간 수정 실패");
+    },
+  });
+};
+
 /**
  * @param attendTime : 'HH:mm' 형식으로 입력
  * attendTime 을 입력하지 않을 경우 현재 시간이 자동으로 입력됨
@@ -96,11 +130,13 @@ export const useRecordCreate = ({
           attendeeId: attendeeId,
           scheduleId: scheduleId,
           attendDate: currentDate,
-          attendTime: attendTime ?? `${getCurrentTimeParts()
-            .hour.toString()
-            .padStart(2, "0")}:${getCurrentTimeParts()
-            .minute.toString()
-            .padStart(2, "0")}`,
+          attendTime:
+            attendTime ??
+            `${getCurrentTimeParts()
+              .hour.toString()
+              .padStart(2, "0")}:${getCurrentTimeParts()
+              .minute.toString()
+              .padStart(2, "0")}`,
           status: status,
         },
       }),
@@ -125,7 +161,7 @@ export const useStatusUpdate = ({ bookId }: { bookId: number }) => {
       scheduleId: number;
       status: STATUS;
     }) =>
-      await updateRecordStatus({
+      await updateRecord({
         params: {
           attendanceBookId: bookId,
           status,

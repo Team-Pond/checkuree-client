@@ -13,7 +13,7 @@ import {
 } from "./RecordSchema";
 
 // 출석 체크
-export const UpdateRecord = async ({
+export const updateRecord = async ({
   params,
 }: {
   params: UpdateRecordRequest;

@@ -22,7 +22,7 @@ export type STATUS = "PENDING" | "ATTEND" | "ABSENT";
 export type UpdateRecordRequest = {
   recordId: number;
   attendanceBookId: number;
-  scheduleId: number;
+  scheduleId?: number;
   status?: STATUS | string;
   attendTime?: string;
 };
