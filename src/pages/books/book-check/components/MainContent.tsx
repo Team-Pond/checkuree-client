@@ -8,6 +8,7 @@ import { formatLocalTimeString } from "../../../../utils";
 import { useLessonUpdate, useRecordCreate, useStatusUpdate } from "../queries";
 import { useState } from "react";
 import { ConfirmModal } from "./ConfirmModal";
+import ModifyRecordTimeModal from "./ModifyRecordTimeModal";
 
 type IProps = {
   bookSchedules: ScheduleDataType;
@@ -38,6 +39,12 @@ export default function MainContents(props: IProps) {
   });
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isRecordTimeOpen, setIsRecordTimeOpen] = useState(false);
+
+  const [record, setRecord] = useState({
+    id: 0,
+    formattedTime: "",
+  });
 
   // 확인 모달창의 메시지 내용, 저장버튼 클릭 시 실행할 함수
   const [confirmMessage, setConfirmMessage] = useState("");
@@ -165,7 +172,18 @@ export default function MainContents(props: IProps) {
               return (
                 <div className="w-full h-[56px] flex items-center justify-between px-2 ">
                   {/*<p className="font-bold  text-text-primary">{schedule.name}</p>*/}
-                  <div className="flex flex-col items-start">
+                  <div
+                    className="flex flex-col items-start"
+                    onClick={() => {
+                      if (schedule.recordStatus === "ATTEND") {
+                        setRecord({
+                          id: schedule.recordId,
+                          formattedTime: schedule.recordTime,
+                        });
+                        setIsRecordTimeOpen(true);
+                      }
+                    }}
+                  >
                     <p className="font-bold text-text-primary">
                       {schedule.name}
                     </p>
@@ -254,6 +272,14 @@ export default function MainContents(props: IProps) {
           setIsOpen(false);
         }}
         message={confirmMessage}
+      />
+      <ModifyRecordTimeModal
+        isOpen={isRecordTimeOpen}
+        bookId={bookId}
+        onClose={() => {
+          setIsRecordTimeOpen(false);
+        }}
+        record={record}
       />
     </div>
   );
