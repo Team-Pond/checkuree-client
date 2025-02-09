@@ -6,6 +6,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { UploadImageRequest } from "../../../api v2/FileSchema";
+import { uploadImage } from "../../../api v2/FileApiClient";
 
 export const useSubjects = () => {
   return useQuery({
@@ -43,12 +45,27 @@ export const useBookCreate = () => {
         console.log(error.response?.data);
         toast.error(
           error.response?.data.description ||
-            "서버에 오류가 있습니다. 잠시 후에 생성해주세요."
+            "서버에 오류가 있습니다. 잠시 후에 생성해주세요.",
         );
       } else {
         console.log(error);
         toast.error("서버에 오류가 있습니다. 잠시 후에 생성해주세요.");
       }
+    },
+  });
+};
+
+
+export const useFileUpload = () => {
+  return useMutation({
+    mutationFn: async ({ file, bookId }: UploadImageRequest) => {
+      return await uploadImage({ file, bookId });
+    },
+    onSuccess: () => {
+      toast.success("파일 업로드 성공");
+    },
+    onError: (error) => {
+      toast.error("파일 업로드 중 오류가 발생했습니다.");
     },
   });
 };
