@@ -1,5 +1,5 @@
 import CommonModal from "../../../../components/CommonModal";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecordUpdate } from "../queries";
 import { twMerge } from "tailwind-merge";
 
@@ -19,11 +19,20 @@ export const ModifyRecordTimeModal: React.FC<Props> = ({
   record,
   bookId,
 }) => {
-  const [initialHour, initialMinute] = record.formattedTime.split(":");
   const [formData, setFormData] = useState({
-    hour: initialHour,
-    minute: initialMinute,
+    hour: "",
+    minute: "",
   });
+
+  // 화면을 다시 열 때마다 기존의 시간을 입력창에 표시
+  useEffect(() => {
+    const [initialHour, initialMinute] = record.formattedTime.split(":");
+
+    setFormData({
+      hour: initialHour,
+      minute: initialMinute,
+    });
+  }, [isOpen]);
 
   const resetFormData = () => {
     setFormData({
