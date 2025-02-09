@@ -95,6 +95,7 @@ const CommonTabs = () => {
               gender: attendeeDetail?.gender!,
               phoneNumber: attendeeDetail?.phoneNumber!,
               description: attendeeDetail?.description!,
+              school: attendeeDetail?.school!,
             }}
             scheduleItems={attendeeDetail?.schedules!}
             associates={{

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import ScheduleTable from "./ScheduleTable";
 import SubjectSelectionDrawer from "./SubjectSelectionDrawer";
 import AttendeeDrawer from "./AttendeeDrawer";
 import { DaysType } from "@/api v2/AttendanceBookSchema";
@@ -12,6 +11,7 @@ import {
   useScheduleTable,
 } from "../queries";
 import { getSub30MinuteHhmm } from "../../../utils";
+import ScheduleTable from "../../books/book-attendee-detail/components/ScheduleTable";
 
 interface Step2Props {
   setAttendeeSchedules: React.Dispatch<

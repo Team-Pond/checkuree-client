@@ -14,7 +14,7 @@ export default function Bottom() {
 
   return (
     <div
-      className="flex justify-between px-[44px] items-center fixed bottom-0 left-1/2 transform -translate-x-1/2 z-50 
+      className="flex justify-between px-[44px] items-center fixed bottom-0 left-1/2 transform -translate-x-1/2 z-40
              w-full max-w-[390px] h-[92px] bg-white rounded-2xl"
     >
       <div
@@ -31,7 +31,9 @@ export default function Bottom() {
         <p
           className={twMerge(
             "text-xs ",
-            bookUrl && !attendeeUrl ? "text-text-primary" : "text-text-tertiary"
+            bookUrl && !attendeeUrl
+              ? "text-text-primary"
+              : "text-text-tertiary",
           )}
         >
           출석부
@@ -52,7 +54,7 @@ export default function Bottom() {
         <p
           className={twMerge(
             "text-xs ",
-            attendeeUrl ? "text-text-primary" : "text-text-tertiary"
+            attendeeUrl ? "text-text-primary" : "text-text-tertiary",
           )}
         >
           명단
