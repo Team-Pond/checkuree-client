@@ -1,9 +1,10 @@
-import { DaysType } from "@/api v2/AttendanceBookSchema";
-import TimePicker from "@/components/TimePicker";
-import { ChangeEvent, useRef, useState } from "react";
-import { FieldErrors, useFormContext } from "react-hook-form";
-import { twMerge } from "tailwind-merge";
-import { CreateBookSchema } from "../BookCreate";
+import { DaysType } from '@/api v2/AttendanceBookSchema';
+import TimePicker from '@/components/TimePicker';
+import { ChangeEvent, useRef, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { twMerge } from 'tailwind-merge';
+import { CreateBookSchema } from '../BookCreate';
+import { useFileUpload } from '../queries';
 
 const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
 
@@ -45,22 +46,37 @@ export default function Step1() {
     }
   };
 
+  const { mutate: uploadFile } = useFileUpload();
+
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (!selectedFile) return;
 
+    // 🌟 미리보기 기능
     const reader = new FileReader();
     reader.onload = (e) => {
       if (e.target && e.target.result) {
-        const result = e.target.result as string;
-        setImageSrc(result);
-        setValue("imageUrl", result);
+        setImageSrc(e.target.result as string);
       }
     };
+    reader.readAsDataURL(selectedFile);
 
-    if (selectedFile) {
-      reader.readAsDataURL(selectedFile);
-    }
+    // 🚀 업로드 API 호출 (비동기 요청)
+    uploadFile(
+      { file: selectedFile }, // bookId는 실제 값으로 변경 필요
+      {
+        onSuccess: (response) => {
+          const uploadedUrl = response?.data?.url;
+          if (uploadedUrl) {
+            const replacedImageUrl = String(uploadedUrl).replaceAll(`"`, "");
+            setValue("imageUrl", replacedImageUrl);
+          }
+        },
+        onError: (error) => {
+          setImageSrc(null);
+        }
+      },
+    );
   };
 
   const fileRef = useRef<HTMLInputElement | null>(null);
