@@ -215,14 +215,9 @@ export default function Step1() {
               );
             })}
           </div>
-          {errors.availableFrom && (
+          {(errors.availableFrom || errors.availableTo) && (
             <p className="text-red-500 text-sm mt-1">
-              {errors.availableFrom.message}
-            </p>
-          )}
-          {errors.availableTo && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.availableTo.message}
+              {"시작 날짜 및 종료 날짜를 입력해주세요."}
             </p>
           )}
         </div>
