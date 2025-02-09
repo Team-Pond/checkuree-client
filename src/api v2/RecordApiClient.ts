@@ -8,17 +8,17 @@ import {
   UpdateRecordAllResponse,
   UpdateRecordLessonRequest,
   UpdateRecordLessonResponse,
-  UpdateRecordStatusRequest,
-  UpdateRecordStatusResponse,
+  UpdateRecordRequest,
+  UpdateRecordResponse,
 } from "./RecordSchema";
 
 // 출석 체크
-export const updateRecordStatus = async ({
+export const UpdateRecord = async ({
   params,
 }: {
-  params: UpdateRecordStatusRequest;
-}): Promise<UpdateRecordStatusResponse> => {
-  const { recordId, status, attendanceBookId, scheduleId } = params;
+  params: UpdateRecordRequest;
+}): Promise<UpdateRecordResponse> => {
+  const { recordId, status, attendanceBookId, scheduleId, attendTime } = params;
   const response = await ApiClient.request({
     method: "POST",
     url: `/record/${recordId}`,
@@ -26,6 +26,7 @@ export const updateRecordStatus = async ({
       attendanceBookId,
       scheduleId,
       status,
+      attendTime,
     },
   });
 

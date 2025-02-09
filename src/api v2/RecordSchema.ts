@@ -8,7 +8,7 @@ type ErrorResponse = ResponseBase & {
   timeStamp: string;
 };
 
-export type UpdateRecordStatusResponse =
+export type UpdateRecordResponse =
   | ({
       status: 200;
       data: {
@@ -19,11 +19,12 @@ export type UpdateRecordStatusResponse =
 
 export type STATUS = "PENDING" | "ATTEND" | "ABSENT";
 
-export type UpdateRecordStatusRequest = {
+export type UpdateRecordRequest = {
   recordId: number;
   attendanceBookId: number;
   scheduleId: number;
-  status: STATUS | string;
+  status?: STATUS | string;
+  attendTime?: string;
 };
 
 export type UpdateRecordLessonResponse =
