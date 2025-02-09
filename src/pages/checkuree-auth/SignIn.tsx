@@ -1,8 +1,10 @@
 import { twMerge } from "tailwind-merge";
 import axios from "axios";
+
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { z } from "zod";
+
 import { useAuthLogin } from "./queries";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -68,41 +70,45 @@ export default function CheckureeSignIn() {
             })}
           >
             <div className="flex flex-col gap-4 w-full items-start">
-              <input
-                {...register("username")}
-                placeholder="example@email.com"
-                className="bg-white w-full h-12 rounded-2xl p-4 border-[2px] focus:outline-none"
-              />
-              {errors.username && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.username.message}
-                </p>
-              )}
-              <div className="relative flex items-center w-full">
+              <div className="flex flex-col gap-[1px] w-full">
                 <input
-                  {...register("password")}
-                  type={showPassword ? "text" : "password"}
-                  placeholder="비밀번호"
+                  {...register("username")}
+                  placeholder="example@email.com"
                   className="bg-white w-full h-12 rounded-2xl p-4 border-[2px] focus:outline-none"
                 />
-                <img
-                  className="absolute right-4"
-                  src={`/images/icons/ico-${
-                    showPassword ? "visible" : "invisible"
-                  }-eye.svg`}
-                  width={24}
-                  height={24}
-                  alt="로그인 유지 체크"
-                  onClick={() => setShowPassword(!showPassword)}
-                />
+                {errors.username && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.username.message}
+                  </p>
+                )}
               </div>
 
-              {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.password.message}
-                </p>
-              )}
+              <div className="flex flex-col gap-[1px] w-full">
+                <div className="relative flex items-center w-full">
+                  <input
+                    {...register("password")}
+                    type={showPassword ? "text" : "password"}
+                    placeholder="비밀번호"
+                    className="bg-white w-full h-12 rounded-2xl p-4 border-[2px] focus:outline-none"
+                  />
+                  <img
+                    className="absolute right-4"
+                    src={`/images/icons/ico-${
+                      showPassword ? "visible" : "invisible"
+                    }-eye.svg`}
+                    width={24}
+                    height={24}
+                    alt="로그인 유지 체크"
+                    onClick={() => setShowPassword(!showPassword)}
+                  />
+                </div>
 
+                {errors.password && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
               <div className="flex gap-1 items-center">
                 <img
                   src="/images/icons/ico-check-active.svg"
