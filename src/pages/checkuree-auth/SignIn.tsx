@@ -70,7 +70,7 @@ export default function CheckureeSignIn() {
             })}
           >
             <div className="flex flex-col gap-4 w-full items-start">
-              <div className="flex flex-col gap-[1px] w-full">
+              <div className="flex flex-col gap-[1px] w-full text-left">
                 <input
                   {...register("username")}
                   placeholder="example@email.com"
@@ -83,7 +83,7 @@ export default function CheckureeSignIn() {
                 )}
               </div>
 
-              <div className="flex flex-col gap-[1px] w-full">
+              <div className="flex flex-col gap-[1px] w-full text-left">
                 <div className="relative flex items-center w-full">
                   <input
                     {...register("password")}

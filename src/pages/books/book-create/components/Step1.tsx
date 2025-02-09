@@ -132,18 +132,19 @@ export default function Step1() {
           <p className="font-bold text-m-medium">출석부</p>
           <p className="text-text-danger">*</p>
         </div>
-
-        <input
-          {...register("title", {
-            required: "출석부는 최소 4글자 이상 입력해주세요.",
-          })}
-          type="text"
-          placeholder="출석부 이름"
-          className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
-        />
-        {errors.title && (
-          <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
-        )}
+        <div className="flex flex-col gap-[1px] w-full text-left">
+          <input
+            {...register("title", {
+              required: "출석부는 최소 4글자 이상 입력해주세요.",
+            })}
+            type="text"
+            placeholder="출석부 이름"
+            className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+          />
+          {errors.title && (
+            <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
+          )}
+        </div>
       </div>
 
       {/* 수업 요일 */}
@@ -153,29 +154,31 @@ export default function Step1() {
           <p className="text-text-danger">*</p>
         </div>
 
-        <div className="grid grid-cols-7 gap-0">
-          {DAYS.map((day, index) => {
-            return (
-              <div
-                key={day}
-                className={twMerge(
-                  "max-w-11 h-11 rounded-lg flex justify-center items-center",
-                  currentDays.includes(DaysMatch[DAYS[index]])
-                    ? "bg-bg-primary text-text-interactive-primary"
-                    : "bg-bg-secondary text-text-secondary"
-                )}
-                onClick={() => onDaysChange(DAYS[index] as DaysType)}
-              >
-                <span className="font-semibold text-base">{DAYS[index]}</span>
-              </div>
-            );
-          })}
+        <div className="flex flex-col gap-[1px] w-full text-left">
+          <div className="grid grid-cols-7 gap-0">
+            {DAYS.map((day, index) => {
+              return (
+                <div
+                  key={day}
+                  className={twMerge(
+                    "max-w-11 h-11 rounded-lg flex justify-center items-center",
+                    currentDays.includes(DaysMatch[DAYS[index]])
+                      ? "bg-bg-primary text-text-interactive-primary"
+                      : "bg-bg-secondary text-text-secondary"
+                  )}
+                  onClick={() => onDaysChange(DAYS[index] as DaysType)}
+                >
+                  <span className="font-semibold text-base">{DAYS[index]}</span>
+                </div>
+              );
+            })}
+          </div>
+          {errors.availableDays && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.availableDays.message}
+            </p>
+          )}
         </div>
-        {errors.availableDays && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.availableDays.message}
-          </p>
-        )}
       </div>
       <input
         type="hidden"
@@ -188,39 +191,41 @@ export default function Step1() {
           <p className="font-bold text-m-medium">수업 시간</p>
           <p className="text-text-danger">*</p>
         </div>
-        <div className="flex items-center gap-4">
-          {PICKER_RENDER.map((time, index) => {
-            return (
-              <div
-                className="flex gap-2 items-center max-w-[163px] w-full"
-                onClick={() => time.handleOpen()}
-                key={index}
-              >
-                <button
-                  type="button"
-                  className="outline-none border border-[#E7E7E7] rounded-xl max-w-[130px] w-full h-12  flex items-center pl-4"
+        <div className="flex flex-col gap-[1px] w-full text-left">
+          <div className="flex items-center gap-4">
+            {PICKER_RENDER.map((time, index) => {
+              return (
+                <div
+                  className="flex gap-2 items-center max-w-[163px] w-full"
+                  onClick={() => time.handleOpen()}
+                  key={index}
                 >
-                  <p className="font-bold text-sm text-[#B0B0B0]">
-                    {time.text}
+                  <button
+                    type="button"
+                    className="outline-none border border-[#E7E7E7] rounded-xl max-w-[130px] w-full h-12  flex items-center pl-4"
+                  >
+                    <p className="font-bold text-sm text-[#B0B0B0]">
+                      {time.text}
+                    </p>
+                  </button>
+                  <p className="text-sm font-bold text-text-primary">
+                    {time.timeText}
                   </p>
-                </button>
-                <p className="text-sm font-bold text-text-primary">
-                  {time.timeText}
-                </p>
-              </div>
-            );
-          })}
+                </div>
+              );
+            })}
+          </div>
+          {errors.availableFrom && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.availableFrom.message}
+            </p>
+          )}
+          {errors.availableTo && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.availableTo.message}
+            </p>
+          )}
         </div>
-        {errors.availableFrom && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.availableFrom.message}
-          </p>
-        )}
-        {errors.availableTo && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.availableTo.message}
-          </p>
-        )}
       </div>
 
       {/* 커버 이미지 */}
