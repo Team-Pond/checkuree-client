@@ -48,9 +48,6 @@ export default function AttendeeDrawer({
           {scheduleData?.map((attendee) => (
             <div key={attendee.name} className="flex gap-2 w-[171px] h-9">
               <p className="text-m-bold text-text-primary">{attendee.name}</p>
-              <p className="text-m-semibold text-text-secondary">
-                {attendee.age}
-              </p>
             </div>
           ))}
         </div>
