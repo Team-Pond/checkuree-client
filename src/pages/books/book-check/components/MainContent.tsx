@@ -16,6 +16,12 @@ type IProps = {
   currentDate: string;
   checkedScheduleCount: number;
   setCheckedCount: (count: number) => void;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  confirmMessage: string;
+  setConfirmMessage: (message: string) => void;
+  onSave: () => void;
+  setOnSave: (onSave: () => void) => void;
 };
 
 export default function MainContents(props: IProps) {
@@ -25,6 +31,12 @@ export default function MainContents(props: IProps) {
     currentDate,
     checkedScheduleCount,
     setCheckedCount,
+    isOpen,
+    setIsOpen,
+    confirmMessage,
+    setConfirmMessage,
+    onSave,
+    setOnSave,
   } = props;
 
   const { mutate: recordMutation } = useRecordCreate({
@@ -38,17 +50,12 @@ export default function MainContents(props: IProps) {
     bookId,
   });
 
-  const [isOpen, setIsOpen] = useState(false);
   const [isRecordTimeOpen, setIsRecordTimeOpen] = useState(false);
 
   const [record, setRecord] = useState({
     id: 0,
     formattedTime: "",
   });
-
-  // 확인 모달창의 메시지 내용, 저장버튼 클릭 시 실행할 함수
-  const [confirmMessage, setConfirmMessage] = useState("");
-  const [onSave, setOnSave] = useState(() => () => {});
 
   // 출석체크 화면의 체크 인원 수 변경
   const handleCheckedCountChange = ({

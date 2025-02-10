@@ -117,7 +117,7 @@ export const ModifyRecordTimeModal: React.FC<Props> = ({
             }}
             type="button"
             className={twMerge(
-              "w-full h-12 flex justify-center items-center rounded-2xl",
+              "w-full h-12 flex justify-center items-center rounded-2xl ",
               !!formData.minute && !!formData.hour
                 ? "bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed opacity-50",

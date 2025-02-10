@@ -22,6 +22,11 @@ export default function BookCheck() {
   const [totalScheduleCount, setTotalScheduleCount] = useState<number>(0);
   const [openFilter, setOpenFilter] = useState<boolean>(false);
 
+  // 확인 모달창의 오픈 여부, 메시지 내용, 저장버튼 클릭 시 실행할 함수
+  const [isOpen, setIsOpen] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState("");
+  const [onSave, setOnSave] = useState(() => () => {});
+
   const formattedDate = currentDate.format("YYYY-MM-DD"); // 데이터 값
 
   const onDrawerChange = () => {
@@ -62,6 +67,9 @@ export default function BookCheck() {
   return (
     <section className="flex flex-col w-full scrollbar-hide custom-scrollbar-hide">
       <Header
+        setConfirmMessage={setConfirmMessage}
+        setOnSave={setOnSave}
+        setConfirmModalIsOpen={setIsOpen}
         title={bookName || selectedBook?.title!}
         bookId={Number(bookId)}
         handlePreviousDay={handlePreviousDay}
@@ -73,6 +81,12 @@ export default function BookCheck() {
         setOpenFilter={setOpenFilter}
       />
       <MainContents
+        confirmMessage={confirmMessage}
+        onSave={onSave}
+        setConfirmMessage={setConfirmMessage}
+        setOnSave={setOnSave}
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
         bookSchedules={bookSchedules?.data as ScheduleDataType}
         currentDate={formattedDate}
         bookId={Number(bookId!)}

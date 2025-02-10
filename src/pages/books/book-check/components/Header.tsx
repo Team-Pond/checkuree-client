@@ -22,6 +22,9 @@ type HeaderProps = {
   checkedScheduleCount: number;
   totalScheduleCount: number;
   setOpenFilter: Dispatch<SetStateAction<boolean>>;
+  setConfirmModalIsOpen: Dispatch<SetStateAction<boolean>>;
+  setConfirmMessage: Dispatch<SetStateAction<string>>;
+  setOnSave: Dispatch<SetStateAction<() => void>>;
 };
 
 export default function Header(props: HeaderProps) {
@@ -35,6 +38,9 @@ export default function Header(props: HeaderProps) {
     checkedScheduleCount,
     totalScheduleCount,
     setOpenFilter,
+    setConfirmModalIsOpen,
+    setConfirmMessage,
+    setOnSave
   } = props;
 
   const navigate = useNavigate();
@@ -118,7 +124,11 @@ export default function Header(props: HeaderProps) {
     {
       src: "/images/icons/ico-check.svg",
       name: "전체 출석",
-      onClick: () => recordAllMutation(),
+      onClick: () => {
+        setConfirmModalIsOpen(true);
+        setConfirmMessage("전체 출석하시겠습니까?");
+        setOnSave(() => () => recordAllMutation());
+      },
     },
   ];
 
