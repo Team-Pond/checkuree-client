@@ -42,7 +42,9 @@ export default function Header(props: HeaderProps) {
         </div>
       </div>
       <div className="flex gap-2 w-full justify-center p-[17px]">
-        <div className="relative w-full max-w-[307px]">
+        <div className="relative w-full max-w-[360px]">
+        {/*<div className="relative w-full max-w-[307px]">*/}
+        {/* 필터링 이모티콘 주석처리로 w-307 -> 360 으로 임시 수정*/}
           <input
             type="text"
             className="bg-bg-secondary rounded-lg w-full h-11 outline-none pl-11 text-m-bold"
@@ -57,13 +59,13 @@ export default function Header(props: HeaderProps) {
             className="absolute top-[2px] left-1"
           />
         </div>
-        <img
-          width={40}
-          height={40}
-          src={"/images/icons/book-roaster/ico-slider.svg"}
-          alt="필터 아이콘"
-          onClick={onDrawerChange}
-        />
+        {/*<img*/}
+        {/*  width={40}*/}
+        {/*  height={40}*/}
+        {/*  src={"/images/icons/book-roaster/ico-slider.svg"}*/}
+        {/*  alt="필터 아이콘"*/}
+        {/*  onClick={onDrawerChange}*/}
+        {/*/>*/}
       </div>
     </>
   );
