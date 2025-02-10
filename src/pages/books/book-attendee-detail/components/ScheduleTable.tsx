@@ -60,6 +60,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
   const { bookId } = useParams();
 
   const { data: bookDetail } = useBookDetail(Number(bookId));
+  // 토.일 미사용 요일 삭제
   const [filteredScheduleTable, setFilteredScheduleTable] =
     useState(scheduleTable);
 
@@ -85,16 +86,26 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
       bookDetail.data.availableDays.forEach((day) => {
         availableDaysSet.add(day);
       });
-      setFilteredScheduleTable(
-        scheduleTable.filter((daySchedule) =>
+      const weekendFiltered = scheduleTable.filter((daySchedule) =>
           availableDaysSet.has(daySchedule.dayOfWeek),
-        ),
-      );
+        )
+
+      // availableFrom이 '30'으로 끝나는 경우 scheduleCount에 0을 추가
+      const isAvailableFrom30 = bookDetail?.data?.availableFrom?.endsWith('30');
+      const updatedScheduleTable = isAvailableFrom30
+        ? weekendFiltered.map((daySchedule) => ({
+          ...daySchedule,
+          scheduleCount: [0, ...daySchedule.scheduleCount, 0], // 시작시간이 30분 인 경우 앞에 0을 하나 추가
+        }))
+        : weekendFiltered;
+
+      // 상태 업데이트
+      setFilteredScheduleTable(updatedScheduleTable);
     }
   }, [bookDetail]);
 
   return (
-    <div className="max-w-4xl mx-auto overflow-x-auto">
+    <div className="max-w-4xl mx-auto">
       <table className="table-fixed w-full text-center border-collapse">
         <thead>
           <tr>
@@ -103,7 +114,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
               filteredScheduleTable.map((dayData, idx) => (
                 <th
                   key={dayData.dayOfWeek}
-                  className="border border-[#f6f6f6] w-[54px] h-2 text-xs-medium text-text-tertiary"
+                  className="border border-[#f6f6f6] w-auto w-max-[54px] h-2 text-xs-medium text-text-tertiary"
                 >
                   {dayMap[dayData.dayOfWeek]}
                 </th>
