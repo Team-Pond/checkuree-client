@@ -68,7 +68,7 @@ export default function BookRoaster() {
         onDrawerChange={onDrawerChange}
         onChangeSearch={onChangeSearch}
       />
-      <MainContent roaster={attendeeList!} getGrades={getGrades} />
+      <MainContent roaster={attendeeList!} getGrades={getGrades} searchName={search}/>
       <BottomFilter
         openFilter={openFilter}
         onDrawerChange={onDrawerChange}

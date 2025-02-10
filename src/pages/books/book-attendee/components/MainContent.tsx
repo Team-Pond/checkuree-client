@@ -5,9 +5,10 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 type IProps = {
   roaster: GetAttendeeListResponse;
   getGrades: (grades: { id: number; name: string }[]) => string;
+  searchName:string
 };
 export default function MainContent(props: IProps) {
-  const { roaster, getGrades } = props;
+  const { roaster, getGrades, searchName } = props;
   const { bookId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -17,7 +18,9 @@ export default function MainContent(props: IProps) {
 
       <div className="border-t border-[#F6F6F6]">
         {roaster?.data.content.length > 0 ? (
-          roaster.data.content.map((student) => (
+          roaster.data.content.filter(student => {
+            return !searchName || student.name.includes(searchName)
+          }).map((student) => (
             <div
               key={student.id}
               className="py-4 px-2 flex gap-4"
