@@ -1,3 +1,15 @@
+import {
+  add,
+  eachDayOfInterval,
+  endOfMonth,
+  endOfWeek,
+  format,
+  startOfMonth,
+  startOfToday,
+  startOfWeek,
+} from "date-fns";
+import { useState } from "react";
+
 type IProps = {
   studentInfo: {
     name: string;
@@ -9,6 +21,28 @@ type IProps = {
 
 export default function AttendanceManage(props: IProps) {
   const { studentInfo } = props;
+
+  const today = startOfToday();
+
+  const [selectedMonth, setSelectedMonth] = useState(startOfMonth(today));
+
+  const lastDayOfMonth = endOfMonth(selectedMonth);
+  const additionalPreviousMonth = startOfWeek(selectedMonth, {
+    weekStartsOn: 0,
+  });
+  const additionalNextMonth = endOfWeek(lastDayOfMonth, { weekStartsOn: 0 });
+
+  const dates = eachDayOfInterval({
+    start: additionalPreviousMonth,
+    end: additionalNextMonth,
+  });
+
+  const datesInWeeks = dates.reduce((acc, _, index) => {
+    if (index % 7 === 0) {
+      acc.push(dates.slice(index, index + 7));
+    }
+    return acc;
+  }, [] as Date[][]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -35,6 +69,128 @@ export default function AttendanceManage(props: IProps) {
               <span className="text-[#b0b0b0]"> {studentInfo.grade}</span>
             </p>
           </div>
+        </div>
+      </div>
+
+      {/*<div className="flex gap-8 items-center w-full h-[81px] rounded-2xl bg-white">*/}
+      <div className="w-full h-auto rounded-2xl bg-white p-4 flex flex-col gap-2">
+        <div>
+          <p className="flex text-s-bold text-[#5d5d5d]">출석 현황</p>
+        </div>
+
+        <div className="flex items-center justify-center space-x-10 mt-6">
+          <div className="flex items-center space-x-3">
+            <div className="w-3 h-3 rounded-full bg-green-500"></div>
+            <p className="text-text-secondary text-s-semibold">출석 8</p>
+          </div>
+
+          <div className="flex items-center space-x-3">
+            <div className="w-3 h-3 rounded-full bg-red-500"></div>
+            <p className="text-text-secondary text-s-semibold">결석 1</p>
+          </div>
+
+          <div className="flex items-center space-x-3">
+            <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+            <p className="text-text-secondary text-s-semibold">보강 1</p>
+          </div>
+        </div>
+
+        {/*<div className="flex-2 flex items-center justify-between w-full">*/}
+        <div className="flex items-center justify-center mt-6">
+          <button
+            aria-label="calendar backward"
+            className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] mr-2"
+            onClick={() => setSelectedMonth(add(selectedMonth, { months: -1 }))}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="icon icon-tabler icon-tabler-chevron-left"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <polyline points="15 6 9 12 15 18" />
+            </svg>
+          </button>
+          <div>
+            <span className="focus:outline-none text-s-bold text-text-primary">
+              {format(selectedMonth, "yyyy년 MM월")}
+            </span>
+          </div>
+          <button
+            aria-label="calendar forward"
+            className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] ml-2"
+            onClick={() => setSelectedMonth(add(selectedMonth, { months: 1 }))}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="icon icon-tabler  icon-tabler-chevron-right"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <polyline points="9 6 15 12 9 18" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="flex items-center justify-between mt-1">
+          <table className="w-full table-fixed">
+            <thead>
+              <tr>
+                {["일", "월", "화", "수", "목", "금", "토"].map((day) => {
+                  return (
+                    <th className="w-1/7">
+                      <div className="w-full h-[30px] flex justify-center items-center">
+                        <p className="text-xs-medium text-center text-[#5d5d5d]">
+                          {day}
+                        </p>
+                      </div>
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
+            <tbody>
+              {datesInWeeks.map((dates) => {
+                return (
+                  <tr>
+                    {dates.map((date) => {
+                      return (
+                        <td>
+                          <div className="flex w-full h-[53px] justify-center items-baseline">
+                            <p
+                              className={
+                                date.getDay() === 0
+                                  ? "text-xs-medium text-[#f44336]"
+                                  : date.getMonth() === selectedMonth.getMonth()
+                                    ? "text-xs-medium text-[#5d5d5d]"
+                                    : "text-xs-medium text-text-tertiary"
+                              }
+                            >
+                              {format(date, "d")}
+                            </p>
+                          </div>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
