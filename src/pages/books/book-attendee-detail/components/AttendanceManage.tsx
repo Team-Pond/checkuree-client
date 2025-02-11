@@ -173,6 +173,7 @@ export default function AttendanceManage(props: IProps) {
                         <td>
                           <div className="flex w-full h-[53px] justify-center flex-col items-center">
                             <div className="h-full">
+                              {/* 이래야 today 의 h-4 가 h-full 에 영향을 주지 않음*/}
                               <p
                                 className={`text-xs-medium ${
                                   date.getDay() === 0
@@ -189,11 +190,11 @@ export default function AttendanceManage(props: IProps) {
                               </p>
                             </div>
 
-                            <div className="flex gap-1 justify-center mb-6 mt-2">
+                            <div className="flex gap-1 justify-center mb-6">
                               {/* 원을 1~3개 추가 */}
-                              <p className="rounded-full w-1 h-1 bg-[#BDDDC3]"></p>
-                              <p className="rounded-full w-1 h-1 bg-[#BDDDC3]"></p>
-                              <p className="rounded-full w-1 h-1 bg-[#BDDDC3]"></p>
+                              <p className="rounded-full w-1.5 h-1.5 bg-green-500"></p>
+                              {/*<p className="rounded-full w-1.5 h-1.5 bg-red-500"></p>*/}
+                              {/*<p className="rounded-full w-1.5 h-1.5 bg-yellow-400"></p>*/}
                             </div>
                           </div>
                         </td>
