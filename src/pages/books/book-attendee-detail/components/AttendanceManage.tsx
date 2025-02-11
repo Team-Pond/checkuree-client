@@ -171,21 +171,25 @@ export default function AttendanceManage(props: IProps) {
                     {dates.map((date) => {
                       return (
                         <td>
-                          <div className="flex w-full h-[53px] justify-center flex-col">
-                            <p
-                              className={`text-xs-medium h-full ${
-                                date.getDay() === 0
-                                  ? "text-[#f44336]"
-                                  : date.getMonth() !== selectedMonth.getMonth()
-                                    ? "text-text-tertiary"
-                                    : isEqual(today, date)
-                                      ? "text-[#5d5d5d] rounded-full w-4 h-4 bg-[#BDDDC3]"
-                                      : "text-[#5d5d5d]"
-                              }`}
-                            >
-                              {format(date, "d")}
-                            </p>
-                            <div className="flex gap-1 justify-center mb-6">
+                          <div className="flex w-full h-[53px] justify-center flex-col items-center">
+                            <div className="h-full">
+                              <p
+                                className={`text-xs-medium ${
+                                  date.getDay() === 0
+                                    ? "text-[#f44336]"
+                                    : date.getMonth() !==
+                                        selectedMonth.getMonth()
+                                      ? "text-text-tertiary"
+                                      : isEqual(today, date)
+                                        ? "text-[#5d5d5d] rounded-full w-4 h-4 bg-[#BDDDC3]"
+                                        : "text-[#5d5d5d]"
+                                }`}
+                              >
+                                {format(date, "d")}
+                              </p>
+                            </div>
+
+                            <div className="flex gap-1 justify-center mb-6 mt-2">
                               {/* 원을 1~3개 추가 */}
                               <p className="rounded-full w-1 h-1 bg-[#BDDDC3]"></p>
                               <p className="rounded-full w-1 h-1 bg-[#BDDDC3]"></p>
