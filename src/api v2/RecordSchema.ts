@@ -77,16 +77,16 @@ export type CreateRecordRequest = {
 };
 
 /**
- * 입력한 기간의 출석부 기록을 조회합니다.
+ * 입력한 기간의 출석대상의 출석부 기록을 조회합니다.
  * @param from 조회 시작일 yyyy-MM-dd 형식 문자열
  * @param to 조회 종료일 yyyy-MM-dd 형식 문자열
  */
-export type GetRecordMonthAttendeeRequest = {
+export type GetAttendeeRecordsRequest = {
   from: string;
   to: string;
 };
 
-export type GetRecordMonthAttendeeResponse = {
+export type GetAttendeeRecordsResponse = {
   id: number;
   attendeeId: number;
   attendeeDate: string;
