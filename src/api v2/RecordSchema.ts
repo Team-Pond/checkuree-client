@@ -86,10 +86,12 @@ export type GetAttendeeRecordsRequest = {
   to: string;
 };
 
-export type GetAttendeeRecordsResponse = {
-  status: 200;
-  data: AttendeeRecord[];
-} & ErrorResponse;
+export type GetAttendeeRecordsResponse =
+  | {
+      status: 200;
+      data: AttendeeRecord[];
+    }
+  | ErrorResponse;
 
 export type AttendeeRecord = {
   id: number;
@@ -99,4 +101,5 @@ export type AttendeeRecord = {
   status: STATUS;
   taughtBy: number;
   taught: boolean;
+  makeup: boolean;
 };

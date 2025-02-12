@@ -15,6 +15,7 @@ import { attendeeKeys } from "@/queryKeys";
 
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { GetAttendeeRecordsResponse } from "../../../api v2/RecordSchema";
 
 // TODO: Calendar 작업 시 필요
 export const useAttendeeRecords = ({
@@ -31,7 +32,7 @@ export const useAttendeeRecords = ({
   return useQuery({
     queryKey: [""],
     queryFn: async () =>
-      getAttendeeRecords({
+      await getAttendeeRecords({
         params: {
           from,
           to,
