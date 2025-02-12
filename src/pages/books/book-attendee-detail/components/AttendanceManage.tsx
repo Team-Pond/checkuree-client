@@ -9,10 +9,11 @@ import {
   startOfToday,
   startOfWeek,
 } from "date-fns";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAttendeeRecords } from "../queries";
 import { useParams } from "react-router-dom";
 import {
+  AttendeeRecord,
   GetAttendeeRecordsResponse,
   STATUS,
 } from "../../../../api v2/RecordSchema";
@@ -55,17 +56,14 @@ export default function AttendanceManage(props: IProps) {
   });
 
   const [recordsByDate, setRecordsByDate] = useState<
-    Map<string, GetAttendeeRecordsResponse[]>
+    Map<string, AttendeeRecord[]>
   >(new Map());
 
   useEffect(() => {
     if (records?.data) {
-      const updatedRecordsByDate = new Map<
-        string,
-        GetAttendeeRecordsResponse[]
-      >();
-      records.data.forEach((record) => {
-        const existingRecords =
+      const updatedRecordsByDate = new Map<string, AttendeeRecord[]>();
+      records?.data.forEach((record: AttendeeRecord) => {
+        const existingRecords: AttendeeRecord[] =
           updatedRecordsByDate.get(record.attendDate) || [];
         updatedRecordsByDate.set(record.attendDate, [
           record,
@@ -79,8 +77,6 @@ export default function AttendanceManage(props: IProps) {
   useEffect(() => {
     refetch(); // selectedMonth가 변경되면 API를 다시 호출
   }, [selectedMonth]);
-
-  console.log(recordsByDate);
 
   return (
     <div className="flex flex-col gap-4">
