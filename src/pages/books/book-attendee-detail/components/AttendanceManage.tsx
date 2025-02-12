@@ -43,9 +43,11 @@ export default function AttendanceManage(props: IProps) {
     end: additionalNextMonth,
   });
 
-  const totalAttendeCount = 1;
-  const totalAbsentCount = 2;
-  const totalMakeupCount = 3;
+  const [totalCount, setTotalCount] = useState({
+    attendCount: 0,
+    absentCount: 0,
+    makeupCount: 0,
+  });
 
   const { data: records, refetch } = useAttendeeRecords({
     bookId: Number(bookId),
@@ -70,6 +72,25 @@ export default function AttendanceManage(props: IProps) {
         ]);
       });
       setRecordsByDate(updatedRecordsByDate);
+
+      // 출석, 결석, 보강 횟수 계산
+      let totalAttendCount = 0;
+      let totalAbsentCount = 0;
+      let totalMakeupCount = 0;
+      records?.data?.forEach((record: AttendeeRecord) => {
+        if (record.status === "ATTEND" && !record.makeup) {
+          totalAttendCount += 1;
+        } else if (record.status === "ABSENT") {
+          totalAbsentCount += 1;
+        } else if (record.status === ("ATTEND" as STATUS) && record.makeup) {
+          totalMakeupCount += 1;
+        }
+      });
+      setTotalCount({
+        attendCount: totalAttendCount,
+        absentCount: totalAbsentCount,
+        makeupCount: totalMakeupCount,
+      });
     }
   }, [records?.data]);
 
@@ -110,23 +131,27 @@ export default function AttendanceManage(props: IProps) {
           <p className="flex text-s-bold text-[#5d5d5d]">출석 현황</p>
         </div>
 
-        <div className="flex items-center justify-center space-x-10 mt-6">
+        {/* 출석/결석/보강의 total count 값에 따라사 요소가 움직임 ... */}
+        <div className="flex items-center justify-between mt-6 mx-4">
           <div className="flex items-center space-x-3">
             <div className="w-3 h-3 rounded-full bg-[#59996b]"></div>
             <p className="text-text-secondary text-s-medium">
-              출석 <span className="text-[#59996b]">{totalAttendeCount}</span>
+              출석{" "}
+              <span className="text-[#59996b]">{totalCount.attendCount}</span>
             </p>
           </div>
           <div className="flex items-center space-x-3">
             <div className="w-3 h-3 rounded-full bg-[#EA5353]"></div>
             <p className="text-text-secondary text-s-medium">
-              결석 <span className="text-[#EA5353]">{totalAbsentCount}</span>
+              결석{" "}
+              <span className="text-[#EA5353]">{totalCount.absentCount}</span>
             </p>
           </div>
           <div className="flex items-center space-x-3">
             <div className="w-3 h-3 rounded-full bg-[#F2BD2D]"></div>
             <p className="text-text-secondary text-s-medium">
-              보강 <span className="text-[#F2BD2D]">{totalMakeupCount}</span>
+              보강{" "}
+              <span className="text-[#F2BD2D]">{totalCount.makeupCount}</span>
             </p>
           </div>
         </div>
