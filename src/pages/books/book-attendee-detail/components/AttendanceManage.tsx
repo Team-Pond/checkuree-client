@@ -31,7 +31,13 @@ export default function AttendanceManage(props: IProps) {
   const { bookId, attendeeId } = useParams();
 
   const [selectedMonth, setSelectedMonth] = useState(startOfMonth(today));
+  const [totalCount, setTotalCount] = useState({
+    attendCount: 0,
+    absentCount: 0,
+    makeupCount: 0,
+  });
 
+  // 달력에 표기할 날짜 계산
   const lastDayOfMonth = endOfMonth(selectedMonth);
   const additionalPreviousMonth = startOfWeek(selectedMonth, {
     weekStartsOn: 0,
@@ -43,12 +49,7 @@ export default function AttendanceManage(props: IProps) {
     end: additionalNextMonth,
   });
 
-  const [totalCount, setTotalCount] = useState({
-    attendCount: 0,
-    absentCount: 0,
-    makeupCount: 0,
-  });
-
+  // 이번 달의 출석 기록 조회 ( 추가로 보이는이전 달과 다음 달의 출석 기록은 조회하지 않음 )
   const { data: records, refetch } = useAttendeeRecords({
     bookId: Number(bookId),
     attendeeId: Number(attendeeId),
@@ -62,6 +63,7 @@ export default function AttendanceManage(props: IProps) {
 
   useEffect(() => {
     if (records?.data && isArray(records?.data)) {
+      // 날짜별로 출석 기록을 묶음
       const updatedRecordsByDate = new Map<string, AttendeeRecord[]>();
       records?.data?.forEach((record: AttendeeRecord) => {
         const existingRecords: AttendeeRecord[] =
@@ -94,8 +96,9 @@ export default function AttendanceManage(props: IProps) {
     }
   }, [records?.data]);
 
+  // selectedMonth가 변경되면 API를 다시 호출
   useEffect(() => {
-    refetch(); // selectedMonth가 변경되면 API를 다시 호출
+    refetch();
   }, [selectedMonth]);
 
   return (
