@@ -10,6 +10,8 @@ import {
   startOfWeek,
 } from "date-fns";
 import { useState } from "react";
+import { useAttendeeRecords } from "../queries.ts";
+import { useParams } from "react-router-dom";
 
 type IProps = {
   studentInfo: {
@@ -24,6 +26,7 @@ export default function AttendanceManage(props: IProps) {
   const { studentInfo } = props;
 
   const today = startOfToday();
+  const { bookId, attendeeId } = useParams();
 
   const [selectedMonth, setSelectedMonth] = useState(startOfMonth(today));
 
@@ -38,12 +41,12 @@ export default function AttendanceManage(props: IProps) {
     end: additionalNextMonth,
   });
 
-  const datesInWeeks = dates.reduce((acc, _, index) => {
-    if (index % 7 === 0) {
-      acc.push(dates.slice(index, index + 7));
-    }
-    return acc;
-  }, [] as Date[][]);
+  const { data: records } = useAttendeeRecords({
+    bookId: Number(bookId),
+    attendeeId: Number(attendeeId),
+    from: format(additionalPreviousMonth, "yyyy-MM-dd"),
+    to: format(additionalNextMonth, "yyyy-MM-dd"),
+  });
 
   return (
     <div className="flex flex-col gap-4">
@@ -165,44 +168,54 @@ export default function AttendanceManage(props: IProps) {
               </tr>
             </thead>
             <tbody>
-              {datesInWeeks.map((dates) => {
-                return (
-                  <tr>
-                    {dates.map((date) => {
-                      return (
-                        <td>
-                          <div className="flex w-full h-[53px] justify-center flex-col items-center">
-                            <div className="h-full">
-                              {/* 이래야 today 의 h-4 가 h-full 에 영향을 주지 않음*/}
-                              <p
-                                className={`text-xs-medium ${
-                                  date.getDay() === 0
-                                    ? "text-[#f44336]"
-                                    : date.getMonth() !==
-                                        selectedMonth.getMonth()
-                                      ? "text-text-tertiary"
-                                      : isEqual(today, date)
-                                        ? "text-[#5d5d5d] rounded-full w-4 h-4 bg-[#BDDDC3]"
-                                        : "text-[#5d5d5d]"
-                                }`}
-                              >
-                                {format(date, "d")}
-                              </p>
-                            </div>
+              {
+                // 7일씩 끊어서 렌더링
+                dates
+                  .reduce((acc, _, index) => {
+                    if (index % 7 === 0) {
+                      acc.push(dates.slice(index, index + 7));
+                    }
+                    return acc;
+                  }, [] as Date[][])
+                  .map((dates) => {
+                    return (
+                      <tr>
+                        {dates.map((date) => {
+                          return (
+                            <td>
+                              <div className="flex w-full h-[53px] justify-center flex-col items-center">
+                                <div className="h-full">
+                                  {/* 이래야 today 의 h-4 가 h-full 에 영향을 주지 않음*/}
+                                  <p
+                                    className={`text-xs-medium ${
+                                      date.getDay() === 0
+                                        ? "text-[#f44336]"
+                                        : date.getMonth() !==
+                                            selectedMonth.getMonth()
+                                          ? "text-text-tertiary"
+                                          : isEqual(today, date)
+                                            ? "text-[#5d5d5d] rounded-full w-4 h-4 bg-[#BDDDC3]"
+                                            : "text-[#5d5d5d]"
+                                    }`}
+                                  >
+                                    {format(date, "d")}
+                                  </p>
+                                </div>
 
-                            <div className="flex gap-1 justify-center mb-6">
-                              {/* 원을 1~3개 추가 */}
-                              <p className="rounded-full w-1.5 h-1.5 bg-green-500"></p>
-                              {/*<p className="rounded-full w-1.5 h-1.5 bg-red-500"></p>*/}
-                              {/*<p className="rounded-full w-1.5 h-1.5 bg-yellow-400"></p>*/}
-                            </div>
-                          </div>
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
+                                <div className="flex gap-1 justify-center mb-6">
+                                  {/* 원을 1~3개 추가 */}
+                                  <p className="rounded-full w-1.5 h-1.5 bg-green-500"></p>
+                                  <p className="rounded-full w-1.5 h-1.5 bg-red-500"></p>
+                                  <p className="rounded-full w-1.5 h-1.5 bg-yellow-400"></p>
+                                </div>
+                              </div>
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })
+              }
             </tbody>
           </table>
         </div>
