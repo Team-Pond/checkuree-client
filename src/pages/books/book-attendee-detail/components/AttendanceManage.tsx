@@ -9,9 +9,10 @@ import {
   startOfToday,
   startOfWeek,
 } from "date-fns";
-import { useState } from "react";
-import { useAttendeeRecords } from "../queries.ts";
+import { useEffect, useMemo, useState } from "react";
+import { useAttendeeRecords } from "../queries";
 import { useParams } from "react-router-dom";
+import { GetAttendeeRecordsResponse } from "../../../../api v2/RecordSchema";
 
 type IProps = {
   studentInfo: {
@@ -31,9 +32,11 @@ export default function AttendanceManage(props: IProps) {
   const [selectedMonth, setSelectedMonth] = useState(startOfMonth(today));
 
   const lastDayOfMonth = endOfMonth(selectedMonth);
+
   const additionalPreviousMonth = startOfWeek(selectedMonth, {
     weekStartsOn: 0,
   });
+
   const additionalNextMonth = endOfWeek(lastDayOfMonth, { weekStartsOn: 0 });
 
   const dates = eachDayOfInterval({
@@ -41,12 +44,40 @@ export default function AttendanceManage(props: IProps) {
     end: additionalNextMonth,
   });
 
-  const { data: records } = useAttendeeRecords({
+  const { data: records, refetch } = useAttendeeRecords({
     bookId: Number(bookId),
     attendeeId: Number(attendeeId),
     from: format(additionalPreviousMonth, "yyyy-MM-dd"),
     to: format(additionalNextMonth, "yyyy-MM-dd"),
   });
+
+  const [recordsByDate, setRecordsByDate] = useState<
+    Map<string, GetAttendeeRecordsResponse[]>
+  >(new Map());
+
+  useEffect(() => {
+    if (records?.data) {
+      const updatedRecordsByDate = new Map<
+        string,
+        GetAttendeeRecordsResponse[]
+      >();
+      records.data.forEach((record) => {
+        const existingRecords =
+          updatedRecordsByDate.get(record.attendDate) || [];
+        updatedRecordsByDate.set(record.attendDate, [
+          record,
+          ...existingRecords,
+        ]);
+      });
+      setRecordsByDate(updatedRecordsByDate);
+    }
+  }, [records?.data]);
+
+  useEffect(() => {
+    refetch(); // selectedMonth가 변경되면 API를 다시 호출
+  }, [selectedMonth]);
+
+  console.log(recordsByDate);
 
   return (
     <div className="flex flex-col gap-4">
@@ -204,9 +235,9 @@ export default function AttendanceManage(props: IProps) {
 
                                 <div className="flex gap-1 justify-center mb-6">
                                   {/* 원을 1~3개 추가 */}
-                                  <p className="rounded-full w-1.5 h-1.5 bg-green-500"></p>
-                                  <p className="rounded-full w-1.5 h-1.5 bg-red-500"></p>
-                                  <p className="rounded-full w-1.5 h-1.5 bg-yellow-400"></p>
+                                  {/*<p className="rounded-full w-1.5 h-1.5 bg-green-500"></p>*/}
+                                  {/*<p className="rounded-full w-1.5 h-1.5 bg-red-500"></p>*/}
+                                  {/*<p className="rounded-full w-1.5 h-1.5 bg-yellow-400"></p>*/}
                                 </div>
                               </div>
                             </td>
