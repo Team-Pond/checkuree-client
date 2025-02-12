@@ -12,7 +12,10 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { useAttendeeRecords } from "../queries";
 import { useParams } from "react-router-dom";
-import { GetAttendeeRecordsResponse } from "../../../../api v2/RecordSchema";
+import {
+  GetAttendeeRecordsResponse,
+  STATUS,
+} from "../../../../api v2/RecordSchema";
 
 type IProps = {
   studentInfo: {
@@ -235,9 +238,23 @@ export default function AttendanceManage(props: IProps) {
 
                                 <div className="flex gap-1 justify-center mb-6">
                                   {/* 원을 1~3개 추가 */}
-                                  {/*<p className="rounded-full w-1.5 h-1.5 bg-green-500"></p>*/}
-                                  {/*<p className="rounded-full w-1.5 h-1.5 bg-red-500"></p>*/}
-                                  {/*<p className="rounded-full w-1.5 h-1.5 bg-yellow-400"></p>*/}
+                                  {recordsByDate
+                                    .get(format(date, "yyyy-MM-dd"))
+                                    ?.map((record) => {
+                                      return (
+                                        <p
+                                          className={`rounded-full w-1.5 h-1.5 ${
+                                            record.status ===
+                                            ("ATTEND" as STATUS)
+                                              ? "bg-[#59996b]"
+                                              : record.status ===
+                                                  ("ABSENT" as STATUS)
+                                                ? "bg-[#EA5353]"
+                                                : "bg-[#F2BD2D]"
+                                          }`}
+                                        ></p>
+                                      );
+                                    })}
                                 </div>
                               </div>
                             </td>
