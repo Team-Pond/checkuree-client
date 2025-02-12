@@ -10,24 +10,34 @@ import {
   updateProgressPromote,
 } from "@/api v2/AttendeeApiClient";
 import { GenderType } from "@/api v2/AttendeeSchema";
-import { getRecordMonthAttendee } from "@/api v2/RecordApiClient";
+import { getAttendeeRecords } from "@/api v2/RecordApiClient";
 import { attendeeKeys } from "@/queryKeys";
 
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 // TODO: Calendar 작업 시 필요
-export const useAttendeeMonth = () => {
+export const useAttendeeRecords = ({
+  bookId,
+  attendeeId,
+  from,
+  to,
+}: {
+  bookId: number;
+  attendeeId: number;
+  from: string;
+  to: string;
+}) => {
   return useQuery({
     queryKey: [""],
     queryFn: async () =>
-      getRecordMonthAttendee({
+      getAttendeeRecords({
         params: {
-          year: 2025,
-          month: 1,
+          from,
+          to,
         },
-        attendanceBookId: 5,
-        attendeeId: 0,
+        attendanceBookId: bookId,
+        attendeeId,
       }),
   });
 };
