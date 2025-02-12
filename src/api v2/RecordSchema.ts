@@ -87,16 +87,16 @@ export type GetAttendeeRecordsRequest = {
 };
 
 export type GetAttendeeRecordsResponse = {
+  status: 200;
+  data: AttendeeRecord[];
+} & ErrorResponse;
+
+export type AttendeeRecord = {
   id: number;
   attendeeId: number;
-  attendeeDate: string;
-  attendeeTime: {
-    hour: number;
-    minute: number;
-    second: number;
-    nano: number;
-  };
+  attendDate: string;
+  attendTime: string;
   status: STATUS;
   taughtBy: number;
   taught: boolean;
-}[];
+};
