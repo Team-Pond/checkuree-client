@@ -12,11 +12,8 @@ import {
 import { useEffect, useState } from "react";
 import { useAttendeeRecords } from "../queries";
 import { useParams } from "react-router-dom";
-import {
-  AttendeeRecord,
-  GetAttendeeRecordsResponse,
-  STATUS,
-} from "../../../../api v2/RecordSchema";
+import { AttendeeRecord, STATUS } from "../../../../api v2/RecordSchema";
+import { isArray } from "lodash";
 
 type IProps = {
   studentInfo: {
@@ -36,11 +33,9 @@ export default function AttendanceManage(props: IProps) {
   const [selectedMonth, setSelectedMonth] = useState(startOfMonth(today));
 
   const lastDayOfMonth = endOfMonth(selectedMonth);
-
   const additionalPreviousMonth = startOfWeek(selectedMonth, {
     weekStartsOn: 0,
   });
-
   const additionalNextMonth = endOfWeek(lastDayOfMonth, { weekStartsOn: 0 });
 
   const dates = eachDayOfInterval({
@@ -48,11 +43,15 @@ export default function AttendanceManage(props: IProps) {
     end: additionalNextMonth,
   });
 
+  const totalAttendeCount = 1;
+  const totalAbsentCount = 2;
+  const totalMakeupCount = 3;
+
   const { data: records, refetch } = useAttendeeRecords({
     bookId: Number(bookId),
     attendeeId: Number(attendeeId),
-    from: format(additionalPreviousMonth, "yyyy-MM-dd"),
-    to: format(additionalNextMonth, "yyyy-MM-dd"),
+    from: format(startOfMonth(selectedMonth), "yyyy-MM-dd"),
+    to: format(endOfMonth(selectedMonth), "yyyy-MM-dd"),
   });
 
   const [recordsByDate, setRecordsByDate] = useState<
@@ -60,9 +59,9 @@ export default function AttendanceManage(props: IProps) {
   >(new Map());
 
   useEffect(() => {
-    if (records?.data) {
+    if (records?.data && isArray(records?.data)) {
       const updatedRecordsByDate = new Map<string, AttendeeRecord[]>();
-      records?.data.forEach((record: AttendeeRecord) => {
+      records?.data?.forEach((record: AttendeeRecord) => {
         const existingRecords: AttendeeRecord[] =
           updatedRecordsByDate.get(record.attendDate) || [];
         updatedRecordsByDate.set(record.attendDate, [
@@ -106,7 +105,6 @@ export default function AttendanceManage(props: IProps) {
         </div>
       </div>
 
-      {/*<div className="flex gap-8 items-center w-full h-[81px] rounded-2xl bg-white">*/}
       <div className="w-full h-auto rounded-2xl bg-white p-4 flex flex-col gap-2">
         <div>
           <p className="flex text-s-bold text-[#5d5d5d]">출석 현황</p>
@@ -114,22 +112,25 @@ export default function AttendanceManage(props: IProps) {
 
         <div className="flex items-center justify-center space-x-10 mt-6">
           <div className="flex items-center space-x-3">
-            <div className="w-3 h-3 rounded-full bg-green-500"></div>
-            <p className="text-text-secondary text-s-semibold">출석 8</p>
+            <div className="w-3 h-3 rounded-full bg-[#59996b]"></div>
+            <p className="text-text-secondary text-s-medium">
+              출석 <span className="text-[#59996b]">{totalAttendeCount}</span>
+            </p>
           </div>
-
           <div className="flex items-center space-x-3">
-            <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <p className="text-text-secondary text-s-semibold">결석 1</p>
+            <div className="w-3 h-3 rounded-full bg-[#EA5353]"></div>
+            <p className="text-text-secondary text-s-medium">
+              결석 <span className="text-[#EA5353]">{totalAbsentCount}</span>
+            </p>
           </div>
-
           <div className="flex items-center space-x-3">
-            <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-            <p className="text-text-secondary text-s-semibold">보강 1</p>
+            <div className="w-3 h-3 rounded-full bg-[#F2BD2D]"></div>
+            <p className="text-text-secondary text-s-medium">
+              보강 <span className="text-[#F2BD2D]">{totalMakeupCount}</span>
+            </p>
           </div>
         </div>
 
-        {/*<div className="flex-2 flex items-center justify-between w-full">*/}
         <div className="flex items-center justify-center mt-6">
           <button
             aria-label="calendar backward"
@@ -237,16 +238,18 @@ export default function AttendanceManage(props: IProps) {
                                   {recordsByDate
                                     .get(format(date, "yyyy-MM-dd"))
                                     ?.map((record) => {
+                                      console.log(record);
                                       return (
                                         <p
                                           className={`rounded-full w-1.5 h-1.5 ${
                                             record.status ===
-                                            ("ATTEND" as STATUS)
-                                              ? "bg-[#59996b]"
+                                            ("ABSENT" as STATUS)
+                                              ? "bg-[#EA5353]"
                                               : record.status ===
-                                                  ("ABSENT" as STATUS)
-                                                ? "bg-[#EA5353]"
-                                                : "bg-[#F2BD2D]"
+                                                    ("ATTEND" as STATUS) &&
+                                                  record.makeup
+                                                ? "bg-[#F2BD2D]"
+                                                : "bg-[#59996b]"
                                           }`}
                                         ></p>
                                       );
