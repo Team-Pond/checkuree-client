@@ -111,5 +111,5 @@ export type DeleteRecordRequest = {
 
 export type DeleteRecordResponse = {
   status: 200;
-  data: null;
+  data: true;
 } & ErrorResponse;
