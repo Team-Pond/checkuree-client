@@ -13,6 +13,7 @@ type ErrorResponse = ResponseBase & {
 export type ScheduleData = {
   scheduleId: number;
   isTaught: boolean;
+  isMakeup: boolean;
   scheduleTime: string;
   recordId: number;
   recordTime: string;
