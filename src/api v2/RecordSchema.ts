@@ -76,22 +76,30 @@ export type CreateRecordRequest = {
   status: STATUS;
 };
 
-export type GetRecordMonthAttendeeRequest = {
-  year: number;
-  month: number;
+/**
+ * 입력한 기간의 출석대상의 출석부 기록을 조회합니다.
+ * @param from 조회 시작일 yyyy-MM-dd 형식 문자열
+ * @param to 조회 종료일 yyyy-MM-dd 형식 문자열
+ */
+export type GetAttendeeRecordsRequest = {
+  from: string;
+  to: string;
 };
 
-export type GetRecordMonthAttendeeResponse = {
+export type GetAttendeeRecordsResponse =
+  | {
+      status: 200;
+      data: AttendeeRecord[];
+    }
+  | ErrorResponse;
+
+export type AttendeeRecord = {
   id: number;
   attendeeId: number;
-  attendeeDate: string;
-  attendeeTime: {
-    hour: number;
-    minute: number;
-    second: number;
-    nano: number;
-  };
+  attendDate: string;
+  attendTime: string;
   status: STATUS;
   taughtBy: number;
   taught: boolean;
-}[];
+  makeup: boolean;
+};

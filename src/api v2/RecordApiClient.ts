@@ -2,8 +2,8 @@ import ApiClient from "./ApiClient";
 import {
   CreateRecordRequest,
   CreateRecordResponse,
-  GetRecordMonthAttendeeRequest,
-  GetRecordMonthAttendeeResponse,
+  GetAttendeeRecordsRequest,
+  GetAttendeeRecordsResponse,
   UpdateRecordAllRequest,
   UpdateRecordAllResponse,
   UpdateRecordLessonRequest,
@@ -86,19 +86,19 @@ export const createRecord = async ({
 };
 
 // 출석부 기록 생성
-export const getRecordMonthAttendee = async ({
+export const getAttendeeRecords = async ({
   params,
   attendanceBookId,
   attendeeId,
 }: {
-  params: GetRecordMonthAttendeeRequest;
+  params: GetAttendeeRecordsRequest;
   attendanceBookId: number;
   attendeeId: number;
-}): Promise<GetRecordMonthAttendeeResponse> => {
-  const { year, month } = params;
+}): Promise<GetAttendeeRecordsResponse> => {
+  const { from, to } = params;
   const response = await ApiClient.request({
     method: "GET",
-    url: `/book/${attendanceBookId}/attendee/${attendeeId}/record?year=${year}&month=${month}`,
+    url: `/book/${attendanceBookId}/attendee/${attendeeId}/record?from=${from}&to=${to}`,
     data: params,
   });
   return response.data;
