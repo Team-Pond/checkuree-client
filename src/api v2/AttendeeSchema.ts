@@ -240,7 +240,7 @@ export type GetAttendeeDetailResponse = {
 export type SearchAttendeeRequest = {
   attendanceBookId: number;
   name: string;
-}
+};
 
 export type SearchAttendeeDataType = {
   content: {
@@ -271,11 +271,11 @@ export type SearchAttendeeDataType = {
     sorted: boolean;
     unsorted: boolean;
   };
-}
+};
 
 export type SearchAttendeeResponse = {
   status: 200;
-  data: SearchAttendeeDataType
+  data: SearchAttendeeDataType;
 } & ErrorResponse;
 
 export type GetAttendeeProgressLogRequest = {

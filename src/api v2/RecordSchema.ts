@@ -103,3 +103,13 @@ export type AttendeeRecord = {
   taught: boolean;
   makeup: boolean;
 };
+
+export type DeleteRecordRequest = {
+  attendanceBookId: number;
+  recordId: number;
+};
+
+export type DeleteRecordResponse = {
+  status: 200;
+  data: null;
+} & ErrorResponse;

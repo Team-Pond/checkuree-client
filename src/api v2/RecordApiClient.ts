@@ -2,6 +2,8 @@ import ApiClient from "./ApiClient";
 import {
   CreateRecordRequest,
   CreateRecordResponse,
+  DeleteRecordRequest,
+  DeleteRecordResponse,
   GetAttendeeRecordsRequest,
   GetAttendeeRecordsResponse,
   UpdateRecordAllRequest,
@@ -101,5 +103,17 @@ export const getAttendeeRecords = async ({
     url: `/book/${attendanceBookId}/attendee/${attendeeId}/record?from=${from}&to=${to}`,
     data: params,
   });
+  return response.data;
+};
+
+export const deleteRecord = async ({
+  attendanceBookId,
+  recordId,
+}: DeleteRecordRequest): Promise<DeleteRecordResponse> => {
+  const response = await ApiClient.request({
+    method: "DELETE",
+    url: `/book/${attendanceBookId}/record/${recordId}`,
+  });
+
   return response.data;
 };
