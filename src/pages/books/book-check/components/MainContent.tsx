@@ -193,6 +193,12 @@ export default function MainContents(props: IProps) {
                   >
                     <p className="font-bold text-text-primary">
                       {schedule.name}
+                      {schedule.isMakeup && (
+                        <span className="text-[#EC9E14] text-xs-medium align-middle">
+                          {" "}
+                          보강
+                        </span>
+                      )}
                     </p>
                     {schedule.recordStatus === "ATTEND" && (
                       <p className="text-[12px] text-[#59996B] font-medium leading-[14.98px]">
