@@ -23,13 +23,15 @@ export type ScheduleData = {
   name: string;
 };
 
+export type ScheduleDataContentType = {
+  count: number;
+  startTime: string;
+  endTime: string;
+  schedules: ScheduleData[];
+}[];
+
 export type ScheduleDataType = {
-  content: {
-    count: number;
-    startTime: string;
-    endTime: string;
-    schedules: ScheduleData[];
-  }[];
+  content: ScheduleDataContentType;
   first: boolean;
   last: boolean;
   size: number;
