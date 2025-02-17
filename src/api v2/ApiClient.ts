@@ -65,7 +65,6 @@ async function refresh(config: AxiosRequestConfig) {
         refreshToken: refreshResult.data.data!.refreshToken,
       });
 
-      // 무한 오류에 빠질 수 있음으로 순수한 axios 기본 인스턴스로 재시도한다.
       return axios.request({
         ...config,
         headers: {
