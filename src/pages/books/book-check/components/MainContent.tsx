@@ -143,7 +143,11 @@ export default function MainContents(props: IProps) {
       });
 
       // 상태 업데이트
-      setNeedLessonStudents(newNeedLessonStudents);
+      setNeedLessonStudents(
+        newNeedLessonStudents.sort((a, b) =>
+          a.recordTime > b.recordTime ? 1 : -1,
+        ),
+      );
       setNoNeedLessonTimeScheduleTable(newNoNeedLessonTimeScheduleTable);
     }
   }, [bookSchedules?.content]); // bookSchedules.content가 변경될 때마다 실행
@@ -209,106 +213,102 @@ export default function MainContents(props: IProps) {
           <p className="text-s-bold text-text-primary h-12 flex items-center ">
             {"수업 중"}
           </p>
-          {needLessonStudents
-            .sort((a, b) => {
-              return a.recordTime > b.recordTime ? 1 : -1;
-            })
-            .map((schedule) => {
-              return (
-                <div className="w-full h-[56px] flex items-center justify-between px-2 ">
-                  <div
-                    className="flex flex-col items-start"
-                    onClick={() => {
-                      if (schedule.recordStatus === "ATTEND") {
-                        setRecord({
-                          id: schedule.recordId,
-                          formattedTime: schedule.recordTime,
-                        });
-                        setIsRecordTimeOpen(true);
-                      }
-                    }}
-                  >
-                    <p className="font-bold text-text-primary">
-                      {schedule.name}
-                      {schedule.isMakeup && (
-                        <span className="text-[#EC9E14] text-xs-medium align-middle">
-                          {" "}
-                          보강
-                        </span>
-                      )}
-                    </p>
-                    {schedule.recordStatus === "ATTEND" && (
-                      <p className="text-[12px] text-[#59996B] font-medium leading-[14.98px]">
-                        {formatLocalTimeString(schedule.recordTime) + " 출석"}
-                      </p>
+          {needLessonStudents.map((schedule) => {
+            return (
+              <div className="w-full h-[56px] flex items-center justify-between px-2 ">
+                <div
+                  className="flex flex-col items-start"
+                  onClick={() => {
+                    if (schedule.recordStatus === "ATTEND") {
+                      setRecord({
+                        id: schedule.recordId,
+                        formattedTime: schedule.recordTime,
+                      });
+                      setIsRecordTimeOpen(true);
+                    }
+                  }}
+                >
+                  <p className="font-bold text-text-primary">
+                    {schedule.name}
+                    {schedule.isMakeup && (
+                      <span className="text-[#EC9E14] text-xs-medium align-middle">
+                        {" "}
+                        보강
+                      </span>
                     )}
-                  </div>
-                  <div className="flex gap-4">
-                    <div className="flex gap-2">
-                      {/* TODO: 결석은 status명이 어떻게 되는지? */}
-                      <button
-                        onClick={() => {
-                          handleAttendanceStatusWithConfirmation(
-                            "ABSENT",
-                            schedule,
-                          );
-                        }}
-                        className={twMerge(
-                          "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
-                          schedule.recordStatus === "ABSENT"
-                            ? "bg-bg-destructive text-text-interactive-destructive"
-                            : "bg-bg-disabled text-text-disabled",
-                        )}
-                      >
-                        결석
-                      </button>
-                      <button
-                        onClick={() => {
-                          handleAttendanceStatusWithConfirmation(
-                            "ATTEND",
-                            schedule,
-                          );
-                        }}
-                        className={twMerge(
-                          "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
-                          schedule.recordStatus === "ATTEND"
-                            ? "bg-bg-primary text-text-interactive-primary"
-                            : "bg-bg-disabled text-text-disabled",
-                        )}
-                      >
-                        출석
-                      </button>
-                    </div>
+                  </p>
+                  {schedule.recordStatus === "ATTEND" && (
+                    <p className="text-[12px] text-[#59996B] font-medium leading-[14.98px]">
+                      {formatLocalTimeString(schedule.recordTime) + " 출석"}
+                    </p>
+                  )}
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex gap-2">
+                    {/* TODO: 결석은 status명이 어떻게 되는지? */}
                     <button
-                      className={twMerge(
-                        "w-8 h-8 flex items-center justify-center rounded-lg",
-                        schedule.recordStatus !== "ATTEND"
-                          ? "bg-bg-disabled"
-                          : schedule.isTaught
-                            ? "bg-bg-tertiary"
-                            : "bg-bg-base", // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?
-                      )}
                       onClick={() => {
-                        lessonMutation({
-                          recordId: schedule.recordId,
-                          isTaught: !schedule.isTaught,
-                        });
+                        handleAttendanceStatusWithConfirmation(
+                          "ABSENT",
+                          schedule,
+                        );
                       }}
-                      disabled={schedule.recordStatus !== "ATTEND"}
+                      className={twMerge(
+                        "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
+                        schedule.recordStatus === "ABSENT"
+                          ? "bg-bg-destructive text-text-interactive-destructive"
+                          : "bg-bg-disabled text-text-disabled",
+                      )}
                     >
-                      <img
-                        src={`/images/icons/book-check/${
-                          schedule.isTaught
-                            ? "ico-note-active.svg"
-                            : "ico-note.svg"
-                        }`}
-                        alt=""
-                      />
+                      결석
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleAttendanceStatusWithConfirmation(
+                          "ATTEND",
+                          schedule,
+                        );
+                      }}
+                      className={twMerge(
+                        "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
+                        schedule.recordStatus === "ATTEND"
+                          ? "bg-bg-primary text-text-interactive-primary"
+                          : "bg-bg-disabled text-text-disabled",
+                      )}
+                    >
+                      출석
                     </button>
                   </div>
+                  <button
+                    className={twMerge(
+                      "w-8 h-8 flex items-center justify-center rounded-lg",
+                      schedule.recordStatus !== "ATTEND"
+                        ? "bg-bg-disabled"
+                        : schedule.isTaught
+                          ? "bg-bg-tertiary"
+                          : "bg-bg-base", // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?
+                    )}
+                    onClick={() => {
+                      lessonMutation({
+                        recordId: schedule.recordId,
+                        isTaught: !schedule.isTaught,
+                      });
+                    }}
+                    disabled={schedule.recordStatus !== "ATTEND"}
+                  >
+                    <img
+                      src={`/images/icons/book-check/${
+                        schedule.isTaught
+                          ? "ico-note-active.svg"
+                          : "ico-note.svg"
+                      }`}
+                      alt=""
+                    />
+                  </button>
                 </div>
-              );
-            })}
+              </div>
+            );
+          })}
         </div>
       )}
       {noNeedLessonTimeScheduleTable?.map((content, index) => {
