@@ -1,6 +1,8 @@
 import { GenderType } from "@/api v2/AttendeeSchema";
 import RelationshipSelect from "@/components/Select";
 import React from "react";
+import { CreateAttendeeSchema } from "../_schema";
+import { useFormContext } from "react-hook-form";
 
 interface Step1FormState {
   name: string;
@@ -76,6 +78,12 @@ export default function Step1({
     }));
   };
 
+  const {
+    setValue,
+    register,
+    watch,
+    formState: { errors },
+  } = useFormContext<CreateAttendeeSchema>();
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
       {/* 학생 이름 */}
@@ -84,15 +92,25 @@ export default function Step1({
           <p className="font-bold text-m-medium">학생 이름</p>
           <p className="text-text-danger">*</p>
         </div>
-        <input
-          type="text"
-          placeholder="학생 이름"
-          className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
-          value={formData.name}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, name: e.target.value }))
-          }
-        />
+        <div className="flex flex-col gap-[1px] w-full text-left">
+          <input
+            type="text"
+            placeholder="학생 이름"
+            {...register("attendeeRequest.name", {
+              required: "이름은 최소 2글자 이상 입력해주세요.",
+            })}
+            className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+            value={formData.name}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, name: e.target.value }))
+            }
+          />
+          {errors.attendeeRequest?.name && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.attendeeRequest?.name.message}
+            </p>
+          )}
+        </div>
       </div>
       {/* 학생 생년월일/성별 */}
       <div className="flex flex-col gap-2">
@@ -103,13 +121,23 @@ export default function Step1({
 
         <div className="flex items-center gap-[9px]">
           {/* 생년월일은 실제로는 datepicker 등을 사용하거나, 텍스트 입력으로 처리 가능 */}
-          <input
-            type="text"
-            placeholder="YYYY.MM.DD"
-            className="outline-none bg-white border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12 flex items-center pl-4"
-            value={formData.birthDate}
-            onChange={handleBirthdateChange}
-          />
+          <div className="flex flex-col gap-[1px] w-full text-left">
+            <input
+              type="text"
+              {...register("attendeeRequest.birthDate", {
+                required: "생년월일은 필수 입니다.",
+              })}
+              placeholder="YYYY.MM.DD"
+              className="outline-none bg-white border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12 flex items-center pl-4"
+              value={formData.birthDate}
+              onChange={handleBirthdateChange}
+            />
+            {errors.attendeeRequest?.birthDate && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.attendeeRequest?.birthDate.message}
+              </p>
+            )}
+          </div>
 
           {/* 성별 라디오 버튼 */}
           <div className="flex px-4 max-w-[170px] w-full h-12">
@@ -183,14 +211,23 @@ export default function Step1({
         </div>
 
         <div className="flex items-center gap-[9px]">
-          <input
-            type="text"
-            placeholder="YYYY.MM.DD"
-            className="outline-none bg-white border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12 flex items-center pl-4"
-            value={formData.enrollmentDate}
-            onChange={handleEntranceChange}
-          />
-
+          <div className="flex flex-col gap-[1px] w-full text-left">
+            <input
+              type="text"
+              {...register("attendeeRequest.enrollmentDate", {
+                required: "학생 입학일은 필수입니다.",
+              })}
+              placeholder="YYYY.MM.DD"
+              className="outline-none bg-white border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12 flex items-center pl-4"
+              value={formData.enrollmentDate}
+              onChange={handleEntranceChange}
+            />
+            {errors.attendeeRequest?.enrollmentDate && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.attendeeRequest?.enrollmentDate.message}
+              </p>
+            )}
+          </div>
           <div className="flex px-4 max-w-[170px] w-full h-12">
             <div className="flex items-center">
               <div className="inline-flex items-center">
@@ -273,18 +310,28 @@ export default function Step1({
           <p className="font-bold text-m-medium">학생 주소</p>
           <p className="text-text-danger">*</p>
         </div>
-        <input
-          type="text"
-          placeholder="학생 주소"
-          className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
-          value={formData.address_1}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              address_1: e.target.value,
-            }))
-          }
-        />
+        <div className="flex flex-col gap-[1px] w-full text-left">
+          <input
+            type="text"
+            placeholder="학생 주소"
+            {...register("attendeeRequest.address_1", {
+              required: "학생 주소는 필수입니다.",
+            })}
+            className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+            value={formData.address_1}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                address_1: e.target.value,
+              }))
+            }
+          />
+          {errors.attendeeRequest?.address_1 && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.attendeeRequest.address_1.message}
+            </p>
+          )}
+        </div>
       </div>
       {/* 학교(선택) */}
       <div className="flex flex-col gap-2">
