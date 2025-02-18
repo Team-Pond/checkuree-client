@@ -13,20 +13,16 @@ const AssociateSchema = z.object({
 // AttendeeRequest 스키마
 export const AttendeeRequestSchema = z.object({
   name: z.string().min(1, "이름은 최소 1글자 이상이어야 합니다."),
-  actualName: z.string(),
+  actualName: z.string().optional(),
   gender: z.enum(["MALE", "FEMALE"]),
-  birthDate: z
-    .string()
-    .refine((val) => !isNaN(Date.parse(val)), {
-      message: "유효한 날짜 형식이 아닙니다.",
-    })
-    .optional(),
-  enrollmentDate: z
-    .string()
-    .refine((val) => !isNaN(Date.parse(val)), {
-      message: "유효한 날짜 형식이 아닙니다.",
-    })
-    .optional(),
+  birthDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
+    message: "유효한 날짜 형식이 아닙니다.",
+  }),
+
+  enrollmentDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
+    message: "유효한 날짜 형식이 아닙니다.",
+  }),
+
   phoneNumber: z.string().optional(),
   description: z.string().optional(),
   school: z.string().optional(),
