@@ -11,25 +11,31 @@ const AssociateSchema = z.object({
 });
 
 // AttendeeRequest 스키마
-const AttendeeRequestSchema = z.object({
+export const AttendeeRequestSchema = z.object({
   name: z.string().min(1, "이름은 최소 1글자 이상이어야 합니다."),
   actualName: z.string(),
   gender: z.enum(["MALE", "FEMALE"]),
-  birthDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
-    message: "유효한 날짜 형식이 아닙니다.",
-  }),
-  enrollmentDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
-    message: "유효한 날짜 형식이 아닙니다.",
-  }),
-  phoneNumber: z.string(),
-  description: z.string(),
-  school: z.string(),
-  initialGradeId: z.number(),
-  isBeginner: z.boolean(),
-  attendeeId: z.number(),
+  birthDate: z
+    .string()
+    .refine((val) => !isNaN(Date.parse(val)), {
+      message: "유효한 날짜 형식이 아닙니다.",
+    })
+    .optional(),
+  enrollmentDate: z
+    .string()
+    .refine((val) => !isNaN(Date.parse(val)), {
+      message: "유효한 날짜 형식이 아닙니다.",
+    })
+    .optional(),
+  phoneNumber: z.string().optional(),
+  description: z.string().optional(),
+  school: z.string().optional(),
+  initialGradeId: z.number().default(0).optional(),
+  isBeginner: z.boolean().optional(),
+  attendeeId: z.number().optional(),
   address_1: z.string().min(1, "주소는 필수 입니다."),
-  address_2: z.string(),
-  associates: z.array(AssociateSchema),
+  address_2: z.string().optional(),
+  associates: z.array(AssociateSchema).optional(),
 });
 
 // Schedule 스키마
@@ -70,5 +76,10 @@ export const AttendeeSchema = z.object({
   schedulesRequest: SchedulesRequestSchema,
   progressRequest: ProgressRequestSchema,
 });
+
+export type CreateAttendeeStep1Schema = z.infer<typeof AttendeeRequestSchema>;
+export type CreateAttendeeStep2Schema = z.infer<
+  typeof SchedulesRequestSchema & typeof ProgressRequestSchema
+>;
 
 export type CreateAttendeeSchema = z.infer<typeof AttendeeSchema>;

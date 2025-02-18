@@ -1,8 +1,9 @@
 import { GenderType } from "@/api v2/AttendeeSchema";
 import RelationshipSelect from "@/components/Select";
 import React from "react";
-import { CreateAttendeeSchema } from "../_schema";
-import { useFormContext } from "react-hook-form";
+import { AttendeeRequestSchema, CreateAttendeeStep1Schema } from "../_schema";
+import { useForm, useFormContext } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface Step1FormState {
   name: string;
@@ -78,12 +79,19 @@ export default function Step1({
     }));
   };
 
+  const methods = useForm<CreateAttendeeStep1Schema>({
+    shouldUnregister: false,
+    mode: "onSubmit",
+    defaultValues: {},
+    resolver: zodResolver(AttendeeRequestSchema),
+  });
+
   const {
     setValue,
     register,
     watch,
     formState: { errors },
-  } = useFormContext<CreateAttendeeSchema>();
+  } = useFormContext<CreateAttendeeStep1Schema>();
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
       {/* 학생 이름 */}
@@ -96,7 +104,7 @@ export default function Step1({
           <input
             type="text"
             placeholder="학생 이름"
-            {...register("attendeeRequest.name", {
+            {...register("name", {
               required: "이름은 최소 2글자 이상 입력해주세요.",
             })}
             className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
@@ -105,10 +113,8 @@ export default function Step1({
               setFormData((prev) => ({ ...prev, name: e.target.value }))
             }
           />
-          {errors.attendeeRequest?.name && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.attendeeRequest?.name.message}
-            </p>
+          {errors.name && (
+            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
           )}
         </div>
       </div>
@@ -124,7 +130,7 @@ export default function Step1({
           <div className="flex flex-col gap-[1px] w-full text-left">
             <input
               type="text"
-              {...register("attendeeRequest.birthDate", {
+              {...register("birthDate", {
                 required: "생년월일은 필수 입니다.",
               })}
               placeholder="YYYY.MM.DD"
@@ -132,75 +138,87 @@ export default function Step1({
               value={formData.birthDate}
               onChange={handleBirthdateChange}
             />
-            {errors.attendeeRequest?.birthDate && (
+            {errors.birthDate && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.attendeeRequest?.birthDate.message}
+                {errors.birthDate.message}
               </p>
             )}
           </div>
 
           {/* 성별 라디오 버튼 */}
-          <div className="flex px-4 max-w-[170px] w-full h-12">
-            <div className="flex gap-8">
-              <div className="inline-flex items-center">
-                <label
-                  className="relative flex items-center cursor-pointer"
-                  htmlFor="male"
-                >
-                  <input
-                    name="gender"
-                    value="MALE"
-                    type="radio"
-                    id="male"
-                    className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-slate-400 transition-all"
-                    checked={formData.gender === "MALE"}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        gender: e.target.value as "MALE" | "FEMALE",
-                      }))
-                    }
-                  />
-                  <span className="absolute bg-bg-tertiary w-3 h-3 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
-                </label>
-                <label
-                  className="ml-2 text-text-primary text-s-bold cursor-pointer"
-                  htmlFor="male"
-                >
-                  남성
-                </label>
-              </div>
+          <div className="flex flex-col gap-[1px] w-full text-left">
+            <div className="flex px-2 max-w-[170px] w-full h-12">
+              <div className="flex gap-8">
+                <div className="inline-flex items-center">
+                  <label
+                    className="relative flex items-center cursor-pointer"
+                    htmlFor="male"
+                  >
+                    <input
+                      name="gender"
+                      value="MALE"
+                      type="radio"
+                      id="male"
+                      className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-slate-400 transition-all"
+                      checked={formData.gender === "MALE"}
+                      onChange={(e) => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          gender: e.target.value as "MALE" | "FEMALE",
+                        }));
+                        setValue("gender", e.target.value as "MALE" | "FEMALE");
+                      }}
+                    />
+                    <span className="absolute bg-bg-tertiary w-3 h-3 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
+                  </label>
+                  <label
+                    className="ml-2 text-text-primary text-s-bold cursor-pointer"
+                    htmlFor="male"
+                  >
+                    남성
+                  </label>
+                </div>
 
-              <div className="inline-flex items-center">
-                <label
-                  className="relative flex items-center cursor-pointer"
-                  htmlFor="female"
-                >
-                  <input
-                    name="gender"
-                    value="FEMALE"
-                    type="radio"
-                    id="female"
-                    className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-slate-400 transition-all"
-                    checked={formData.gender === "FEMALE"}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        gender: e.target.value as "MALE" | "FEMALE",
-                      }))
-                    }
-                  />
-                  <span className="absolute bg-bg-tertiary w-3 h-3 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
-                </label>
-                <label
-                  className="ml-2 text-text-primary text-s-bold cursor-pointer"
-                  htmlFor="female"
-                >
-                  여성
-                </label>
+                <div className="inline-flex items-center">
+                  <label
+                    className="relative flex items-center cursor-pointer"
+                    htmlFor="female"
+                  >
+                    <input
+                      name="gender"
+                      value="FEMALE"
+                      type="radio"
+                      id="female"
+                      className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-slate-400 transition-all"
+                      checked={formData.gender === "FEMALE"}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          gender: e.target.value as "MALE" | "FEMALE",
+                        }))
+                      }
+                    />
+                    <span className="absolute bg-bg-tertiary w-3 h-3 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></span>
+                  </label>
+                  <label
+                    className="ml-2 text-text-primary text-s-bold cursor-pointer"
+                    htmlFor="female"
+                  >
+                    여성
+                  </label>
+                </div>
               </div>
             </div>
+            {errors.gender && (
+              <p className="text-red-500 text-sm mt-1">
+                {"성별은 필수 입니다."}
+              </p>
+            )}
           </div>
+          <input
+            type="hidden"
+            {...register("gender", { required: "성별은 필수 입니다." })}
+          />
         </div>
       </div>
       {/* 학생 입학일 */}
@@ -210,11 +228,11 @@ export default function Step1({
           <p className="text-text-danger">*</p>
         </div>
 
-        <div className="flex items-center gap-[9px]">
-          <div className="flex flex-col gap-[1px] w-full text-left">
+        <div className="flex flex-col gap-[1px] w-full text-left">
+          <div className="flex items-center gap-[9px]">
             <input
               type="text"
-              {...register("attendeeRequest.enrollmentDate", {
+              {...register("enrollmentDate", {
                 required: "학생 입학일은 필수입니다.",
               })}
               placeholder="YYYY.MM.DD"
@@ -222,71 +240,74 @@ export default function Step1({
               value={formData.enrollmentDate}
               onChange={handleEntranceChange}
             />
-            {errors.attendeeRequest?.enrollmentDate && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.attendeeRequest?.enrollmentDate.message}
-              </p>
-            )}
-          </div>
-          <div className="flex px-4 max-w-[170px] w-full h-12">
-            <div className="flex items-center">
-              <div className="inline-flex items-center">
-                <label className="flex items-center cursor-pointer relative">
-                  <input
-                    type="checkbox"
-                    // checked={formData.admittedToday}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        const today = new Date();
-                        const yyyy = today.getFullYear();
-                        const mm = String(today.getMonth() + 1).padStart(
-                          2,
-                          "0"
-                        );
-                        const dd = String(today.getDate()).padStart(2, "0");
-                        const formattedDate = `${yyyy}.${mm}.${dd}`;
-                        setFormData((prev) => ({
-                          ...prev,
-                          // admittedToday: true,
-                          enrollmentDate: formattedDate,
-                        }));
-                      } else {
-                        setFormData((prev) => ({
-                          ...prev,
-                          // admittedToday: false,
-                          enrollmentDate: "",
-                        }));
-                      }
-                    }}
-                    className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded border border-slate-300 checked:bg-bg-tertiary checked:border-bg-tertiary"
-                    id="admittedToday"
-                  />
-                  <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-3.5 w-3.5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      stroke="currentColor"
-                      strokeWidth="1"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  </span>
+            <div className="flex px-4 max-w-[170px] w-full h-12">
+              <div className="flex items-center">
+                <div className="inline-flex items-center">
+                  <label className="flex items-center cursor-pointer relative">
+                    <input
+                      type="checkbox"
+                      // checked={formData.admittedToday}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          const today = new Date();
+                          const yyyy = today.getFullYear();
+                          const mm = String(today.getMonth() + 1).padStart(
+                            2,
+                            "0"
+                          );
+                          const dd = String(today.getDate()).padStart(2, "0");
+                          const formattedDate = `${yyyy}.${mm}.${dd}`;
+                          setFormData((prev) => ({
+                            ...prev,
+                            // admittedToday: true,
+                            enrollmentDate: formattedDate,
+                          }));
+                          setValue("enrollmentDate", formattedDate);
+                        } else {
+                          setFormData((prev) => ({
+                            ...prev,
+                            // admittedToday: false,
+                            enrollmentDate: "",
+                          }));
+                          setValue("enrollmentDate", "");
+                        }
+                      }}
+                      className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded border border-slate-300 checked:bg-bg-tertiary checked:border-bg-tertiary"
+                      id="admittedToday"
+                    />
+                    <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-3.5 w-3.5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        stroke="currentColor"
+                        strokeWidth="1"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        ></path>
+                      </svg>
+                    </span>
+                  </label>
+                </div>
+                <label
+                  htmlFor="admittedToday"
+                  className="ml-2 text-text-primary text-s-bold cursor-pointer"
+                >
+                  오늘 입학
                 </label>
               </div>
-              <label
-                htmlFor="admittedToday"
-                className="ml-2 text-text-primary text-s-bold cursor-pointer"
-              >
-                오늘 입학
-              </label>
             </div>
           </div>
+
+          {errors.enrollmentDate && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.enrollmentDate.message}
+            </p>
+          )}
         </div>
       </div>
       {/* 가족 연락처 */}
@@ -314,7 +335,7 @@ export default function Step1({
           <input
             type="text"
             placeholder="학생 주소"
-            {...register("attendeeRequest.address_1", {
+            {...register("address_1", {
               required: "학생 주소는 필수입니다.",
             })}
             className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
@@ -326,9 +347,9 @@ export default function Step1({
               }))
             }
           />
-          {errors.attendeeRequest?.address_1 && (
+          {errors.address_1 && (
             <p className="text-red-500 text-sm mt-1">
-              {errors.attendeeRequest.address_1.message}
+              {errors.address_1.message}
             </p>
           )}
         </div>
