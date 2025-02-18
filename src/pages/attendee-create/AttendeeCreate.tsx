@@ -13,7 +13,12 @@ import { getTodayYYYYMMDD } from "@/utils";
 import { useAttendeeCreate, useScheduleUpdate } from "./queries";
 import { FormProvider, useForm } from "react-hook-form";
 
-import { AttendeeSchema, CreateAttendeeSchema } from "./_schema";
+import {
+  AttendeeRequestSchema,
+  AttendeeSchema,
+  CreateAttendeeSchema,
+  CreateAttendeeStep1Schema,
+} from "./_schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 interface Step1FormState {
@@ -112,14 +117,23 @@ export default function AttendeeCreate() {
     resolver: zodResolver(AttendeeSchema),
   });
 
+  const methodsStep1 = useForm<CreateAttendeeStep1Schema>({
+    shouldUnregister: false,
+    mode: "onSubmit",
+    defaultValues: {},
+    resolver: zodResolver(AttendeeRequestSchema),
+  });
+
   const {
     getValues,
     trigger,
     handleSubmit,
     formState: { errors },
   } = methods;
+
+  const { trigger: triggerStep1 } = methodsStep1;
   return (
-    <FormProvider {...methods}>
+    <FormProvider {...{ ...methods, ...methodsStep1 }}>
       <form className="flex flex-col gap-7 w-full pb-[30px]">
         <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
           <p className="font-bold text-text-primary text-[22px]">학생 등록</p>
@@ -152,7 +166,7 @@ export default function AttendeeCreate() {
                   // Step2로 내려줄 함수
                   // setBookProgress={setBookProgress}
                   onChangeGrade={onChangeGrade}
-                  attendanceBookId={context?.selectedBook?.id!}
+                  attendanceBookId={Number(bookId)}
                   setAttendeeSchedules={setAttendeeSchedules}
                   attendeeSchedules={attendeeSchedules}
                 />
@@ -187,13 +201,12 @@ export default function AttendeeCreate() {
                   type="button"
                   className={twMerge(
                     "max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl",
-                    isStep1Valid
-                      ? "bg-bg-tertiary text-[#f1f8f3]"
-                      : "bg-bg-disabled text-text-disabled"
+                    "bg-bg-tertiary text-[#f1f8f3]"
                   )}
                   // disabled={!isStep1Valid}
                   onClick={async () => {
-                    const isValid = await trigger();
+                    const isValid = await triggerStep1();
+                    console.log(isValid);
                     if (isValid) {
                       handleStep2Change(true);
                     }
