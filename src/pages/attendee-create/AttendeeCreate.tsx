@@ -13,12 +13,7 @@ import { getTodayYYYYMMDD } from "@/utils";
 import { useAttendeeCreate, useScheduleUpdate } from "./queries";
 import { FormProvider, useForm } from "react-hook-form";
 
-import {
-  AttendeeRequestSchema,
-  AttendeeSchema,
-  CreateAttendeeSchema,
-  CreateAttendeeStep1Schema,
-} from "./_schema";
+import { AttendeeSchema, CreateAttendeeSchema } from "./_schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 interface Step1FormState {
@@ -111,17 +106,40 @@ export default function AttendeeCreate() {
   });
 
   const methods = useForm<CreateAttendeeSchema>({
-    shouldUnregister: false,
-    mode: "onSubmit",
-    defaultValues: {},
     resolver: zodResolver(AttendeeSchema),
-  });
-
-  const methodsStep1 = useForm<CreateAttendeeStep1Schema>({
-    shouldUnregister: false,
     mode: "onSubmit",
-    defaultValues: {},
-    resolver: zodResolver(AttendeeRequestSchema),
+    defaultValues: {
+      attendeeRequest: {
+        name: "",
+        actualName: "",
+        birthDate: "",
+        enrollmentDate: "",
+        gender: "MALE", // 기본값 (또는 다른 값)
+        phoneNumber: "",
+        description: "",
+        school: "",
+        initialGradeId: 0,
+        isBeginner: false,
+        attendeeId: 0,
+        address_1: "",
+        address_2: "",
+        associates: [],
+      },
+      schedulesRequest: {
+        schedules: [
+          {
+            hhmm: "",
+            day: "MONDAY", // 기본 선택 값
+          },
+        ],
+        progresses: [
+          {
+            startAt: "", // 예: getTodayYYYYMMDD() 등
+            gradeId: 0,
+          },
+        ],
+      },
+    },
   });
 
   const {
@@ -131,9 +149,15 @@ export default function AttendeeCreate() {
     formState: { errors },
   } = methods;
 
-  const { trigger: triggerStep1 } = methodsStep1;
+  const handleStep1Next = async () => {
+    const isValid = await methods.trigger("attendeeRequest");
+    if (isValid) {
+      setIsStep2(true);
+    }
+  };
+
   return (
-    <FormProvider {...{ ...methods, ...methodsStep1 }}>
+    <FormProvider {...methods}>
       <form className="flex flex-col gap-7 w-full pb-[30px]">
         <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
           <p className="font-bold text-text-primary text-[22px]">학생 등록</p>
@@ -187,9 +211,7 @@ export default function AttendeeCreate() {
                     이전으로
                   </button>
                   <button
-                    onClick={() => {
-                      scheduleMutation();
-                    }}
+                    onClick={handleStep1Next}
                     type="button"
                     className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
                   >
@@ -205,8 +227,10 @@ export default function AttendeeCreate() {
                   )}
                   // disabled={!isStep1Valid}
                   onClick={async () => {
-                    const isValid = await triggerStep1();
-                    console.log(isValid);
+                    const isValid = await trigger([
+                      "attendeeRequest.name",
+                      "attendeeRequest.address_1",
+                    ]);
                     if (isValid) {
                       handleStep2Change(true);
                     }
