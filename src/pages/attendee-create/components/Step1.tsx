@@ -1,9 +1,7 @@
 import { GenderType } from "@/api v2/AttendeeSchema";
 import RelationshipSelect from "@/components/Select";
 import React from "react";
-import { AttendeeRequestSchema, CreateAttendeeStep1Schema } from "../_schema";
-import { useForm, useFormContext } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useFormContext } from "react-hook-form";
 
 interface Step1FormState {
   name: string;
@@ -79,19 +77,13 @@ export default function Step1({
     }));
   };
 
-  const methods = useForm<CreateAttendeeStep1Schema>({
-    shouldUnregister: false,
-    mode: "onSubmit",
-    defaultValues: {},
-    resolver: zodResolver(AttendeeRequestSchema),
-  });
-
   const {
     setValue,
     register,
-    watch,
     formState: { errors },
-  } = useFormContext<CreateAttendeeStep1Schema>();
+  } = useFormContext();
+
+  console.log(errors);
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
       {/* 학생 이름 */}
@@ -113,9 +105,11 @@ export default function Step1({
               setFormData((prev) => ({ ...prev, name: e.target.value }))
             }
           />
-          {errors.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-          )}
+          {/* {errors?.attendeeRequest.name && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.attendeeRequest.name.message}
+            </p>
+          )} */}
         </div>
       </div>
       {/* 학생 생년월일/성별 */}
@@ -138,11 +132,11 @@ export default function Step1({
               value={formData.birthDate}
               onChange={handleBirthdateChange}
             />
-            {errors.birthDate && (
+            {/* {errors.birthDate && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.birthDate.message}
               </p>
-            )}
+            )} */}
           </div>
 
           {/* 성별 라디오 버튼 */}
@@ -303,11 +297,11 @@ export default function Step1({
             </div>
           </div>
 
-          {errors.enrollmentDate && (
+          {/* {errors.enrollmentDate && (
             <p className="text-red-500 text-sm mt-1">
               {errors.enrollmentDate.message}
             </p>
-          )}
+          )} */}
         </div>
       </div>
       {/* 가족 연락처 */}
@@ -347,11 +341,11 @@ export default function Step1({
               }))
             }
           />
-          {errors.address_1 && (
+          {/* {errors.address_1 && (
             <p className="text-red-500 text-sm mt-1">
               {errors.address_1.message}
             </p>
-          )}
+          )} */}
         </div>
       </div>
       {/* 학교(선택) */}

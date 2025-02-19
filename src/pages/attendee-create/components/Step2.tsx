@@ -12,6 +12,7 @@ import {
 } from "../queries";
 import { getSub30MinuteHhmm } from "../../../utils";
 import ScheduleTable from "../../books/book-attendee-detail/components/ScheduleTable";
+import { useFormContext } from "react-hook-form";
 
 interface Step2Props {
   setAttendeeSchedules: React.Dispatch<
@@ -63,7 +64,7 @@ export default function Step2({
   const handleSchedule = (
     dayOfWeek: string,
     hhmm: string,
-    isSelected: boolean = false,
+    isSelected: boolean = false
   ) => {
     setScheduleParams({ dayOfWeek, hhmm, isSelected });
     handleAttendeeBottomDrawer(true);
@@ -77,7 +78,7 @@ export default function Step2({
     attendanceBookIdNumber,
     scheduleParams.dayOfWeek,
     scheduleParams.hhmm,
-    !!(scheduleParams.dayOfWeek && scheduleParams.hhmm),
+    !!(scheduleParams.dayOfWeek && scheduleParams.hhmm)
   );
 
   // 시간표 데이터
@@ -86,7 +87,7 @@ export default function Step2({
   // 커리큘럼 데이터를 가져옴
   const { data: bookCourses } = useBookCourses(
     attendanceBookIdNumber,
-    openDrawer,
+    openDrawer
   );
 
   useEffect(() => {
@@ -134,7 +135,7 @@ export default function Step2({
       // prev 가 존재하는 경우 로직 시작
       // 해당 시간이 존재하는지 확인
       const isExist = prev.schedules.some(
-        (schedule) => schedule.day === day && schedule.hhmm === hhmm,
+        (schedule) => schedule.day === day && schedule.hhmm === hhmm
       );
 
       // 존재하는 경우 삭제
@@ -142,7 +143,7 @@ export default function Step2({
         return {
           ...prev,
           schedules: prev.schedules.filter(
-            (schedule) => schedule.day !== day && schedule.hhmm !== hhmm,
+            (schedule) => schedule.day !== day && schedule.hhmm !== hhmm
           ),
         };
       }
@@ -150,7 +151,7 @@ export default function Step2({
       // 존재하지 않는 경우 30분 전의 시간이 존재하는지 확인
       const beforeHhmm = getSub30MinuteHhmm(hhmm);
       const isExistBefore = prev.schedules.some(
-        (schedule) => schedule.day === day && schedule.hhmm === beforeHhmm,
+        (schedule) => schedule.day === day && schedule.hhmm === beforeHhmm
       );
 
       // 30분 전의 시간이 존재하는 경우 삭제
@@ -158,12 +159,12 @@ export default function Step2({
         return {
           ...prev,
           schedules: prev.schedules.filter(
-            (schedule) => schedule.day !== day && schedule.hhmm !== beforeHhmm,
+            (schedule) => schedule.day !== day && schedule.hhmm !== beforeHhmm
           ),
         };
       }
 
-      // 30분 전도 없으면 ... ? 넌 나가라 그냥
+      // 30분 전도 없으면 ... ? 넌 나가라 그냥 , 상후님 ㅋㅋㅋㅋ 웃픕니닼ㅋㅋㅋ
       return prev;
     });
   };
@@ -179,17 +180,19 @@ export default function Step2({
           className="w-full flex justify-center"
           onClick={() => handleBottomDrawer(true)}
         >
-          <input
-            type="input"
-            placeholder="커리큘럼 선택"
-            value={
-              selectedSubject && selectedSubjectItems
-                ? `${selectedSubject.title} > ${selectedSubjectItems.title}`
-                : ""
-            }
-            className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#5D5D5D] text-left"
-            readOnly
-          />
+          <div className="flex flex-col gap-[1px] w-full text-left">
+            <input
+              type="input"
+              placeholder="커리큘럼 선택"
+              value={
+                selectedSubject && selectedSubjectItems
+                  ? `${selectedSubject.title} > ${selectedSubjectItems.title}`
+                  : ""
+              }
+              className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#5D5D5D] text-left"
+              readOnly
+            />
+          </div>
         </div>
       </div>
       <div className="flex flex-col gap-2">
