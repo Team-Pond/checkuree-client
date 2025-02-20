@@ -35,21 +35,9 @@ const ScheduleSchema = z.object({
 export const AttendeeRequestSchema = z.object({
   name: z.string().min(1, "이름은 최소 1글자 이상이어야 합니다."),
   actualName: z.string().optional(),
-  gender: z.enum(["MALE", "FEMALE"]),
-  birthDate: z
-    .string()
-    .min(1, { message: "생년월일은 필수입니다." })
-    .refine((val) => !isNaN(Date.parse(val)), {
-      message: "유효한 날짜 형식이 아닙니다.",
-    }),
-
-  enrollmentDate: z
-    .string()
-    .min(1, { message: "입학년월은 필수입니다." })
-    .refine((val) => !isNaN(Date.parse(val)), {
-      message: "유효한 날짜 형식이 아닙니다.",
-    }),
-
+  gender: z.enum(["MALE", "FEMALE"], { message: "성별을 선택해주세요." }),
+  birthDate: z.string().nonempty({ message: "생년월일은 필수입니다." }),
+  enrollmentDate: z.string().nonempty({ message: "생년월일은 필수입니다." }),
   phoneNumber: z.string().optional(),
   description: z.string().optional(),
   school: z.string().optional(),
@@ -78,7 +66,8 @@ export const ProgressRequestSchema = z.object({
 // 최종 메인 스키마
 export const AttendeeSchema = z.object({
   attendeeRequest: AttendeeRequestSchema,
-  schedulesRequest: SchedulesRequestSchema.merge(ProgressRequestSchema),
+  schedulesRequest: SchedulesRequestSchema,
+  progressRequest: ProgressRequestSchema,
 });
 
 export type CreateAttendeeSchema = z.infer<typeof AttendeeSchema>;
