@@ -166,7 +166,6 @@ export default function CurriculumModify({
             endHhmm={scheduleTimeTable?.endHhmm!}
             handleSchedule={handleSchedule}
             handleAttendeeBottomDrawer={handleAttendeeBottomDrawer}
-            attendeeSchedules={attendeeSchedules}
           />
         )}
       </div>
