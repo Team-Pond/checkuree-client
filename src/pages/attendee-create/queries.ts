@@ -25,7 +25,7 @@ export const useScheduleAttendee = (
   attendanceBookId: number,
   dayOfWeek: string,
   hhmm: string,
-  enabled: boolean = false,
+  enabled: boolean = false
 ) => {
   return useQuery({
     enabled: enabled && dayOfWeek !== "" && hhmm !== "",
@@ -83,39 +83,6 @@ interface Step1FormState {
     phoneNumber: string;
   }[];
 }
-
-export const useAttendeeCreate = ({
-  bookId,
-  formData,
-  guardian,
-  handleAttendeeId,
-  handleStep2Change,
-}: {
-  bookId: number;
-  formData: Step1FormState;
-  guardian: Associates;
-  handleAttendeeId: (id: number) => void;
-  handleStep2Change: (state: boolean) => void;
-}) => {
-  return useMutation({
-    mutationFn: async () =>
-      await createAttendee({
-        attendanceBookId: bookId,
-        params: {
-          ...formData,
-          birthDate: formData.birthDate.replaceAll(".", "-"),
-          actualName: formData.name,
-          enrollmentDate: formData.enrollmentDate.replaceAll(".", "-"),
-          associates: guardian ? [guardian] : [],
-        },
-      }),
-    onSuccess: (res) => {
-      handleAttendeeId(res.data.id);
-      handleStep2Change(true);
-    },
-    onError: (error) => {},
-  });
-};
 
 interface progressGrade {
   startAt: string;
