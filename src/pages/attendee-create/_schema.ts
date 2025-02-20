@@ -1,13 +1,13 @@
 import { z } from "zod";
 
 // Associate 스키마
-const AssociateSchema = z.object({
-  name: z.string(),
-  gender: z.enum(["MALE", "FEMALE"]), // 필요에 따라 값 수정
-  relationType: z.enum(["FATHER", "MOTHER", "SIBLING", "OTHER"]), // 예시 enum 값
+export const AssociateSchema = z.object({
+  name: z.string().optional(),
+  gender: z.enum(["MALE", "FEMALE"]).optional(), // 필요에 따라 값 수정
+  relationType: z.enum(["FATHER", "MOTHER", "SIBLING", "OTHER", ""]),
   phoneNumber: z.string(),
-  relationDescription: z.string(),
-  description: z.string(),
+  relationDescription: z.string().optional(),
+  description: z.string().optional(),
 });
 
 const ProgressSchema = z.object({
