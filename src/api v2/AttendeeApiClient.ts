@@ -1,10 +1,10 @@
 // 출석 관리 대상 API
 
+import { CreateAttendeeSchema } from "@/pages/attendee-create/_schema";
 import ApiClient from "./ApiClient";
 import {
   AttendeeCheckNameRequest,
   AttendeeNewResponse,
-  AttendeeNewRequest,
   AttendeeCheckNameResponse,
   AttendeeCheckRequest,
   AttendeeCheckResponse,
@@ -25,15 +25,18 @@ import {
   UpdateProgressPromoteRequest,
   UpdateProgressPromoteResponse,
   UpdateAttendeeDetailRequest,
-  UpdateAttendeeDetailResponse, SearchAttendeeRequest, SearchAttendeeResponse, SearchAttendeeDataType,
-} from './AttendeeSchema';
+  UpdateAttendeeDetailResponse,
+  SearchAttendeeRequest,
+  SearchAttendeeResponse,
+} from "./AttendeeSchema";
 
+// TODO: ATTENDEENEW Request 작업하기
 export const createAttendee = async ({
   attendanceBookId,
   params,
 }: {
   attendanceBookId: number;
-  params: AttendeeNewRequest;
+  params: CreateAttendeeSchema;
 }): Promise<AttendeeNewResponse> => {
   const response = await ApiClient.request({
     method: "PUT",
@@ -227,10 +230,12 @@ export const updateAttendeeDetail = async ({
 };
 
 // 학생 이름 검색 API (
-export const searchAttendee = async (params: SearchAttendeeRequest):Promise<SearchAttendeeResponse> => {
+export const searchAttendee = async (
+  params: SearchAttendeeRequest
+): Promise<SearchAttendeeResponse> => {
   const { attendanceBookId, name } = params;
   const response = await ApiClient.request({
-    method: 'GET',
+    method: "GET",
     url: `/book/${attendanceBookId}/attendee/search?searchName=${name}&size=100`,
   });
 
