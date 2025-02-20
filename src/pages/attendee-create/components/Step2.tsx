@@ -90,13 +90,7 @@ export default function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
     }
   }, [openDrawer, attendeeOpenDrawer]);
 
-  const {
-    setValue,
-    getValues,
-    register,
-    watch,
-    formState: { errors },
-  } = useFormContext<CreateAttendeeSchema>();
+  const { setValue, getValues } = useFormContext<CreateAttendeeSchema>();
   const handleAttendeeSchedules = (day: DaysType, hhmm: string) => {
     const currentSchedules = getValues("schedulesRequest.schedules");
     const newSchedule = { day, hhmm };

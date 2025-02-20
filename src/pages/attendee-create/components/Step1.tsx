@@ -1,27 +1,16 @@
-import { GenderType } from "@/api v2/AttendeeSchema";
-import RelationshipSelect from "@/components/Select";
+import { Associates, GenderType } from "@/api v2/AttendeeSchema";
+import Select from "@/components/Select";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import { CreateAttendeeSchema } from "../_schema";
+import { twMerge } from "tailwind-merge";
 
-interface Step1FormState {
-  name: string;
-  actualName: string;
-  birthDate: string;
-  gender: GenderType;
-  enrollmentDate: string;
-  // admittedToday: boolean;
-  address_1: string;
-  school: string;
-  description: string;
-}
-
-// Step1에서 받을 props 정의
 interface Step1Props {
   onChangeGuardian: (key: string, value: string) => void;
+  guardian: Associates;
 }
 
-export default function Step1({ onChangeGuardian }: Step1Props) {
+export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
   const handleBirthdateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let input = e.target.value.replace(/\D/g, ""); // 숫자 이외 제거
 
@@ -265,12 +254,30 @@ export default function Step1({ onChangeGuardian }: Step1Props) {
           <p className="font-bold text-m-medium">가족 연락처</p>
         </div>
         <div className="flex gap-2">
-          <RelationshipSelect onChangeGuardian={onChangeGuardian} />
+          <Select
+            onChange={onChangeGuardian}
+            options={[
+              { name: "모", value: "MOTHER" },
+              { name: "부", value: "FATHER" },
+              { name: "조부모", value: "GRANDPARENT" },
+              { name: "기타", value: "ETC" },
+            ]}
+            placeholder="관계"
+          />
           <input
-            type="text"
-            placeholder="ex) 01012345678"
-            className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
-            onChange={(e) => onChangeGuardian("phoneNumber", e.target.value)}
+            type="number"
+            disabled={guardian?.relationType ? false : true}
+            placeholder="01012345678"
+            className={twMerge(
+              "max-w-[342px] w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary",
+              guardian?.relationType ? "bg-white" : "bg-gray-200"
+            )}
+            onChange={(e) =>
+              onChangeGuardian(
+                "phoneNumber",
+                e.target.value.replaceAll("-", "")
+              )
+            }
           />
         </div>
       </div>

@@ -4,37 +4,37 @@ import Step1 from "./components/Step1";
 import { useContext, useState } from "react";
 import Step2 from "./components/Step2";
 import { BookContext } from "@/context/BookContext";
-import { Associates } from "@/api v2/AttendeeSchema";
+import { Associates, RelationType } from "@/api v2/AttendeeSchema";
 import { getTodayYYYYMMDD } from "@/utils";
 
 import { FormProvider, useForm } from "react-hook-form";
 
 import { AttendeeSchema, CreateAttendeeSchema } from "./_schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createAttendee } from "@/api v2/AttendeeApiClient";
+import toast from "react-hot-toast";
 
 export default function AttendeeCreate() {
   const navigate = useNavigate();
   const location = useLocation();
   const { bookId } = useParams();
-  const context = useContext(BookContext);
-  const { selectedBook } = context!;
 
   const [isStep2, setIsStep2] = useState<boolean>(false);
   const [guardian, setGuardian] = useState<Associates>();
-
-  const onChangeGuardian = (key: string, value: string) => {
-    setGuardian((prev) => ({
-      ...prev!,
-      [key]: value,
-    }));
-  };
 
   const methods = useForm<CreateAttendeeSchema>({
     resolver: zodResolver(AttendeeSchema),
     mode: "onSubmit",
   });
 
-  const { getValues, trigger, setValue, handleSubmit } = methods;
+  const { trigger, setValue, handleSubmit } = methods;
+
+  const onChangeGuardian = (key: RelationType | string, value: string) => {
+    setGuardian((prev) => ({
+      ...prev!,
+      [key]: value,
+    }));
+  };
 
   const onChangeGrade = (gradeId: number) => {
     setValue("progressRequest.progresses", [
@@ -54,10 +54,25 @@ export default function AttendeeCreate() {
     <FormProvider {...methods}>
       <form
         className="flex flex-col gap-7 w-full pb-[30px]"
-        onSubmit={handleSubmit((data) => {
-          console.log(data);
-          console.log("ㅅㅅㅁ하매");
-          // 로직
+        onSubmit={handleSubmit(async (data) => {
+          await createAttendee({
+            attendanceBookId: Number(bookId),
+            params: {
+              ...data,
+              attendeeRequest: {
+                ...data.attendeeRequest,
+                actualName: data.attendeeRequest.name + "-1",
+                associates: guardian && [
+                  {
+                    relationType: guardian.relationType,
+                    phoneNumber: guardian.phoneNumber,
+                  },
+                ],
+              },
+            },
+          }).catch((err) => {
+            toast.error(err.response.data.message);
+          });
         })}
       >
         <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
@@ -92,7 +107,10 @@ export default function AttendeeCreate() {
                   attendanceBookId={Number(bookId)}
                 />
               ) : (
-                <Step1 onChangeGuardian={onChangeGuardian} />
+                <Step1
+                  onChangeGuardian={onChangeGuardian}
+                  guardian={guardian!}
+                />
               )}
               {isStep2 ? (
                 <div className="flex gap-4 w-full">
