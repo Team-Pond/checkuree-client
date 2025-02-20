@@ -37,7 +37,7 @@ export const AttendeeRequestSchema = z.object({
   actualName: z.string().optional(),
   gender: z.enum(["MALE", "FEMALE"], { message: "성별을 선택해주세요." }),
   birthDate: z.string().nonempty({ message: "생년월일은 필수입니다." }),
-  enrollmentDate: z.string().nonempty({ message: "생년월일은 필수입니다." }),
+  enrollmentDate: z.string().nonempty({ message: "학생 입학일은 필수입니다." }),
   phoneNumber: z.string().optional(),
   description: z.string().optional(),
   school: z.string().optional(),
