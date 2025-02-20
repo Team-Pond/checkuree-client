@@ -2,6 +2,7 @@ export type GenderType = "MALE" | "FEMALE" | "";
 type Parent = string;
 type Status = "ATTENDING" | string;
 
+export type RelationType = "FATHER" | "MOTHER" | "SIBLING" | "OTHER";
 export type DaysType =
   | "MONDAY"
   | "TUESDAY"
@@ -14,7 +15,7 @@ export type DaysType =
 export interface Associates {
   name?: string;
   gender?: GenderType;
-  relationType: Parent;
+  relationType: RelationType;
   phoneNumber: string;
   relationescription?: string;
   description?: string;
@@ -240,7 +241,7 @@ export type GetAttendeeDetailResponse = {
 export type SearchAttendeeRequest = {
   attendanceBookId: number;
   name: string;
-}
+};
 
 export type SearchAttendeeDataType = {
   content: {
@@ -271,11 +272,11 @@ export type SearchAttendeeDataType = {
     sorted: boolean;
     unsorted: boolean;
   };
-}
+};
 
 export type SearchAttendeeResponse = {
   status: 200;
-  data: SearchAttendeeDataType
+  data: SearchAttendeeDataType;
 } & ErrorResponse;
 
 export type GetAttendeeProgressLogRequest = {
