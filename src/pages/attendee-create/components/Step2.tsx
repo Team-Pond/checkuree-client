@@ -90,7 +90,12 @@ export default function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
     }
   }, [openDrawer, attendeeOpenDrawer]);
 
-  const { setValue, getValues } = useFormContext<CreateAttendeeSchema>();
+  const {
+    setValue,
+    getValues,
+    register,
+    formState: { errors },
+  } = useFormContext<CreateAttendeeSchema>();
   const handleAttendeeSchedules = (day: DaysType, hhmm: string) => {
     const currentSchedules = getValues("schedulesRequest.schedules");
     const newSchedule = { day, hhmm };
@@ -158,6 +163,9 @@ export default function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
           <div className="flex flex-col gap-[1px] w-full text-left">
             <input
               type="input"
+              {...register("progressRequest.progresses", {
+                required: "필수입니다.",
+              })}
               placeholder="커리큘럼 선택"
               value={
                 selectedSubject && selectedSubjectItems
@@ -167,8 +175,14 @@ export default function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
               className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#5D5D5D] text-left"
               readOnly
             />
+            {errors?.progressRequest?.progresses && (
+              <p className="text-red-500 text-sm mt-1">
+                커리큘럼 선택 후 클래스 일정 선택은 필수입니다.
+              </p>
+            )}
           </div>
         </div>
+        {/* <input type="hidden" {...register("schedulesRequest.schedules")} /> */}
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">

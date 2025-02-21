@@ -1,4 +1,4 @@
-import { Associates, GenderType } from "@/api v2/AttendeeSchema";
+import { Associates } from "@/api v2/AttendeeSchema";
 import Select from "@/components/Select";
 import React from "react";
 import { useFormContext } from "react-hook-form";

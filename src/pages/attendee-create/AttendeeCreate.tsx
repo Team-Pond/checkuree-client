@@ -1,9 +1,9 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import Step1 from "./components/Step1";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Step2 from "./components/Step2";
-import { BookContext } from "@/context/BookContext";
+
 import { Associates, RelationType } from "@/api v2/AttendeeSchema";
 import { getTodayYYYYMMDD } from "@/utils";
 
@@ -49,31 +49,35 @@ export default function AttendeeCreate() {
       setIsStep2(true);
     }
   };
+  const handleStep2Next = async (data: CreateAttendeeSchema) => {
+    const isValid = await trigger("attendeeRequest");
+    if (isValid) {
+      await createAttendee({
+        attendanceBookId: Number(bookId),
+        params: {
+          ...data,
+          attendeeRequest: {
+            ...data.attendeeRequest,
+            actualName: data.attendeeRequest.name,
+            associates: guardian && [
+              {
+                relationType: guardian.relationType,
+                phoneNumber: guardian.phoneNumber,
+              },
+            ],
+          },
+        },
+      }).catch((err) => {
+        toast.error(err.response.data.message);
+      });
+    }
+  };
 
   return (
     <FormProvider {...methods}>
       <form
         className="flex flex-col gap-7 w-full pb-[30px]"
-        onSubmit={handleSubmit(async (data) => {
-          await createAttendee({
-            attendanceBookId: Number(bookId),
-            params: {
-              ...data,
-              attendeeRequest: {
-                ...data.attendeeRequest,
-                actualName: data.attendeeRequest.name + "-1",
-                associates: guardian && [
-                  {
-                    relationType: guardian.relationType,
-                    phoneNumber: guardian.phoneNumber,
-                  },
-                ],
-              },
-            },
-          }).catch((err) => {
-            toast.error(err.response.data.message);
-          });
-        })}
+        onSubmit={handleSubmit(handleStep2Next)}
       >
         <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
           <p className="font-bold text-text-primary text-[22px]">학생 등록</p>
@@ -116,7 +120,9 @@ export default function AttendeeCreate() {
                 <div className="flex gap-4 w-full">
                   <button
                     type="button"
-                    onClick={() => {}}
+                    onClick={() => {
+                      setIsStep2(false);
+                    }}
                     className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
                   >
                     이전으로
