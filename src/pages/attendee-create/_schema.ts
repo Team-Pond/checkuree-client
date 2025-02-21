@@ -51,16 +51,12 @@ export const AttendeeRequestSchema = z.object({
 
 // SchedulesRequest 스키마
 export const SchedulesRequestSchema = z.object({
-  schedules: z
-    .array(ScheduleSchema)
-    .min(1, { message: "스케줄 선택은 필수입니다." }),
+  schedules: z.array(ScheduleSchema).min(1),
 });
 
 // ProgressRequest 스키마
 export const ProgressRequestSchema = z.object({
-  progresses: z
-    .array(ProgressSchema)
-    .min(1, { message: "과정 선택은 필수입니다." }),
+  progresses: z.array(ProgressSchema).min(1),
 });
 
 // 최종 메인 스키마
