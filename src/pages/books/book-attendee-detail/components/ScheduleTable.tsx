@@ -153,7 +153,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
 
                   return (
                     <td
-                      key={`${dayData.dayOfWeek}-${slotIndex}`}
+                      key={[dayData.dayOfWeek, slotIndex].join("-")}
                       // ▼ isSelected면 빨간색, 아니면 기존 로직
                       className={`border border-[#f6f6f6] text-sm w-[54px] h-[34px] align-middle cursor-pointer
                         ${
@@ -193,7 +193,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
 
                   return (
                     <td
-                      key={`${dayData.dayOfWeek}-${secondSlotIndex}`}
+                      key={[dayData.dayOfWeek, secondSlotIndex].join("-")}
                       className={`border border-[#f6f6f6] text-sm w-[54px] h-[34px] align-middle cursor-pointer
                         ${
                           isSelected
