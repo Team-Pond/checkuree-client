@@ -115,7 +115,7 @@ export default function MainContents(props: IProps) {
   // 확인 모달에서 띄울 메시지 설정
   const handleConfirmMessage = (
     schedule: ScheduleData,
-    targetStatus: "ATTEND" | "ABSENT",
+    targetStatus: "ATTEND" | "ABSENT"
   ) => {
     if (schedule.recordStatus === targetStatus) {
       setConfirmMessage("출석체크를 취소하시겠어요?");
@@ -133,7 +133,7 @@ export default function MainContents(props: IProps) {
 
   const handleAttendanceStatusWithConfirmation = (
     targetStatus: "ATTEND" | "ABSENT",
-    schedule: ScheduleData,
+    schedule: ScheduleData
   ) => {
     // 출석기록이 이미 있는 경우 확인 메시지 출력
     if (schedule.recordStatus !== "PENDING") {
@@ -168,16 +168,19 @@ export default function MainContents(props: IProps) {
       {bookSchedules?.content?.map((content, index) => {
         return (
           <div
-            key={content.schedules + `${index}`}
+            key={[content.schedules, index].join("-")}
             className="w-full text-left rounded-2xl bg-white px-6 pt-1 flex flex-col"
           >
             <p className="text-s-bold text-text-secondary h-12 flex items-center">
               {scheduleCheckformatTime(content.startTime)}
             </p>
 
-            {content.schedules.map((schedule) => {
+            {content.schedules.map((schedule, index) => {
               return (
-                <div className="w-full h-[56px] flex items-center justify-between px-2 ">
+                <div
+                  key={[schedule, index].join("-")}
+                  className="w-full h-[56px] flex items-center justify-between px-2 "
+                >
                   {/*<p className="font-bold  text-text-primary">{schedule.name}</p>*/}
                   <div
                     className="flex flex-col items-start"
@@ -213,14 +216,14 @@ export default function MainContents(props: IProps) {
                         onClick={() => {
                           handleAttendanceStatusWithConfirmation(
                             "ABSENT",
-                            schedule,
+                            schedule
                           );
                         }}
                         className={twMerge(
                           "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
                           schedule.recordStatus === "ABSENT"
                             ? "bg-bg-destructive text-text-interactive-destructive"
-                            : "bg-bg-disabled text-text-disabled",
+                            : "bg-bg-disabled text-text-disabled"
                         )}
                       >
                         결석
@@ -229,14 +232,14 @@ export default function MainContents(props: IProps) {
                         onClick={() => {
                           handleAttendanceStatusWithConfirmation(
                             "ATTEND",
-                            schedule,
+                            schedule
                           );
                         }}
                         className={twMerge(
                           "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
                           schedule.recordStatus === "ATTEND"
                             ? "bg-bg-primary text-text-interactive-primary"
-                            : "bg-bg-disabled text-text-disabled",
+                            : "bg-bg-disabled text-text-disabled"
                         )}
                       >
                         출석
@@ -248,8 +251,8 @@ export default function MainContents(props: IProps) {
                         schedule.recordStatus !== "ATTEND"
                           ? "bg-bg-disabled"
                           : schedule.isTaught
-                            ? "bg-bg-tertiary"
-                            : "bg-bg-base", // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?
+                          ? "bg-bg-tertiary"
+                          : "bg-bg-base" // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?
                       )}
                       onClick={() => {
                         lessonMutation({
