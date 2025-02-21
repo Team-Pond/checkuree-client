@@ -11,7 +11,10 @@ interface Step1Props {
 }
 
 export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
-  const handleBirthdateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDateChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    parameter: "attendeeRequest.birthDate" | "attendeeRequest.enrollmentDate"
+  ) => {
     let input = e.target.value.replace(/\D/g, ""); // 숫자 이외 제거
 
     if (input.length > 8) {
@@ -26,24 +29,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
       input = input.slice(0, 7) + "." + input.slice(7);
     }
 
-    setValue("attendeeRequest.birthDate", input);
-  };
-
-  const handleEntranceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let input = e.target.value.replace(/\D/g, ""); // 숫자 이외 제거
-
-    if (input.length > 8) {
-      input = input.slice(0, 8);
-    }
-
-    if (input.length >= 5) {
-      input = input.slice(0, 4) + "." + input.slice(4);
-    }
-
-    if (input.length >= 8) {
-      input = input.slice(0, 7) + "." + input.slice(7);
-    }
-    setValue("attendeeRequest.enrollmentDate", input);
+    setValue(parameter, input.replaceAll(".", "-"));
   };
 
   const {
@@ -89,7 +75,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
             <input
               type="text"
               {...register("attendeeRequest.birthDate")}
-              onChange={handleBirthdateChange}
+              onChange={(e) => handleDateChange(e, "attendeeRequest.birthDate")}
               placeholder="YYYY.MM.DD"
               className="outline-none bg-white border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12 flex items-center pl-4"
             />
@@ -181,7 +167,9 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
               type="text"
               {...register("attendeeRequest.enrollmentDate")}
               placeholder="YYYY.MM.DD"
-              onChange={handleEntranceChange}
+              onChange={(e) =>
+                handleDateChange(e, "attendeeRequest.enrollmentDate")
+              }
               className="outline-none bg-white border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12 flex items-center pl-4"
             />
             <div className="flex px-4 max-w-[170px] w-full h-12">
@@ -204,7 +192,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
 
                           setValue(
                             "attendeeRequest.enrollmentDate",
-                            formattedDate
+                            formattedDate.replaceAll(".", "-")
                           );
                         } else {
                           setValue("attendeeRequest.enrollmentDate", "");

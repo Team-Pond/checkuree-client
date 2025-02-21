@@ -1,4 +1,9 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  redirect,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import Step1 from "./components/Step1";
 import { useState } from "react";
@@ -67,9 +72,14 @@ export default function AttendeeCreate() {
             ],
           },
         },
-      }).catch((err) => {
-        toast.error(err.response.data.message);
-      });
+      })
+        .then(() => {
+          toast.success(`${data.attendeeRequest.name} 학생이 등록되었습니다.`);
+          navigate(`/book/${bookId}/attendee${location.search}`);
+        })
+        .catch((err) => {
+          toast.error(err.response.data.message);
+        });
     }
   };
 
