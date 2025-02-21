@@ -192,7 +192,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
 
                           setValue(
                             "attendeeRequest.enrollmentDate",
-                            formattedDate
+                            formattedDate.replaceAll(".", "-")
                           );
                         } else {
                           setValue("attendeeRequest.enrollmentDate", "");
