@@ -1,6 +1,5 @@
 // 출석 관리 대상 API
 
-import { CreateAttendeeSchema } from "@/pages/attendee-create/_schema";
 import ApiClient from "./ApiClient";
 import {
   AttendeeCheckNameRequest,
@@ -28,6 +27,7 @@ import {
   UpdateAttendeeDetailResponse,
   SearchAttendeeRequest,
   SearchAttendeeResponse,
+  AttendeeNewRequest,
 } from "./AttendeeSchema";
 
 // TODO: ATTENDEENEW Request 작업하기
@@ -36,7 +36,7 @@ export const createAttendee = async ({
   params,
 }: {
   attendanceBookId: number;
-  params: CreateAttendeeSchema;
+  params: AttendeeNewRequest;
 }): Promise<AttendeeNewResponse> => {
   const response = await ApiClient.request({
     method: "PUT",

@@ -1,3 +1,6 @@
+import { AttendeeSchema } from "@/pages/attendee-create/_schema";
+import { z } from "zod";
+
 export type GenderType = "MALE" | "FEMALE" | "";
 type Parent = string;
 type Status = "ATTENDING" | string;
@@ -35,20 +38,7 @@ type ErrorResponse = ResponseBase & {
   timeStamp: string;
 };
 
-export type AttendeeNewRequest = {
-  name: string;
-  gender: GenderType;
-  actualName: string;
-  birthDate: string;
-  enrollmentDate: string;
-  description: string;
-  school: string;
-  attendeeId?: number;
-  initialGradeId?: number;
-  isBeginner?: boolean;
-  address_1: string;
-  associates?: Associates[];
-};
+export type AttendeeNewRequest = z.infer<typeof AttendeeSchema>;
 
 export type AttendeeNewResponse = {
   status: 200;
