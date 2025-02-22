@@ -250,11 +250,11 @@ export default function AttendanceManage(props: IProps) {
                                       date.getDay() === 0
                                         ? "text-[#f44336]"
                                         : date.getMonth() !==
-                                            selectedMonth.getMonth()
-                                          ? "text-text-tertiary"
-                                          : isEqual(today, date)
-                                            ? "text-[#5d5d5d] rounded-full w-4 h-4 bg-[#BDDDC3]"
-                                            : "text-[#5d5d5d]"
+                                          selectedMonth.getMonth()
+                                        ? "text-text-tertiary"
+                                        : isEqual(today, date)
+                                        ? "text-[#5d5d5d] rounded-full w-4 h-4 bg-[#BDDDC3]"
+                                        : "text-[#5d5d5d]"
                                     }`}
                                   >
                                     {format(date, "d")}
@@ -266,7 +266,6 @@ export default function AttendanceManage(props: IProps) {
                                   {recordsByDate
                                     .get(format(date, "yyyy-MM-dd"))
                                     ?.map((record) => {
-                                      console.log(record);
                                       return (
                                         <p
                                           className={`rounded-full w-1.5 h-1.5 ${
@@ -274,10 +273,10 @@ export default function AttendanceManage(props: IProps) {
                                             ("ABSENT" as STATUS)
                                               ? "bg-[#EA5353]"
                                               : record.status ===
-                                                    ("ATTEND" as STATUS) &&
-                                                  record.makeup
-                                                ? "bg-[#F2BD2D]"
-                                                : "bg-[#59996b]"
+                                                  ("ATTEND" as STATUS) &&
+                                                record.makeup
+                                              ? "bg-[#F2BD2D]"
+                                              : "bg-[#59996b]"
                                           }`}
                                         ></p>
                                       );

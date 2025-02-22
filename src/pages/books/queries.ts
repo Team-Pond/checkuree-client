@@ -10,8 +10,6 @@ export const useBookList = () => {
       const response = await getMeBooks();
       if (response.status === 200) {
         return response;
-      } else {
-        console.log(response); // 에러 바운더리 추가
       }
     },
   });
@@ -24,8 +22,6 @@ export const useBookDetail = (bookId: number) => {
       const response = await getBookDetail(bookId);
       if (response.status === 200) {
         return response;
-      } else {
-        console.log(response); // 에러 바운더리 추가
       }
     },
   });
