@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { useLocation } from "react-router-dom";
 
 interface SEOProps {
   title: string;
@@ -6,8 +7,9 @@ interface SEOProps {
 }
 export default function SEO(props: SEOProps) {
   const { title, content } = props;
+  const location = useLocation();
   return (
-    <Helmet>
+    <Helmet key={location.pathname}>
       <title>{title}</title>
       <meta name="description" content={content} />
       <meta property="og:title" content={title} />
