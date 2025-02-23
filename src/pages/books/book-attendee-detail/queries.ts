@@ -15,7 +15,7 @@ import { attendeeKeys } from "@/queryKeys";
 
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { GetAttendeeRecordsResponse } from "../../../api v2/RecordSchema";
+import { getAttendeeCounsellings } from "../../../api v2/CounselApiClient";
 
 // TODO: Calendar 작업 시 필요
 export const useAttendeeRecords = ({
@@ -40,6 +40,23 @@ export const useAttendeeRecords = ({
         attendanceBookId: bookId,
         attendeeId,
       }),
+  });
+};
+
+export const useCounsellingList = ({
+  bookId,
+  attendeeId,
+}: {
+  bookId: number;
+  attendeeId: number;
+}) => {
+  return useQuery({
+    queryKey: [""],
+    queryFn: async () =>
+      await getAttendeeCounsellings({
+        bookId,
+        attendeeId,
+      }).then((res) => res.data),
   });
 };
 
