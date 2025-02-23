@@ -1,16 +1,12 @@
 import { RelationType } from "./AttendeeSchema";
 
-export enum CounsellingTopicType {
-  FUTURE_PATH = "진로 상담",
-  STUDY_PROGRESS = "진도 상담",
-  PEER_RELATIONS = "교우관계 상담",
-  ETC = "기타",
-}
+export type CounsellingTopicType =
+  | "FUTURE_PATH"
+  | "STUDY_PROGRESS"
+  | "PEER_RELATIONS"
+  | "ETC";
 
-export enum CounsellingType {
-  PHONE = "전화 상담",
-  VISIT = "방문 상담",
-}
+export type CounsellingType = "PHONE" | "VISIT";
 
 export const counsellingTypeMapper = (type: CounsellingTopicType) => {};
 
