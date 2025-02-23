@@ -49,8 +49,7 @@ export default function BookCheck() {
 
   useEffect(() => {
     if (bookSchedules?.status === 200) {
-      // CODE-REVIEW 이렇게 as 로 Casting 하지 않으면 타입 에러가 발생합니다..
-      const scheduleData = bookSchedules.data as ScheduleDataType;
+      const scheduleData = bookSchedules.data;
 
       setTotalScheduleCount(scheduleData.numberOfElements);
       const checkedCount = scheduleData.content.reduce((total, schedules) => {
@@ -85,19 +84,24 @@ export default function BookCheck() {
         totalScheduleCount={totalScheduleCount}
         setOpenFilter={setOpenFilter}
       />
-      <MainContents
-        confirmMessage={confirmMessage}
-        onSave={onSave}
-        setConfirmMessage={setConfirmMessage}
-        setOnSave={setOnSave}
-        setIsOpen={setIsOpen}
-        isOpen={isOpen}
-        bookSchedules={bookSchedules?.data as ScheduleDataType}
-        currentDate={formattedDate}
-        bookId={Number(bookId!)}
-        checkedScheduleCount={checkedScheduleCount}
-        setCheckedCount={setCheckedScheduleCount}
-      />
+      {bookSchedules?.status === 200 ? (
+        <MainContents
+          confirmMessage={confirmMessage}
+          onSave={onSave}
+          setConfirmMessage={setConfirmMessage}
+          setOnSave={setOnSave}
+          setIsOpen={setIsOpen}
+          isOpen={isOpen}
+          bookSchedules={bookSchedules.data}
+          currentDate={formattedDate}
+          bookId={Number(bookId!)}
+          checkedScheduleCount={checkedScheduleCount}
+          setCheckedCount={setCheckedScheduleCount}
+        />
+      ) : (
+        <></>
+      )}
+
       <BottomAddRecord
         openFilter={openFilter}
         onDrawerChange={onDrawerChange}
