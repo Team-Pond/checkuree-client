@@ -3,10 +3,13 @@ import { twMerge } from "tailwind-merge";
 import { ScheduleDataType } from "@/api v2/ScheduleSchema";
 import { scheduleCheckformatTime } from "@/utils";
 import { STATUS } from "@/api v2/RecordSchema";
-import { ScheduleData } from "../../../../api v2/ScheduleSchema";
+import {
+  ScheduleData,
+  ScheduleDataContentType,
+} from "../../../../api v2/ScheduleSchema";
 import { formatLocalTimeString } from "../../../../utils";
 import { useLessonUpdate, useRecordCreate, useStatusUpdate } from "../queries";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ConfirmModal } from "./ConfirmModal";
 import ModifyRecordTimeModal from "./ModifyRecordTimeModal";
 
@@ -56,6 +59,13 @@ export default function MainContents(props: IProps) {
     id: 0,
     formattedTime: "",
   });
+  // 수업 중( 등원 후 && 수업 전)인 학생
+  const [needLessonStudents, setNeedLessonStudents] = useState<ScheduleData[]>(
+    [],
+  );
+  // 출선 전 or 수업 완료 학생
+  const [noNeedLessonTimeScheduleTable, setNoNeedLessonTimeScheduleTable] =
+    useState<ScheduleDataContentType>([]);
 
   // 출석체크 화면의 체크 인원 수 변경
   const handleCheckedCountChange = ({
@@ -112,6 +122,36 @@ export default function MainContents(props: IProps) {
     });
   };
 
+  useEffect(() => {
+    if (bookSchedules?.content) {
+      const newNeedLessonStudents: ScheduleData[] = [];
+      const newNoNeedLessonTimeScheduleTable: ScheduleDataContentType = [];
+
+      bookSchedules.content.forEach((content) => {
+        const beforeLessonStudents = content.schedules.filter((schedule) => {
+          return schedule.recordStatus === "ATTEND" && !schedule.isTaught;
+        });
+        const noNeedToLessonSchedules = content.schedules.filter((schedule) => {
+          return schedule.recordStatus !== "ATTEND" || schedule.isTaught;
+        });
+
+        newNeedLessonStudents.push(...beforeLessonStudents);
+        newNoNeedLessonTimeScheduleTable.push({
+          ...content,
+          schedules: noNeedToLessonSchedules,
+        });
+      });
+
+      // 상태 업데이트
+      setNeedLessonStudents(
+        newNeedLessonStudents.sort((a, b) =>
+          a.recordTime > b.recordTime ? 1 : -1,
+        ),
+      );
+      setNoNeedLessonTimeScheduleTable(newNoNeedLessonTimeScheduleTable);
+    }
+  }, [bookSchedules?.content]); // bookSchedules.content가 변경될 때마다 실행
+
   // 확인 모달에서 띄울 메시지 설정
   const handleConfirmMessage = (
     schedule: ScheduleData,
@@ -165,8 +205,114 @@ export default function MainContents(props: IProps) {
 
   return (
     <div className="w-full flex flex-col gap-4 justify-center items-center py-3 px-4 bg-bg-secondary scrollbar-hide custom-scrollbar-hide">
-      {bookSchedules?.content?.map((content, index) => {
-        return (
+      {needLessonStudents.length > 0 && (
+        <div
+          key={"needLesson"}
+          className="w-full text-left rounded-2xl bg-white px-6 pt-1 flex flex-col"
+        >
+          <p className="text-s-bold text-text-primary h-12 flex items-center ">
+            {"수업 중"}
+          </p>
+          {needLessonStudents.map((schedule) => {
+            return (
+              <div className="w-full h-[56px] flex items-center justify-between px-2 ">
+                <div
+                  className="flex flex-col items-start"
+                  onClick={() => {
+                    if (schedule.recordStatus === "ATTEND") {
+                      setRecord({
+                        id: schedule.recordId,
+                        formattedTime: schedule.recordTime,
+                      });
+                      setIsRecordTimeOpen(true);
+                    }
+                  }}
+                >
+                  <p className="font-bold text-text-primary">
+                    {schedule.name}
+                    {schedule.isMakeup && (
+                      <span className="text-[#EC9E14] text-xs-medium align-middle">
+                        {" "}
+                        보강
+                      </span>
+                    )}
+                  </p>
+                  {schedule.recordStatus === "ATTEND" && (
+                    <p className="text-[12px] text-[#59996B] font-medium leading-[14.98px]">
+                      {formatLocalTimeString(schedule.recordTime) + " 출석"}
+                    </p>
+                  )}
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex gap-2">
+                    {/* TODO: 결석은 status명이 어떻게 되는지? */}
+                    <button
+                      onClick={() => {
+                        handleAttendanceStatusWithConfirmation(
+                          "ABSENT",
+                          schedule,
+                        );
+                      }}
+                      className={twMerge(
+                        "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
+                        schedule.recordStatus === "ABSENT"
+                          ? "bg-bg-destructive text-text-interactive-destructive"
+                          : "bg-bg-disabled text-text-disabled",
+                      )}
+                    >
+                      결석
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleAttendanceStatusWithConfirmation(
+                          "ATTEND",
+                          schedule,
+                        );
+                      }}
+                      className={twMerge(
+                        "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
+                        schedule.recordStatus === "ATTEND"
+                          ? "bg-bg-primary text-text-interactive-primary"
+                          : "bg-bg-disabled text-text-disabled",
+                      )}
+                    >
+                      출석
+                    </button>
+                  </div>
+                  <button
+                    className={twMerge(
+                      "w-8 h-8 flex items-center justify-center rounded-lg",
+                      schedule.recordStatus !== "ATTEND"
+                        ? "bg-bg-disabled"
+                        : schedule.isTaught
+                          ? "bg-bg-tertiary"
+                          : "bg-bg-base", // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?
+                    )}
+                    onClick={() => {
+                      lessonMutation({
+                        recordId: schedule.recordId,
+                        isTaught: !schedule.isTaught,
+                      });
+                    }}
+                    disabled={schedule.recordStatus !== "ATTEND"}
+                  >
+                    <img
+                      src={`/images/icons/book-check/${
+                        schedule.isTaught
+                          ? "ico-note-active.svg"
+                          : "ico-note.svg"
+                      }`}
+                      alt=""
+                    />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+      {noNeedLessonTimeScheduleTable?.map((content, index) => {
+        return content.schedules.length === 0 ? null : (
           <div
             key={[content.schedules, index].join("-")}
             className="w-full text-left rounded-2xl bg-white px-6 pt-1 flex flex-col"
