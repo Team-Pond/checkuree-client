@@ -66,7 +66,7 @@ export default function BookCheck() {
   }, [bookSchedules]);
 
   return (
-    <section className="flex flex-col w-full scrollbar-hide custom-scrollbar-hide">
+    <section className="flex flex-col w-full scrollbar-hide custom-scrollbar-hide bg-bg-secondary flex-1">
       <SEO
         title="체쿠리 | 출석부 출석"
         content="체쿠리 음악학원 출석부 서비스의 출석부 출석 페이지입니다."
@@ -104,13 +104,7 @@ export default function BookCheck() {
         attendanceBookId={Number(bookId)}
         currentDate={currentDate.format("YYYY-MM-DD")}
       />
-      <div className="flex justify-between px-[44px] items-center w-full h-[92px] bg-bg-secondary" />
-      {!openFilter && (
-        <>
-          <div className="flex justify-between px-[44px] items-center w-full h-[92px]" />
-          <Bottom />
-        </>
-      )}
+      {!openFilter && <Bottom />}
     </section>
   );
 }

@@ -61,7 +61,7 @@ export default function MainContents(props: IProps) {
   });
   // 수업 중( 등원 후 && 수업 전)인 학생
   const [needLessonStudents, setNeedLessonStudents] = useState<ScheduleData[]>(
-    [],
+    []
   );
   // 출선 전 or 수업 완료 학생
   const [noNeedLessonTimeScheduleTable, setNoNeedLessonTimeScheduleTable] =
@@ -145,8 +145,8 @@ export default function MainContents(props: IProps) {
       // 상태 업데이트
       setNeedLessonStudents(
         newNeedLessonStudents.sort((a, b) =>
-          a.recordTime > b.recordTime ? 1 : -1,
-        ),
+          a.recordTime > b.recordTime ? 1 : -1
+        )
       );
       setNoNeedLessonTimeScheduleTable(newNoNeedLessonTimeScheduleTable);
     }
@@ -204,7 +204,7 @@ export default function MainContents(props: IProps) {
   };
 
   return (
-    <div className="w-full flex flex-col gap-4 justify-center items-center py-3 px-4 bg-bg-secondary scrollbar-hide custom-scrollbar-hide">
+    <div className="w-full flex flex-col gap-4 justify-center items-center py-3 px-4 scrollbar-hide custom-scrollbar-hide">
       {needLessonStudents.length > 0 && (
         <div
           key={"needLesson"}
@@ -250,14 +250,14 @@ export default function MainContents(props: IProps) {
                       onClick={() => {
                         handleAttendanceStatusWithConfirmation(
                           "ABSENT",
-                          schedule,
+                          schedule
                         );
                       }}
                       className={twMerge(
                         "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
                         schedule.recordStatus === "ABSENT"
                           ? "bg-bg-destructive text-text-interactive-destructive"
-                          : "bg-bg-disabled text-text-disabled",
+                          : "bg-bg-disabled text-text-disabled"
                       )}
                     >
                       결석
@@ -266,14 +266,14 @@ export default function MainContents(props: IProps) {
                       onClick={() => {
                         handleAttendanceStatusWithConfirmation(
                           "ATTEND",
-                          schedule,
+                          schedule
                         );
                       }}
                       className={twMerge(
                         "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
                         schedule.recordStatus === "ATTEND"
                           ? "bg-bg-primary text-text-interactive-primary"
-                          : "bg-bg-disabled text-text-disabled",
+                          : "bg-bg-disabled text-text-disabled"
                       )}
                     >
                       출석
@@ -285,8 +285,8 @@ export default function MainContents(props: IProps) {
                       schedule.recordStatus !== "ATTEND"
                         ? "bg-bg-disabled"
                         : schedule.isTaught
-                          ? "bg-bg-tertiary"
-                          : "bg-bg-base", // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?
+                        ? "bg-bg-tertiary"
+                        : "bg-bg-base" // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?
                     )}
                     onClick={() => {
                       lessonMutation({
