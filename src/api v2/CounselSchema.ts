@@ -44,5 +44,5 @@ export type CounsellingListRequest = {
 
 export type CounsellingListResponse = {
   status: 200;
-  data: CounsellingListType;
-} & ErrorResponse;
+  data: CounsellingListType[];
+};
