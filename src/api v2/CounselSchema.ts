@@ -1,11 +1,18 @@
 import { RelationType } from "./AttendeeSchema";
 
-export enum CounsellingType {
+export enum CounsellingTopicType {
   FUTURE_PATH = "진로 상담",
   STUDY_PROGRESS = "진도 상담",
   PEER_RELATIONS = "교우관계 상담",
   ETC = "기타",
 }
+
+export enum CounsellingType {
+  PHONE = "전화 상담",
+  VISIT = "방문 상담",
+}
+
+export const counsellingTypeMapper = (type: CounsellingTopicType) => {};
 
 type ResponseBase = {
   status: number;
@@ -23,15 +30,15 @@ type ErrorResponse = ResponseBase & {
 
 export type CounsellingListType = {
   counsellingId: number;
-  counsellingType: string;
-  counsellingTopicTypes: CounsellingType[];
+  counsellingType: CounsellingType;
+  counsellingTopicTypes: CounsellingTopicType[];
   counsellingAt: Date;
   description: string;
-  Counselee: {
+  counselee: {
     counseleeId: number;
     relationType: RelationType;
   };
-  Counsellor: {
+  counsellor: {
     counsellorId: number;
     name: string;
   };
