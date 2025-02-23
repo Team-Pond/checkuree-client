@@ -1,3 +1,5 @@
+import CounselList from './CounselList';
+
 type IProps = {
   studentInfo: {
     name: string;
@@ -35,43 +37,8 @@ export default function CounselManage(props: IProps) {
           </div>
         </div>
       </div>
-
-      <div className="w-full rounded-2xl text-left bg-white p-4 flex flex-col gap-5">
-        <p className="flex text-s-bold text-[#5d5d5d]">
-          상담 내역 <img src="" alt="" />
-        </p>
-        <p className="text-m-semibold text-text-primary">2024.12.31</p>
-        <div className="flex items-center justify-between text-s-semibold">
-          <p className="text-text-tertiary">유형</p>
-          <p className="text-text-primary">전화</p>
-        </div>
-        <div className="flex items-center justify-between text-s-semibold">
-          <p className="text-text-tertiary">주제</p>
-          <p className="text-text-primary">진로 상담</p>
-        </div>
-        <div className="flex items-center justify-between text-s-semibold">
-          <p className="text-text-tertiary">상담자</p>
-          <p className="text-text-primary">학생 모</p>
-        </div>
-      </div>
-      <div className="w-full rounded-2xl text-left bg-white p-4 flex flex-col gap-5">
-        <p className="flex text-s-bold text-[#5d5d5d]">
-          상담 내역 <img src="" alt="" />
-        </p>
-        <p className="text-m-semibold text-text-primary">2024.12.31</p>
-        <div className="flex items-center justify-between text-s-semibold">
-          <p className="text-text-tertiary">유형</p>
-          <p className="text-text-primary">전화</p>
-        </div>
-        <div className="flex items-center justify-between text-s-semibold">
-          <p className="text-text-tertiary">주제</p>
-          <p className="text-text-primary">진로 상담</p>
-        </div>
-        <div className="flex items-center justify-between text-s-semibold">
-          <p className="text-text-tertiary">상담자</p>
-          <p className="text-text-primary">학생 모</p>
-        </div>
-      </div>
+      <CounselList counselType={'전화'} counselSubjects={['진로 상담', '진도 상담']} counsellee={'학생 모'}></CounselList>
+      <CounselList counselType={'전화'} counselSubjects={['진로 상담', '진도 상담']} counsellee={'학생 모'}></CounselList>
     </div>
   );
 }
