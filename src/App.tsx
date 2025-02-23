@@ -16,6 +16,7 @@ import NotFound from "./pages/404";
 
 // TODO: function으로 변경
 import { ScheduleModify } from "./pages/books/book-attendee-detail/components/ScheduleModify";
+import { HelmetProvider } from "react-helmet-async";
 
 // Lazy load components
 const Books = lazy(() => import("@/pages/books/Books"));
@@ -55,36 +56,29 @@ const routes: RouteType[] = [
 
 function App() {
   return (
-    <Router>
-      {/* <ErrorBoundary fallback={<Loading />}> */}
-      <Suspense fallback={<Loading />}>
-        <PageContainer>
-          <ScrollToTop />
-          <Routes>
-            <Route path="/" element={<Navigate to={"/book"} />} />
-            <Route path="*" element={<NotFound />} /> {/* 404페이지 */}
-            <Route path="/auth/signin" element={<SignIn />} />
-            <Route
-              path="/checkuree-auth/signin"
-              element={<CheckureeSignIn />}
-            />
-            <Route path="/kakao-auth/signin" element={<KakaoSignIn />} />
-            {/* 인증 처리 */}
-            {/* Book 관련 라우트 그룹 */}
-            <Route element={<BookLayout />}>
-              {routes.map((route) => (
-                <Route
-                  key={route.path}
-                  path={route.path}
-                  element={<ProtectedRoute element={route.element} />}
-                />
-              ))}
-            </Route>
-          </Routes>
-        </PageContainer>
-      </Suspense>
-      {/* </ErrorBoundary> */}
-    </Router>
+    <Suspense fallback={<Loading />}>
+      <PageContainer>
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<Navigate to={"/book"} />} />
+          <Route path="*" element={<NotFound />} /> {/* 404페이지 */}
+          <Route path="/auth/signin" element={<SignIn />} />
+          <Route path="/checkuree-auth/signin" element={<CheckureeSignIn />} />
+          <Route path="/kakao-auth/signin" element={<KakaoSignIn />} />
+          {/* 인증 처리 */}
+          {/* Book 관련 라우트 그룹 */}
+          <Route element={<BookLayout />}>
+            {routes.map((route) => (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={<ProtectedRoute element={route.element} />}
+              />
+            ))}
+          </Route>
+        </Routes>
+      </PageContainer>
+    </Suspense>
   );
 }
 
