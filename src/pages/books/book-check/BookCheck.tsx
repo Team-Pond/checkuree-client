@@ -49,8 +49,7 @@ export default function BookCheck() {
 
   useEffect(() => {
     if (bookSchedules?.status === 200) {
-      // CODE-REVIEW 이렇게 as 로 Casting 하지 않으면 타입 에러가 발생합니다..
-      const scheduleData = bookSchedules.data as ScheduleDataType;
+      const scheduleData = bookSchedules.data;
 
       setTotalScheduleCount(scheduleData.numberOfElements);
       const checkedCount = scheduleData.content.reduce((total, schedules) => {
@@ -66,7 +65,7 @@ export default function BookCheck() {
   }, [bookSchedules]);
 
   return (
-    <section className="flex flex-col w-full scrollbar-hide custom-scrollbar-hide">
+    <section className="flex flex-col w-full scrollbar-hide custom-scrollbar-hide bg-bg-secondary flex-1">
       <SEO
         title="체쿠리 | 출석부 출석"
         content="체쿠리 음악학원 출석부 서비스의 출석부 출석 페이지입니다."
@@ -85,32 +84,31 @@ export default function BookCheck() {
         totalScheduleCount={totalScheduleCount}
         setOpenFilter={setOpenFilter}
       />
-      <MainContents
-        confirmMessage={confirmMessage}
-        onSave={onSave}
-        setConfirmMessage={setConfirmMessage}
-        setOnSave={setOnSave}
-        setIsOpen={setIsOpen}
-        isOpen={isOpen}
-        bookSchedules={bookSchedules?.data as ScheduleDataType}
-        currentDate={formattedDate}
-        bookId={Number(bookId!)}
-        checkedScheduleCount={checkedScheduleCount}
-        setCheckedCount={setCheckedScheduleCount}
-      />
+      {bookSchedules?.status === 200 ? (
+        <MainContents
+          confirmMessage={confirmMessage}
+          onSave={onSave}
+          setConfirmMessage={setConfirmMessage}
+          setOnSave={setOnSave}
+          setIsOpen={setIsOpen}
+          isOpen={isOpen}
+          bookSchedules={bookSchedules.data}
+          currentDate={formattedDate}
+          bookId={Number(bookId!)}
+          checkedScheduleCount={checkedScheduleCount}
+          setCheckedCount={setCheckedScheduleCount}
+        />
+      ) : (
+        <></>
+      )}
+
       <BottomAddRecord
         openFilter={openFilter}
         onDrawerChange={onDrawerChange}
         attendanceBookId={Number(bookId)}
         currentDate={currentDate.format("YYYY-MM-DD")}
       />
-      <div className="flex justify-between px-[44px] items-center w-full h-[92px] bg-bg-secondary" />
-      {!openFilter && (
-        <>
-          <div className="flex justify-between px-[44px] items-center w-full h-[92px]" />
-          <Bottom />
-        </>
-      )}
+      {!openFilter && <Bottom />}
     </section>
   );
 }
