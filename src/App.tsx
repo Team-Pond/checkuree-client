@@ -13,23 +13,26 @@ import { lazy, Suspense } from "react";
 import ScrollToTop from "./components/ScrollToTop";
 import BookLayout from "./layouts/BookLayout";
 import NotFound from "./pages/404";
-import BookAttendeeDetail from "./pages/books/book-attendee-detail/BookAttendeeDetail";
+
+// TODO: function으로 변경
 import { ScheduleModify } from "./pages/books/book-attendee-detail/components/ScheduleModify";
 
 // Lazy load components
 const Books = lazy(() => import("@/pages/books/Books"));
 const AttendeeCreate = lazy(
-  () => import("@/pages/attendee-create/AttendeeCreate"),
+  () => import("@/pages/attendee-create/AttendeeCreate")
 );
 const BookCreate = lazy(() => import("@/pages/books/book-create/BookCreate"));
 const BookRoaster = lazy(
-  () => import("@/pages/books/book-attendee/BookAttendee"),
+  () => import("@/pages/books/book-attendee/BookAttendee")
 );
 const KakaoSignIn = lazy(() => import("@/pages/kakao-auth/SignIn"));
 const CheckureeSignIn = lazy(() => import("@/pages/checkuree-auth/SignIn"));
-
 const SignIn = lazy(() => import("@/pages/auth/SignIn"));
 const BookCheck = lazy(() => import("@/pages/books/book-check/BookCheck"));
+const BookAttendeeDetail = lazy(
+  () => import("@/pages/books/book-attendee-detail/BookAttendeeDetail")
+);
 interface RouteType {
   path: string;
   element: JSX.Element;
