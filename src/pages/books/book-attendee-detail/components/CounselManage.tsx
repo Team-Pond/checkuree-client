@@ -48,7 +48,6 @@ export default function CounselManage(props: IProps) {
       </div>
       {counsellingList?.map((counsel) => (
         <CounselList
-          key={counsel.counsellingId}
           counselType={counsel.counsellingType}
           counselSubjects={counsel.counsellingTopicTypes}
           counselleeType={counsel.counselee.relationType}
