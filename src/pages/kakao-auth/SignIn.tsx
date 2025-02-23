@@ -1,3 +1,4 @@
+import SEO from "@/components/SEO";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
@@ -18,6 +19,10 @@ export default function KakaoSignIn() {
 
   return (
     <section className="relative flex flex-col justify-center items-center h-full gap-8 px-6 mb-[31px]">
+      <SEO
+        title="체쿠리 | 카카오 로그인"
+        content="체쿠리 음악학원 출석부 서비스의 카카오 로그인 페이지입니다."
+      />
       <div className="flex flex-col items-center justify-center gap-12">
         <div className="flex flex-col gap-2">
           <img

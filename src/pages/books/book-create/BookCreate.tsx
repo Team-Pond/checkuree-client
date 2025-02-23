@@ -9,6 +9,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useBookCreate } from "./queries";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { bookSchema, CreateBookSchema } from "./_schema";
+import SEO from "@/components/SEO";
 
 export default function BookCreate() {
   const navigate = useNavigate();
@@ -66,6 +67,10 @@ export default function BookCreate() {
   };
   return (
     <FormProvider {...methods}>
+      <SEO
+        title="체쿠리 | 출석부 등록"
+        content="체쿠리 음악학원 출석부 서비스의 출석부 등록 페이지입니다."
+      />
       <form
         className="flex flex-col gap-7 w-full pb-[30px]"
         onSubmit={handleSubmit(() => {

@@ -8,6 +8,7 @@ import MainContent from "./components/MainContent";
 import { BookContext } from "@/context/BookContext";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useAttendeeList } from "./queries";
+import SEO from "@/components/SEO";
 
 const DaysMatch: Record<string, DaysType> = {
   월: "MONDAY",
@@ -63,12 +64,20 @@ export default function BookRoaster() {
 
   return (
     <section className="flex flex-col w-full">
+      <SEO
+        title="체쿠리 | 학생 목록"
+        content="체쿠리 음악학원 출석부 서비스의 학생 목록 페이지입니다."
+      />
       <Header
         title={bookName || selectedBook?.title!}
         onDrawerChange={onDrawerChange}
         onChangeSearch={onChangeSearch}
       />
-      <MainContent roaster={attendeeList!} getGrades={getGrades} searchName={search}/>
+      <MainContent
+        roaster={attendeeList!}
+        getGrades={getGrades}
+        searchName={search}
+      />
       <BottomFilter
         openFilter={openFilter}
         onDrawerChange={onDrawerChange}

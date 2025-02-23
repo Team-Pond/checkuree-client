@@ -1,9 +1,10 @@
-import { DayOfWeek } from '../../utils';
+import { DayOfWeek } from "../../utils";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatTimeRange, getDayGroupFromInput } from "@/utils";
 import { BookContext } from "@/context/BookContext";
 import { useBookList } from "./queries";
+import SEO from "@/components/SEO";
 
 export default function Books() {
   const navigate = useNavigate();
@@ -11,21 +12,21 @@ export default function Books() {
 
   const { setSelectedBook } = context!;
 
-  const handleNavigation = (args:{
-    id:number,
-    title:string,
-    attendeeCount:number,
-    availableDays:DayOfWeek[],
-    availableFrom:string,
-    availableTo:string
+  const handleNavigation = (args: {
+    id: number;
+    title: string;
+    attendeeCount: number;
+    availableDays: DayOfWeek[];
+    availableFrom: string;
+    availableTo: string;
   }) => {
     setSelectedBook({
       id: args.id,
-      title:args.title,
-      attendeeCount:args.attendeeCount,
-      availableDays:args.availableDays,
-      availableFrom:args.availableFrom,
-      availableTo:args.availableTo,
+      title: args.title,
+      attendeeCount: args.attendeeCount,
+      availableDays: args.availableDays,
+      availableFrom: args.availableFrom,
+      availableTo: args.availableTo,
     });
     navigate(`/book/${args.id}?bookName=${args.title}`);
   };
@@ -34,6 +35,10 @@ export default function Books() {
 
   return (
     <section className="relative flex flex-col w-full min-h-screen">
+      <SEO
+        title="체쿠리 | 출석부 목록"
+        content="체쿠리 음악학원 출석부 서비스의 출석부 목록 페이지입니다."
+      />
       <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
         <img
           src="/images/logos/checkuree_logo.svg"
@@ -57,12 +62,12 @@ export default function Books() {
                 className="max-w-[162px] w-full"
                 onClick={() => {
                   handleNavigation({
-                    id:attendance.id,
-                    title:attendance.title,
-                    attendeeCount:attendance.attendeeCount,
-                    availableDays:attendance.availableDays,
-                    availableFrom:attendance.availableFrom,
-                    availableTo:attendance.availableTo
+                    id: attendance.id,
+                    title: attendance.title,
+                    attendeeCount: attendance.attendeeCount,
+                    availableDays: attendance.availableDays,
+                    availableFrom: attendance.availableFrom,
+                    availableTo: attendance.availableTo,
                   });
                 }}
               >

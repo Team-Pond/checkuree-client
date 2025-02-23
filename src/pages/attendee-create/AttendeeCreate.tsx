@@ -18,6 +18,7 @@ import { AttendeeSchema, CreateAttendeeSchema } from "./_schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createAttendee } from "@/api v2/AttendeeApiClient";
 import toast from "react-hot-toast";
+import SEO from "@/components/SEO";
 
 export default function AttendeeCreate() {
   const navigate = useNavigate();
@@ -85,6 +86,10 @@ export default function AttendeeCreate() {
 
   return (
     <FormProvider {...methods}>
+      <SEO
+        title="체쿠리 | 학생 등록"
+        content="체쿠리 음악학원 출석부 서비스의 학생 등록 페이지입니다."
+      />
       <form
         className="flex flex-col gap-7 w-full pb-[30px]"
         onSubmit={handleSubmit(handleStep2Next)}
