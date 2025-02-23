@@ -1,4 +1,6 @@
-import CounselList from './CounselList';
+import CounselList from "./CounselList";
+import { useCounsellingList } from "../queries";
+import { useParams } from "react-router-dom";
 
 type IProps = {
   studentInfo: {
@@ -10,6 +12,13 @@ type IProps = {
 };
 export default function CounselManage(props: IProps) {
   const { studentInfo } = props;
+  const { bookId, attendeeId } = useParams();
+
+  const { data: counsellingList } = useCounsellingList({
+    bookId: parseInt(bookId!),
+    attendeeId: parseInt(attendeeId!),
+  });
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-8 items-center w-full h-[81px] rounded-2xl bg-white">
@@ -37,8 +46,15 @@ export default function CounselManage(props: IProps) {
           </div>
         </div>
       </div>
-      <CounselList counselType={'전화'} counselSubjects={['진로 상담', '진도 상담']} counsellee={'학생 모'}></CounselList>
-      <CounselList counselType={'전화'} counselSubjects={['진로 상담', '진도 상담']} counsellee={'학생 모'}></CounselList>
+      {counsellingList?.map((counsel) => (
+        <CounselList
+          key={counsel.counsellingId}
+          counselType={counsel.counsellingType}
+          counselSubjects={counsel.counsellingTopicTypes}
+          counselleeType={counsel.counselee.relationType}
+          counsellingAt={new Date(counsel.counsellingAt)}
+        ></CounselList>
+      ))}
     </div>
   );
 }
