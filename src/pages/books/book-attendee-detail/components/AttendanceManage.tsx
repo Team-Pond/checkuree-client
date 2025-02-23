@@ -14,6 +14,7 @@ import { useAttendeeRecords } from "../queries";
 import { useParams } from "react-router-dom";
 import { AttendeeRecord, STATUS } from "../../../../api v2/RecordSchema";
 import { isArray } from "lodash";
+import { twMerge } from "tailwind-merge";
 
 type IProps = {
   studentInfo: {
@@ -240,22 +241,24 @@ export default function AttendanceManage(props: IProps) {
                     return (
                       <tr>
                         {dates.map((date) => {
+                          const isTextColor =
+                            date.getDay() === 0
+                              ? "text-[#f44336]"
+                              : date.getMonth() !== selectedMonth.getMonth()
+                              ? "text-text-tertiary"
+                              : isEqual(today, date)
+                              ? "text-[#5d5d5d] rounded-full w-4 h-4 bg-[#BDDDC3]"
+                              : "text-[#5d5d5d]";
                           return (
                             <td>
                               <div className="flex w-full h-[53px] justify-center flex-col items-center">
                                 <div className="h-full">
                                   {/* 이래야 today 의 h-4 가 h-full 에 영향을 주지 않음*/}
                                   <p
-                                    className={`text-xs-medium ${
-                                      date.getDay() === 0
-                                        ? "text-[#f44336]"
-                                        : date.getMonth() !==
-                                          selectedMonth.getMonth()
-                                        ? "text-text-tertiary"
-                                        : isEqual(today, date)
-                                        ? "text-[#5d5d5d] rounded-full w-4 h-4 bg-[#BDDDC3]"
-                                        : "text-[#5d5d5d]"
-                                    }`}
+                                    className={twMerge(
+                                      "text-xs-medium",
+                                      isTextColor
+                                    )}
                                   >
                                     {format(date, "d")}
                                   </p>
