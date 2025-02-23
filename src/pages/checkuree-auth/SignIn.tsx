@@ -8,6 +8,7 @@ import { z } from "zod";
 import { useAuthLogin } from "./queries";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import SEO from "@/components/SEO";
 
 export interface LoginDataType {
   username: string;
@@ -51,6 +52,10 @@ export default function CheckureeSignIn() {
   });
   return (
     <section className="flex flex-col justify-center items-center gap-8 px-6 h-full">
+      <SEO
+        title="체쿠리 | 출석부 로그인"
+        content="체쿠리 음악학원 출석부 서비스의 사내 로그인 페이지입니다."
+      />
       <div className="flex flex-col items-center gap-12">
         <img
           src={"/images/logos/checkuree_logo.svg"}

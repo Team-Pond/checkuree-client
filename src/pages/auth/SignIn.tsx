@@ -1,3 +1,4 @@
+import SEO from "@/components/SEO";
 import { useNavigate } from "react-router-dom";
 
 export interface LoginDataType {
@@ -10,6 +11,10 @@ export default function SignIn() {
   const navigate = useNavigate();
   return (
     <section className="flex flex-col justify-center items-center h-full gap-8 px-6">
+      <SEO
+        title="체쿠리 | 로그인"
+        content="체쿠리 음악학원 출석부 서비스의 로그인 페이지입니다."
+      />
       <div className="flex flex-col gap-2">
         <img
           src={"/images/logos/checkuree_logo.svg"}
