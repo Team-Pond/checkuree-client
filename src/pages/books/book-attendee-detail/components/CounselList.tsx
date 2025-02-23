@@ -67,6 +67,20 @@ const CounselList = (args: IProps) => {
           </p>
         </div>
       </div>
+      <div className="fixed bottom-11 ml-[250px] max-w-[390px] w-full">
+        <button
+          onClick={() => {}}
+          className="w-[90px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
+        >
+          <img
+            src="/images/icons/book/ico-plus.svg"
+            alt="플러스 아이콘"
+            width={16}
+            height={16}
+          />
+          <p className="text-white font-semibold text-lg">상담</p>
+        </button>
+      </div>
     </div>
   );
 };
