@@ -1,10 +1,5 @@
 import "./App.css";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import ProtectedRoute from "@/ProtectedRoute";
 import PageContainer from "@/components/PageContainer";
@@ -16,7 +11,6 @@ import NotFound from "./pages/404";
 
 // TODO: function으로 변경
 import { ScheduleModify } from "./pages/books/book-attendee-detail/components/ScheduleModify";
-import { HelmetProvider } from "react-helmet-async";
 
 // Lazy load components
 const Books = lazy(() => import("@/pages/books/Books"));

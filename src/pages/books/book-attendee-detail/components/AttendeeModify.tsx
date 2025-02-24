@@ -98,7 +98,7 @@ export default function AttendeeModify({
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
-                        gender: e.target.value as "MALE" | "FEMALE",
+                        gender: e.target.value as GenderType,
                       }))
                     }
                   />
@@ -127,7 +127,7 @@ export default function AttendeeModify({
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
-                        gender: e.target.value as "MALE" | "FEMALE",
+                        gender: e.target.value as GenderType,
                       }))
                     }
                   />
