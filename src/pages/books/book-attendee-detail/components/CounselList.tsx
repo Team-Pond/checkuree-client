@@ -10,6 +10,7 @@ import {
   relationTypeToKor,
 } from "../../../../utils/enumMapper";
 import { format } from "date-fns";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface IProps {
   counselType: CounsellingType;
@@ -18,6 +19,10 @@ interface IProps {
   counsellingAt: Date;
 }
 const CounselList = (args: IProps) => {
+  const navigate = useNavigate();
+
+  const { bookId, attendeeId } = useParams();
+
   const { counselType, counselleeType, counsellingAt, counselSubjects } = args;
   const slicedSubjects = [];
   for (let i = 0; i < counselSubjects.length; i += 2) {
@@ -69,7 +74,9 @@ const CounselList = (args: IProps) => {
       </div>
       <div className="fixed bottom-11 ml-[250px] max-w-[390px] w-full">
         <button
-          onClick={() => {}}
+          onClick={() => {
+            navigate(`/book/${bookId}/attendee/${attendeeId}/counselling`);
+          }}
           className="w-[90px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
         >
           <img
