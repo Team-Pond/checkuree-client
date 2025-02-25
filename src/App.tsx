@@ -11,6 +11,7 @@ import NotFound from "./pages/404";
 
 // TODO: function으로 변경
 import { ScheduleModify } from "./pages/books/book-attendee-detail/components/ScheduleModify";
+import Modal from "./components/Modal";
 
 // Lazy load components
 const Books = lazy(() => import("@/pages/books/Books"));
@@ -71,6 +72,7 @@ function App() {
             ))}
           </Route>
         </Routes>
+        <Modal />
       </PageContainer>
     </Suspense>
   );

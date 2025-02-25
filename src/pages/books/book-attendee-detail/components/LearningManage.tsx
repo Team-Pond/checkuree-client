@@ -1,8 +1,9 @@
 import { Progresses } from "@/api v2/AttendeeSchema";
 import { useParams } from "react-router-dom";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import NextProgressModal from "./NextProgressModal";
 import { useProgressLog } from "../queries";
+import useModalStore from "@/store/dialogStore";
 
 type IProps = {
   studentInfo: {
@@ -17,12 +18,23 @@ type IProps = {
 export default function LearningManage(props: IProps) {
   const { progresses, studentInfo } = props;
   const { bookId, attendeeId } = useParams();
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   const { data: progressLog } = useProgressLog({
     bookId: Number(bookId),
     attendeeId: Number(attendeeId),
   });
-  const [attendeeProgressId, setAttendeeProgressId] = useState<number>(0);
+
+  const openModal = useModalStore((state) => state.openModal);
+  const openNextProgressModal = (progressId: number) => {
+    openModal(
+      <NextProgressModal
+        onClose={() => useModalStore.getState().closeModal()}
+        bookId={Number(bookId)}
+        attendeeProgressId={progressId}
+      />
+    );
+  };
+
   return (
     <div className="flex flex-col gap-4">
       {/* 학생 정보 섹션 */}
@@ -56,30 +68,25 @@ export default function LearningManage(props: IProps) {
         <p className="flex text-s-bold text-[#5d5d5d]">
           커리큘럼 정보 <img src="" alt="" />
         </p>
-        {progresses?.map((progress) => {
-          return (
-            <Fragment key={progress.id}>
-              <div className="flex items-center justify-between text-s-semibold">
-                <p className="text-text-tertiary">커리큘럼 1</p>
-                <p className="text-text-primary">{progress.gradeTitle}</p>
-                <button
-                  className="max-w-[109px] w-full h-8 rounded-lg bg-[#f6f6f6] text-s-medium text-text-secondary"
-                  type="button"
-                  onClick={() => {
-                    setIsModalOpen(true);
-                    setAttendeeProgressId(Number(progress.id));
-                  }}
-                >
-                  다음 과정으로
-                </button>
-              </div>
-              <div className="flex items-center justify-between text-s-semibold">
-                <p className="text-text-tertiary">시작일</p>
-                <p className="text-text-primary">{progress.startDate}</p>
-              </div>
-            </Fragment>
-          );
-        })}
+        {progresses?.map((progress) => (
+          <Fragment key={progress.id}>
+            <div className="flex items-center justify-between text-s-semibold">
+              <p className="text-text-tertiary">커리큘럼 1</p>
+              <p className="text-text-primary">{progress.gradeTitle}</p>
+              <button
+                className="max-w-[109px] w-full h-8 rounded-lg bg-[#f6f6f6] text-s-medium text-text-secondary"
+                type="button"
+                onClick={() => openNextProgressModal(Number(progress.id))}
+              >
+                다음 과정으로
+              </button>
+            </div>
+            <div className="flex items-center justify-between text-s-semibold">
+              <p className="text-text-tertiary">시작일</p>
+              <p className="text-text-primary">{progress.startDate}</p>
+            </div>
+          </Fragment>
+        ))}
       </div>
 
       {/* 성장 이력 섹션 */}
@@ -110,14 +117,6 @@ export default function LearningManage(props: IProps) {
           ))}
         </div>
       </div>
-
-      {/* 모달 */}
-      <NextProgressModal
-        onClose={() => setIsModalOpen(false)}
-        isOpen={isModalOpen}
-        bookId={Number(bookId)}
-        attendeeProgressId={attendeeProgressId}
-      />
     </div>
   );
 }
