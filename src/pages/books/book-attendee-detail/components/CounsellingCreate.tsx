@@ -4,21 +4,24 @@ import { bookSchema, CreateBookSchema } from "../../book-create/_schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SEO from "../../../../components/SEO";
 import { useNavigate } from "react-router-dom";
+import { CounsellingSchema, CreateCounsellingSchema } from "../_schema";
+import { getTodayYYYYMMDD } from "../../../../utils";
 
 export default function CounsellingCreate() {
   const navigate = useNavigate();
 
-  const methods = useForm<CreateBookSchema>({
+  const methods = useForm<CreateCounsellingSchema>({
     shouldUnregister: false,
     mode: "onSubmit",
     defaultValues: {
-      availableTo: "",
-      availableFrom: "",
-      availableDays: [],
-      title: "",
+      counsellingType: "VISIT",
+      counsellingTopicTypes: [],
+      counsellingDate: getTodayYYYYMMDD(),
+      description: "",
+      counseleeId: 0,
     },
     // resolver는 폼 제출 시 실행되는 함수를 정의, Promise로 유효성 검사 결과를 반환
-    resolver: zodResolver(bookSchema),
+    resolver: zodResolver(CounsellingSchema),
   });
   const {
     getValues,
