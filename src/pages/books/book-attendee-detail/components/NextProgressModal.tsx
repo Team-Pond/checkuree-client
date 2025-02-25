@@ -1,23 +1,17 @@
-import CommonModal from "@/components/CommonModal";
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-
-import { getBookCourse } from "@/api v2/AttendanceBookApiClient";
 import { useBookCourses, useProgressPromote } from "../queries";
 
 interface Props {
-  isOpen: boolean;
   onClose: () => void;
   attendeeProgressId: number;
   bookId: number;
 }
 
 const NextProgressModal: React.FC<Props> = ({
-  isOpen,
   onClose,
-  attendeeProgressId,
   bookId,
+  attendeeProgressId,
 }) => {
   const { attendeeId } = useParams();
   const [formData, setFormData] = useState({
@@ -28,9 +22,10 @@ const NextProgressModal: React.FC<Props> = ({
 
   const { data: bookCourses } = useBookCourses({
     bookId: String(bookId),
-    openDrawer: isOpen,
+    openDrawer: true, // 모달이 열렸으니 true 처리
   });
 
+  // 각 과정의 등급 리스트 합치기
   const totalBookGrades: any[] = [];
   bookCourses?.courses.forEach((course) => {
     totalBookGrades.push(...course.grades);
@@ -79,15 +74,13 @@ const NextProgressModal: React.FC<Props> = ({
   };
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFormData((prev) => {
-      let newVar = {
-        ...prev,
-        nextGradeId: e.target.value,
-      };
-      return newVar;
-    });
+    setFormData((prev) => ({
+      ...prev,
+      nextGradeId: e.target.value,
+    }));
   };
 
+  // TODO: mutation 후 데이터 최신작업 필요
   const { mutate: progressMutation } = useProgressPromote({
     bookId,
     attendeeProgressId,
@@ -95,84 +88,73 @@ const NextProgressModal: React.FC<Props> = ({
     attendeeId: Number(attendeeId),
     onClose,
   });
-  return (
-    <CommonModal
-      isOpen={isOpen}
-      onClose={onClose}
-      isClose={false}
-      className="max-w-xs flex items-center justify-between  w-full"
-    >
-      <div className="flex flex-col gap-6 justify-center items-center  w-full">
-        <div className="flex flex-col gap-2 w-full">
-          <div className="flex gap-1 items-center">
-            <p className="font-bold text-m-medium">과정 종료일</p>
-            <p className="text-text-danger">*</p>
-          </div>
 
-          {/*여기에 드롭박스를 추가해줘*/}
-          <input
-            type="text"
-            placeholder="YYYY.MM.DD"
-            className="outline-none bg-white border border-[#E7E7E7] rounded-xl  w-full h-12 flex items-center pl-4"
-            value={formData.completeAt}
-            onChange={handleEndDateChange}
-          />
+  return (
+    <div className="flex flex-col gap-6 justify-center items-center w-full">
+      <div className="flex flex-col gap-2 w-full">
+        <div className="flex gap-1 items-center">
+          <p className="font-bold text-m-medium">과정 종료일</p>
+          <p className="text-text-danger">*</p>
         </div>
-        <div className="flex flex-col gap-2 w-full">
-          <div className="flex gap-1 items-center">
-            <p className="font-bold text-m-medium">다음 과정 선택</p>
-            <p className="text-text-danger">*</p>
-          </div>
-          <select
-            value={formData.nextGradeId}
-            onChange={handleSelectChange}
-            className="outline-none bg-white border border-[#E7E7E7] rounded-xl w-full h-12 pl-4 text-m-medium"
-          >
-            <option value="">과정을 선택하세요</option>
-            {(
-              bookCourses?.courses.flatMap((course) => course.grades) || []
-            ).map((grade) => (
+        <input
+          type="text"
+          placeholder="YYYY.MM.DD"
+          className="outline-none bg-white border border-[#E7E7E7] rounded-xl w-full h-12 flex items-center pl-4"
+          value={formData.completeAt}
+          onChange={handleEndDateChange}
+        />
+      </div>
+      <div className="flex flex-col gap-2 w-full">
+        <div className="flex gap-1 items-center">
+          <p className="font-bold text-m-medium">다음 과정 선택</p>
+          <p className="text-text-danger">*</p>
+        </div>
+        <select
+          value={formData.nextGradeId}
+          onChange={handleSelectChange}
+          className="outline-none bg-white border border-[#E7E7E7] rounded-xl w-full h-12 pl-4 text-m-medium"
+        >
+          <option value="">과정을 선택하세요</option>
+          {(bookCourses?.courses.flatMap((course) => course.grades) || []).map(
+            (grade) => (
               <option key={grade.id} value={grade.id}>
                 {grade.title}
               </option>
-            ))}
-          </select>
-        </div>
-        <div className="flex flex-col gap-2 w-full">
-          <div className="flex gap-1 items-center">
-            <p className="font-bold text-m-medium">다음 과정 시작일</p>
-            <p className="text-text-danger">*</p>
-          </div>
-          {/* <NextProgressSelect /> */}
-          <input
-            type="text"
-            placeholder="YYYY.MM.DD"
-            className="outline-none bg-white border border-[#E7E7E7] rounded-xl w-full h-12 flex items-center pl-4"
-            value={formData.startAt}
-            onChange={handleStartDateChange}
-          />
-        </div>
-
-        <div className="flex gap-4 w-full">
-          <button
-            type="button"
-            onClick={onClose}
-            className="w-full h-12 flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
-          >
-            취소
-          </button>
-          <button
-            onClick={() => {
-              progressMutation();
-            }}
-            type="button"
-            className="w-full h-12 flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
-          >
-            저장하기
-          </button>
-        </div>
+            )
+          )}
+        </select>
       </div>
-    </CommonModal>
+      <div className="flex flex-col gap-2 w-full">
+        <div className="flex gap-1 items-center">
+          <p className="font-bold text-m-medium">다음 과정 시작일</p>
+          <p className="text-text-danger">*</p>
+        </div>
+        <input
+          type="text"
+          placeholder="YYYY.MM.DD"
+          className="outline-none bg-white border border-[#E7E7E7] rounded-xl w-full h-12 flex items-center pl-4"
+          value={formData.startAt}
+          onChange={handleStartDateChange}
+        />
+      </div>
+
+      <div className="flex gap-4 w-full">
+        <button
+          type="button"
+          onClick={onClose}
+          className="w-full h-12 flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
+        >
+          취소
+        </button>
+        <button
+          type="button"
+          className="w-full h-12 flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
+          onClick={() => progressMutation()}
+        >
+          저장하기
+        </button>
+      </div>
+    </div>
   );
 };
 
