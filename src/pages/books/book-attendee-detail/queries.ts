@@ -206,7 +206,7 @@ export const useProgressPromote = ({
     onSuccess: () => {
       toast.success("다음 과정이 저장되었습니다.");
       queryClient.invalidateQueries({
-        queryKey: attendeeKeys.detail(attendeeId).queryKey,
+        queryKey: attendeeKeys.progressLog(bookId, attendeeId).queryKey,
       });
     },
   });
