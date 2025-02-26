@@ -1,6 +1,6 @@
 // ScheduleTable.tsx
 
-import { UpdateAttendeeScheduleRequest } from "@/api v2/AttendeeSchema";
+import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useBookDetail } from "../../queries";

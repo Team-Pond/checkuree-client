@@ -1,5 +1,5 @@
-import { getAttendee } from "@/api v2/AttendeeApiClient";
-import { DaysType, GenderType } from "@/api v2/AttendeeSchema";
+import { getAttendee } from "@/api/AttendeeApiClient";
+import { DaysType, GenderType } from "@/api/AttendeeSchema";
 import { attendeeKeys } from "@/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 

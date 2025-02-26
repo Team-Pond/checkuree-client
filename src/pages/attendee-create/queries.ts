@@ -4,18 +4,18 @@ import {
   getBookCourse,
   getBookScheduleTable,
   updateBookProgress,
-} from "@/api v2/AttendanceBookApiClient";
+} from "@/api/AttendanceBookApiClient";
 import {
   createAttendee,
   getScheduleAttendee,
   updateAttendeeSchedule,
   updateAttendeeVerify,
-} from "@/api v2/AttendeeApiClient";
+} from "@/api/AttendeeApiClient";
 import {
   Associates,
   GenderType,
   UpdateAttendeeScheduleRequest,
-} from "@/api v2/AttendeeSchema";
+} from "@/api/AttendeeSchema";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { attendeeKeys } from "@/queryKeys";

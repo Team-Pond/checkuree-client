@@ -1,6 +1,6 @@
 // ScheduleTable.tsx
 
-import { UpdateAttendeeScheduleRequest } from "@/api v2/AttendeeSchema";
+import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
 import React from "react";
 
 type DayOfWeek =

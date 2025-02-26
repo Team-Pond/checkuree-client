@@ -1,4 +1,4 @@
-import { Progresses } from "@/api v2/AttendeeSchema";
+import { Progresses } from "@/api/AttendeeSchema";
 import { useParams } from "react-router-dom";
 import { Fragment, useState } from "react";
 import NextProgressModal from "./NextProgressModal";

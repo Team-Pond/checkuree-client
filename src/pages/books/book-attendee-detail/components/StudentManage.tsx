@@ -3,7 +3,7 @@ import {
   GenderType,
   Progresses,
   UpdateAttendeeScheduleRequest,
-} from "@/api v2/AttendeeSchema";
+} from "@/api/AttendeeSchema";
 import { formatSchedule, getTodayYYYYMMDD } from "@/utils";
 import { useState } from "react";
 import CurriculumModify from "./CurriculumModify";
@@ -150,7 +150,7 @@ export default function StudentManage(props: IProps) {
                 alt=""
                 onClick={() => {
                   navigate(
-                    `/book/${bookId}/attendee/${attendeeId}/schedule${location.search}`,
+                    `/book/${bookId}/attendee/${attendeeId}/schedule${location.search}`
                   );
                 }}
               />

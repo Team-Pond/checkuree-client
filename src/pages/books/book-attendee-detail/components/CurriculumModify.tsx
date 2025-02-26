@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { DaysType } from "@/api v2/AttendanceBookSchema";
-import { UpdateAttendeeScheduleRequest } from "@/api v2/AttendeeSchema";
+import { DaysType } from "@/api/AttendanceBookSchema";
+import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
 import { useParams } from "react-router-dom";
 import ScheduleTable from "./ScheduleTable";
 import SubjectSelectionDrawer from "./SubjectSelectionDrawer";

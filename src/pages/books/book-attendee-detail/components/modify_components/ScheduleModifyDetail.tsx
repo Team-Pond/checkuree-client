@@ -7,7 +7,7 @@ import {
 import {
   DaysType,
   UpdateAttendeeScheduleRequest,
-} from "../../../../../api v2/AttendeeSchema";
+} from "../../../../../api/AttendeeSchema";
 import AttendeeDrawer from "../../../../attendee-create/components/AttendeeDrawer";
 import ScheduleTable from "../ScheduleTable";
 import { getSub30MinuteHhmm } from "../../../../../utils";

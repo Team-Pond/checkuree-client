@@ -9,14 +9,14 @@ import Step1 from "./components/Step1";
 import { useState } from "react";
 import Step2 from "./components/Step2";
 
-import { Associates, RelationType } from "@/api v2/AttendeeSchema";
+import { Associates, RelationType } from "@/api/AttendeeSchema";
 import { getTodayYYYYMMDD } from "@/utils";
 
 import { FormProvider, useForm } from "react-hook-form";
 
 import { AttendeeSchema, CreateAttendeeSchema } from "./_schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createAttendee } from "@/api v2/AttendeeApiClient";
+import { createAttendee } from "@/api/AttendeeApiClient";
 import toast from "react-hot-toast";
 import SEO from "@/components/SEO";
 

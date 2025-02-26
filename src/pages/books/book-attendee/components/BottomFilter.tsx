@@ -1,5 +1,5 @@
-import { DaysType } from "@/api v2/AttendanceBookSchema";
-import { GenderType } from "@/api v2/AttendeeSchema";
+import { DaysType } from "@/api/AttendanceBookSchema";
+import { GenderType } from "@/api/AttendeeSchema";
 import BottomDrawer from "@/components/BottomDrawer";
 import { twMerge } from "tailwind-merge";
 
@@ -70,24 +70,19 @@ export default function BottomFilter(props: IProps) {
             <div className="flex flex-col gap-3 text-left">
               <p className="text-m-bold text-text-primary">학생 연령</p>
               <div className="flex gap-2">
-                <button
-                  className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
+                <button className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
                   미취학
                 </button>
-                <button
-                  className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
+                <button className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
                   초등
                 </button>
-                <button
-                  className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
+                <button className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
                   중등
                 </button>
-                <button
-                  className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
+                <button className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
                   고등
                 </button>
-                <button
-                  className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
+                <button className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
                   성인
                 </button>
               </div>
@@ -148,20 +143,17 @@ export default function BottomFilter(props: IProps) {
           <div className={"flex gap-4 w-full"}>
             <button
               className="w-full h-[54px] bg-gray-300 rounded-2xl text-l-semibold"
-              onClick={() => {
-              }}
+              onClick={() => {}}
             >
               초기화
             </button>
             <button
               className="w-full h-[54px] bg-bg-tertiary text-[#f1f8f3] rounded-2xl text-l-semibold"
-              onClick={() => {
-              }}
+              onClick={() => {}}
             >
               필터 적용
             </button>
           </div>
-
         </>
       }
     />

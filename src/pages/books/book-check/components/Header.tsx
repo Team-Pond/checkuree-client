@@ -7,8 +7,8 @@ import {
   useMotionValue,
 } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { updateBookStatus } from "@/api v2/AttendanceBookApiClient";
-import { BookStatus } from "@/api v2/AttendanceBookSchema";
+import { updateBookStatus } from "@/api/AttendanceBookApiClient";
+import { BookStatus } from "@/api/AttendanceBookSchema";
 import { useRecordAllUpdate } from "../queries";
 import { Dispatch, SetStateAction } from "react";
 import useModalStore from "@/store/dialogStore";

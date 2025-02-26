@@ -1,4 +1,4 @@
-import { GenderType } from "@/api v2/AttendeeSchema";
+import { GenderType } from "@/api/AttendeeSchema";
 import React from "react";
 import { twMerge } from "tailwind-merge";
 import { useAttendeeUpdate } from "../queries";

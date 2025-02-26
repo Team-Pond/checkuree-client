@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ScheduleModifyDetail from "./modify_components/ScheduleModifyDetail";
 import { useOnlyScheduleUpdate } from "../../../attendee-create/queries";
 import { useEffect, useState } from "react";
-import { UpdateAttendeeScheduleRequest } from "../../../../api v2/AttendeeSchema";
+import { UpdateAttendeeScheduleRequest } from "../../../../api/AttendeeSchema";
 import { useAttendeeDetail } from "../queries";
 import SEO from "@/components/SEO";
 

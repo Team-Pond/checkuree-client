@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CourseData } from "@/api v2/AttendanceBookSchema";
+import { CourseData } from "@/api/AttendanceBookSchema";
 import { twMerge } from "tailwind-merge";
 import BottomDrawer from "@/components/BottomDrawer";
 import { useSubjectItems, useSubjects } from "../queries";
