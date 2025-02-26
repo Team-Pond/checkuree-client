@@ -178,28 +178,24 @@ export const useAttendeeUpdate = ({
 
 export const useProgressPromote = ({
   bookId,
-  attendeeProgressId,
   formData,
   attendeeId,
-  onClose,
 }: {
   bookId: number;
-  attendeeProgressId: number;
   formData: {
     completeAt: string;
     startAt: string;
     nextGradeId: string;
   };
   attendeeId: number;
-  onClose: () => void;
 }) => {
   const queryClient = new QueryClient();
   return useMutation({
-    mutationFn: async () =>
+    mutationFn: async (progressId: number) =>
       await updateProgressPromote({
         attendanceBookId: Number(bookId),
         params: {
-          attendeeProgressId: attendeeProgressId,
+          attendeeProgressId: progressId,
           completedAt: formData.completeAt.replaceAll(".", "-"),
           startAt: formData.startAt.replaceAll(".", "-"),
           nextGradeId: !!formData.nextGradeId
@@ -212,7 +208,6 @@ export const useProgressPromote = ({
       queryClient.invalidateQueries({
         queryKey: attendeeKeys.detail(attendeeId).queryKey,
       });
-      onClose();
     },
   });
 };
