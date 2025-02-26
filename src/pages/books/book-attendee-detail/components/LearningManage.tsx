@@ -1,9 +1,10 @@
 import { Progresses } from "@/api v2/AttendeeSchema";
 import { useParams } from "react-router-dom";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import NextProgressModal from "./NextProgressModal";
-import { useProgressLog } from "../queries";
+import { useProgressLog, useProgressPromote } from "../queries";
 import useModalStore from "@/store/dialogStore";
+import useProgressFormStore from "@/store/progressStore";
 
 type IProps = {
   studentInfo: {
@@ -25,14 +26,20 @@ export default function LearningManage(props: IProps) {
   });
 
   const openModal = useModalStore((state) => state.openModal);
+
+  const { formData } = useProgressFormStore();
+
+  // TODO: mutation 후 데이터 최신작업 필요
+  const { mutate: progressMutation } = useProgressPromote({
+    bookId: Number(bookId),
+    formData,
+    attendeeId: Number(attendeeId),
+  });
+
   const openNextProgressModal = (progressId: number) => {
-    openModal(
-      <NextProgressModal
-        onClose={() => useModalStore.getState().closeModal()}
-        bookId={Number(bookId)}
-        attendeeProgressId={progressId}
-      />
-    );
+    openModal(<NextProgressModal bookId={Number(bookId)} />, () => {
+      progressMutation(progressId);
+    });
   };
 
   return (
@@ -57,7 +64,7 @@ export default function LearningManage(props: IProps) {
             <p className="text-s-medium">
               <span className="text-text-brand">
                 {studentInfo.scheduleDays}
-              </span>{" "}
+              </span>
               <span className="text-[#b0b0b0]"> {studentInfo.grade}</span>
             </p>
           </div>

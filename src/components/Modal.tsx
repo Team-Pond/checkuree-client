@@ -1,12 +1,7 @@
 import useModalStore from "@/store/dialogStore";
-import React from "react";
 
-interface ModalProps {
-  className?: string;
-}
-
-const Modal: React.FC<ModalProps> = () => {
-  const { isOpen, content } = useModalStore();
+const Modal = () => {
+  const { isOpen, content, action, closeAction, closeModal } = useModalStore();
   if (!isOpen) return null;
 
   return (
@@ -18,6 +13,29 @@ const Modal: React.FC<ModalProps> = () => {
         onClick={(e) => e.stopPropagation()}
       >
         {content}
+
+        <div className="flex gap-4 w-full mt-7">
+          <button
+            type="button"
+            onClick={() => {
+              closeModal();
+              closeAction();
+            }}
+            className="w-full h-12 flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
+          >
+            취소
+          </button>
+          <button
+            type="button"
+            className="w-full h-12 flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
+            onClick={() => {
+              action();
+              closeModal();
+            }}
+          >
+            저장하기
+          </button>
+        </div>
       </div>
     </div>
   );

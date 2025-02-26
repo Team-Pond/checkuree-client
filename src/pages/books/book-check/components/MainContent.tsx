@@ -1,17 +1,20 @@
-import { twMerge } from "tailwind-merge";
-
-import { ScheduleDataType } from "@/api v2/ScheduleSchema";
-import { scheduleCheckformatTime } from "@/utils";
-import { STATUS } from "@/api v2/RecordSchema";
 import {
   ScheduleData,
   ScheduleDataContentType,
-} from "../../../../api v2/ScheduleSchema";
-import { formatLocalTimeString } from "../../../../utils";
-import { useLessonUpdate, useRecordCreate, useStatusUpdate } from "../queries";
+  ScheduleDataType,
+} from "@/api v2/ScheduleSchema";
+import { STATUS } from "@/api v2/RecordSchema";
+
+import { useRecordCreate, useRecordUpdate, useStatusUpdate } from "../queries";
 import { useEffect, useState } from "react";
 import { ConfirmModal } from "./ConfirmModal";
 import ModifyRecordTimeModal from "./ModifyRecordTimeModal";
+
+import useModalStore from "@/store/dialogStore";
+import NeedLessonTable from "./NeedLessonTable";
+import NoNeedLessonTable from "./NoNeedLessonTable";
+import tw from "tailwind-styled-components";
+import useFormDataStore from "@/store/recordStore";
 
 type IProps = {
   bookSchedules: ScheduleDataType;
@@ -19,46 +22,24 @@ type IProps = {
   currentDate: string;
   checkedScheduleCount: number;
   setCheckedCount: (count: number) => void;
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
-  confirmMessage: string;
-  setConfirmMessage: (message: string) => void;
-  onSave: () => void;
-  setOnSave: (onSave: () => void) => void;
 };
 
 export default function MainContents(props: IProps) {
+  const openModal = useModalStore((state) => state.openModal);
+
   const {
     bookId,
     bookSchedules,
     currentDate,
     checkedScheduleCount,
     setCheckedCount,
-    isOpen,
-    setIsOpen,
-    confirmMessage,
-    setConfirmMessage,
-    onSave,
-    setOnSave,
   } = props;
-
-  const { mutate: recordMutation } = useRecordCreate({
-    bookId,
-    currentDate,
-  });
-
-  const { mutate: statusMutation } = useStatusUpdate({ bookId });
-
-  const { mutate: lessonMutation } = useLessonUpdate({
-    bookId,
-  });
-
-  const [isRecordTimeOpen, setIsRecordTimeOpen] = useState(false);
 
   const [record, setRecord] = useState({
     id: 0,
     formattedTime: "",
   });
+
   // 수업 중( 등원 후 && 수업 전)인 학생
   const [needLessonStudents, setNeedLessonStudents] = useState<ScheduleData[]>(
     []
@@ -66,6 +47,16 @@ export default function MainContents(props: IProps) {
   // 출선 전 or 수업 완료 학생
   const [noNeedLessonTimeScheduleTable, setNoNeedLessonTimeScheduleTable] =
     useState<ScheduleDataContentType>([]);
+
+  const { mutate: recordCreate } = useRecordCreate({
+    bookId,
+    currentDate,
+  });
+  const { mutate: statusMutation } = useStatusUpdate({ bookId });
+  const { mutate: recordUpdate } = useRecordUpdate({
+    bookId: Number(bookId),
+    recordId: Number(record.id),
+  });
 
   // 출석체크 화면의 체크 인원 수 변경
   const handleCheckedCountChange = ({
@@ -80,7 +71,7 @@ export default function MainContents(props: IProps) {
       return;
     }
     const currentStatus = schedule.recordStatus;
-    // 상태 변화에 따른 checkedScheduleCount 조정
+
     const adjustment =
       currentStatus === targetStatus ? -1 : currentStatus === "PENDING" ? 1 : 0;
     setCheckedCount(checkedScheduleCount + adjustment);
@@ -96,7 +87,7 @@ export default function MainContents(props: IProps) {
   }) => {
     // 출석 기록이 없는 경우 출석 기록 생성
     if (!schedule.recordId) {
-      recordMutation({
+      recordCreate({
         attendeeId: schedule.attendeeId,
         scheduleId: schedule.scheduleId,
         status: targetStatus as STATUS,
@@ -150,299 +141,94 @@ export default function MainContents(props: IProps) {
       );
       setNoNeedLessonTimeScheduleTable(newNoNeedLessonTimeScheduleTable);
     }
-  }, [bookSchedules?.content]); // bookSchedules.content가 변경될 때마다 실행
-
-  // 확인 모달에서 띄울 메시지 설정
-  const handleConfirmMessage = (
-    schedule: ScheduleData,
-    targetStatus: "ATTEND" | "ABSENT"
-  ) => {
-    if (schedule.recordStatus === targetStatus) {
-      setConfirmMessage("출석체크를 취소하시겠어요?");
-      return;
-    }
-    if (targetStatus === "ATTEND") {
-      setConfirmMessage("출석상태로 변경하시겠어요?");
-      return;
-    }
-    if (targetStatus === "ABSENT") {
-      setConfirmMessage("결석상태로 변경하시겠어요?");
-      return;
-    }
-  };
+  }, [bookSchedules?.content]);
 
   const handleAttendanceStatusWithConfirmation = (
     targetStatus: "ATTEND" | "ABSENT",
     schedule: ScheduleData
   ) => {
+    // targetStatus에 따라 메시지를 즉시 결정
+    const message =
+      schedule.recordStatus === targetStatus
+        ? "출석체크를 취소하시겠어요?"
+        : targetStatus === "ATTEND"
+        ? "출석상태로 변경하시겠어요?"
+        : "결석상태로 변경하시겠어요?";
+
     // 출석기록이 이미 있는 경우 확인 메시지 출력
     if (schedule.recordStatus !== "PENDING") {
-      handleConfirmMessage(schedule, targetStatus);
-      setOnSave(() => () => {
-        handleCheckedCountChange({
-          schedule,
-          targetStatus,
-        });
-        handleStatusChange({
-          schedule,
-          targetStatus,
-        });
+      openModal(<ConfirmModal message={message} />, () => {
+        handleCheckedCountChange({ schedule, targetStatus });
+        handleStatusChange({ schedule, targetStatus });
       });
-      setIsOpen(true);
       return;
     }
-
     // 출석기록이 없는 경우 바로 상태 변경
-    handleCheckedCountChange({
-      schedule,
-      targetStatus,
-    });
-    handleStatusChange({
-      schedule,
-      targetStatus,
+    handleCheckedCountChange({ schedule, targetStatus });
+    handleStatusChange({ schedule, targetStatus });
+  };
+
+  const { updateFormData, formData, setFormData } = useFormDataStore();
+
+  const handleTimeChange = (
+    key: "hour" | "minute",
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    let input = e.target.value.replace(/\D/g, "");
+    if (input.length > 2) {
+      input = input.slice(0, 2);
+    }
+    updateFormData(key, input);
+  };
+  const handleRecord = (id: number, formattedTime: string) => {
+    setRecord({
+      id,
+      formattedTime,
     });
   };
 
-  return (
-    <div className="w-full flex flex-col gap-4 justify-center items-center py-3 px-4 scrollbar-hide custom-scrollbar-hide">
-      {needLessonStudents.length > 0 && (
-        <div
-          key={"needLesson"}
-          className="w-full text-left rounded-2xl bg-white px-6 pt-1 flex flex-col"
-        >
-          <p className="text-s-bold text-text-primary h-12 flex items-center ">
-            {"수업 중"}
-          </p>
-          {needLessonStudents.map((schedule) => {
-            return (
-              <div className="w-full h-[56px] flex items-center justify-between px-2 ">
-                <div
-                  className="flex flex-col items-start"
-                  onClick={() => {
-                    if (schedule.recordStatus === "ATTEND") {
-                      setRecord({
-                        id: schedule.recordId,
-                        formattedTime: schedule.recordTime,
-                      });
-                      setIsRecordTimeOpen(true);
-                    }
-                  }}
-                >
-                  <p className="font-bold text-text-primary">
-                    {schedule.name}
-                    {schedule.isMakeup && (
-                      <span className="text-[#EC9E14] text-xs-medium align-middle">
-                        {" "}
-                        보강
-                      </span>
-                    )}
-                  </p>
-                  {schedule.recordStatus === "ATTEND" && (
-                    <p className="text-[12px] text-[#59996B] font-medium leading-[14.98px]">
-                      {formatLocalTimeString(schedule.recordTime) + " 출석"}
-                    </p>
-                  )}
-                </div>
-                <div className="flex gap-4">
-                  <div className="flex gap-2">
-                    {/* TODO: 결석은 status명이 어떻게 되는지? */}
-                    <button
-                      onClick={() => {
-                        handleAttendanceStatusWithConfirmation(
-                          "ABSENT",
-                          schedule
-                        );
-                      }}
-                      className={twMerge(
-                        "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
-                        schedule.recordStatus === "ABSENT"
-                          ? "bg-bg-destructive text-text-interactive-destructive"
-                          : "bg-bg-disabled text-text-disabled"
-                      )}
-                    >
-                      결석
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleAttendanceStatusWithConfirmation(
-                          "ATTEND",
-                          schedule
-                        );
-                      }}
-                      className={twMerge(
-                        "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
-                        schedule.recordStatus === "ATTEND"
-                          ? "bg-bg-primary text-text-interactive-primary"
-                          : "bg-bg-disabled text-text-disabled"
-                      )}
-                    >
-                      출석
-                    </button>
-                  </div>
-                  <button
-                    className={twMerge(
-                      "w-8 h-8 flex items-center justify-center rounded-lg",
-                      schedule.recordStatus !== "ATTEND"
-                        ? "bg-bg-disabled"
-                        : schedule.isTaught
-                        ? "bg-bg-tertiary"
-                        : "bg-bg-base" // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?
-                    )}
-                    onClick={() => {
-                      lessonMutation({
-                        recordId: schedule.recordId,
-                        isTaught: !schedule.isTaught,
-                      });
-                    }}
-                    disabled={schedule.recordStatus !== "ATTEND"}
-                  >
-                    <img
-                      src={`/images/icons/book-check/${
-                        schedule.isTaught
-                          ? "ico-note-active.svg"
-                          : "ico-note.svg"
-                      }`}
-                      alt=""
-                    />
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-      {noNeedLessonTimeScheduleTable?.map((content, index) => {
-        return content.schedules.length === 0 ? null : (
-          <div
-            key={[content.schedules, index].join("-")}
-            className="w-full text-left rounded-2xl bg-white px-6 pt-1 flex flex-col"
-          >
-            <p className="text-s-bold text-text-secondary h-12 flex items-center">
-              {scheduleCheckformatTime(content.startTime)}
-            </p>
+  const openModifyRecordTimeModal = (schedule: ScheduleData) => {
+    if (schedule.recordStatus === "ATTEND") {
+      handleRecord(schedule.recordId, schedule.recordTime);
+      openModal(
+        <ModifyRecordTimeModal
+          bookId={bookId}
+          record={record}
+          setFormData={setFormData}
+          handleTimeChange={handleTimeChange}
+        />,
+        () => {
+          recordUpdate(`${formData?.hour}:${formData?.minute}`);
+          setFormData({ hour: "", minute: "" });
+        },
+        () => setFormData({ hour: "", minute: "" })
+      );
+    }
+  };
 
-            {content.schedules.map((schedule, index) => {
-              return (
-                <div
-                  key={[schedule, index].join("-")}
-                  className="w-full h-[56px] flex items-center justify-between px-2 "
-                >
-                  {/*<p className="font-bold  text-text-primary">{schedule.name}</p>*/}
-                  <div
-                    className="flex flex-col items-start"
-                    onClick={() => {
-                      if (schedule.recordStatus === "ATTEND") {
-                        setRecord({
-                          id: schedule.recordId,
-                          formattedTime: schedule.recordTime,
-                        });
-                        setIsRecordTimeOpen(true);
-                      }
-                    }}
-                  >
-                    <p className="font-bold text-text-primary">
-                      {schedule.name}
-                      {schedule.isMakeup && (
-                        <span className="text-[#EC9E14] text-xs-medium align-middle">
-                          {" "}
-                          보강
-                        </span>
-                      )}
-                    </p>
-                    {schedule.recordStatus === "ATTEND" && (
-                      <p className="text-[12px] text-[#59996B] font-medium leading-[14.98px]">
-                        {formatLocalTimeString(schedule.recordTime) + " 출석"}
-                      </p>
-                    )}
-                  </div>
-                  <div className="flex gap-4">
-                    <div className="flex gap-2">
-                      {/* TODO: 결석은 status명이 어떻게 되는지? */}
-                      <button
-                        onClick={() => {
-                          handleAttendanceStatusWithConfirmation(
-                            "ABSENT",
-                            schedule
-                          );
-                        }}
-                        className={twMerge(
-                          "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
-                          schedule.recordStatus === "ABSENT"
-                            ? "bg-bg-destructive text-text-interactive-destructive"
-                            : "bg-bg-disabled text-text-disabled"
-                        )}
-                      >
-                        결석
-                      </button>
-                      <button
-                        onClick={() => {
-                          handleAttendanceStatusWithConfirmation(
-                            "ATTEND",
-                            schedule
-                          );
-                        }}
-                        className={twMerge(
-                          "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
-                          schedule.recordStatus === "ATTEND"
-                            ? "bg-bg-primary text-text-interactive-primary"
-                            : "bg-bg-disabled text-text-disabled"
-                        )}
-                      >
-                        출석
-                      </button>
-                    </div>
-                    <button
-                      className={twMerge(
-                        "w-8 h-8 flex items-center justify-center rounded-lg",
-                        schedule.recordStatus !== "ATTEND"
-                          ? "bg-bg-disabled"
-                          : schedule.isTaught
-                          ? "bg-bg-tertiary"
-                          : "bg-bg-base" // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?
-                      )}
-                      onClick={() => {
-                        lessonMutation({
-                          recordId: schedule.recordId,
-                          isTaught: !schedule.isTaught,
-                        });
-                      }}
-                      disabled={schedule.recordStatus !== "ATTEND"}
-                    >
-                      <img
-                        src={`/images/icons/book-check/${
-                          schedule.isTaught
-                            ? "ico-note-active.svg"
-                            : "ico-note.svg"
-                        }`}
-                        alt=""
-                      />
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        );
-      })}
-      <ConfirmModal
-        isOpen={isOpen}
-        onClose={() => {
-          setIsOpen(false);
-        }}
-        onSave={() => {
-          onSave();
-          setIsOpen(false);
-        }}
-        message={confirmMessage}
+  return (
+    <MainContentWrapper>
+      {/* 수업중인 학생들 */}
+      <NeedLessonTable
+        needLessonStudents={needLessonStudents}
+        bookId={Number(bookId)}
+        handleAttendanceStatusWithConfirmation={
+          handleAttendanceStatusWithConfirmation
+        }
+        handleRecord={handleRecord}
       />
-      <ModifyRecordTimeModal
-        isOpen={isRecordTimeOpen}
-        bookId={bookId}
-        onClose={() => {
-          setIsRecordTimeOpen(false);
-        }}
-        record={record}
+      {/* 수업중이 아닌 학생들 */}
+      <NoNeedLessonTable
+        noNeedLessonTimeScheduleTable={noNeedLessonTimeScheduleTable}
+        bookId={Number(bookId)}
+        handleAttendanceStatusWithConfirmation={
+          handleAttendanceStatusWithConfirmation
+        }
+        openModifyRecordTimeModal={openModifyRecordTimeModal}
       />
-    </div>
+      <div className="mt-[92px]"></div>
+    </MainContentWrapper>
   );
 }
+
+const MainContentWrapper = tw.div`w-full flex flex-col gap-4 justify-center items-center py-3 px-4 scrollbar-hide custom-scrollbar-hide`;

@@ -11,6 +11,8 @@ import { updateBookStatus } from "@/api v2/AttendanceBookApiClient";
 import { BookStatus } from "@/api v2/AttendanceBookSchema";
 import { useRecordAllUpdate } from "../queries";
 import { Dispatch, SetStateAction } from "react";
+import useModalStore from "@/store/dialogStore";
+import ConfirmModal from "./ConfirmModal";
 
 type HeaderProps = {
   title: string;
@@ -22,9 +24,6 @@ type HeaderProps = {
   checkedScheduleCount: number;
   totalScheduleCount: number;
   setOpenFilter: Dispatch<SetStateAction<boolean>>;
-  setConfirmModalIsOpen: Dispatch<SetStateAction<boolean>>;
-  setConfirmMessage: Dispatch<SetStateAction<string>>;
-  setOnSave: Dispatch<SetStateAction<() => void>>;
 };
 
 export default function Header(props: HeaderProps) {
@@ -38,9 +37,6 @@ export default function Header(props: HeaderProps) {
     checkedScheduleCount,
     totalScheduleCount,
     setOpenFilter,
-    setConfirmModalIsOpen,
-    setConfirmMessage,
-    setOnSave
   } = props;
 
   const navigate = useNavigate();
@@ -108,6 +104,7 @@ export default function Header(props: HeaderProps) {
     });
   };
 
+  const openModal = useModalStore((state) => state.openModal);
   const SUB_HEADER = [
     {
       src: "/images/icons/ico-zzz.svg",
@@ -125,9 +122,9 @@ export default function Header(props: HeaderProps) {
       src: "/images/icons/ico-check.svg",
       name: "전체 출석",
       onClick: () => {
-        setConfirmModalIsOpen(true);
-        setConfirmMessage("전체 출석하시겠습니까?");
-        setOnSave(() => () => recordAllMutation());
+        openModal(<ConfirmModal message="전체 출석하시겠습니까?" />, () =>
+          recordAllMutation()
+        );
       },
     },
   ];

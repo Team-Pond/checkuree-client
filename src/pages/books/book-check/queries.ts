@@ -69,15 +69,14 @@ export const useRecordAllUpdate = ({
 export const useRecordUpdate = ({
   bookId,
   recordId,
-  formattedTime,
 }: {
   bookId: number;
   recordId: number;
-  formattedTime: string;
 }) => {
   const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: async () =>
+    mutationFn: async (formattedTime: string) =>
       await updateRecord({
         params: {
           attendanceBookId: bookId,
