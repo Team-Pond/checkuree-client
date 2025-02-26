@@ -1,4 +1,4 @@
-import { CoursesResponse } from "@/api v2/AttendanceBookSchema";
+import { CoursesResponse } from "@/api/AttendanceBookSchema";
 import BottomDrawer from "@/components/BottomDrawer";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";

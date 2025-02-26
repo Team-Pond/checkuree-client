@@ -1,11 +1,11 @@
-import { GetAttendeeListResponse } from "@/api v2/AttendeeSchema";
+import { GetAttendeeListResponse } from "@/api/AttendeeSchema";
 import { getDayGroupFromInput } from "@/utils";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 type IProps = {
   roaster: GetAttendeeListResponse;
   getGrades: (grades: { id: number; name: string }[]) => string;
-  searchName:string
+  searchName: string;
 };
 export default function MainContent(props: IProps) {
   const { roaster, getGrades, searchName } = props;
@@ -18,50 +18,52 @@ export default function MainContent(props: IProps) {
 
       <div className="border-t border-[#F6F6F6]">
         {roaster?.data.content.length > 0 ? (
-          roaster.data.content.filter(student => {
-            return !searchName || student.name.includes(searchName)
-          }).map((student) => (
-            <div
-              key={student.id}
-              className="py-4 px-2 flex gap-4"
-              onClick={() =>
-                navigate(
-                  `/book/${bookId}/attendee/${student.id}${
-                    location.search
-                  }&scheduleDays=${getDayGroupFromInput(
-                    student.scheduleDays,
-                  )}&grade=${getGrades(student.grades)}`,
-                  { state: { from: location.pathname + location.search } },
-                )
-              }
-            >
-              <img
-                src="/images/icons/book-roaster/ico-student.svg"
-                alt="학생 아이콘"
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
-              <div className="gap-1 text-left">
-                <div className="flex gap-2">
-                  <p className="text-m-bold text-text-primary">
-                    {student.name}
-                  </p>
-                  <p className="text-m-semibold text-text-secondary">
-                    {student.age + "세"}
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  <p className="text-text-brand text-s-semibold">
-                    {getDayGroupFromInput(student.scheduleDays)}
-                  </p>
-                  <p className="text-[#B0B0B0] text-s-medium">
-                    {getGrades(student.grades)}
-                  </p>
+          roaster.data.content
+            .filter((student) => {
+              return !searchName || student.name.includes(searchName);
+            })
+            .map((student) => (
+              <div
+                key={student.id}
+                className="py-4 px-2 flex gap-4"
+                onClick={() =>
+                  navigate(
+                    `/book/${bookId}/attendee/${student.id}${
+                      location.search
+                    }&scheduleDays=${getDayGroupFromInput(
+                      student.scheduleDays
+                    )}&grade=${getGrades(student.grades)}`,
+                    { state: { from: location.pathname + location.search } }
+                  )
+                }
+              >
+                <img
+                  src="/images/icons/book-roaster/ico-student.svg"
+                  alt="학생 아이콘"
+                  width={40}
+                  height={40}
+                  className="rounded-full"
+                />
+                <div className="gap-1 text-left">
+                  <div className="flex gap-2">
+                    <p className="text-m-bold text-text-primary">
+                      {student.name}
+                    </p>
+                    <p className="text-m-semibold text-text-secondary">
+                      {student.age + "세"}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <p className="text-text-brand text-s-semibold">
+                      {getDayGroupFromInput(student.scheduleDays)}
+                    </p>
+                    <p className="text-[#B0B0B0] text-s-medium">
+                      {getGrades(student.grades)}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            ))
         ) : (
           <div className="absolute inset-0 flex flex-col gap-2 items-center justify-center">
             <img

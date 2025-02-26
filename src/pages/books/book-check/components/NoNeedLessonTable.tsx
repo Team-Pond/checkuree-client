@@ -1,4 +1,4 @@
-import { ScheduleData, ScheduleDataContentType } from "@/api v2/ScheduleSchema";
+import { ScheduleData, ScheduleDataContentType } from "@/api/ScheduleSchema";
 import { twMerge } from "tailwind-merge";
 import tw from "tailwind-styled-components";
 import { useLessonUpdate } from "../queries";

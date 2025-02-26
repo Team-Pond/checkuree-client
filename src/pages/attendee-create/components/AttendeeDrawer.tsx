@@ -1,4 +1,4 @@
-import { DaysType } from "@/api v2/AttendanceBookSchema";
+import { DaysType } from "@/api/AttendanceBookSchema";
 import BottomDrawer from "@/components/BottomDrawer";
 import { convertEngDayToKorDay, getAddMinuteHhmm } from "../../../utils";
 

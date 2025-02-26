@@ -3,9 +3,9 @@ import {
   updateRecordAll,
   updateRecordLesson,
   updateRecord,
-} from "@/api v2/RecordApiClient";
-import { STATUS } from "@/api v2/RecordSchema";
-import { getScheduleAttendee } from "@/api v2/ScheduleApiClient";
+} from "@/api/RecordApiClient";
+import { STATUS } from "@/api/RecordSchema";
+import { getScheduleAttendee } from "@/api/ScheduleApiClient";
 import { bookKeys } from "@/queryKeys";
 import { getCurrentTimeParts } from "@/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

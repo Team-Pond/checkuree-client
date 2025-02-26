@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import SubjectSelectionDrawer from "./SubjectSelectionDrawer";
 import AttendeeDrawer from "./AttendeeDrawer";
-import { DaysType } from "@/api v2/AttendanceBookSchema";
+import { DaysType } from "@/api/AttendanceBookSchema";
 
 import {
   useBookCourses,

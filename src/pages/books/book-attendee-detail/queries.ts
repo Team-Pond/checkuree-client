@@ -1,21 +1,21 @@
 import {
   getBookCourse,
   getBookScheduleTable,
-} from "@/api v2/AttendanceBookApiClient";
+} from "@/api/AttendanceBookApiClient";
 import {
   getAttendeeDetail,
   getAttendeeProgressLog,
   getScheduleAttendee,
   updateAttendeeDetail,
   updateProgressPromote,
-} from "@/api v2/AttendeeApiClient";
-import { GenderType } from "@/api v2/AttendeeSchema";
-import { getAttendeeRecords } from "@/api v2/RecordApiClient";
+} from "@/api/AttendeeApiClient";
+import { GenderType } from "@/api/AttendeeSchema";
+import { getAttendeeRecords } from "@/api/RecordApiClient";
 import { attendeeKeys } from "@/queryKeys";
 
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { GetAttendeeRecordsResponse } from "../../../api v2/RecordSchema";
+import { GetAttendeeRecordsResponse } from "../../../api/RecordSchema";
 
 // TODO: Calendar 작업 시 필요
 export const useAttendeeRecords = ({

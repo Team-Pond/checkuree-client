@@ -4,7 +4,7 @@ import axios from "axios";
 import { setTokens } from "@/lib/auth";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { SignIn } from "@/api v2/AuthApiClient";
+import { SignIn } from "@/api/AuthApiClient";
 
 export const useAuthLogin = () => {
   const queryClient = new QueryClient();

@@ -1,4 +1,4 @@
-import { DaysType } from "@/api v2/AttendanceBookSchema";
+import { DaysType } from "@/api/AttendanceBookSchema";
 import TimePicker from "@/components/TimePicker";
 import { ChangeEvent, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";

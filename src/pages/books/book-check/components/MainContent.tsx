@@ -2,8 +2,8 @@ import {
   ScheduleData,
   ScheduleDataContentType,
   ScheduleDataType,
-} from "@/api v2/ScheduleSchema";
-import { STATUS } from "@/api v2/RecordSchema";
+} from "@/api/ScheduleSchema";
+import { STATUS } from "@/api/RecordSchema";
 
 import { useRecordCreate, useRecordUpdate, useStatusUpdate } from "../queries";
 import { useEffect, useState } from "react";

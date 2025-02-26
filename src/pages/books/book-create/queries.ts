@@ -1,6 +1,6 @@
-import { createBook } from "@/api v2/AttendanceBookApiClient";
-import { CreateBookRequest } from "@/api v2/AttendanceBookSchema";
-import { getSubjectItems, getSubjects } from "@/api v2/CourseApiClient";
+import { createBook } from "@/api/AttendanceBookApiClient";
+import { CreateBookRequest } from "@/api/AttendanceBookSchema";
+import { getSubjectItems, getSubjects } from "@/api/CourseApiClient";
 import { bookKeys } from "@/queryKeys";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";

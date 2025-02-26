@@ -1,7 +1,7 @@
-import { getMeBooks } from "@/api v2/AttendanceBookApiClient";
+import { getMeBooks } from "@/api/AttendanceBookApiClient";
 import { bookKeys } from "@/queryKeys";
 import { useQuery } from "@tanstack/react-query";
-import { getBookDetail } from "@/api v2/AttendanceBookApiClient";
+import { getBookDetail } from "@/api/AttendanceBookApiClient";
 
 export const useBookList = () => {
   return useQuery({
