@@ -1,15 +1,17 @@
 import { DaysType } from "@/api/AttendanceBookSchema";
 import { GenderType } from "@/api/AttendeeSchema";
 import BottomDrawer from "@/components/BottomDrawer";
+import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 type IProps = {
+  onChangeFilter: (
+    dayArrays: DaysType[],
+    gender: GenderType,
+    age: { min: number; max: number }
+  ) => void;
   openFilter: boolean;
   onDrawerChange: () => void;
-  onChangeGender: (gender: GenderType) => void;
-  onDaysChange: (day: DaysType) => void;
-  gender: GenderType;
-  dayArrays: DaysType[];
   DaysMatch: Record<string, DaysType>;
 };
 
@@ -27,15 +29,35 @@ const GENDER_BUTTONS: { gender: GenderType; name: string }[] = [
 ];
 
 export default function BottomFilter(props: IProps) {
-  const {
-    openFilter,
-    onDrawerChange,
-    onChangeGender,
-    onDaysChange,
-    gender,
-    dayArrays,
-    DaysMatch,
-  } = props;
+  const { onChangeFilter, openFilter, onDrawerChange, DaysMatch } = props;
+  const [dayArrays, setDayArrays] = useState<DaysType[]>([]);
+  const [gender, setGender] = useState<GenderType>("");
+
+  const [age, setAge] = useState<{
+    min: number;
+    max: number;
+  }>({ min: 0, max: 100 });
+  const onAgeChange = (min: number, max: number) => {
+    setAge({ min, max });
+  };
+
+  const onDaysChange = (day: DaysType) => {
+    if (dayArrays.includes(DaysMatch[day])) {
+      setDayArrays(dayArrays.filter((item) => item !== DaysMatch[day]));
+    } else {
+      setDayArrays([...dayArrays, DaysMatch[day]]);
+    }
+  };
+
+  const onChangeGender = (selectGender: GenderType) => {
+    setGender(gender === selectGender ? "" : selectGender);
+  };
+
+  const resetFilter = () => {
+    setDayArrays([]);
+    setGender("");
+    setAge({ min: 0, max: 100 });
+  };
   return (
     <BottomDrawer
       isOpen={openFilter}
@@ -70,19 +92,59 @@ export default function BottomFilter(props: IProps) {
             <div className="flex flex-col gap-3 text-left">
               <p className="text-m-bold text-text-primary">학생 연령</p>
               <div className="flex gap-2">
-                <button className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
+                <button
+                  onClick={() => onAgeChange(0, 6)}
+                  className={twMerge(
+                    "rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium",
+                    age.min === 0 && age.max === 6
+                      ? "border-border-brand text-text-brand"
+                      : "text-border-secondary-hover"
+                  )}
+                >
                   미취학
                 </button>
-                <button className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
+                <button
+                  onClick={() => onAgeChange(7, 12)}
+                  className={twMerge(
+                    "rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium",
+                    age.min === 7 && age.max === 12
+                      ? "border-border-brand text-text-brand"
+                      : "text-border-secondary-hover"
+                  )}
+                >
                   초등
                 </button>
-                <button className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
+                <button
+                  onClick={() => onAgeChange(13, 15)}
+                  className={twMerge(
+                    "rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium",
+                    age.min === 13 && age.max === 15
+                      ? "border-border-brand text-text-brand"
+                      : "text-border-secondary-hover"
+                  )}
+                >
                   중등
                 </button>
-                <button className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
+                <button
+                  onClick={() => onAgeChange(16, 18)}
+                  className={twMerge(
+                    "rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium",
+                    age.min === 16 && age.max === 18
+                      ? "border-border-brand text-text-brand"
+                      : "text-border-secondary-hover"
+                  )}
+                >
                   고등
                 </button>
-                <button className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">
+                <button
+                  onClick={() => onAgeChange(19, 100)}
+                  className={twMerge(
+                    "rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium",
+                    age.min === 19 && age.max === 100
+                      ? "border-border-brand text-text-brand"
+                      : "text-border-secondary-hover"
+                  )}
+                >
                   성인
                 </button>
               </div>
@@ -109,47 +171,19 @@ export default function BottomFilter(props: IProps) {
                   );
                 })}
               </div>
-              {/*<div className="flex gap-2">*/}
-              {/*  <button className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">*/}
-              {/*    휴원*/}
-              {/*  </button>*/}
-              {/*  <button className="rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover">*/}
-              {/*    퇴원*/}
-              {/*  </button>*/}
-              {/*</div>*/}
             </div>
           </div>
 
-          {/*<div className="absolute bottom-0 left-0 right-0 p-4 flex flex-row gap-2 shadow-md">*/}
-          {/*  <button*/}
-          {/*    className="w-full h-[54px] bg-gray-300 rounded-2xl text-l-semibold"*/}
-          {/*    onClick={onBack}*/}
-          {/*  >*/}
-          {/*    이전으로*/}
-          {/*  </button>*/}
-          {/*  <button*/}
-          {/*    className={twMerge(*/}
-          {/*      "w-full h-[54px] rounded-2xl text-l-semibold",*/}
-          {/*      selectedTime === ""*/}
-          {/*        ? "bg-gray-300 text-gray-500 cursor-not-allowed opacity-50" // 비활성화 스타일*/}
-          {/*        : "bg-bg-tertiary text-[#f1f8f3]", // 활성화 스타일*/}
-          {/*    )}*/}
-          {/*    onClick={() => onConfirm(selectedTime)}*/}
-          {/*    disabled={!selectedTime}*/}
-          {/*  >*/}
-          {/*    추가하기*/}
-          {/*  </button>*/}
-          {/*</div>*/}
           <div className={"flex gap-4 w-full"}>
             <button
               className="w-full h-[54px] bg-gray-300 rounded-2xl text-l-semibold"
-              onClick={() => {}}
+              onClick={resetFilter}
             >
               초기화
             </button>
             <button
               className="w-full h-[54px] bg-bg-tertiary text-[#f1f8f3] rounded-2xl text-l-semibold"
-              onClick={() => {}}
+              onClick={() => onChangeFilter(dayArrays, gender, age)}
             >
               필터 적용
             </button>
