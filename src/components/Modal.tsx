@@ -1,7 +1,10 @@
 import useModalStore from "@/store/dialogStore";
+import { twMerge } from "tailwind-merge";
+import tw from "tailwind-styled-components";
 
 const Modal = () => {
-  const { isOpen, content, action, closeAction, closeModal } = useModalStore();
+  const { isOpen, content, action, closeAction, closeModal, buttonProps } =
+    useModalStore();
   if (!isOpen) return null;
 
   return (
@@ -15,26 +18,30 @@ const Modal = () => {
         {content}
 
         <div className="flex gap-4 w-full mt-7">
-          <button
+          <Button
             type="button"
             onClick={() => {
               closeModal();
               closeAction();
             }}
-            className="w-full h-12 flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
+            className=" bg-bg-secondary"
           >
-            취소
-          </button>
-          <button
+            <text className="text-text-secondary text-l-semibold">취소</text>
+          </Button>
+          <Button
             type="button"
-            className="w-full h-12 flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
+            className={twMerge(
+              buttonProps?.color ? buttonProps?.color : "bg-bg-tertiary"
+            )}
             onClick={() => {
               action();
               closeModal();
             }}
           >
-            저장하기
-          </button>
+            <text className="text-[#F1F8F3] text-l-semibold">
+              {buttonProps?.text ? buttonProps.text : "저장하기"}
+            </text>
+          </Button>
         </div>
       </div>
     </div>
@@ -42,3 +49,5 @@ const Modal = () => {
 };
 
 export default Modal;
+
+const Button = tw.button`w-full h-12 flex justify-center items-center rounded-2xl`;
