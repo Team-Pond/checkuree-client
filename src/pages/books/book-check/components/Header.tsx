@@ -7,6 +7,7 @@ import { useRecordAllUpdate } from "../queries";
 import { Dispatch, SetStateAction } from "react";
 import useModalStore from "@/store/dialogStore";
 import ConfirmModal from "./ConfirmModal";
+import toast from "react-hot-toast";
 
 type HeaderProps = {
   title: string;
@@ -68,11 +69,12 @@ export default function Header(props: HeaderProps) {
     {
       src: "/images/icons/ico-check.svg",
       name: "전체 출석",
-      onClick: () => {
-        openModal(<ConfirmModal message="전체 출석하시겠습니까?" />, () =>
-          recordAllMutation()
-        );
-      },
+      onClick: () =>
+        totalScheduleCount > 0
+          ? openModal(<ConfirmModal message="전체 출석하시겠습니까?" />, () =>
+              recordAllMutation()
+            )
+          : toast("출석할 수 있는 학생이 없습니다."),
     },
   ];
 
