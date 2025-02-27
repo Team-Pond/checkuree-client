@@ -3,10 +3,11 @@ import {
   updateRecordAll,
   updateRecordLesson,
   updateRecord,
+  deleteRecord,
 } from "@/api/RecordApiClient";
-import { STATUS } from "@/api/RecordSchema";
+import { DeleteRecordRequest, STATUS } from "@/api/RecordSchema";
 import { getScheduleAttendee } from "@/api/ScheduleApiClient";
-import { bookKeys } from "@/queryKeys";
+import { attendeeKeys, bookKeys } from "@/queryKeys";
 import { getCurrentTimeParts } from "@/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -200,5 +201,20 @@ export const useLessonUpdate = ({ bookId }: { bookId: number }) => {
       });
     },
     onError: () => {},
+  });
+};
+
+export const useRecordDelete = (bookId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (params: DeleteRecordRequest) =>
+      await deleteRecord(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: attendeeKeys.schedules(bookId),
+      });
+      toast.success("보강기록이 삭제되었습니다.");
+    },
   });
 };

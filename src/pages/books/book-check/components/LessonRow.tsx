@@ -5,7 +5,7 @@ import tw from "tailwind-styled-components";
 import ConfirmModal from "./ConfirmModal";
 import { formatLocalTimeString } from "@/utils";
 import { twMerge } from "tailwind-merge";
-import { useLessonUpdate } from "../queries";
+import { useLessonUpdate, useRecordDelete } from "../queries";
 
 interface IProps {
   bookId: number;
@@ -27,26 +27,30 @@ export default function LessonRow(props: IProps) {
     bookId,
   });
 
+  const { mutate: deleteRecord } = useRecordDelete(bookId);
   const openModal = useModalStore((state) => state.openModal);
   const onLongPress = () => {
     openModal(
       <ConfirmModal message="보강기록을 삭제하시겠습니까?" />,
       { text: "삭제하기", color: "bg-bg-interactive-destructive" },
-      () => {}
+      () =>
+        deleteRecord({
+          attendanceBookId: bookId,
+          recordId: schedule.recordId,
+        })
     );
   };
 
-  // useLongPress을 여기서 최상위에서 호출합니다.
-  const longPressHandlers = useLongPress(
+  const deleteRecordHandlers = useLongPress(
     onLongPress,
     () => openModifyRecordTimeModal(schedule),
-    { delay: 700 }
+    { delay: 300 }
   );
   return (
     <LessonWrapper key={schedule.scheduleId}>
       <div
         className="flex flex-col items-start select-none"
-        {...longPressHandlers}
+        {...(schedule.isMakeup && deleteRecordHandlers)}
       >
         <p className="font-bold text-text-primary">
           {schedule.name}
