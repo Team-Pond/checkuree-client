@@ -77,7 +77,8 @@ export default function BookCheck() {
         totalScheduleCount={totalScheduleCount}
         setOpenFilter={setOpenFilter}
       />
-      {bookSchedules?.status === 200 ? (
+      {bookSchedules?.status === 200 &&
+      bookSchedules.data.content.length > 0 ? (
         <MainContents
           bookSchedules={bookSchedules.data}
           currentDate={formattedDate}
@@ -86,7 +87,11 @@ export default function BookCheck() {
           setCheckedCount={setCheckedScheduleCount}
         />
       ) : (
-        <></>
+        <div className="flex flex-col gap-5 items-center h-full justify-center mb-24">
+          <h2 className="text-center  font-semibold text-text-disabled">
+            오늘 등원한 학생이 없습니다.
+          </h2>
+        </div>
       )}
 
       <BottomAddRecord
