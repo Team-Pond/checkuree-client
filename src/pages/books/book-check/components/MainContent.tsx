@@ -180,6 +180,7 @@ export default function MainContents(props: IProps) {
     }
     updateFormData(key, input);
   };
+
   const handleRecord = (id: number, formattedTime: string) => {
     setRecord({
       id,
