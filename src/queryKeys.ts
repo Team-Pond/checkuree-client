@@ -5,8 +5,13 @@ import { DaysType, GenderType } from "./api/AttendeeSchema";
 
 // 수강생 데이터를 위한 키
 export const attendeeKeys = createQueryKeys("attendee", {
-  list: (bookId: number, dayArrays: DaysType[], gender: GenderType) => ({
-    queryKey: [bookId, dayArrays, gender],
+  list: (
+    bookId: number,
+    dayArrays: DaysType[],
+    gender: GenderType,
+    age: { min: number; max: number }
+  ) => ({
+    queryKey: [bookId, dayArrays, gender, age],
   }),
   detail: (attendeeId: number) => ({
     queryKey: [attendeeId],
