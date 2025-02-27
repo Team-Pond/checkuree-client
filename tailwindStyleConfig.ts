@@ -13,6 +13,7 @@ const colors = {
   "bg-destructive": "#fccccc",
   "bg-destructive-hover": "#f9a8a8",
   "bg-destructive-press": "#f37676",
+  "bg-interactive-destructive": "#EA5353",
   "bg-disabled": "#e7e7e7",
 
   // Border colors

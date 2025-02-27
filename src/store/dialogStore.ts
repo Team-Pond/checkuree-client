@@ -4,8 +4,16 @@ import { create } from "zustand";
 interface ModalState {
   isOpen: boolean;
   content: ReactNode | null;
+  buttonProps?: {
+    text: string;
+    color: string;
+  };
   openModal: (
     content: ReactNode,
+    buttonProps: {
+      text: string;
+      color: string;
+    },
     action?: () => void,
     closeAction?: () => void
   ) => void;
@@ -18,9 +26,13 @@ const useModalStore = create<ModalState>((set) => ({
   isOpen: false,
   content: null,
   action: (action = () => {}) => set({ action }),
+  openModal: (
+    content,
+    buttonProps,
+    action = () => {},
+    closeAction = () => {}
+  ) => set({ isOpen: true, content, buttonProps, action, closeAction }),
   closeAction: (closeAction = () => {}) => set({ closeAction }),
-  openModal: (content, action = () => {}, closeAction = () => {}) =>
-    set({ isOpen: true, content, action, closeAction }),
   closeModal: () => set({ isOpen: false, content: null }),
 }));
 

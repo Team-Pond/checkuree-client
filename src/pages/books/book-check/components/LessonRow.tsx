@@ -30,7 +30,8 @@ export default function LessonRow(props: IProps) {
   const openModal = useModalStore((state) => state.openModal);
   const onLongPress = () => {
     openModal(
-      <ConfirmModal message="상후님 보강 메시지는 뭐가 좋을까요????" />,
+      <ConfirmModal message="보강기록을 삭제하시겠습니까?" />,
+      { text: "삭제하기", color: "bg-bg-interactive-destructive" },
       () => {}
     );
   };
@@ -43,7 +44,10 @@ export default function LessonRow(props: IProps) {
   );
   return (
     <LessonWrapper key={schedule.scheduleId}>
-      <div className="flex flex-col items-start" {...longPressHandlers}>
+      <div
+        className="flex flex-col items-start select-none"
+        {...longPressHandlers}
+      >
         <p className="font-bold text-text-primary">
           {schedule.name}
           {schedule.isMakeup && (
