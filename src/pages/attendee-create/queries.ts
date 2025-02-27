@@ -6,13 +6,11 @@ import {
   updateBookProgress,
 } from "@/api/AttendanceBookApiClient";
 import {
-  createAttendee,
   getScheduleAttendee,
   updateAttendeeSchedule,
   updateAttendeeVerify,
 } from "@/api/AttendeeApiClient";
 import {
-  Associates,
   GenderType,
   UpdateAttendeeScheduleRequest,
 } from "@/api/AttendeeSchema";
