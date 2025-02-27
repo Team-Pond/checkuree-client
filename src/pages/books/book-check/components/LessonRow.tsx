@@ -44,13 +44,13 @@ export default function LessonRow(props: IProps) {
   const deleteRecordHandlers = useLongPress(
     onLongPress,
     () => openModifyRecordTimeModal(schedule),
-    { delay: 700 }
+    { delay: 300 }
   );
   return (
     <LessonWrapper key={schedule.scheduleId}>
       <div
         className="flex flex-col items-start select-none"
-        {...deleteRecordHandlers}
+        {...(schedule.isMakeup && deleteRecordHandlers)}
       >
         <p className="font-bold text-text-primary">
           {schedule.name}

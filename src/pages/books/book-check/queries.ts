@@ -214,6 +214,7 @@ export const useRecordDelete = (bookId: number) => {
       queryClient.invalidateQueries({
         queryKey: attendeeKeys.schedules(bookId),
       });
+      toast.success("보강기록이 삭제되었습니다.");
     },
   });
 };
