@@ -10,12 +10,12 @@ interface ModalState {
   };
   openModal: (
     content: ReactNode,
-    buttonProps: {
+    action?: () => void,
+    closeAction?: () => void,
+    buttonProps?: {
       text: string;
       color: string;
-    },
-    action?: () => void,
-    closeAction?: () => void
+    }
   ) => void;
   closeModal: () => void;
   action: () => void;
@@ -28,9 +28,10 @@ const useModalStore = create<ModalState>((set) => ({
   action: (action = () => {}) => set({ action }),
   openModal: (
     content,
-    buttonProps,
+
     action = () => {},
-    closeAction = () => {}
+    closeAction = () => {},
+    buttonProps
   ) => set({ isOpen: true, content, buttonProps, action, closeAction }),
   closeAction: (closeAction = () => {}) => set({ closeAction }),
   closeModal: () => set({ isOpen: false, content: null }),

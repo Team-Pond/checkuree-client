@@ -32,12 +32,13 @@ export default function LessonRow(props: IProps) {
   const onLongPress = () => {
     openModal(
       <ConfirmModal message="보강기록을 삭제하시겠습니까?" />,
-      { text: "삭제하기", color: "bg-bg-interactive-destructive" },
       () =>
         deleteRecord({
           attendanceBookId: bookId,
           recordId: schedule.recordId,
-        })
+        }),
+      () => {},
+      { text: "삭제하기", color: "bg-bg-interactive-destructive" }
     );
   };
 
