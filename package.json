@@ -11,17 +11,12 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "deploy-storybook": "gh-pages -d storybook-static",
-    "prepare": "husky install",
-    "postbuild": "react-snap"
+    "prepare": "husky install"
   },
   "reactSnap": {
-    "inlineCss": true,
-    "routes": [
-      "/auth/signin",
-      "/checuree-auth/signin",
-      "/book",
-      "/book/cxwreate"
-    ]
+    "puppeteerExecutablePath": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "source": "dist",
+    "inlineCss": true
   },
   "dependencies": {
     "@emotion/css": "^11.13.4",
