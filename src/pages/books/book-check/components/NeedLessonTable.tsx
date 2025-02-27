@@ -3,6 +3,10 @@ import { twMerge } from "tailwind-merge";
 import tw from "tailwind-styled-components";
 import { useLessonUpdate } from "../queries";
 import { formatLocalTimeString } from "@/utils";
+import useLongPress from "@/hook/useLongPress";
+import { STATUS } from "@/api/RecordSchema";
+import useModalStore from "@/store/dialogStore";
+import ConfirmModal from "./ConfirmModal";
 
 interface IProps {
   needLessonStudents: ScheduleData[];
@@ -25,6 +29,20 @@ export default function NeedLessonTable(props: IProps) {
     bookId,
   });
 
+  const openModal = useModalStore((state) => state.openModal);
+  const onLongPress = () => {
+    openModal(
+      <ConfirmModal message="상후님 보강 메시지는 뭐가 좋을까요????" />,
+      () => {}
+    );
+  };
+
+  const eventHandleRecord = (schedule: ScheduleData) => {
+    if (schedule.recordStatus === "ATTEND") {
+      handleRecord(schedule.recordId, schedule.recordTime);
+    }
+  };
+
   return (
     <>
       {needLessonStudents.length > 0 && (
@@ -35,16 +53,18 @@ export default function NeedLessonTable(props: IProps) {
               <LessonWrapper key={[schedule, index].join("-")}>
                 <div
                   className="flex flex-col items-start"
-                  onClick={() => {
-                    if (schedule.recordStatus === "ATTEND") {
-                      handleRecord(schedule.recordId, schedule.recordTime);
-                    }
-                  }}
+                  {...useLongPress(
+                    onLongPress,
+                    () => eventHandleRecord(schedule),
+                    { delay: 700 }
+                  )}
+                  onClick={() => eventHandleRecord(schedule)}
                 >
                   <p className="font-bold text-text-primary">
                     {schedule.name}
                     {schedule.isMakeup && (
                       <span className="text-[#EC9E14] text-xs-medium align-middle">
+                        {" "}
                         보강
                       </span>
                     )}
