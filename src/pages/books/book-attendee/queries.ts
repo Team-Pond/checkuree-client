@@ -7,21 +7,20 @@ export const useAttendeeList = ({
   bookId,
   dayArrays,
   gender,
+  age,
 }: {
   bookId: number;
   dayArrays: DaysType[];
   gender: GenderType;
+  age: { min: number; max: number };
 }) => {
   return useQuery({
-    queryKey: attendeeKeys.list(bookId, dayArrays, gender).queryKey,
+    queryKey: attendeeKeys.list(bookId, dayArrays, gender, age).queryKey,
     queryFn: async () => {
       const response = await getAttendee({
         attendanceBookId: Number(bookId),
         filter: {
-          age: {
-            min: 30,
-            max: 1,
-          },
+          age: age,
           gradeIds: [0],
           scheduleDays: dayArrays,
           gender: gender,
