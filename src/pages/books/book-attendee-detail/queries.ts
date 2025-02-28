@@ -9,11 +9,16 @@ import {
   updateAttendeeDetail,
   updateProgressPromote,
 } from "@/api/AttendeeApiClient";
-import { GenderType } from "@/api/AttendeeSchema";
 import { getAttendeeRecords } from "@/api/RecordApiClient";
+import { GenderType } from "@/api/type";
 import { attendeeKeys } from "@/queryKeys";
 
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 // TODO: Calendar 작업 시 필요
@@ -188,7 +193,7 @@ export const useProgressPromote = ({
   };
   attendeeId: number;
 }) => {
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (progressId: number) =>
       await updateProgressPromote({
@@ -204,6 +209,7 @@ export const useProgressPromote = ({
       }).then((res) => res.data),
     onSuccess: () => {
       toast.success("다음 과정이 저장되었습니다.");
+
       queryClient.invalidateQueries({
         queryKey: attendeeKeys.progressLog(bookId, attendeeId).queryKey,
       });
