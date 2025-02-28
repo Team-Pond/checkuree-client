@@ -28,3 +28,7 @@ storybook-static/
 stories
 .storybook
 .vercel
+
+
+# TypeScript 빌드 정보 파일 무시
+tsconfig.tsbuildinfo
