@@ -1,9 +1,9 @@
-import { Associates } from "@/api/AttendeeSchema";
 import Select from "@/components/Select";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import { CreateAttendeeSchema } from "../_schema";
 import { twMerge } from "tailwind-merge";
+import { Associates } from "@/api/type";
 
 interface Step1Props {
   onChangeGuardian: (key: string, value: string) => void;

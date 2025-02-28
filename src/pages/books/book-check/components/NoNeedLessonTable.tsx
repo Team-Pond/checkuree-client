@@ -1,9 +1,9 @@
-import { ScheduleData, ScheduleDataContentType } from "@/api/ScheduleSchema";
 import { twMerge } from "tailwind-merge";
 import tw from "tailwind-styled-components";
 import { useLessonUpdate } from "../queries";
 import { formatLocalTimeString, scheduleCheckformatTime } from "@/utils";
 import LessonRow from "./LessonRow";
+import { ScheduleData, ScheduleDataContentType } from "@/api/type";
 
 interface IProps {
   noNeedLessonTimeScheduleTable: ScheduleDataContentType;

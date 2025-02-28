@@ -12,9 +12,9 @@ import {
 import { useEffect, useState } from "react";
 import { useAttendeeRecords } from "../queries";
 import { useParams } from "react-router-dom";
-import { AttendeeRecord, STATUS } from "../../../../api/RecordSchema";
 import { isArray } from "lodash";
 import { twMerge } from "tailwind-merge";
+import { AttendeeRecord, STATUS } from "@/api/type";
 
 type IProps = {
   studentInfo: {

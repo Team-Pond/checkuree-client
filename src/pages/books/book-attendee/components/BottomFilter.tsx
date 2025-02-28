@@ -1,5 +1,4 @@
-import { DaysType } from "@/api/AttendanceBookSchema";
-import { GenderType } from "@/api/AttendeeSchema";
+import { DaysType, GenderType } from "@/api/type";
 import BottomDrawer from "@/components/BottomDrawer";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";

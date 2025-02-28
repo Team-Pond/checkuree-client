@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { CourseData } from "@/api/AttendanceBookSchema";
+
 import { twMerge } from "tailwind-merge";
 import BottomDrawer from "@/components/BottomDrawer";
 import { useSubjectItems, useSubjects } from "../queries";
+import { CourseData } from "@/api/type";
 
 export type IProps = {
   handleCourseChange: (params: CourseData) => void;

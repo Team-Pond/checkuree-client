@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { searchAttendee } from "../../../../../api/AttendeeApiClient";
-import { GenderType } from "../../../../../api/AttendeeSchema";
+import { GenderType } from "@/api/type";
+import { searchAttendee } from "@/api/AttendeeApiClient";
 
 interface Props {
   attendanceBookId: number;

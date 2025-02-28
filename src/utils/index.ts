@@ -1,4 +1,3 @@
-import { DaysType } from "@/api/AttendanceBookSchema";
 import dayjs from "dayjs";
 
 export const dateFormat = (
@@ -85,7 +84,7 @@ const DayTransfer = {
   SUNDAY: "일",
 };
 
-export function getDayGroupFromInput(input: DaysType[]) {
+export function getDayGroupFromInput(input: DayOfWeek[]) {
   const weekdays = ["월", "화", "수", "목", "금"];
   const weekends = ["토", "일"];
   const allDays = ["월", "화", "수", "목", "금", "토", "일"];

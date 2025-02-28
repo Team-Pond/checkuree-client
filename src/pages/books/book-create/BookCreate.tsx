@@ -4,12 +4,13 @@ import Step1 from "./components/Step1";
 import Step2 from "./components/Step2";
 import { twMerge } from "tailwind-merge";
 import { getSubjects } from "@/api/CourseApiClient";
-import { CourseData } from "@/api/AttendanceBookSchema";
+
 import { FormProvider, useForm } from "react-hook-form";
 import { useBookCreate } from "./queries";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { bookSchema, CreateBookSchema } from "./_schema";
 import SEO from "@/components/SEO";
+import { CourseData } from "@/api/type";
 
 export default function BookCreate() {
   const navigate = useNavigate();

@@ -5,8 +5,9 @@ import {
   updateRecord,
   deleteRecord,
 } from "@/api/RecordApiClient";
-import { DeleteRecordRequest, STATUS } from "@/api/RecordSchema";
+import { DeleteRecordRequest } from "@/api/RecordSchema";
 import { getScheduleAttendee } from "@/api/ScheduleApiClient";
+import { STATUS } from "@/api/type";
 import { attendeeKeys, bookKeys } from "@/queryKeys";
 import { getCurrentTimeParts } from "@/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

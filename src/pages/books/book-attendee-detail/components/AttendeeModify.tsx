@@ -1,7 +1,7 @@
-import { GenderType } from "@/api/AttendeeSchema";
 import React from "react";
 import { twMerge } from "tailwind-merge";
 import { useAttendeeUpdate } from "../queries";
+import { GenderType } from "@/api/type";
 
 interface AttendeeModifyFormState {
   birthDate: string;

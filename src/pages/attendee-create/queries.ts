@@ -10,13 +10,11 @@ import {
   updateAttendeeSchedule,
   updateAttendeeVerify,
 } from "@/api/AttendeeApiClient";
-import {
-  GenderType,
-  UpdateAttendeeScheduleRequest,
-} from "@/api/AttendeeSchema";
+import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { attendeeKeys } from "@/queryKeys";
+import { GenderType } from "@/api/type";
 
 // 일정(요일, 시간)에 따른 수강생 데이터를 가져오는 커스텀 훅
 export const useScheduleAttendee = (

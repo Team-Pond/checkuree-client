@@ -1,17 +1,14 @@
+import {
+  BookStatus,
+  Course,
+  DaysType,
+  GetBookScheduleTableDataType,
+  GetMyBooksDataType,
+} from "./type";
+
 type ResponseBase = {
   message: string;
 };
-
-export type DaysType =
-  | "MONDAY"
-  | "TUESDAY"
-  | "WEDNESDAY"
-  | "THURSDAY"
-  | "FRIDAY"
-  | "SATURDAY"
-  | "SUNDAY";
-
-export type BookStatus = "ACTIVE" | "PAUSED" | "VACATION";
 
 type SuccessResponse = ResponseBase & {
   status: 200;
@@ -22,15 +19,6 @@ type ErrorResponse = ResponseBase & {
   status: 400 | 500 | 403;
   data: {};
   timeStamp: string;
-};
-
-export type CourseData = {
-  title: string;
-  isPrimary: boolean;
-  grades: {
-    subjectItemId: number;
-    level: number;
-  }[];
 };
 
 export type CreateBookRequest = {
@@ -71,17 +59,6 @@ export type UpdateBookRequest = string;
 
 export type UpdateBookResponse = SuccessResponse | ErrorResponse;
 
-export type GetMyBooksDataType = {
-  id: number;
-  title: string;
-  description?: string;
-  availableFrom: string;
-  availableTo: string;
-  availableDays: DaysType[];
-  imageUrl: string;
-  attendeeCount: number;
-};
-
 type GetBookResponse = ResponseBase & {
   status: 200;
   data: GetMyBooksDataType[];
@@ -96,27 +73,11 @@ export type GetBookDetailResponse = ResponseBase & {
 
 export type GetMyBooksResponse = GetBookResponse | ErrorResponse;
 
-interface ScheduleItem {
-  dayOfWeek: DaysType;
-  scheduleCount: number[]; // 16칸짜리 예시
-}
-
-type GetBookScheduleTableDataType = {
-  startHhmm: string;
-  endHhmm: string;
-  timeSlots: number;
-  scheduleTable: ScheduleItem[];
-};
-
 export type GetBookScheudleTableRequest = number;
 
 export type GetBookScheduleTableResponse = ResponseBase & {
   status: 200;
   data: GetBookScheduleTableDataType;
-};
-
-export type UpdateBookProgressDataType = {
-  ids: number[];
 };
 
 export type UpdateBookProgressRequest = {
@@ -129,7 +90,7 @@ export type UpdateBookProgressRequest = {
 
 export type UpdateBookProgressResponse = {
   status: 200;
-  data: UpdateBookProgressDataType;
+  data: { ids: number[] };
 } & ErrorResponse;
 
 export type UpdateBookStatusRequest = {
@@ -144,20 +105,6 @@ export type UpdateBookStatusResponse = {
     id: number;
   };
 } & ErrorResponse;
-
-type Grade = {
-  id: number;
-  title: string;
-  level: number;
-  subjectItemId: number;
-};
-
-type Course = {
-  id: number;
-  title: string;
-  isPrimary: boolean;
-  grades: Grade[];
-};
 
 export type CoursesResponse = {
   courses: Course[];

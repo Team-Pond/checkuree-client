@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 
 import SubjectSelectionDrawer from "./SubjectSelectionDrawer";
 import AttendeeDrawer from "./AttendeeDrawer";
-import { DaysType } from "@/api/AttendanceBookSchema";
 
 import {
   useBookCourses,
@@ -14,6 +13,7 @@ import { getSub30MinuteHhmm } from "../../../utils";
 import ScheduleTable from "../../books/book-attendee-detail/components/ScheduleTable";
 import { useFormContext } from "react-hook-form";
 import { CreateAttendeeSchema } from "../_schema";
+import { DaysType } from "@/api/type";
 
 interface Step2Props {
   attendanceBookId: number;

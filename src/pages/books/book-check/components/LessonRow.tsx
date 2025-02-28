@@ -1,4 +1,3 @@
-import { ScheduleData } from "@/api/ScheduleSchema";
 import useLongPress from "@/hook/useLongPress";
 import useModalStore from "@/store/dialogStore";
 import tw from "tailwind-styled-components";
@@ -6,6 +5,7 @@ import ConfirmModal from "./ConfirmModal";
 import { formatLocalTimeString } from "@/utils";
 import { twMerge } from "tailwind-merge";
 import { useLessonUpdate, useRecordDelete } from "../queries";
+import { ScheduleData } from "@/api/type";
 
 interface IProps {
   bookId: number;
