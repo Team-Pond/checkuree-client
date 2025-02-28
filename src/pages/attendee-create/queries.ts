@@ -27,8 +27,7 @@ export const useScheduleAttendee = (
 ) => {
   return useQuery({
     enabled: enabled && dayOfWeek !== "" && hhmm !== "",
-    queryKey: attendeeKeys.schedules(attendanceBookId, dayOfWeek, hhmm)
-      .queryKey,
+    queryKey: attendeeKeys.schedules(attendanceBookId, dayOfWeek).queryKey,
     queryFn: async () => {
       const res = await getScheduleAttendee({
         attendanceBookId,
