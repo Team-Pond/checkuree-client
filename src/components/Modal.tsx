@@ -26,7 +26,9 @@ const Modal = () => {
             }}
             className=" bg-bg-secondary"
           >
-            <text className="text-text-secondary text-l-semibold">취소</text>
+            <text className="text-text-secondary text-l-semibold select-none">
+              취소
+            </text>
           </Button>
           <Button
             type="button"
@@ -38,7 +40,7 @@ const Modal = () => {
               closeModal();
             }}
           >
-            <text className="text-[#F1F8F3] text-l-semibold">
+            <text className="text-[#F1F8F3] text-l-semibold select-none">
               {buttonProps?.text ? buttonProps.text : "저장하기"}
             </text>
           </Button>
