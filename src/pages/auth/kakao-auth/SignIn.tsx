@@ -3,6 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
 import LoginButton from "../component/LoginButton";
+import HeaderBanner from "../component/HeaderBanner";
 
 export interface LoginDataType {
   username: string;
@@ -25,17 +26,7 @@ export default function KakaoSignIn() {
         content="체쿠리 음악학원 출석부 서비스의 카카오 로그인 페이지입니다."
       />
       <div className="flex flex-col items-center justify-center gap-12">
-        <div className="flex flex-col gap-2">
-          <img
-            src={"/images/logos/checkuree_logo.svg"}
-            width={284}
-            height={48}
-            alt="로고 이미지"
-          />
-          <p className="font-medium text-lg text-[#454545]">
-            레슨 관리와 통계까지 손쉽게
-          </p>
-        </div>
+        <HeaderBanner />
         <LoginButton
           className="relative bg-[#FEE500]"
           onClick={() =>

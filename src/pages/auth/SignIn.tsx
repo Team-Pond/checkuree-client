@@ -2,6 +2,7 @@ import SEO from "@/components/SEO";
 import { useNavigate } from "react-router-dom";
 import LoginButton from "./component/LoginButton";
 import Hr from "./component/Hr";
+import HeaderBanner from "./component/HeaderBanner";
 
 export interface LoginDataType {
   username: string;
@@ -17,18 +18,7 @@ export default function SignIn() {
         title="체쿠리 | 로그인"
         content="체쿠리 음악학원 출석부 서비스의 로그인 페이지입니다."
       />
-      <div className="flex flex-col gap-2">
-        <img
-          src={"/images/logos/checkuree_logo.svg"}
-          width={284}
-          height={48}
-          alt="로고 이미지"
-        />
-        <p className="font-medium text-lg text-[#454545]">
-          레슨 관리와 통계까지 손쉽게
-        </p>
-      </div>
-
+      <HeaderBanner />
       <div className="flex flex-col gap-4">
         <LoginButton
           className={"text-[#FFFFFF] bg-[#59996B]"}
