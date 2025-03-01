@@ -25,7 +25,7 @@ export default function KakaoSignIn() {
         title="체쿠리 | 카카오 로그인"
         content="체쿠리 음악학원 출석부 서비스의 카카오 로그인 페이지입니다."
       />
-      <div className="flex flex-col items-center justify-center gap-12">
+      <div className="flex flex-col items-center justify-center gap-[191px]">
         <HeaderBanner />
         <LoginButton
           className="relative bg-[#FEE500]"

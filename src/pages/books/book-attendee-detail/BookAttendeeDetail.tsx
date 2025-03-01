@@ -32,6 +32,7 @@ const Menu = [
     label: "상담관리",
   },
 ];
+
 export default function BookAttendeeDetail() {
   const { bookId, attendeeId } = useParams();
   const navigate = useNavigate();
