@@ -35,7 +35,7 @@ export default function KakaoSignIn() {
             레슨 관리와 통계까지 손쉽게
           </p>
         </div>
-        <div className="absolute bottom-0">
+        <div className="absolute bottom-20">
           <button
             className="relative flex items-center justify-center w-[342px] h-[52px] rounded-xl bg-[#FEE500]"
             onClick={() =>

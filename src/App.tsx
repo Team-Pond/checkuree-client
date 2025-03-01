@@ -12,7 +12,6 @@ import NotFound from "./pages/404";
 // TODO: function으로 변경
 import { ScheduleModify } from "./pages/books/book-attendee-detail/components/ScheduleModify";
 import Modal from "./components/Modal";
-import { ViewportProvider } from "./providers/ViewportProvider";
 
 // Lazy load components
 const Books = lazy(() => import("@/pages/books/Books"));
@@ -53,33 +52,28 @@ const routes: RouteType[] = [
 function App() {
   return (
     <Suspense fallback={<Loading />}>
-      <ViewportProvider>
-        <PageContainer>
-          <ScrollToTop />
-          <Routes>
-            <Route path="/" element={<Navigate to={"/book"} />} />
-            <Route path="*" element={<NotFound />} /> {/* 404페이지 */}
-            <Route path="/auth/signin" element={<SignIn />} />
-            <Route
-              path="/checkuree-auth/signin"
-              element={<CheckureeSignIn />}
-            />
-            <Route path="/kakao-auth/signin" element={<KakaoSignIn />} />
-            {/* 인증 처리 */}
-            {/* Book 관련 라우트 그룹 */}
-            <Route element={<BookLayout />}>
-              {routes.map((route) => (
-                <Route
-                  key={route.path}
-                  path={route.path}
-                  element={<ProtectedRoute element={route.element} />}
-                />
-              ))}
-            </Route>
-          </Routes>
-          <Modal />
-        </PageContainer>
-      </ViewportProvider>
+      <PageContainer>
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<Navigate to={"/book"} />} />
+          <Route path="*" element={<NotFound />} /> {/* 404페이지 */}
+          <Route path="/auth/signin" element={<SignIn />} />
+          <Route path="/checkuree-auth/signin" element={<CheckureeSignIn />} />
+          <Route path="/kakao-auth/signin" element={<KakaoSignIn />} />
+          {/* 인증 처리 */}
+          {/* Book 관련 라우트 그룹 */}
+          <Route element={<BookLayout />}>
+            {routes.map((route) => (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={<ProtectedRoute element={route.element} />}
+              />
+            ))}
+          </Route>
+        </Routes>
+        <Modal />
+      </PageContainer>
     </Suspense>
   );
 }
