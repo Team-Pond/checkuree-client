@@ -22,8 +22,10 @@ const BookCreate = lazy(() => import("@/pages/books/book-create/BookCreate"));
 const BookRoaster = lazy(
   () => import("@/pages/books/book-attendee/BookAttendee")
 );
-const KakaoSignIn = lazy(() => import("@/pages/kakao-auth/SignIn"));
-const CheckureeSignIn = lazy(() => import("@/pages/checkuree-auth/SignIn"));
+const KakaoSignIn = lazy(() => import("@/pages/auth/kakao-auth/SignIn"));
+const CheckureeSignIn = lazy(
+  () => import("@/pages/auth/checkuree-auth/SignIn")
+);
 const SignIn = lazy(() => import("@/pages/auth/SignIn"));
 const BookCheck = lazy(() => import("@/pages/books/book-check/BookCheck"));
 const BookAttendeeDetail = lazy(
