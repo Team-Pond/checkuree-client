@@ -2,6 +2,7 @@ import SEO from "@/components/SEO";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
+import LoginButton from "../component/LoginButton";
 
 export interface LoginDataType {
   username: string;
@@ -35,8 +36,8 @@ export default function KakaoSignIn() {
             레슨 관리와 통계까지 손쉽게
           </p>
         </div>
-        <button
-          className="relative flex items-center justify-center w-[342px] h-[52px] rounded-xl bg-[#FEE500]"
+        <LoginButton
+          className="relative bg-[#FEE500]"
           onClick={() =>
             (window.location.href =
               "https://dev.checkuree.com/oauth2/authorization/kakao")
@@ -52,7 +53,7 @@ export default function KakaoSignIn() {
 
           {/* font 적용 */}
           <p className="ml-[30px] font-medium text-[17px]">카카오로 시작하기</p>
-        </button>
+        </LoginButton>
       </div>
     </section>
   );

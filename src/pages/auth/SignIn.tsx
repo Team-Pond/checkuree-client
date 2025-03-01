@@ -1,5 +1,7 @@
 import SEO from "@/components/SEO";
 import { useNavigate } from "react-router-dom";
+import LoginButton from "./component/LoginButton";
+import Hr from "./component/Hr";
 
 export interface LoginDataType {
   username: string;
@@ -28,22 +30,16 @@ export default function SignIn() {
       </div>
 
       <div className="flex flex-col gap-4">
-        <button
-          className={
-            "w-full h-[54px] rounded-xl text-lg leading-[22px] font-semibold flex items-center justify-center text-[#FFFFFF] bg-[#59996B] cursor-pointer"
-          }
+        <LoginButton
+          className={"text-[#FFFFFF] bg-[#59996B]"}
           type="submit"
           onClick={() => navigate("/checkuree-auth/signin")}
         >
           체쿠리 ID로 시작하기
-        </button>
-        <div className="flex items-center justify-center gap-2">
-          <hr className="w-[140px] h-[1px] bg-[rgba(0,0,0,0.24)]" />
-          <p className="text-xs text-[rgba(0,0,0,0.24)]">또는</p>
-          <hr className="w-[140px] h-[1px] bg-[rgba(0,0,0,0.24)]" />
-        </div>
-        <button
-          className="relative flex items-center justify-center w-[342px] h-[52px] rounded-xl bg-[#FEE500]"
+        </LoginButton>
+        <Hr />
+        <LoginButton
+          className="relative bg-[#FEE500]"
           onClick={() => navigate("/kakao-auth/signin")}
         >
           <img
@@ -54,9 +50,8 @@ export default function SignIn() {
             className="absolute left-4"
           />
 
-          {/* font 적용 */}
           <p className="ml-[30px] font-medium text-[17px]">카카오로 시작하기</p>
-        </button>
+        </LoginButton>
       </div>
     </section>
   );
