@@ -6,7 +6,6 @@ import {
   GenderType,
   Progresses,
   ProgressLog,
-  RelationType,
   ScheduleAttendeeDataType,
   SearchAttendeeDataType,
   Status,
@@ -44,7 +43,6 @@ export type AttendeeCheckNameRequest = {
 export type AttendeeCheckNameResponse = SuccessResponse | ErrorResponse;
 
 // 출석 체크
-
 export type AttendeeCheckRequest = {
   attendanceBookId: number;
   attendeeId: number;
