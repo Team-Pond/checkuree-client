@@ -8,7 +8,7 @@ import {
   ProgressLog,
   ScheduleAttendeeDataType,
   SearchAttendeeDataType,
-  Status,
+  StudentStatus,
   UpdateScheduleAttendeeDataType,
 } from "./type";
 
@@ -43,6 +43,7 @@ export type AttendeeCheckNameRequest = {
 export type AttendeeCheckNameResponse = SuccessResponse | ErrorResponse;
 
 // 출석 체크
+
 export type AttendeeCheckRequest = {
   attendanceBookId: number;
   attendeeId: number;
@@ -61,7 +62,7 @@ export type GetAttendeeListRequest = {
     gender: GenderType;
     gradeIds: number[];
     scheduleDays: DaysType[];
-    status: Status;
+    status: StudentStatus;
   };
 };
 
@@ -70,7 +71,7 @@ type AttendeeListType = {
     id: number;
     name: string;
     gender: GenderType;
-    status: "ATTENDING";
+    status: StudentStatus;
     grades: {
       id: number;
       name: string;
@@ -170,7 +171,7 @@ export type GetAttendeeDetailResponse = {
     birthDate: string;
     enrollmentDate: string;
     age: number;
-    status: Status;
+    status: StudentStatus;
     phoneNumber: string;
     description: string;
     school: string;
