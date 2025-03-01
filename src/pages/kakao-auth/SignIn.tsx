@@ -37,8 +37,7 @@ export default function KakaoSignIn() {
         </div>
         <div className="absolute bottom-0">
           <button
-            className="relative flex items-center justify-center w-[342px] h-[52px] rounded-xl bg-[#FEE500] border border-[#000000] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
-            type="submit"
+            className="relative flex items-center justify-center w-[342px] h-[52px] rounded-xl bg-[#FEE500]"
             onClick={() =>
               (window.location.href =
                 "https://dev.checkuree.com/oauth2/authorization/kakao")
