@@ -8,7 +8,7 @@ export type DaysType =
   | "SUNDAY";
 
 export type GenderType = "MALE" | "FEMALE" | "";
-export type Status = "ATTENDING" | string;
+export type StudentStatus = "ATTENDING" | "SUSPENSION" | "WITHDRAWAL";
 
 export interface Associates {
   name?: string;
