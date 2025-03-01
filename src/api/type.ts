@@ -43,6 +43,12 @@ export type Progresses = {
   startDate: string;
 }[];
 
+export type SortType = {
+  empty: boolean;
+  sorted: boolean;
+  unsorted: boolean;
+};
+
 export type SearchAttendeeDataType = {
   content: {
     id: number;
@@ -61,11 +67,7 @@ export type SearchAttendeeDataType = {
     pageNumber: number;
     pageSize: number;
     paged: boolean;
-    sort: {
-      empty: boolean;
-      sorted: boolean;
-      unsorted: boolean;
-    };
+    sort: SortType;
   };
   sort: {
     emply: boolean;
