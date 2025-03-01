@@ -23,8 +23,9 @@ const LoginSchema = z.object({
 });
 
 const initailValues = {
-  username: "",
-  password: "",
+  username: "dkandkdlel",
+  // TODO: 테스트를 위한 임시 계정
+  password: "test123123!!",
   isAutoLogin: false,
 };
 
@@ -78,6 +79,7 @@ export default function CheckureeSignIn() {
               <div className="flex flex-col gap-[1px] w-full text-left">
                 <input
                   {...register("username")}
+                  value={getValues("username")}
                   placeholder="example@email.com"
                   className="bg-white w-full h-12 rounded-2xl p-4 border-[2px] focus:outline-none"
                 />
@@ -92,6 +94,7 @@ export default function CheckureeSignIn() {
                 <div className="relative flex items-center w-full">
                   <input
                     {...register("password")}
+                    value={getValues("password")}
                     type={showPassword ? "text" : "password"}
                     placeholder="비밀번호"
                     className="bg-white w-full h-12 rounded-2xl p-4 border-[2px] focus:outline-none"
