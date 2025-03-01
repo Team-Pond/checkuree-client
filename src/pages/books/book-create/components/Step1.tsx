@@ -1,9 +1,9 @@
-import { DaysType } from "@/api/AttendanceBookSchema";
 import TimePicker from "@/components/TimePicker";
 import { ChangeEvent, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 import { CreateBookSchema } from "../_schema";
+import { DaysType } from "@/api/type";
 
 const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
 

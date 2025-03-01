@@ -1,6 +1,6 @@
-import { DaysType } from "@/api/AttendanceBookSchema";
 import BottomDrawer from "@/components/BottomDrawer";
-import { convertEngDayToKorDay } from "../../../../utils";
+import { DaysType } from "@/api/type";
+import { convertEngDayToKorDay } from "@/utils";
 
 type Attendee = {
   name: string;

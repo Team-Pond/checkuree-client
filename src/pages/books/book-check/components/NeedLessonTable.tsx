@@ -1,6 +1,6 @@
-import { ScheduleData } from "@/api/ScheduleSchema";
 import tw from "tailwind-styled-components";
 import LessonRow from "./LessonRow";
+import { ScheduleData } from "@/api/type";
 
 interface IProps {
   needLessonStudents: ScheduleData[];

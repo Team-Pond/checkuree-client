@@ -2,12 +2,13 @@ import { Dayjs } from "dayjs";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { updateBookStatus } from "@/api/AttendanceBookApiClient";
-import { BookStatus } from "@/api/AttendanceBookSchema";
+
 import { useRecordAllUpdate } from "../queries";
 import { Dispatch, SetStateAction } from "react";
 import useModalStore from "@/store/dialogStore";
 import ConfirmModal from "./ConfirmModal";
 import toast from "react-hot-toast";
+import { BookStatus } from "@/api/type";
 
 type HeaderProps = {
   title: string;

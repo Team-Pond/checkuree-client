@@ -1,10 +1,3 @@
-import {
-  ScheduleData,
-  ScheduleDataContentType,
-  ScheduleDataType,
-} from "@/api/ScheduleSchema";
-import { STATUS } from "@/api/RecordSchema";
-
 import { useRecordCreate, useRecordUpdate, useStatusUpdate } from "../queries";
 import { useEffect, useState } from "react";
 import { ConfirmModal } from "./ConfirmModal";
@@ -15,6 +8,12 @@ import NeedLessonTable from "./NeedLessonTable";
 import NoNeedLessonTable from "./NoNeedLessonTable";
 import tw from "tailwind-styled-components";
 import useFormDataStore from "@/store/recordStore";
+import {
+  ScheduleData,
+  ScheduleDataContentType,
+  ScheduleDataType,
+  STATUS,
+} from "@/api/type";
 
 type IProps = {
   bookSchedules: ScheduleDataType;

@@ -1,28 +1,17 @@
 import { AttendeeSchema } from "@/pages/attendee-create/_schema";
 import { z } from "zod";
-
-export type GenderType = "MALE" | "FEMALE" | "";
-type Parent = string;
-type Status = "ATTENDING" | string;
-
-export type RelationType = "FATHER" | "MOTHER" | "SIBLING" | "OTHER";
-export type DaysType =
-  | "MONDAY"
-  | "TUESDAY"
-  | "WEDNESDAY"
-  | "THURSDAY"
-  | "FRIDAY"
-  | "SATURDAY"
-  | "SUNDAY";
-
-export interface Associates {
-  name?: string;
-  gender?: GenderType;
-  relationType: RelationType;
-  phoneNumber: string;
-  relationescription?: string;
-  description?: string;
-}
+import {
+  Associates,
+  DaysType,
+  GenderType,
+  Progresses,
+  ProgressLog,
+  RelationType,
+  ScheduleAttendeeDataType,
+  SearchAttendeeDataType,
+  Status,
+  UpdateScheduleAttendeeDataType,
+} from "./type";
 
 type ResponseBase = {
   status: number;
@@ -119,15 +108,6 @@ export type GetAttendeeListResponse = {
   data: AttendeeListType;
 } & ErrorResponse;
 
-type ScheduleAttendeeDataType = {
-  attendeeId: number;
-  name: string;
-  gender: GenderType;
-  age: number;
-  scheduleId: number;
-  time: string;
-  endTime: string;
-};
 export type GetScheduleAttendeeRequest = {
   attendanceBookId: number;
   dayOfWeek: string;
@@ -139,10 +119,6 @@ export type GetScheduleAttendeeResponse = {
   data: ScheduleAttendeeDataType[];
 } & ErrorResponse;
 
-export type UpdateScheduleAttendeeDataType = {
-  ids: number[];
-};
-
 export type UpdateAttendeeScheduleRequest = {
   schedules: {
     hhmm: string;
@@ -152,7 +128,7 @@ export type UpdateAttendeeScheduleRequest = {
 
 export type UpdateAttendeeScheduleResponse = {
   status: 200;
-  data: ScheduleAttendeeDataType[];
+  data: UpdateScheduleAttendeeDataType[];
 } & ErrorResponse;
 
 // 진도 관리 API
@@ -186,15 +162,6 @@ export type GetAttendeeDetailRequest = {
   attendanceBookId: number;
   attendeeId: number;
 };
-
-export type Progresses = {
-  id: number;
-  courseId: number;
-  gradeId: number;
-  gradeTitle: string;
-  courseTitle: string;
-  startDate: string;
-}[];
 
 export type GetAttendeeDetailResponse = {
   status: 200;
@@ -233,37 +200,6 @@ export type SearchAttendeeRequest = {
   name: string;
 };
 
-export type SearchAttendeeDataType = {
-  content: {
-    id: number;
-    name: string;
-    gender: GenderType;
-    age: number;
-  }[];
-  empty: boolean;
-  first: boolean;
-  last: boolean;
-  number: number;
-  numberOfElements: number;
-  size: number;
-  pageable: {
-    offset: number;
-    pageNumber: number;
-    pageSize: number;
-    paged: boolean;
-    sort: {
-      empty: boolean;
-      sorted: boolean;
-      unsorted: boolean;
-    };
-  };
-  sort: {
-    emply: boolean;
-    sorted: boolean;
-    unsorted: boolean;
-  };
-};
-
 export type SearchAttendeeResponse = {
   status: 200;
   data: SearchAttendeeDataType;
@@ -272,19 +208,6 @@ export type SearchAttendeeResponse = {
 export type GetAttendeeProgressLogRequest = {
   attendanceBookId: number;
   attendeeId: number;
-};
-
-type ProgressLog = {
-  progressLogId: number;
-  status: "IN_PROGRESS" | "COMPLETED" | "CANCELLED"; // 상태 값이 여러 개일 가능성을 고려
-  startedAt: string; // ISO 형식의 날짜 문자열
-  endedAt: string; // ISO 형식의 날짜 문자열
-  attendeeId: number;
-  gradeId: number;
-  gradeTitle: string;
-  attendanceCount: number;
-  lessonCount: number;
-  ageAtStart: number;
 };
 
 export type GetAttendeeProgressLogResponse = {

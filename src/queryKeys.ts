@@ -1,7 +1,7 @@
 // src/queryKeys.ts
 // src/queryKeys.ts
 import { createQueryKeys } from "@lukemorales/query-key-factory";
-import { DaysType, GenderType } from "./api/AttendeeSchema";
+import { DaysType, GenderType } from "./api/type";
 
 // 수강생 데이터를 위한 키
 export const attendeeKeys = createQueryKeys("attendee", {

@@ -1,10 +1,10 @@
-import { Progresses } from "@/api/AttendeeSchema";
 import { useParams } from "react-router-dom";
 import { Fragment, useState } from "react";
 import NextProgressModal from "./NextProgressModal";
 import { useProgressLog, useProgressPromote } from "../queries";
 import useModalStore from "@/store/dialogStore";
 import useProgressFormStore from "@/store/progressStore";
+import { Progresses } from "@/api/type";
 
 type IProps = {
   studentInfo: {
