@@ -257,6 +257,9 @@ export default function Step2(props: IProps) {
               </ul>
               <ul className="w-full overflow-y-scroll bg-[#f6f6f6] px-[14px] rounded-tr-lg">
                 {subjectItems?.map((subjectItem) => {
+                  const isFindIndex = selectedSubjectItems.find(
+                    (item) => item.subjectItemId === subjectItem.id
+                  );
                   return (
                     <li
                       key={subjectItem.level}
@@ -267,16 +270,15 @@ export default function Step2(props: IProps) {
                       </p>
                       <img
                         src={
-                          selectedSubjectItems.find(
-                            (item) => item.subjectItemId === subjectItem.id
-                          )
+                          isFindIndex
                             ? "/images/icons/ico-check.svg"
                             : "/images/icons/book-create/ico-plus.svg"
                         }
                         alt="플러스 아이콘"
                         width={19}
                         height={19}
-                        onClick={() => {
+                        onClick={() =>
+                          !isFindIndex &&
                           setSelectedSubjectItems([
                             ...selectedSubjectItems,
                             {
@@ -284,8 +286,8 @@ export default function Step2(props: IProps) {
                               level: selectedSubjectItems.length + 1,
                               title: subjectItem.title,
                             },
-                          ]);
-                        }}
+                          ])
+                        }
                       />
                     </li>
                   );
