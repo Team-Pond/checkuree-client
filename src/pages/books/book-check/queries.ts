@@ -34,7 +34,9 @@ export const useBookSchedules = ({
           },
         },
       }),
-    staleTime: 5000,
+    refetchInterval: 5000,
+    refetchIntervalInBackground: true,
+
     enabled: !!bookId && !!formattedDate,
   });
 };
