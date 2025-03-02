@@ -266,11 +266,17 @@ export default function Step2(props: IProps) {
                         {subjectItem.title}
                       </p>
                       <img
-                        src="/images/icons/book-create/ico-plus.svg"
+                        src={
+                          selectedSubjectItems.find(
+                            (item) => item.subjectItemId === subjectItem.id
+                          )
+                            ? "/images/icons/ico-check.svg"
+                            : "/images/icons/book-create/ico-plus.svg"
+                        }
                         alt="플러스 아이콘"
                         width={19}
                         height={19}
-                        onClick={() =>
+                        onClick={() => {
                           setSelectedSubjectItems([
                             ...selectedSubjectItems,
                             {
@@ -278,8 +284,8 @@ export default function Step2(props: IProps) {
                               level: selectedSubjectItems.length + 1,
                               title: subjectItem.title,
                             },
-                          ])
-                        }
+                          ]);
+                        }}
                       />
                     </li>
                   );
