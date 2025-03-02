@@ -23,9 +23,9 @@ const LoginSchema = z.object({
 });
 
 const initailValues = {
-  username: "dkandkdlel",
-  // TODO: 테스트를 위한 임시 계정
-  password: "test123123!!",
+  username: "",
+
+  password: "",
   isAutoLogin: false,
 };
 
