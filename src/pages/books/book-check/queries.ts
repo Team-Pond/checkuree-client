@@ -9,6 +9,7 @@ import { DeleteRecordRequest } from "@/api/RecordSchema";
 import { getScheduleAttendee } from "@/api/ScheduleApiClient";
 import { STATUS } from "@/api/type";
 import { attendeeKeys, bookKeys } from "@/queryKeys";
+import useFormDataStore from "@/store/recordStore";
 import { getCurrentTimeParts } from "@/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -72,14 +73,16 @@ export const useRecordAllUpdate = ({
 export const useRecordUpdate = ({
   bookId,
   recordId,
+  formattedTime,
 }: {
   bookId: number;
   recordId: number;
+  formattedTime: string;
 }) => {
   const queryClient = useQueryClient();
-
+  const { setFormData } = useFormDataStore();
   return useMutation({
-    mutationFn: async (formattedTime: string) =>
+    mutationFn: async () =>
       await updateRecord({
         params: {
           attendanceBookId: bookId,
@@ -95,6 +98,7 @@ export const useRecordUpdate = ({
         queryKey: bookKeys.schedules._def,
       });
       toast.success("출석시간 변경 완료");
+      setFormData({ hour: "", minute: "" });
     },
     onError: () => {
       toast.error("출석시간 수정 실패");

@@ -9,21 +9,15 @@ interface IProps {
     targetStatus: "ATTEND" | "ABSENT",
     schedule: ScheduleData
   ) => void;
-  handleRecord: (id: number, formattedTime: string) => void;
+  openModifyRecordTimeModal: (schedule: ScheduleData) => void;
 }
 export default function NeedLessonTable(props: IProps) {
   const {
     needLessonStudents,
     bookId,
     handleAttendanceStatusWithConfirmation,
-    handleRecord,
+    openModifyRecordTimeModal,
   } = props;
-
-  const openModifyRecordTimeModal = (schedule: ScheduleData) => {
-    if (schedule.recordStatus === "ATTEND") {
-      handleRecord(schedule.recordId, schedule.recordTime);
-    }
-  };
 
   return (
     <>

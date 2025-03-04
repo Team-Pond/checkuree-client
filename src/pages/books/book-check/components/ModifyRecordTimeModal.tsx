@@ -9,18 +9,20 @@ interface Props {
     id: number;
     formattedTime: string;
   };
-  handleTimeChange: (
-    key: "hour" | "minute",
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => void;
 }
 
-export const ModifyRecordTimeModal: React.FC<Props> = ({
-  setFormData,
-  record,
-  handleTimeChange,
-}) => {
-  const { formData } = useFormDataStore(); // 전역 상태 formData 사용
+export const ModifyRecordTimeModal: React.FC<Props> = ({}) => {
+  const { formData, updateFormData } = useFormDataStore(); // 전역 상태 formData 사용
+  const handleTimeChange = (
+    key: "hour" | "minute",
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    let input = e.target.value.replace(/\D/g, "");
+    if (input.length > 2) {
+      input = input.slice(0, 2);
+    }
+    updateFormData(key, input);
+  };
 
   return (
     <div className="flex flex-col gap-6 justify-center items-center w-full">
