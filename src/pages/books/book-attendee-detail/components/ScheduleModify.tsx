@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ScheduleModifyDetail from "./modify_components/ScheduleModifyDetail";
 import { useOnlyScheduleUpdate } from "../../../attendee-create/queries";
 import { useEffect, useState } from "react";
-import { UpdateAttendeeScheduleRequest } from "../../../../api v2/AttendeeSchema";
+import { UpdateAttendeeScheduleRequest } from "../../../../api/AttendeeSchema";
 import { useAttendeeDetail } from "../queries";
 import SEO from "@/components/SEO";
 
@@ -60,10 +60,7 @@ export const ScheduleModify = () => {
 
         <div className="flex w-full justify-center">
           <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
-            <ScheduleModifyDetail
-              attendeeSchedules={attendeeSchedules}
-              setAttendeeSchedules={setAttendeeSchedules}
-            />
+            <ScheduleModifyDetail setAttendeeSchedules={setAttendeeSchedules} />
             <div className="flex gap-4 w-full">
               <button
                 type="button"

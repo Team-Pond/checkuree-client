@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { DaysType } from "@/api v2/AttendanceBookSchema";
-import { UpdateAttendeeScheduleRequest } from "@/api v2/AttendeeSchema";
+import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
 import { useParams } from "react-router-dom";
 import ScheduleTable from "./ScheduleTable";
 import SubjectSelectionDrawer from "./SubjectSelectionDrawer";
@@ -10,21 +9,19 @@ import {
   useScheduleData,
   useScheduleTimeTable,
 } from "../queries";
+import { DaysType } from "@/api/type";
 
 interface CurriculumModifyProps {
   setAttendeeSchedules: React.Dispatch<
     React.SetStateAction<UpdateAttendeeScheduleRequest | undefined>
   >;
-  attendeeSchedules: UpdateAttendeeScheduleRequest | undefined;
-  attendanceBookId: number;
+
   setIsCourseModify: React.Dispatch<React.SetStateAction<boolean>>;
   onChangeGrade: (gradeId: number) => void;
 }
 
 export default function CurriculumModify({
   setAttendeeSchedules,
-  attendeeSchedules,
-  attendanceBookId,
   onChangeGrade,
   setIsCourseModify,
 }: CurriculumModifyProps) {

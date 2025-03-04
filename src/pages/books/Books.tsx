@@ -103,7 +103,7 @@ export default function Books() {
           })}
         </div>
       </div>
-      <div className="fixed bottom-11 ml-[270px] max-w-[390px] w-full">
+      <div className="fixed bottom-11 right-[5%] max-w-[390px]">
         <button
           onClick={() => navigate("/book/create")}
           className="w-[104px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { CourseData } from "@/api v2/AttendanceBookSchema";
+
 import { twMerge } from "tailwind-merge";
 import BottomDrawer from "@/components/BottomDrawer";
 import { useSubjectItems, useSubjects } from "../queries";
+import { CourseData } from "@/api/type";
 
 export type IProps = {
   handleCourseChange: (params: CourseData) => void;
@@ -256,6 +257,9 @@ export default function Step2(props: IProps) {
               </ul>
               <ul className="w-full overflow-y-scroll bg-[#f6f6f6] px-[14px] rounded-tr-lg">
                 {subjectItems?.map((subjectItem) => {
+                  const isFindIndex = selectedSubjectItems.find(
+                    (item) => item.subjectItemId === subjectItem.id
+                  );
                   return (
                     <li
                       key={subjectItem.level}
@@ -265,11 +269,16 @@ export default function Step2(props: IProps) {
                         {subjectItem.title}
                       </p>
                       <img
-                        src="/images/icons/book-create/ico-plus.svg"
+                        src={
+                          isFindIndex
+                            ? "/images/icons/ico-check.svg"
+                            : "/images/icons/book-create/ico-plus.svg"
+                        }
                         alt="플러스 아이콘"
                         width={19}
                         height={19}
                         onClick={() =>
+                          !isFindIndex &&
                           setSelectedSubjectItems([
                             ...selectedSubjectItems,
                             {

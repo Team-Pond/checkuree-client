@@ -66,9 +66,10 @@ export const getAttendee = async (
 ): Promise<GetAttendeeListResponse> => {
   const { attendanceBookId, filter } = params;
   const scheduleDays = filter.scheduleDays.join(",");
+  const { min, max } = filter.age;
   const response = await ApiClient.request({
     method: "GET",
-    url: `/book/${attendanceBookId}/attendee?age.min=0&age.max=100&scheduleDays=${scheduleDays}&gender=${
+    url: `/book/${attendanceBookId}/attendee?age.min=${min}&age.max=${max}&scheduleDays=${scheduleDays}&gender=${
       filter.gender || ""
     }&status=ATTENDING&size=100`,
   });

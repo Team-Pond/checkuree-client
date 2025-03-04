@@ -24,6 +24,7 @@ const LoginSchema = z.object({
 
 const initailValues = {
   username: "",
+
   password: "",
   isAutoLogin: false,
 };

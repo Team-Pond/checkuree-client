@@ -2,6 +2,8 @@ import ApiClient from "./ApiClient";
 import {
   CreateRecordRequest,
   CreateRecordResponse,
+  DeleteRecordRequest,
+  DeleteRecordResponse,
   GetAttendeeRecordsRequest,
   GetAttendeeRecordsResponse,
   UpdateRecordAllRequest,
@@ -100,6 +102,17 @@ export const getAttendeeRecords = async ({
     method: "GET",
     url: `/book/${attendanceBookId}/attendee/${attendeeId}/record?from=${from}&to=${to}`,
     data: params,
+  });
+  return response.data;
+};
+
+// 출석부 기록 삭제
+export const deleteRecord = async (
+  params: DeleteRecordRequest
+): Promise<DeleteRecordResponse> => {
+  const response = await ApiClient.request({
+    method: "DELETE",
+    url: `/book/${params.attendanceBookId}/record/${params.recordId}`,
   });
   return response.data;
 };

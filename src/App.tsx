@@ -1,5 +1,5 @@
 import "./App.css";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import ProtectedRoute from "@/ProtectedRoute";
 import PageContainer from "@/components/PageContainer";
@@ -11,26 +11,29 @@ import NotFound from "./pages/404";
 
 // TODO: function으로 변경
 import { ScheduleModify } from "./pages/books/book-attendee-detail/components/ScheduleModify";
+import Modal from "./components/Modal";
 
 // Lazy load components
 const Books = lazy(() => import("@/pages/books/Books"));
 const AttendeeCreate = lazy(
-  () => import("@/pages/attendee-create/AttendeeCreate"),
+  () => import("@/pages/attendee-create/AttendeeCreate")
 );
 const BookCreate = lazy(() => import("@/pages/books/book-create/BookCreate"));
 const BookRoaster = lazy(
-  () => import("@/pages/books/book-attendee/BookAttendee"),
+  () => import("@/pages/books/book-attendee/BookAttendee")
 );
-const KakaoSignIn = lazy(() => import("@/pages/kakao-auth/SignIn"));
-const CheckureeSignIn = lazy(() => import("@/pages/checkuree-auth/SignIn"));
+const KakaoSignIn = lazy(() => import("@/pages/auth/kakao-auth/SignIn"));
+const CheckureeSignIn = lazy(
+  () => import("@/pages/auth/checkuree-auth/SignIn")
+);
 const SignIn = lazy(() => import("@/pages/auth/SignIn"));
 const BookCheck = lazy(() => import("@/pages/books/book-check/BookCheck"));
 const BookAttendeeDetail = lazy(
-  () => import("@/pages/books/book-attendee-detail/BookAttendeeDetail"),
+  () => import("@/pages/books/book-attendee-detail/BookAttendeeDetail")
 );
 const CounsellingCreate = lazy(
   () =>
-    import("@/pages/books/book-attendee-detail/components/CounsellingCreate"),
+    import("@/pages/books/book-attendee-detail/components/CounsellingCreate")
 );
 interface RouteType {
   path: string;
@@ -79,6 +82,7 @@ function App() {
             ))}
           </Route>
         </Routes>
+        <Modal />
       </PageContainer>
     </Suspense>
   );

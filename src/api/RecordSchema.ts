@@ -1,3 +1,5 @@
+import { AttendeeRecord, STATUS } from "./type";
+
 type ResponseBase = {
   message: string;
 };
@@ -16,8 +18,6 @@ export type UpdateRecordResponse =
       };
     } & ResponseBase)
   | ErrorResponse;
-
-export type STATUS = "PENDING" | "ATTEND" | "ABSENT";
 
 export type UpdateRecordRequest = {
   recordId: number;
@@ -93,13 +93,14 @@ export type GetAttendeeRecordsResponse =
     }
   | ErrorResponse;
 
-export type AttendeeRecord = {
-  id: number;
-  attendeeId: number;
-  attendDate: string;
-  attendTime: string;
-  status: STATUS;
-  taughtBy: number;
-  taught: boolean;
-  makeup: boolean;
+export type DeleteRecordRequest = {
+  attendanceBookId: number;
+  recordId: number;
 };
+export type DeleteRecordResponse =
+  | {
+      status: 200;
+      message: string;
+      data: {};
+    }
+  | ErrorResponse;

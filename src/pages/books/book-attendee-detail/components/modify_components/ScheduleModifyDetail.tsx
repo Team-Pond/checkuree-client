@@ -1,28 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import ScheduleTable from "../ScheduleTable";
+import { DaysType } from "@/api/type";
+import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
 import {
   useScheduleAttendee,
   useScheduleTable,
-} from "../../../../attendee-create/queries";
-import {
-  DaysType,
-  UpdateAttendeeScheduleRequest,
-} from "../../../../../api v2/AttendeeSchema";
-import AttendeeDrawer from "../../../../attendee-create/components/AttendeeDrawer";
-import ScheduleTable from "../ScheduleTable";
-import { getSub30MinuteHhmm } from "../../../../../utils";
+} from "@/pages/attendee-create/queries";
+import { getSub30MinuteHhmm } from "@/utils";
+import AttendeeDrawer from "../AttendeeDrawer";
 
 interface IProps {
   setAttendeeSchedules: React.Dispatch<
     React.SetStateAction<UpdateAttendeeScheduleRequest | undefined>
   >;
-  attendeeSchedules: UpdateAttendeeScheduleRequest | undefined;
 }
-export default function ScheduleModifyDetail({
-  setAttendeeSchedules,
-  attendeeSchedules,
-}: IProps) {
-  const { bookId, attendeeId } = useParams();
+export default function ScheduleModifyDetail({ setAttendeeSchedules }: IProps) {
+  const { bookId } = useParams();
 
   const [scheduleParams, setScheduleParams] = useState<{
     dayOfWeek: string;
@@ -180,7 +174,6 @@ export default function ScheduleModifyDetail({
         scheduleParams={scheduleParams}
         scheduleData={scheduleData}
         handleAttendeeSchedules={handleAttendeeSchedules}
-        handleRemoveAttendeeSchedules={handleRemoveAttendeeSchedules}
       />
     </div>
   );

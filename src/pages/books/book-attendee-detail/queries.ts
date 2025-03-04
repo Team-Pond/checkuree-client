@@ -1,19 +1,24 @@
 import {
   getBookCourse,
   getBookScheduleTable,
-} from "@/api v2/AttendanceBookApiClient";
+} from "@/api/AttendanceBookApiClient";
 import {
   getAttendeeDetail,
   getAttendeeProgressLog,
   getScheduleAttendee,
   updateAttendeeDetail,
   updateProgressPromote,
-} from "@/api v2/AttendeeApiClient";
-import { GenderType } from "@/api v2/AttendeeSchema";
-import { getAttendeeRecords } from "@/api v2/RecordApiClient";
+} from "@/api/AttendeeApiClient";
+import { getAttendeeRecords } from "@/api/RecordApiClient";
+import { GenderType } from "@/api/type";
 import { attendeeKeys } from "@/queryKeys";
 
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { getAttendeeCounsellings } from "../../../api v2/CounselApiClient";
 import { counsellingKeys } from "../../../queryKeys";
@@ -73,7 +78,7 @@ export const useScheduleData = ({
 }) => {
   return useQuery({
     enabled: !!dayOfWeek && !!hhmm,
-    queryKey: attendeeKeys.schedules(bookId, dayOfWeek, hhmm).queryKey,
+    queryKey: attendeeKeys.schedules(bookId, dayOfWeek).queryKey,
     queryFn: async () => {
       const res = await getScheduleAttendee({
         attendanceBookId: bookId,
@@ -196,28 +201,24 @@ export const useAttendeeUpdate = ({
 
 export const useProgressPromote = ({
   bookId,
-  attendeeProgressId,
   formData,
   attendeeId,
-  onClose,
 }: {
   bookId: number;
-  attendeeProgressId: number;
   formData: {
     completeAt: string;
     startAt: string;
     nextGradeId: string;
   };
   attendeeId: number;
-  onClose: () => void;
 }) => {
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async () =>
+    mutationFn: async (progressId: number) =>
       await updateProgressPromote({
         attendanceBookId: Number(bookId),
         params: {
-          attendeeProgressId: attendeeProgressId,
+          attendeeProgressId: progressId,
           completedAt: formData.completeAt.replaceAll(".", "-"),
           startAt: formData.startAt.replaceAll(".", "-"),
           nextGradeId: !!formData.nextGradeId
@@ -227,10 +228,10 @@ export const useProgressPromote = ({
       }).then((res) => res.data),
     onSuccess: () => {
       toast.success("다음 과정이 저장되었습니다.");
+
       queryClient.invalidateQueries({
-        queryKey: attendeeKeys.detail(attendeeId).queryKey,
+        queryKey: attendeeKeys.progressLog(bookId, attendeeId).queryKey,
       });
-      onClose();
     },
   });
 };

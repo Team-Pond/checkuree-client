@@ -1,23 +1,15 @@
 // ScheduleTable.tsx
 
-import { UpdateAttendeeScheduleRequest } from "@/api v2/AttendeeSchema";
+import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useBookDetail } from "../../queries";
 import { CreateAttendeeSchema } from "@/pages/attendee-create/_schema";
 import { useFormContext } from "react-hook-form";
-
-type DayOfWeek =
-  | "MONDAY"
-  | "TUESDAY"
-  | "WEDNESDAY"
-  | "THURSDAY"
-  | "FRIDAY"
-  | "SATURDAY"
-  | "SUNDAY";
+import { DaysType } from "@/api/type";
 
 interface ScheduleItem {
-  dayOfWeek: DayOfWeek;
+  dayOfWeek: DaysType;
   scheduleCount: number[];
 }
 
@@ -35,7 +27,7 @@ interface ScheduleProps {
   // ▼ 추가
 }
 
-const dayMap: Record<DayOfWeek, string> = {
+const dayMap: Record<DaysType, string> = {
   MONDAY: "월",
   TUESDAY: "화",
   WEDNESDAY: "수",

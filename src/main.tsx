@@ -15,13 +15,13 @@ dayjs.locale("ko");
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
-  <QueryClientProvider client={queryClient}>
-    <RootToaster />
-    <ReactQueryDevtools initialIsOpen={true} />
-    <BrowserRouter>
-      <HelmetProvider>
+  <HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <RootToaster />
+      <ReactQueryDevtools initialIsOpen={true} />
+      <BrowserRouter>
         <App />
-      </HelmetProvider>
-    </BrowserRouter>
-  </QueryClientProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
+  </HelmetProvider>
 );

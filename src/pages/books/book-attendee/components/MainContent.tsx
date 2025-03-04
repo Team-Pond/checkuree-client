@@ -1,11 +1,11 @@
-import { GetAttendeeListResponse } from "@/api v2/AttendeeSchema";
+import { GetAttendeeListResponse } from "@/api/AttendeeSchema";
 import { getDayGroupFromInput } from "@/utils";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 type IProps = {
   roaster: GetAttendeeListResponse;
   getGrades: (grades: { id: number; name: string }[]) => string;
-  searchName:string
+  searchName: string;
 };
 export default function MainContent(props: IProps) {
   const { roaster, getGrades, searchName } = props;
@@ -15,12 +15,12 @@ export default function MainContent(props: IProps) {
   return (
     <div className="w-full px-[17px]">
       <p className="text-left text-s-semibold text-text-secondary mb-1">전체</p>
-
       <div className="border-t border-[#F6F6F6]">
-        {roaster?.data.content.length > 0 ? (
-          roaster.data.content.filter(student => {
-            return !searchName || student.name.includes(searchName)
-          }).map((student) => (
+        {roaster.data.content
+          .filter((student) => {
+            return !searchName || student.name.includes(searchName);
+          })
+          .map((student) => (
             <div
               key={student.id}
               className="py-4 px-2 flex gap-4"
@@ -29,9 +29,9 @@ export default function MainContent(props: IProps) {
                   `/book/${bookId}/attendee/${student.id}${
                     location.search
                   }&scheduleDays=${getDayGroupFromInput(
-                    student.scheduleDays,
+                    student.scheduleDays
                   )}&grade=${getGrades(student.grades)}`,
-                  { state: { from: location.pathname + location.search } },
+                  { state: { from: location.pathname + location.search } }
                 )
               }
             >
@@ -61,20 +61,7 @@ export default function MainContent(props: IProps) {
                 </div>
               </div>
             </div>
-          ))
-        ) : (
-          <div className="absolute inset-0 flex flex-col gap-2 items-center justify-center">
-            <img
-              src="/images/icons/book-roaster/ico-error-frog.svg"
-              alt="체쿠리 에러 아이콘"
-              width={45}
-              height={45}
-            />
-            <p className="text-s-medium text-[#B0B0B0]">
-              등록된 학생이 없습니다.
-            </p>
-          </div>
-        )}
+          ))}
       </div>
     </div>
   );

@@ -1,14 +1,10 @@
-import {
-  DaysType,
-  GenderType,
-  Progresses,
-  UpdateAttendeeScheduleRequest,
-} from "@/api v2/AttendeeSchema";
+import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
 import { formatSchedule, getTodayYYYYMMDD } from "@/utils";
 import { useState } from "react";
 import CurriculumModify from "./CurriculumModify";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AttendeeModify from "./AttendeeModify";
+import { DaysType, GenderType, Progresses } from "@/api/type";
 
 type ScheduleItem = {
   id: number;
@@ -125,9 +121,7 @@ export default function StudentManage(props: IProps) {
       {isCourseModify ? (
         <CurriculumModify
           onChangeGrade={onChangeGrade}
-          attendanceBookId={Number(bookId)}
           setAttendeeSchedules={setAttendeeSchedules}
-          attendeeSchedules={attendeeSchedules}
           setIsCourseModify={setIsCourseModify}
         />
       ) : isAttendeeModify ? (
@@ -150,7 +144,7 @@ export default function StudentManage(props: IProps) {
                 alt=""
                 onClick={() => {
                   navigate(
-                    `/book/${bookId}/attendee/${attendeeId}/schedule${location.search}`,
+                    `/book/${bookId}/attendee/${attendeeId}/schedule${location.search}`
                   );
                 }}
               />

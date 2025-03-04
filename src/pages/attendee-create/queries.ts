@@ -4,21 +4,17 @@ import {
   getBookCourse,
   getBookScheduleTable,
   updateBookProgress,
-} from "@/api v2/AttendanceBookApiClient";
+} from "@/api/AttendanceBookApiClient";
 import {
-  createAttendee,
   getScheduleAttendee,
   updateAttendeeSchedule,
   updateAttendeeVerify,
-} from "@/api v2/AttendeeApiClient";
-import {
-  Associates,
-  GenderType,
-  UpdateAttendeeScheduleRequest,
-} from "@/api v2/AttendeeSchema";
+} from "@/api/AttendeeApiClient";
+import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { attendeeKeys } from "@/queryKeys";
+import { GenderType } from "@/api/type";
 
 // 일정(요일, 시간)에 따른 수강생 데이터를 가져오는 커스텀 훅
 export const useScheduleAttendee = (
@@ -29,8 +25,7 @@ export const useScheduleAttendee = (
 ) => {
   return useQuery({
     enabled: enabled && dayOfWeek !== "" && hhmm !== "",
-    queryKey: attendeeKeys.schedules(attendanceBookId, dayOfWeek, hhmm)
-      .queryKey,
+    queryKey: attendeeKeys.schedules(attendanceBookId, dayOfWeek).queryKey,
     queryFn: async () => {
       const res = await getScheduleAttendee({
         attendanceBookId,

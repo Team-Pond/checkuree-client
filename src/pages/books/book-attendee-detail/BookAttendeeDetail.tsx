@@ -14,6 +14,25 @@ import LearningManage from "./components/LearningManage";
 import CounselManage from "./components/CounselManage";
 import SEO from "@/components/SEO";
 
+const Menu = [
+  {
+    value: "tab1",
+    label: "학생관리",
+  },
+  {
+    value: "tab2",
+    label: "출석관리",
+  },
+  {
+    value: "tab3",
+    label: "학습관리",
+  },
+  {
+    value: "tab4",
+    label: "상담관리",
+  },
+];
+
 export default function BookAttendeeDetail() {
   const { bookId, attendeeId } = useParams();
   const navigate = useNavigate();
@@ -65,16 +84,33 @@ export default function BookAttendeeDetail() {
         }}
       >
         <List className="TabsList" aria-label="Manage your account">
+          {Menu.map((menu) => (
+            <Trigger
+              className="TabsTrigger"
+              value={menu.value}
+              style={{
+                wordBreak: "keep-all",
+              }}
+            >
+              {menu.label}
+            </Trigger>
+          ))}
           <Trigger className="TabsTrigger" value="tab1">
-            학생관리
+            <span className="break-words">학생관리</span>
           </Trigger>
           <Trigger className="TabsTrigger" value="tab2">
-            출석관리
+            <span className="break-words">출석관리</span>
           </Trigger>
           <Trigger className="TabsTrigger" value="tab3">
             학습관리
           </Trigger>
-          <Trigger className="TabsTrigger" value="tab4">
+          <Trigger
+            className="TabsTrigger"
+            value="tab4"
+            style={{
+              wordBreak: "keep-all",
+            }}
+          >
             상담관리
           </Trigger>
         </List>
