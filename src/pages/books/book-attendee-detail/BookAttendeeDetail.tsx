@@ -86,6 +86,7 @@ export default function BookAttendeeDetail() {
         <List className="TabsList" aria-label="Manage your account">
           {Menu.map((menu) => (
             <Trigger
+              key={menu.label}
               className="TabsTrigger"
               value={menu.value}
               style={{
@@ -95,24 +96,6 @@ export default function BookAttendeeDetail() {
               {menu.label}
             </Trigger>
           ))}
-          <Trigger className="TabsTrigger" value="tab1">
-            <span className="break-words">학생관리</span>
-          </Trigger>
-          <Trigger className="TabsTrigger" value="tab2">
-            <span className="break-words">출석관리</span>
-          </Trigger>
-          <Trigger className="TabsTrigger" value="tab3">
-            학습관리
-          </Trigger>
-          <Trigger
-            className="TabsTrigger"
-            value="tab4"
-            style={{
-              wordBreak: "keep-all",
-            }}
-          >
-            상담관리
-          </Trigger>
         </List>
         <Content
           className="TabsContent"

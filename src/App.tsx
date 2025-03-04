@@ -33,8 +33,11 @@ const BookAttendeeDetail = lazy(
 );
 const CounsellingCreate = lazy(
   () =>
-    import("@/pages/books/book-attendee-detail/components/CounsellingCreate")
+    import(
+      "@/pages/books/book-attendee-detail/components/counsel/CounsellingCreate"
+    )
 );
+
 interface RouteType {
   path: string;
   element: JSX.Element;

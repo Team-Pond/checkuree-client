@@ -1,6 +1,6 @@
 import CounselList from "./CounselList";
 import { useCounsellingList } from "../queries";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 type IProps = {
   studentInfo: {
@@ -19,6 +19,9 @@ export default function CounselManage(props: IProps) {
     attendeeId: parseInt(attendeeId!),
   });
 
+  const navigate = useNavigate();
+
+  console.log(counsellingList);
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-8 items-center w-full h-[81px] rounded-2xl bg-white">
@@ -54,6 +57,22 @@ export default function CounselManage(props: IProps) {
           counsellingAt={new Date(counsel.counsellingAt)}
         ></CounselList>
       ))}
+      <div className="fixed bottom-11 right-[5%] max-w-[390px]">
+        <button
+          onClick={() =>
+            navigate("/book/:bookId/attendee/:attendeeId/counselling")
+          }
+          className="w-[88px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
+        >
+          <img
+            src="/images/icons/book/ico-plus.svg"
+            alt="플러스 아이콘"
+            width={16}
+            height={16}
+          />
+          <p className="text-white font-semibold text-lg">상담</p>
+        </button>
+      </div>
     </div>
   );
 }
