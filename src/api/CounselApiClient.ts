@@ -19,10 +19,13 @@ export const getAttendeeCounsellings = async (
   return response.data;
 };
 
-export const createCounsellings = async (
-  params: CounsellingCreateRequest
-): Promise<CounsellingCreateResponse> => {
-  const { attendanceBookId } = params;
+export const createCounsellings = async ({
+  params,
+  attendanceBookId,
+}: {
+  params: CounsellingCreateRequest;
+  attendanceBookId: number;
+}): Promise<CounsellingCreateResponse> => {
   const response = await ApiClient.request({
     method: "POST",
     url: `/book/${attendanceBookId}/counselling`,

@@ -7,7 +7,7 @@ export type CounsellingTopicType =
   | "PEER_RELATIONS"
   | "ETC";
 
-export type CounsellingType = "PHONE" | "VISIT";
+export type CounsellingType = "PHONE" | "VISIT" | "KAKAOTALK";
 
 export const counsellingTypeMapper = (type: CounsellingTopicType) => {};
 
@@ -52,10 +52,9 @@ export type CounsellingListResponse = {
 };
 
 export type CounsellingCreateRequest = {
-  attendanceBookId: number;
   counsellingId: number;
   counseleeId: number;
-  tpye: CounsellingType;
+  type: CounsellingType;
   topics: CounsellingTopicType[];
   counsellingAt: Date;
   description: string;
