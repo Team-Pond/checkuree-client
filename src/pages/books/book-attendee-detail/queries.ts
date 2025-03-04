@@ -164,8 +164,6 @@ interface AttendeeModifyFormState {
   description: string;
 }
 
-const queryClinet = useQueryClient();
-
 export const useAttendeeUpdate = ({
   bookId,
   attendeeId,
@@ -177,6 +175,7 @@ export const useAttendeeUpdate = ({
   formData: AttendeeModifyFormState;
   setIsAttendeeModify: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  const queryClinet = useQueryClient();
   return useMutation({
     mutationFn: async () =>
       await updateAttendeeDetail({
