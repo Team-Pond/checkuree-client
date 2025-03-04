@@ -20,8 +20,9 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { getAttendeeCounsellings } from "../../../api v2/CounselApiClient";
+
 import { counsellingKeys } from "../../../queryKeys";
+import { getAttendeeCounsellings } from "@/api/CounselApiClient";
 
 // TODO: Calendar 작업 시 필요
 export const useAttendeeRecords = ({
@@ -163,7 +164,7 @@ interface AttendeeModifyFormState {
   description: string;
 }
 
-const queryClinet = new QueryClient();
+const queryClinet = useQueryClient();
 
 export const useAttendeeUpdate = ({
   bookId,
