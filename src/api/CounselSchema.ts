@@ -1,4 +1,4 @@
-import { RelationType } from "./AttendeeSchema";
+import { RelationType } from "./type";
 
 export type CounsellingTopicType =
   | "FUTURE_PATH"

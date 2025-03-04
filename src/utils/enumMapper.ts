@@ -1,5 +1,5 @@
-import { RelationType } from "../api v2/AttendeeSchema";
-import { CounsellingTopicType, CounsellingType } from "../api v2/CounselSchema";
+import { CounsellingTopicType, CounsellingType } from "@/api/CounselSchema";
+import { RelationType } from "@/api/type";
 
 export const relationTypeToKor = (relationType: RelationType) => {
   switch (relationType) {
@@ -26,7 +26,7 @@ export const counsellingTypeToKor = (counsellingType: CounsellingType) => {
 };
 
 export const counsellingTopicTypeToKor = (
-  counsellingTopicType: CounsellingTopicType,
+  counsellingTopicType: CounsellingTopicType
 ) => {
   switch (counsellingTopicType) {
     case "FUTURE_PATH":

@@ -1,9 +1,5 @@
 import React from "react";
-import { RelationType } from "../../../../api v2/AttendeeSchema";
-import {
-  CounsellingTopicType,
-  CounsellingType,
-} from "../../../../api v2/CounselSchema";
+
 import {
   counsellingTopicTypeToKor,
   counsellingTypeToKor,
@@ -11,6 +7,8 @@ import {
 } from "../../../../utils/enumMapper";
 import { format } from "date-fns";
 import { useNavigate, useParams } from "react-router-dom";
+import { RelationType } from "@/api/type";
+import { CounsellingTopicType, CounsellingType } from "@/api/CounselSchema";
 
 interface IProps {
   counselType: CounsellingType;
