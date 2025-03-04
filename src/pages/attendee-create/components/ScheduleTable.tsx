@@ -1,8 +1,12 @@
 // ScheduleTable.tsx
 
-import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
+import { CreateAttendeeSchema } from "@/pages/attendee-create/_schema";
+import { useFormContext } from "react-hook-form";
 import { DaysType } from "@/api/type";
-import React from "react";
+import { useBookDetail } from "@/pages/books/queries";
 
 interface ScheduleItem {
   dayOfWeek: DaysType;
@@ -14,11 +18,13 @@ interface ScheduleProps {
   startHhmm: string;
   endHhmm: string;
   timeSlots: number;
-  handleSchedule: (dayOfWeek: string, hhmm: string) => void;
+  handleSchedule: (
+    dayOfWeek: string,
+    hhmm: string,
+    isSelected: boolean
+  ) => void;
   handleAttendeeBottomDrawer: (state: boolean) => void;
   // ▼ 추가
-
-  attendeeSchedules: UpdateAttendeeScheduleRequest | undefined;
 }
 
 const dayMap: Record<DaysType, string> = {
@@ -41,9 +47,14 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
   startHhmm,
   endHhmm,
   handleSchedule,
-
-  attendeeSchedules,
 }) => {
+  const { bookId } = useParams();
+
+  const { data: bookDetail } = useBookDetail(Number(bookId));
+  // 토.일 미사용 요일 삭제
+  const [filteredScheduleTable, setFilteredScheduleTable] =
+    useState(scheduleTable);
+
   const start = parseHhmm(startHhmm);
   const end = parseHhmm(endHhmm);
 
@@ -53,20 +64,53 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
     (_, i) => start.hour + i
   );
 
+  const availableDaysSet = new Set([
+    "MONDAY",
+    "TUESDAY",
+    "WEDNESDAY",
+    "THURSDAY",
+    "FRIDAY",
+  ]);
+
+  useEffect(() => {
+    if (bookDetail?.data?.availableDays) {
+      bookDetail.data.availableDays.forEach((day) => {
+        availableDaysSet.add(day);
+      });
+      const weekendFiltered = scheduleTable.filter((daySchedule) =>
+        availableDaysSet.has(daySchedule.dayOfWeek)
+      );
+
+      // availableFrom이 '30'으로 끝나는 경우 scheduleCount에 0을 추가
+      const isAvailableFrom30 = bookDetail?.data?.availableFrom?.endsWith("30");
+      const updatedScheduleTable = isAvailableFrom30
+        ? weekendFiltered.map((daySchedule) => ({
+            ...daySchedule,
+            scheduleCount: [0, ...daySchedule.scheduleCount, 0], // 시작시간이 30분 인 경우 앞에 0을 하나 추가
+          }))
+        : weekendFiltered;
+
+      // 상태 업데이트
+      setFilteredScheduleTable(updatedScheduleTable);
+    }
+  }, [bookDetail]);
+
+  const { getValues } = useFormContext<CreateAttendeeSchema>();
   return (
-    <div className="max-w-4xl mx-auto overflow-x-auto">
-      <table className="table-auto w-full text-center border-collapse">
+    <div className="max-w-4xl mx-auto">
+      <table className="table-fixed w-full text-center border-collapse">
         <thead>
           <tr>
             <th className="border border-[#f6f6f6] w-[21px] h-2"></th>
-            {scheduleTable.map((dayData) => (
-              <th
-                key={dayData.dayOfWeek}
-                className="border border-[#f6f6f6] w-[54px] h-2 text-xs-medium text-text-tertiary"
-              >
-                {dayMap[dayData.dayOfWeek]}
-              </th>
-            ))}
+            {filteredScheduleTable &&
+              filteredScheduleTable.map((dayData, idx) => (
+                <th
+                  key={dayData.dayOfWeek}
+                  className="border border-[#f6f6f6] w-auto w-max-[54px] h-2 text-xs-medium text-text-tertiary"
+                >
+                  {dayMap[dayData.dayOfWeek]}
+                </th>
+              ))}
           </tr>
         </thead>
         <tbody>
@@ -83,16 +127,21 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                   {hour}
                 </td>
 
-                {scheduleTable.map((dayData) => {
+                {filteredScheduleTable.map((dayData) => {
                   const count = dayData.scheduleCount[slotIndex];
                   const hhmm = `${hour}:00`;
+                  const beforeHhmm =
+                    hour >= 1
+                      ? `${String(hour - 1).padStart(2, "0")}:30`
+                      : "00:00";
 
                   // ▼ dayOfWeek, hhmm이 selectedSchedules에 있는지 체크
-                  const isSelected = attendeeSchedules?.schedules.some(
-                    (schedule) =>
-                      schedule.day === dayData.dayOfWeek &&
-                      schedule.hhmm === hhmm
-                  );
+                  const isSelected =
+                    getValues("schedulesRequest.schedules")?.some(
+                      (schedule) =>
+                        schedule.day === dayData.dayOfWeek &&
+                        (schedule.hhmm === hhmm || schedule.hhmm === beforeHhmm)
+                    ) ?? false;
 
                   return (
                     <td
@@ -107,7 +156,9 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                             : "bg-bg-secondary text-text-secondary text-xs-medium"
                         }
                       `}
-                      onClick={() => handleSchedule(dayData.dayOfWeek, hhmm)}
+                      onClick={() =>
+                        handleSchedule(dayData.dayOfWeek, hhmm, isSelected)
+                      }
                     >
                       {count}명
                     </td>
@@ -118,16 +169,19 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
 
             const secondRow = (
               <tr key={`${hour}-second`}>
-                {scheduleTable.map((dayData) => {
+                {filteredScheduleTable.map((dayData) => {
                   const count = dayData.scheduleCount[secondSlotIndex];
                   const hhmm = `${hour}:30`;
 
+                  const beforeHhmm = `${hour}:00`;
+
                   // ▼ dayOfWeek, hhmm이 selectedSchedules에 있는지 체크
-                  const isSelected = attendeeSchedules?.schedules.some(
-                    (schedule) =>
-                      schedule.day === dayData.dayOfWeek &&
-                      schedule.hhmm === hhmm
-                  );
+                  const isSelected =
+                    getValues("schedulesRequest.schedules")?.some(
+                      (schedule) =>
+                        schedule.day === dayData.dayOfWeek &&
+                        (schedule.hhmm === hhmm || schedule.hhmm === beforeHhmm)
+                    ) ?? false;
 
                   return (
                     <td
@@ -141,7 +195,9 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                             : "bg-bg-secondary text-text-secondary text-xs-medium"
                         }
                       `}
-                      onClick={() => handleSchedule(dayData.dayOfWeek, hhmm)}
+                      onClick={() =>
+                        handleSchedule(dayData.dayOfWeek, hhmm, isSelected)
+                      }
                     >
                       {count}명
                     </td>
