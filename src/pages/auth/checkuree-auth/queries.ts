@@ -1,4 +1,4 @@
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LoginDataType } from "./SignIn";
 import axios from "axios";
 import { setTokens } from "@/lib/auth";
@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { SignIn } from "@/api/AuthApiClient";
 
 export const useAuthLogin = () => {
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   return useMutation({
     mutationFn: async (params: LoginDataType) => await SignIn(params),

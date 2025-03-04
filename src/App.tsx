@@ -31,6 +31,10 @@ const BookCheck = lazy(() => import("@/pages/books/book-check/BookCheck"));
 const BookAttendeeDetail = lazy(
   () => import("@/pages/books/book-attendee-detail/BookAttendeeDetail")
 );
+const CounsellingCreate = lazy(
+  () =>
+    import("@/pages/books/book-attendee-detail/components/CounsellingCreate")
+);
 interface RouteType {
   path: string;
   element: JSX.Element;
@@ -48,6 +52,10 @@ const routes: RouteType[] = [
   {
     path: "/book/:bookId/attendee/:attendeeId/schedule",
     element: <ScheduleModify />,
+  },
+  {
+    path: "/book/:bookId/attendee/:attendeeId/counselling",
+    element: <CounsellingCreate />,
   },
 ];
 

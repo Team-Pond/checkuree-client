@@ -14,6 +14,7 @@ import {
   ScheduleDataType,
   STATUS,
 } from "@/api/type";
+import { set } from "lodash";
 
 type IProps = {
   bookSchedules: ScheduleDataType;
@@ -52,9 +53,13 @@ export default function MainContents(props: IProps) {
     currentDate,
   });
   const { mutate: statusMutation } = useStatusUpdate({ bookId });
+
+  const { formData, setFormData } = useFormDataStore();
+
   const { mutate: recordUpdate } = useRecordUpdate({
     bookId: Number(bookId),
     recordId: Number(record.id),
+    formattedTime: `${formData?.hour}:${formData?.minute}`,
   });
 
   // 출석체크 화면의 체크 인원 수 변경
@@ -167,19 +172,6 @@ export default function MainContents(props: IProps) {
     handleStatusChange({ schedule, targetStatus });
   };
 
-  const { updateFormData, formData, setFormData } = useFormDataStore();
-
-  const handleTimeChange = (
-    key: "hour" | "minute",
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    let input = e.target.value.replace(/\D/g, "");
-    if (input.length > 2) {
-      input = input.slice(0, 2);
-    }
-    updateFormData(key, input);
-  };
-
   const handleRecord = (id: number, formattedTime: string) => {
     setRecord({
       id,
@@ -195,13 +187,13 @@ export default function MainContents(props: IProps) {
           bookId={bookId}
           record={record}
           setFormData={setFormData}
-          handleTimeChange={handleTimeChange}
         />,
         () => {
-          recordUpdate(`${formData?.hour}:${formData?.minute}`);
-          setFormData({ hour: "", minute: "" });
+          recordUpdate();
         },
-        () => setFormData({ hour: "", minute: "" })
+        () => {
+          setFormData({ hour: "", minute: "" });
+        }
       );
     }
   };
@@ -215,7 +207,7 @@ export default function MainContents(props: IProps) {
         handleAttendanceStatusWithConfirmation={
           handleAttendanceStatusWithConfirmation
         }
-        handleRecord={handleRecord}
+        openModifyRecordTimeModal={openModifyRecordTimeModal}
       />
       {/* 수업중이 아닌 학생들 */}
       <NoNeedLessonTable

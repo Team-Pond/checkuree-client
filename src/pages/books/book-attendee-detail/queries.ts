@@ -21,6 +21,9 @@ import {
 } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
+import { counsellingKeys } from "../../../queryKeys";
+import { getAttendeeCounsellings } from "@/api/CounselApiClient";
+
 // TODO: Calendar 작업 시 필요
 export const useAttendeeRecords = ({
   bookId,
@@ -44,6 +47,23 @@ export const useAttendeeRecords = ({
         attendanceBookId: bookId,
         attendeeId,
       }),
+  });
+};
+
+export const useCounsellingList = ({
+  bookId,
+  attendeeId,
+}: {
+  bookId: number;
+  attendeeId: number;
+}) => {
+  return useQuery({
+    queryKey: counsellingKeys.list(attendeeId).queryKey,
+    queryFn: async () =>
+      await getAttendeeCounsellings({
+        bookId,
+        attendeeId,
+      }).then((res) => res.data),
   });
 };
 
@@ -144,7 +164,7 @@ interface AttendeeModifyFormState {
   description: string;
 }
 
-const queryClinet = new QueryClient();
+const queryClinet = useQueryClient();
 
 export const useAttendeeUpdate = ({
   bookId,
