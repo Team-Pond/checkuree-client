@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ScheduleTable from "../ScheduleTable";
+
 import { DaysType } from "@/api/type";
 import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
 import {
@@ -9,6 +9,7 @@ import {
 } from "@/pages/attendee-create/queries";
 import { getSub30MinuteHhmm } from "@/utils";
 import AttendeeDrawer from "../AttendeeDrawer";
+import ScheduleTable from "../ScheduleTable";
 
 interface IProps {
   setAttendeeSchedules: React.Dispatch<

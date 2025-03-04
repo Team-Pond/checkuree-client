@@ -10,10 +10,11 @@ import {
   useScheduleTable,
 } from "../queries";
 import { getSub30MinuteHhmm } from "../../../utils";
-import ScheduleTable from "../../books/book-attendee-detail/components/ScheduleTable";
+
 import { useFormContext } from "react-hook-form";
 import { CreateAttendeeSchema } from "../_schema";
 import { DaysType } from "@/api/type";
+import ScheduleTable from "./ScheduleTable";
 
 interface Step2Props {
   attendanceBookId: number;
