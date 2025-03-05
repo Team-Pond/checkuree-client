@@ -6,7 +6,7 @@ import {
 } from "@radix-ui/react-icons";
 
 type IProps = {
-  onChange: (key: string, value: string) => void;
+  onChange: (id: number) => void;
   options: {
     name: string;
     value: string;
@@ -18,7 +18,7 @@ const CounsellerSelect = (props: IProps) => {
   const { onChange, options, placeholder } = props;
 
   return (
-    <Select.Root onValueChange={(value) => onChange("relationType", value)}>
+    <Select.Root onValueChange={(value) => onChange(Number(value))}>
       <Select.Trigger className="rounded-xl outline-none inline-flex items-center justify-between w-full h-12 px-3 py-2 bg-white border border-border-brand ounded-md text-sm focus:outline-none  focus:ring-green-500 ">
         <Select.Value placeholder={placeholder} />
         <Select.Icon>
@@ -26,11 +26,11 @@ const CounsellerSelect = (props: IProps) => {
         </Select.Icon>
       </Select.Trigger>
       <Select.Portal>
-        <Select.Content className="outline-none z-10 bg-white border border-gray-300 rounded-md shadow-md">
+        <Select.Content className="outline-none z-10 mt-[49px] bg-white border border-gray-300 rounded-xl shadow-md">
           <Select.ScrollUpButton className="flex items-center justify-center h-6 bg-white">
             <ChevronUpIcon />
           </Select.ScrollUpButton>
-          <Select.Viewport className="p-2">
+          <Select.Viewport className="p-[6px]">
             {options.map(({ name, value }) => (
               <Select.Item
                 key={value}
