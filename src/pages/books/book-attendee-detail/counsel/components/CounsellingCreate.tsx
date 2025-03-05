@@ -59,7 +59,7 @@ export default function CounsellingCreate() {
     }
   };
 
-  const counselors = location?.state.map((counselor: Associates) => {
+  const counselors = location?.state.associates.map((counselor: Associates) => {
     return {
       name: transferCounselorName(counselor.relationType),
       value: String(counselor.id),
@@ -77,7 +77,9 @@ export default function CounsellingCreate() {
         onSubmit={handleSubmit(Submit)}
       >
         <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
-          <p className="font-bold text-text-primary text-[22px]">상담 기록</p>
+          <p className="font-bold text-text-primary text-[22px]">
+            {location?.state.name} 상담 기록
+          </p>
           <img
             src="/images/icons/book-create/ico-close.svg"
             alt="닫기 아이콘"

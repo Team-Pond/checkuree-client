@@ -63,7 +63,12 @@ export default function CounselManage(props: IProps) {
           onClick={() =>
             navigate(
               `/book/${bookId}/attendee/${attendeeId}/counselling${location.search}`,
-              { state: studentInfo.associates }
+              {
+                state: {
+                  associates: studentInfo.associates,
+                  name: studentInfo.name,
+                },
+              }
             )
           }
           className="w-[88px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
