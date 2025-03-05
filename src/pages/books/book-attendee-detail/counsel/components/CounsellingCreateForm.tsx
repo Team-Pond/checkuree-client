@@ -16,11 +16,13 @@ interface Step1Props {
     name: string;
     value: string;
   }[];
+  counsellorName: string;
 }
 
 export default function CounsellingCreateForm({
   onChangeCounseleeId,
   counselors,
+  counsellorName,
 }: Step1Props) {
   const handleDateChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -80,7 +82,8 @@ export default function CounsellingCreateForm({
           <CounsellerSelect
             onChange={onChangeCounseleeId}
             options={counselors || []}
-            placeholder="상담자"
+            placeholder={counsellorName ? counsellorName : "상담자"}
+            disabled={!!counsellorName}
           />
         </div>
       </div>

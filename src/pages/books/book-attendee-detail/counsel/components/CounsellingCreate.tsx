@@ -12,7 +12,7 @@ import SEO from "@/components/SEO";
 import { Associates, RelationType } from "@/api/type";
 import CounsellingCreateForm from "./CounsellingCreateForm";
 import { CreateCounsellingSchema, CounsellingSchema } from "../../_schema";
-import { createCounsellings } from "@/api/CounselApiClient";
+import { createCounsellings, updateCounsellings } from "@/api/CounselApiClient";
 
 export default function CounsellingCreate() {
   const navigate = useNavigate();
@@ -20,30 +20,43 @@ export default function CounsellingCreate() {
   const { bookId, attendeeId } = useParams();
   const [counseleeId, setCounseleeId] = useState<number>();
 
-  const methods = useForm<CreateCounsellingSchema>({
-    resolver: zodResolver(CounsellingSchema),
-    mode: "onSubmit",
-  });
-
-  const { handleSubmit } = methods;
-
   const Submit = async (data: CreateCounsellingSchema) => {
-    await createCounsellings({
-      params: {
-        ...data,
-        counseleeId: counseleeId!,
-        attendeeId: Number(attendeeId),
-        counsellingAt: new Date(data.counsellingAt),
-      },
-      attendanceBookId: Number(bookId),
-    })
-      .then(() => {
-        toast.success("상담이 등록되었습니다.");
-        navigate(`/book/${bookId}/attendee/${attendeeId}${location.search}`);
+    if (location.state.counsellingId) {
+      await updateCounsellings({
+        params: {
+          ...data,
+          counseleeId: location.state.counseleeId,
+          attendeeId: Number(attendeeId),
+          counsellingAt: new Date(data.counsellingAt),
+        },
+        attendanceBookId: Number(bookId),
+        counsellingId: location.state.counsellingId,
       })
-      .catch((err) => {
-        toast.error(err.response.data.message);
-      });
+        .then(() => {
+          toast.success("상담이 수정되었습니다..");
+          navigate(`/book/${bookId}/attendee/${attendeeId}${location.search}`);
+        })
+        .catch((err) => {
+          toast.error(err.response.data.message);
+        });
+    } else {
+      await createCounsellings({
+        params: {
+          ...data,
+          counseleeId: counseleeId!,
+          attendeeId: Number(attendeeId),
+          counsellingAt: new Date(data.counsellingAt),
+        },
+        attendanceBookId: Number(bookId),
+      })
+        .then(() => {
+          toast.success("상담이 등록되었습니다.");
+          navigate(`/book/${bookId}/attendee/${attendeeId}${location.search}`);
+        })
+        .catch((err) => {
+          toast.error(err.response.data.message);
+        });
+    }
   };
 
   const transferCounselorName = (relationType: RelationType) => {
@@ -59,12 +72,40 @@ export default function CounsellingCreate() {
     }
   };
 
-  const counselors = location?.state.associates.map((counselor: Associates) => {
-    return {
-      name: transferCounselorName(counselor.relationType),
-      value: String(counselor.id),
-    };
+  const counselors = location?.state.associates?.map(
+    (counselor: Associates) => {
+      return {
+        name: transferCounselorName(counselor.relationType),
+        value: String(counselor.id),
+      };
+    }
+  );
+
+  const dateFormat = (dateString: string) => {
+    const date = new Date(dateString);
+
+    // 년, 월, 일 추출
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 1을 더해줍니다.
+    const day = String(date.getDate()).padStart(2, "0");
+
+    // 원하는 형식으로 출력
+    return `${year}-${month}-${day}`;
+  };
+
+  const methods = useForm<CreateCounsellingSchema>({
+    resolver: zodResolver(CounsellingSchema),
+    mode: "onSubmit",
+    defaultValues: {
+      type: location.state.counselType,
+      topics: location.state.counselSubjects,
+      counsellingAt: location.state.counsellingAt
+        ? dateFormat(location.state.counsellingAt)
+        : "",
+    },
   });
+
+  const { handleSubmit } = methods;
 
   return (
     <FormProvider {...methods}>
@@ -100,6 +141,7 @@ export default function CounsellingCreate() {
               <CounsellingCreateForm
                 onChangeCounseleeId={(id: number) => setCounseleeId(id)}
                 counselors={counselors}
+                counsellorName={location.state.counsellorName}
               />
               <button
                 type="submit"

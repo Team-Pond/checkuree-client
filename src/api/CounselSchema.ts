@@ -63,3 +63,20 @@ export type CounsellingCreateResponse =
       };
     }
   | ErrorResponse;
+
+export type CounsellingUpdateRequest = {
+  attendeeId: number;
+  counseleeId: number;
+  type: CounsellingType;
+  topics: CounsellingTopicType[];
+  counsellingAt: Date;
+  description: string;
+};
+export type CounsellingUpdateResponse =
+  | {
+      status: 200;
+      data: {
+        id: number;
+      };
+    }
+  | ErrorResponse;
