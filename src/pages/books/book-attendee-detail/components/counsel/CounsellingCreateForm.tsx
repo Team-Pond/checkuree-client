@@ -2,12 +2,13 @@ import React from "react";
 import { useFormContext } from "react-hook-form";
 
 import { Associates } from "@/api/type";
-import CheckBox from "./Checkbox";
+
 import CounsellerSelect from "./Select";
 
-import Radio from "./Radio";
 import { CreateCounsellingSchema } from "../../_schema";
 import { CounsellingTopicType } from "@/api/CounselSchema";
+import Radio from "@/components/Radio";
+import CheckBox from "@/components/CheckBox";
 
 interface Step1Props {
   onChangeGuardian: (key: string, value: string) => void;
