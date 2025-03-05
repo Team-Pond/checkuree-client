@@ -8,8 +8,16 @@ interface SEOProps {
 export default function SEO(props: SEOProps) {
   const { title, content } = props;
   const location = useLocation();
+
+  // 환경에 따라 base URL 결정
+  const baseUrl =
+    process.env.NODE_ENV === "development"
+      ? window.location.origin
+      : "https://dev.checkuree.com";
+  const currentUrl = `${baseUrl}${location.pathname}`;
+
   return (
-    <Helmet key={location.pathname}>
+    <Helmet key={location.key}>
       <title>{title}</title>
       <meta name="description" content={content} />
       <meta property="og:title" content={title} />
@@ -18,7 +26,7 @@ export default function SEO(props: SEOProps) {
         property="og:image"
         content="https://dev.checkuree.com/images/logos/checkuree_logo.svg"
       />
-      <meta property="og:url" content="https://dev.checkuree.com" />
+      <meta property="og:url" content={currentUrl} />
     </Helmet>
   );
 }
