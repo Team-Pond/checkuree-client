@@ -1,5 +1,5 @@
 import useFormDataStore from "@/store/recordStore";
-import React, { useEffect } from "react";
+import React from "react";
 import tw from "tailwind-styled-components";
 
 export const ModifyRecordTimeModal: React.FC = ({}) => {
