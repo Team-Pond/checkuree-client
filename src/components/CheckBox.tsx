@@ -3,7 +3,7 @@ import { ChangeEvent } from "react";
 interface IProps {
   id: string;
   label: string;
-  checked: boolean;
+  checked?: boolean;
   onChange: (checked: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -12,7 +12,6 @@ export default function CheckBox({ id, label, checked, onChange }: IProps) {
     <div className="flex items-center w-[167px] h-9 px-4 py-2">
       <label htmlFor={id} className="flex items-center cursor-pointer">
         <div className="flex items-center cursor-pointer relative">
-          {/* input 자체에 클릭 가능한 영역을 부여 */}
           <input
             type="checkbox"
             id={id}
@@ -39,12 +38,9 @@ export default function CheckBox({ id, label, checked, onChange }: IProps) {
         </div>
 
         {/* 레이블이 input과 연결되어 있어 클릭 시 체크박스도 활성화 */}
-        <label
-          htmlFor={id}
-          className="ml-2 text-text-primary text-s-bold cursor-pointer"
-        >
+        <span className="ml-2 text-text-primary text-s-bold cursor-pointer">
           {label}
-        </label>
+        </span>
       </label>
     </div>
   );
