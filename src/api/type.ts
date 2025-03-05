@@ -12,6 +12,7 @@ export type StudentStatus = "ATTENDING" | "SUSPENSION" | "WITHDRAWAL";
 
 export interface Associates {
   name?: string;
+  id: number;
   gender?: GenderType;
   relationType: RelationType;
   phoneNumber: string;
