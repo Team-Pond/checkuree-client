@@ -17,9 +17,8 @@ import { createCounsellings } from "@/api/CounselApiClient";
 export default function CounsellingCreate() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { bookId } = useParams();
-  const { attendeeId } = useParams();
-  const [guardian, setGuardian] = useState<Associates>();
+  const { bookId, attendeeId } = useParams();
+  const [counseleeId, setCounseleeId] = useState<number>();
 
   const methods = useForm<CreateCounsellingSchema>({
     resolver: zodResolver(CounsellingSchema),
@@ -28,28 +27,44 @@ export default function CounsellingCreate() {
 
   const { handleSubmit } = methods;
 
-  const onChangeGuardian = (key: RelationType | string, value: string) => {
-    setGuardian((prev) => ({
-      ...prev!,
-      [key]: value,
-    }));
-  };
-
-  const handleStep2Next = async (data: CreateCounsellingSchema) => {
+  const Submit = async (data: CreateCounsellingSchema) => {
     await createCounsellings({
       params: {
         ...data,
-        counseleeId: Number(attendeeId),
+        counseleeId: counseleeId!,
         attendeeId: Number(attendeeId),
         counsellingAt: new Date(data.counsellingAt),
       },
       attendanceBookId: Number(bookId),
     })
-      .then(() => {})
+      .then(() => {
+        toast.success("상담이 등록되었습니다.");
+        navigate(`/book/${bookId}/attendee/${attendeeId}${location.search}`);
+      })
       .catch((err) => {
         toast.error(err.response.data.message);
       });
   };
+
+  const transferCounselorName = (relationType: RelationType) => {
+    switch (relationType) {
+      case "FATHER":
+        return "학생 부";
+      case "MOTHER":
+        return "학생 모";
+      case "SIBLING":
+        return "조부모";
+      case "OTHER":
+        return "기타";
+    }
+  };
+
+  const counselors = location.state.map((counselor: Associates) => {
+    return {
+      name: transferCounselorName(counselor.relationType),
+      value: String(counselor.id),
+    };
+  });
 
   return (
     <FormProvider {...methods}>
@@ -59,7 +74,7 @@ export default function CounsellingCreate() {
       />
       <form
         className="flex flex-col  w-full pb-[30px]"
-        onSubmit={handleSubmit(handleStep2Next)}
+        onSubmit={handleSubmit(Submit)}
       >
         <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
           <p className="font-bold text-text-primary text-[22px]">상담 기록</p>
@@ -81,8 +96,8 @@ export default function CounsellingCreate() {
           <div className="flex w-full justify-center">
             <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
               <CounsellingCreateForm
-                onChangeGuardian={onChangeGuardian}
-                guardian={guardian!}
+                onChangeCounseleeId={(id: number) => setCounseleeId(id)}
+                counselors={counselors}
               />
               <button
                 type="submit"
