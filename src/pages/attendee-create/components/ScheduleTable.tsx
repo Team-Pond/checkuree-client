@@ -3,10 +3,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { CreateAttendeeSchema } from "@/pages/attendee-create/_schema";
-import { useFormContext } from "react-hook-form";
 import { DaysType } from "@/api/type";
 import { useBookDetail } from "@/pages/books/queries";
+import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
+import { CreateAttendeeSchema } from "../_schema";
+import { useFormContext } from "react-hook-form";
 
 interface ScheduleItem {
   dayOfWeek: DaysType;
@@ -25,6 +26,7 @@ interface ScheduleProps {
   ) => void;
   handleAttendeeBottomDrawer: (state: boolean) => void;
   // ▼ 추가
+  attendeeSchedules?: UpdateAttendeeScheduleRequest;
 }
 
 const dayMap: Record<DaysType, string> = {
@@ -47,6 +49,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
   startHhmm,
   endHhmm,
   handleSchedule,
+  attendeeSchedules,
 }) => {
   const { bookId } = useParams();
 
@@ -95,7 +98,8 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
     }
   }, [bookDetail]);
 
-  const { getValues } = useFormContext<CreateAttendeeSchema>();
+  const { watch } = useFormContext<CreateAttendeeSchema>();
+  const newSchedules = watch("schedulesRequest.schedules");
   return (
     <div className="max-w-4xl mx-auto">
       <table className="table-fixed w-full text-center border-collapse">
@@ -137,7 +141,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
 
                   // ▼ dayOfWeek, hhmm이 selectedSchedules에 있는지 체크
                   const isSelected =
-                    getValues("schedulesRequest.schedules")?.some(
+                    newSchedules.some(
                       (schedule) =>
                         schedule.day === dayData.dayOfWeek &&
                         (schedule.hhmm === hhmm || schedule.hhmm === beforeHhmm)
@@ -177,7 +181,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
 
                   // ▼ dayOfWeek, hhmm이 selectedSchedules에 있는지 체크
                   const isSelected =
-                    getValues("schedulesRequest.schedules")?.some(
+                    newSchedules?.some(
                       (schedule) =>
                         schedule.day === dayData.dayOfWeek &&
                         (schedule.hhmm === hhmm || schedule.hhmm === beforeHhmm)

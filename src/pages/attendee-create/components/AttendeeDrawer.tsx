@@ -45,8 +45,12 @@ export default function AttendeeDrawer({
 
         {/* 수강생 목록 */}
         <div className="grid grid-cols-2 px-[24px]">
-          {scheduleData?.map((attendee) => (
-            <div key={attendee.name} className="flex gap-2 w-[171px] h-9">
+          {scheduleData?.map((attendee, index) => (
+            <div
+              // 중복 데이터가 발생하는 현상이 있어 key 변경
+              key={[attendee.name, attendee.age, index].join("-")}
+              className="flex gap-2 w-[171px] h-9"
+            >
               <p className="text-m-bold text-text-primary">{attendee.name}</p>
             </div>
           ))}
