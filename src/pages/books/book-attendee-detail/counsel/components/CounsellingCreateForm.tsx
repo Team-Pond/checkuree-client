@@ -79,8 +79,8 @@ export default function CounsellingCreateForm({
         <div className="flex flex-col gap-[1px] w-full text-left">
           <CounsellerSelect
             onChange={onChangeCounseleeId}
-            options={counselors}
-            placeholder="관계"
+            options={counselors || []}
+            placeholder="상담자"
           />
         </div>
       </div>
