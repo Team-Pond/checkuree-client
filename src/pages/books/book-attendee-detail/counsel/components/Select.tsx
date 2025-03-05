@@ -12,13 +12,17 @@ type IProps = {
     value: string;
   }[];
   placeholder: string;
+  disabled: boolean;
 };
 
 const CounsellerSelect = (props: IProps) => {
-  const { onChange, options, placeholder } = props;
+  const { onChange, options, placeholder, disabled } = props;
 
   return (
-    <Select.Root onValueChange={(value) => onChange(Number(value))}>
+    <Select.Root
+      onValueChange={(value) => onChange(Number(value))}
+      disabled={disabled}
+    >
       <Select.Trigger className="rounded-xl outline-none inline-flex items-center justify-between w-full h-12 px-3 py-2 bg-white border border-border-brand ounded-md text-sm focus:outline-none  focus:ring-green-500 ">
         <Select.Value placeholder={placeholder} />
         <Select.Icon>
