@@ -56,6 +56,10 @@ export default function CounselManage(props: IProps) {
           counselSubjects={counsel.counsellingTopicTypes}
           counselleeType={counsel.counselee.relationType}
           counsellingAt={new Date(counsel.counsellingAt)}
+          counsellingId={counsel.counsellingId}
+          counsellorName={counsel.counsellor.name}
+          counsellorId={counsel.counsellor.counsellorId}
+          counseleeId={counsel.counselee.counseleeId}
         />
       ))}
       <div className="fixed bottom-11 right-[5%] max-w-[390px]">

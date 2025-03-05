@@ -15,6 +15,10 @@ interface IProps {
   counselSubjects: CounsellingTopicType[];
   counselleeType: RelationType;
   counsellingAt: Date;
+  counsellingId: number;
+  counsellorName?: string;
+  counsellorId?: number;
+  counseleeId: number; // 상담자 번호
 }
 const CounselList = (args: IProps) => {
   const navigate = useNavigate();
@@ -30,7 +34,19 @@ const CounselList = (args: IProps) => {
   return (
     <div className="w-full rounded-2xl text-left bg-white p-4 flex flex-col gap-5">
       <p className="flex text-s-bold text-[#5d5d5d]">
-        상담 내역 <img src="" alt="" />
+        상담 내역{" "}
+        <img
+          src="/images/icons/ico-pencil.svg"
+          width={20}
+          height={20}
+          alt=""
+          onClick={() => {
+            navigate(
+              `/book/${bookId}/attendee/${attendeeId}/counselling${location.search}`,
+              { state: args }
+            );
+          }}
+        />
       </p>
       <div className="flex flex-col gap-2">
         <p className="text-m-semibold text-text-primary">
