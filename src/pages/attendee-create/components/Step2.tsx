@@ -9,12 +9,14 @@ import {
   useScheduleAttendee,
   useScheduleTable,
 } from "../queries";
-import { getSub30MinuteHhmm } from "../../../utils";
 
 import { useFormContext } from "react-hook-form";
 import { CreateAttendeeSchema } from "../_schema";
 import { DaysType } from "@/api/type";
 import ScheduleTable from "./ScheduleTable";
+import tw from "tailwind-styled-components";
+import FieldHeader from "@/components/FieldTitle";
+import { getSub30MinuteHhmm } from "@/utils";
 
 interface Step2Props {
   attendanceBookId: number;
@@ -152,11 +154,8 @@ export default function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
 
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
-      <div className="flex flex-col gap-2">
-        <div className="flex gap-1 items-center">
-          <p className="font-bold text-m-medium">커리큘럼</p>
-          <p className="text-text-danger">*</p>
-        </div>
+      <FieldWrapper>
+        <FieldHeader title="커리큘럼" essential />
         <div
           className="w-full flex justify-center"
           onClick={() => handleBottomDrawer(true)}
@@ -183,13 +182,10 @@ export default function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
             )}
           </div>
         </div>
-        {/* <input type="hidden" {...register("schedulesRequest.schedules")} /> */}
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="flex gap-1 items-center">
-          <p className="font-bold text-m-medium">클래스 일정</p>
-          <p className="text-text-danger">*</p>
-        </div>
+        <input type="hidden" {...register("schedulesRequest.schedules")} />
+      </FieldWrapper>
+      <FieldWrapper>
+        <FieldHeader title="클래스 일정" essential />
         {scheduleTable && (
           <ScheduleTable
             scheduleTable={scheduleTable.scheduleTable}
@@ -200,7 +196,7 @@ export default function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
             handleAttendeeBottomDrawer={handleAttendeeBottomDrawer}
           />
         )}
-      </div>
+      </FieldWrapper>
 
       {/* 커리큘럼 선택 Drawer */}
       <SubjectSelectionDrawer
@@ -226,3 +222,5 @@ export default function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
     </div>
   );
 }
+
+const FieldWrapper = tw.div`flex flex-col gap-2`;

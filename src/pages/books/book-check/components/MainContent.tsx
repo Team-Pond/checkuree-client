@@ -182,12 +182,12 @@ export default function MainContents(props: IProps) {
   const openModifyRecordTimeModal = (schedule: ScheduleData) => {
     if (schedule.recordStatus === "ATTEND") {
       handleRecord(schedule.recordId, schedule.recordTime);
+      setFormData({
+        hour: schedule.recordTime.split(":")[0],
+        minute: schedule.recordTime.split(":")[1],
+      });
       openModal(
-        <ModifyRecordTimeModal
-          bookId={bookId}
-          record={record}
-          setFormData={setFormData}
-        />,
+        <ModifyRecordTimeModal />,
         () => {
           recordUpdate();
         },

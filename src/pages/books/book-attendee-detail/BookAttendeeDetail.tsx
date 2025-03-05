@@ -179,6 +179,7 @@ export default function BookAttendeeDetail() {
               age: Number(attendeeDetail?.age),
               grade: grade!,
               scheduleDays: scheduleDays!,
+              associates: attendeeDetail?.associates || [],
             }}
           />
         </Content>

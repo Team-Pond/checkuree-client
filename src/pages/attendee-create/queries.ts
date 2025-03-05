@@ -24,8 +24,8 @@ export const useScheduleAttendee = (
   enabled: boolean = false
 ) => {
   return useQuery({
-    enabled: enabled && dayOfWeek !== "" && hhmm !== "",
-    queryKey: attendeeKeys.schedules(attendanceBookId, dayOfWeek).queryKey,
+    queryKey: attendeeKeys.schedules(attendanceBookId, dayOfWeek, hhmm)
+      .queryKey,
     queryFn: async () => {
       const res = await getScheduleAttendee({
         attendanceBookId,
@@ -35,6 +35,7 @@ export const useScheduleAttendee = (
       if (res.status === 200) return res.data;
       throw new Error("Failed to fetch schedule attendee");
     },
+    staleTime: 6000,
   });
 };
 

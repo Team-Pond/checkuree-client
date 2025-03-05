@@ -2,21 +2,25 @@ import React from "react";
 import { useFormContext } from "react-hook-form";
 
 import { Associates } from "@/api/type";
-import CheckBox from "./Checkbox";
+
 import CounsellerSelect from "./Select";
 
-import Radio from "./Radio";
 import { CreateCounsellingSchema } from "../../_schema";
 import { CounsellingTopicType } from "@/api/CounselSchema";
+import Radio from "@/components/Radio";
+import CheckBox from "@/components/CheckBox";
 
 interface Step1Props {
-  onChangeGuardian: (key: string, value: string) => void;
-  guardian: Associates;
+  onChangeCounseleeId: (id: number) => void;
+  counselors: {
+    name: string;
+    value: string;
+  }[];
 }
 
 export default function CounsellingCreateForm({
-  onChangeGuardian,
-  guardian,
+  onChangeCounseleeId,
+  counselors,
 }: Step1Props) {
   const handleDateChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -74,13 +78,8 @@ export default function CounsellingCreateForm({
         </div>
         <div className="flex flex-col gap-[1px] w-full text-left">
           <CounsellerSelect
-            onChange={onChangeGuardian}
-            options={[
-              { name: "학생 모", value: "MOTHER" },
-              { name: "학생 부", value: "FATHER" },
-              { name: "조부모", value: "GRANDPARENT" },
-              { name: "기타", value: "ETC" },
-            ]}
+            onChange={onChangeCounseleeId}
+            options={counselors}
             placeholder="관계"
           />
         </div>

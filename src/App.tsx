@@ -34,7 +34,7 @@ const BookAttendeeDetail = lazy(
 const CounsellingCreate = lazy(
   () =>
     import(
-      "@/pages/books/book-attendee-detail/components/counsel/CounsellingCreate"
+      "@/pages/books/book-attendee-detail/counsel/components/CounsellingCreate"
     )
 );
 

@@ -1,17 +1,8 @@
 import useFormDataStore from "@/store/recordStore";
-import React, { useEffect } from "react";
+import React from "react";
 import tw from "tailwind-styled-components";
 
-interface Props {
-  bookId: number;
-  setFormData: (data: { hour: string; minute: string }) => void;
-  record: {
-    id: number;
-    formattedTime: string;
-  };
-}
-
-export const ModifyRecordTimeModal: React.FC<Props> = ({}) => {
+export const ModifyRecordTimeModal: React.FC = ({}) => {
   const { formData, updateFormData } = useFormDataStore(); // 전역 상태 formData 사용
   const handleTimeChange = (
     key: "hour" | "minute",

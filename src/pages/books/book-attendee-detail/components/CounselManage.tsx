@@ -1,6 +1,7 @@
 import CounselList from "./CounselList";
 import { useCounsellingList } from "../queries";
 import { useNavigate, useParams } from "react-router-dom";
+import { Associates } from "@/api/type";
 
 type IProps = {
   studentInfo: {
@@ -8,6 +9,7 @@ type IProps = {
     age: number;
     grade: string;
     scheduleDays: string;
+    associates: Associates[];
   };
 };
 export default function CounselManage(props: IProps) {
@@ -54,13 +56,14 @@ export default function CounselManage(props: IProps) {
           counselSubjects={counsel.counsellingTopicTypes}
           counselleeType={counsel.counselee.relationType}
           counsellingAt={new Date(counsel.counsellingAt)}
-        ></CounselList>
+        />
       ))}
       <div className="fixed bottom-11 right-[5%] max-w-[390px]">
         <button
           onClick={() =>
             navigate(
-              `/book/${bookId}/attendee/${attendeeId}/counselling${location.search}`
+              `/book/${bookId}/attendee/${attendeeId}/counselling${location.search}`,
+              { state: studentInfo.associates }
             )
           }
           className="w-[88px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
