@@ -59,7 +59,7 @@ export default function CounsellingCreate() {
     }
   };
 
-  const counselors = location.state.map((counselor: Associates) => {
+  const counselors = location?.state.map((counselor: Associates) => {
     return {
       name: transferCounselorName(counselor.relationType),
       value: String(counselor.id),
