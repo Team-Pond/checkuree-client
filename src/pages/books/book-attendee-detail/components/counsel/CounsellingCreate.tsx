@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import SEO from "@/components/SEO";
 import { Associates, RelationType } from "@/api/type";
-import Step1 from "./Step1";
+import Step1 from "./CounsellingCreateForm";
 import { CreateCounsellingSchema, CounsellingSchema } from "../../_schema";
 import { createCounsellings } from "@/api/CounselApiClient";
 
