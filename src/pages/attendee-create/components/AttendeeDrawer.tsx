@@ -78,8 +78,6 @@ export default function AttendeeDrawer({
           </button>
         </div>
       </div>
-      {/*</div>*/}
-      {/*</div>*/}
     </BottomDrawer>
   );
 }
