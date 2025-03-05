@@ -6,7 +6,7 @@ export type CounsellingTopicType =
   | "PEER_RELATIONS"
   | "ETC";
 
-export type CounsellingType = "PHONE" | "VISIT";
+export type CounsellingType = "PHONE" | "VISIT" | "KAKAOTALK";
 
 export const counsellingTypeMapper = (type: CounsellingTopicType) => {};
 
@@ -14,10 +14,6 @@ type ResponseBase = {
   status: number;
   message: string;
 };
-
-// type SuccessResponse = ResponseBase & {
-//   data: Record<string, unknown>;
-// };
 
 type ErrorResponse = ResponseBase & {
   data: Record<string, unknown>;
@@ -49,3 +45,21 @@ export type CounsellingListResponse = {
   status: 200;
   data: CounsellingListType[];
 };
+
+export type CounsellingCreateRequest = {
+  attendeeId: number;
+  counseleeId: number;
+  type: CounsellingType;
+  topics: CounsellingTopicType[];
+  counsellingAt: Date;
+  description: string;
+};
+
+export type CounsellingCreateResponse =
+  | {
+      status: 200;
+      data: {
+        id: number;
+      };
+    }
+  | ErrorResponse;
