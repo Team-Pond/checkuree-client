@@ -3,15 +3,8 @@ interface IProps {
   label: string;
   checked: boolean;
   onChange: (checked: boolean) => void;
-  className?: string;
 }
-export default function Radio({
-  id,
-  label,
-  checked,
-  onChange,
-  className,
-}: IProps) {
+export default function Radio({ id, label, checked, onChange }: IProps) {
   return (
     <div className="inline-flex items-center">
       <label htmlFor={id} className="flex items-center cursor-pointer">
