@@ -18,6 +18,7 @@ export default function CounsellingCreate() {
   const navigate = useNavigate();
   const location = useLocation();
   const { bookId } = useParams();
+  const { attendeeId } = useParams();
   const [guardian, setGuardian] = useState<Associates>();
 
   const methods = useForm<CreateCounsellingSchema>({
@@ -25,7 +26,7 @@ export default function CounsellingCreate() {
     mode: "onSubmit",
   });
 
-  const { trigger, setValue, handleSubmit } = methods;
+  const { handleSubmit } = methods;
 
   const onChangeGuardian = (key: RelationType | string, value: string) => {
     setGuardian((prev) => ({
@@ -34,16 +35,12 @@ export default function CounsellingCreate() {
     }));
   };
 
-  const onChangeGrade = (gradeId: number) => {};
-
-  const handleStep1Next = async () => {};
-
   const handleStep2Next = async (data: CreateCounsellingSchema) => {
     await createCounsellings({
       params: {
         ...data,
-        counseleeId: Number(data.counseleeId),
-        counsellingId: 0,
+        counseleeId: Number(attendeeId),
+        attendeeId: Number(attendeeId),
         counsellingAt: new Date(data.counsellingAt),
       },
       attendanceBookId: Number(bookId),
@@ -62,7 +59,7 @@ export default function CounsellingCreate() {
       />
       <form
         className="flex flex-col  w-full pb-[30px]"
-        onSubmit={handleSubmit((data) => handleStep2Next(data))}
+        onSubmit={handleSubmit(handleStep2Next)}
       >
         <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
           <p className="font-bold text-text-primary text-[22px]">상담 기록</p>
@@ -72,7 +69,9 @@ export default function CounsellingCreate() {
             width={32}
             height={32}
             onClick={() =>
-              navigate(`/book/${bookId}/attendee${location.search}`)
+              navigate(
+                `/book/${bookId}/attendee/${attendeeId}${location.search}`
+              )
             }
           />
         </div>
@@ -82,14 +81,12 @@ export default function CounsellingCreate() {
           <div className="flex w-full justify-center">
             <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
               <Step1 onChangeGuardian={onChangeGuardian} guardian={guardian!} />
-
               <button
-                type="button"
+                type="submit"
                 className={twMerge(
                   "max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl",
                   "bg-bg-tertiary text-[#f1f8f3]"
                 )}
-                onClick={handleStep1Next}
               >
                 <p className="font-semibold text-lg">저장하기</p>
               </button>

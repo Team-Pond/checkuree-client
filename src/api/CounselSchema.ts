@@ -1,5 +1,4 @@
 import { RelationType } from "./type";
-import CounsellingCreate from "../pages/books/book-attendee-detail/components/counsel/CounsellingCreate";
 
 export type CounsellingTopicType =
   | "FUTURE_PATH"
@@ -15,10 +14,6 @@ type ResponseBase = {
   status: number;
   message: string;
 };
-
-// type SuccessResponse = ResponseBase & {
-//   data: Record<string, unknown>;
-// };
 
 type ErrorResponse = ResponseBase & {
   data: Record<string, unknown>;
@@ -52,7 +47,7 @@ export type CounsellingListResponse = {
 };
 
 export type CounsellingCreateRequest = {
-  counsellingId: number;
+  attendeeId: number;
   counseleeId: number;
   type: CounsellingType;
   topics: CounsellingTopicType[];

@@ -7,6 +7,7 @@ import CounsellerSelect from "./Select";
 
 import Radio from "./Radio";
 import { CreateCounsellingSchema } from "../../_schema";
+import { CounsellingTopicType } from "@/api/CounselSchema";
 
 interface Step1Props {
   onChangeGuardian: (key: string, value: string) => void;
@@ -44,10 +45,25 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
 
   // getValue를 사용하면 렌더링이 안되어 성별 선택을 실시간으로 볼 수 없기 때문에 watch 함수를 사용
   const counsellingType = watch("type");
-  console.log(counsellingType);
+
+  const handleCheckboxChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    topic: CounsellingTopicType
+  ) => {
+    const updatedTopics = watch("topics") || [];
+
+    if (e.target.checked) {
+      setValue("topics", [...updatedTopics, topic]);
+    } else {
+      setValue(
+        "topics",
+        updatedTopics.filter((item) => item !== topic)
+      );
+    }
+  };
+
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
-      {/* 학생 이름 */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
           <p className="font-bold text-m-medium">상담자</p>
@@ -78,9 +94,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
           <div className="flex gap-8">
             <Radio
               label="방문"
-              onChange={() => {
-                setValue("type", "VISIT");
-              }}
+              onChange={() => setValue("type", "VISIT")}
               id="visit"
               checked={counsellingType === "VISIT"}
             />
@@ -98,6 +112,9 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
             />
           </div>
         </div>
+        {errors?.type && (
+          <p className="text-red-500 text-sm mt-1">{errors.type.message}</p>
+        )}
       </div>
 
       {/* 상담일시 */}
@@ -117,12 +134,12 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
               className="outline-none bg-white border border-[#E7E7E7] rounded-xl w-full h-12 flex items-center pl-4"
             />
           </div>
-          {errors?.counsellingAt && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.counsellingAt.message}
-            </p>
-          )}
         </div>
+        {errors?.counsellingAt && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.counsellingAt.message}
+          </p>
+        )}
       </div>
 
       {/* 상담 주제 */}
@@ -132,15 +149,38 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
         </div>
         <div className="flex flex-col w-full">
           <div className="flex gap-2">
-            <CheckBox label={"오늘 입학"} checked onChange={() => {}} id="1" />
-            <CheckBox label={"진도 상담"} checked onChange={() => {}} id="2" />
+            <CheckBox
+              label={"오늘 입학"}
+              checked={watch("topics")?.includes("FUTURE_PATH")}
+              onChange={(e) => handleCheckboxChange(e, "FUTURE_PATH")}
+              id="0"
+            />
+            <CheckBox
+              label={"진도 상담"}
+              checked={watch("topics")?.includes("STUDY_PROGRESS")}
+              onChange={(e) => handleCheckboxChange(e, "STUDY_PROGRESS")}
+              id="1"
+            />
           </div>
 
           <div className="flex gap-2">
-            <CheckBox label={"교우 관계"} checked onChange={() => {}} id="3" />
-            <CheckBox label={"기타"} checked onChange={() => {}} id="4" />
+            <CheckBox
+              label={"교우 관계"}
+              checked={watch("topics")?.includes("PEER_RELATIONS")}
+              onChange={(e) => handleCheckboxChange(e, "PEER_RELATIONS")}
+              id="2"
+            />
+            <CheckBox
+              label={"기타"}
+              checked={watch("topics")?.includes("ETC")}
+              onChange={(e) => handleCheckboxChange(e, "ETC")}
+              id="3"
+            />
           </div>
         </div>
+        {errors?.topics && (
+          <p className="text-red-500 text-sm mt-1">{errors.topics.message}</p>
+        )}
       </div>
 
       {/* 비고(선택) */}
@@ -148,8 +188,8 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
         <div className="flex gap-1 items-center">
           <p className="font-bold text-m-medium">상담 내용(선택)</p>
         </div>
-        <input
-          type="text"
+        <textarea
+          {...register("description")}
           placeholder=""
           className="max-w-[342px] h-[92px] bg-white w-full border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />

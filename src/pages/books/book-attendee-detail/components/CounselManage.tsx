@@ -21,7 +21,6 @@ export default function CounselManage(props: IProps) {
 
   const navigate = useNavigate();
 
-  console.log(counsellingList);
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-8 items-center w-full h-[81px] rounded-2xl bg-white">
@@ -60,7 +59,9 @@ export default function CounselManage(props: IProps) {
       <div className="fixed bottom-11 right-[5%] max-w-[390px]">
         <button
           onClick={() =>
-            navigate("/book/:bookId/attendee/:attendeeId/counselling")
+            navigate(
+              `/book/${bookId}/attendee/${attendeeId}/counselling${location.search}`
+            )
           }
           className="w-[88px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
         >
