@@ -14,7 +14,10 @@ interface Step1Props {
   guardian: Associates;
 }
 
-export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
+export default function CounsellingCreateForm({
+  onChangeGuardian,
+  guardian,
+}: Step1Props) {
   const handleDateChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     parameter: "counsellingAt"
