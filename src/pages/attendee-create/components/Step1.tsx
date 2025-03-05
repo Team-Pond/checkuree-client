@@ -7,7 +7,7 @@ import { Associates } from "@/api/type";
 import Radio from "@/components/Radio";
 import CheckBox from "@/components/CheckBox";
 import tw from "tailwind-styled-components";
-import FieldHeader from "./FieldTitle";
+import FieldHeader from "../../../components/FieldTitle";
 
 interface Step1Props {
   onChangeGuardian: (key: string, value: string) => void;

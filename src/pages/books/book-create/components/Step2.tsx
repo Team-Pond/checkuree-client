@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 import BottomDrawer from "@/components/BottomDrawer";
 import { useSubjectItems, useSubjects } from "../queries";
 import { CourseData } from "@/api/type";
+import FieldHeader from "@/components/FieldTitle";
 
 export type IProps = {
   handleCourseChange: (params: CourseData) => void;
@@ -93,10 +94,7 @@ export default function Step2(props: IProps) {
           <>
             {/* 커리큘럼 이름 */}
             <div className="flex flex-col gap-2">
-              <div className="flex gap-1 items-center">
-                <p className="font-bold text-m-medium">커리큘럼 이름</p>
-                <p className="text-text-danger">*</p>
-              </div>
+              <FieldHeader title="커리큘럼 이름" essential />
 
               <input
                 type="text"
@@ -107,10 +105,7 @@ export default function Step2(props: IProps) {
             </div>
             {/* 커리큘럼 내용 */}
             <div className="flex flex-col gap-2">
-              <div className="flex gap-1 items-center">
-                <p className="font-bold text-m-medium">커리큘럼 내용</p>
-                <p className="text-text-danger">*</p>
-              </div>
+              <FieldHeader title="커리큘럼 내용" essential />
 
               <div className="max-w-[343px] rounded-2xl py-1 px-2 text-left bg-bg-base">
                 <ul>

@@ -9,14 +9,14 @@ import {
   useScheduleAttendee,
   useScheduleTable,
 } from "../queries";
-import { getSub30MinuteHhmm } from "../../../utils";
 
 import { useFormContext } from "react-hook-form";
 import { CreateAttendeeSchema } from "../_schema";
 import { DaysType } from "@/api/type";
 import ScheduleTable from "./ScheduleTable";
 import tw from "tailwind-styled-components";
-import FieldHeader from "./FieldTitle";
+import FieldHeader from "@/components/FieldTitle";
+import { getSub30MinuteHhmm } from "@/utils";
 
 interface Step2Props {
   attendanceBookId: number;

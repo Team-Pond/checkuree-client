@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import SEO from "@/components/SEO";
 import { Associates, RelationType } from "@/api/type";
-import Step1 from "./CounsellingCreateForm";
+import CounsellingCreateForm from "./CounsellingCreateForm";
 import { CreateCounsellingSchema, CounsellingSchema } from "../../_schema";
 import { createCounsellings } from "@/api/CounselApiClient";
 
@@ -80,7 +80,10 @@ export default function CounsellingCreate() {
         <div className="w-full flex flex-col gap-10 items-center mt-10">
           <div className="flex w-full justify-center">
             <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
-              <Step1 onChangeGuardian={onChangeGuardian} guardian={guardian!} />
+              <CounsellingCreateForm
+                onChangeGuardian={onChangeGuardian}
+                guardian={guardian!}
+              />
               <button
                 type="submit"
                 className={twMerge(
