@@ -4,6 +4,8 @@ import {
   CounsellingCreateResponse,
   CounsellingListRequest,
   CounsellingListResponse,
+  CounsellingUpdateRequest,
+  CounsellingUpdateResponse,
 } from "./CounselSchema";
 
 export const getAttendeeCounsellings = async (
@@ -29,6 +31,24 @@ export const createCounsellings = async ({
   const response = await ApiClient.request({
     method: "POST",
     url: `/book/${attendanceBookId}/counselling`,
+    data: params,
+  });
+
+  return response.data;
+};
+
+export const updateCounsellings = async ({
+  params,
+  attendanceBookId,
+  counsellingId,
+}: {
+  params: CounsellingUpdateRequest;
+  attendanceBookId: number;
+  counsellingId: number;
+}): Promise<CounsellingUpdateResponse> => {
+  const response = await ApiClient.request({
+    method: "PUT",
+    url: `/book/${attendanceBookId}/counselling/${counsellingId}`,
     data: params,
   });
 
