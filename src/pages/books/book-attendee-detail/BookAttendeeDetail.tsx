@@ -86,6 +86,7 @@ export default function BookAttendeeDetail() {
         <List className="TabsList" aria-label="Manage your account">
           {Menu.map((menu) => (
             <Trigger
+              key={menu.label}
               className="TabsTrigger"
               value={menu.value}
               style={{
