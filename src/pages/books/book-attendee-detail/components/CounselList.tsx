@@ -5,10 +5,11 @@ import {
   counsellingTypeToKor,
   relationTypeToKor,
 } from "../../../../utils/enumMapper";
-import { format } from "date-fns";
+
 import { useNavigate, useParams } from "react-router-dom";
 import { RelationType } from "@/api/type";
 import { CounsellingTopicType, CounsellingType } from "@/api/CounselSchema";
+import dayjs from "dayjs";
 
 interface IProps {
   counselType: CounsellingType;
@@ -50,7 +51,7 @@ const CounselList = (args: IProps) => {
       </p>
       <div className="flex flex-col gap-2">
         <p className="text-m-semibold text-text-primary">
-          {format(counsellingAt, "yyyy.MM.dd")}
+          {dayjs(counsellingAt).format("YYYY.MM.DD")}
         </p>
         <div className="flex flex-col space-y-1">
           <div className="flex items-center text-sm">

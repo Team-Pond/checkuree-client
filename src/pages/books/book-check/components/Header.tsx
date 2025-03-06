@@ -20,6 +20,7 @@ type HeaderProps = {
   checkedScheduleCount: number;
   totalScheduleCount: number;
   setOpenFilter: Dispatch<SetStateAction<boolean>>;
+  handleDrawer: () => void;
 };
 
 export default function Header(props: HeaderProps) {
@@ -33,6 +34,7 @@ export default function Header(props: HeaderProps) {
     checkedScheduleCount,
     totalScheduleCount,
     setOpenFilter,
+    handleDrawer,
   } = props;
 
   const navigate = useNavigate();
@@ -101,7 +103,11 @@ export default function Header(props: HeaderProps) {
           height={9}
           onClick={handlePreviousDay}
         />
-        <p className="text-xl font-bold" data-value={formattedDate}>
+        <p
+          className="text-xl font-bold"
+          data-value={formattedDate}
+          onClick={handleDrawer}
+        >
           {displayDate}
         </p>
         <img

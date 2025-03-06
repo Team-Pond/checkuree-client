@@ -9,6 +9,7 @@ import Bottom from "../components/Bottom";
 import { useBookSchedules } from "./queries";
 import { BottomAddRecord } from "./components/BottomAddRecord";
 import SEO from "@/components/SEO";
+import DateDrawer from "./components/DateDrawer";
 
 export default function BookCheck() {
   const context = useContext(BookContext);
@@ -17,10 +18,12 @@ export default function BookCheck() {
   const { bookId } = useParams();
   const [searchParams] = useSearchParams();
   const bookName = searchParams.get("bookName");
+
   const [currentDate, setCurrentDate] = useState(dayjs()); // dayjs로 초기화
   const [checkedScheduleCount, setCheckedScheduleCount] = useState<number>(0);
   const [totalScheduleCount, setTotalScheduleCount] = useState<number>(0);
   const [openFilter, setOpenFilter] = useState<boolean>(false);
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
   // 확인 모달창의 오픈 여부, 메시지 내용, 저장버튼 클릭 시 실행할 함수
 
@@ -36,6 +39,10 @@ export default function BookCheck() {
 
   const handleNextDay = () => {
     setCurrentDate((prev) => prev.add(1, "day"));
+  };
+
+  const handleCurrentDay = (date: Date) => {
+    setCurrentDate(dayjs(date));
   };
 
   const { data: bookSchedules } = useBookSchedules({
@@ -76,6 +83,7 @@ export default function BookCheck() {
         checkedScheduleCount={checkedScheduleCount}
         totalScheduleCount={totalScheduleCount}
         setOpenFilter={setOpenFilter}
+        handleDrawer={() => setOpenDrawer(true)}
       />
       {bookSchedules?.status === 200 &&
       bookSchedules.data.content.length > 0 ? (
@@ -99,6 +107,11 @@ export default function BookCheck() {
         onDrawerChange={onDrawerChange}
         attendanceBookId={Number(bookId)}
         currentDate={currentDate.format("YYYY-MM-DD")}
+      />
+      <DateDrawer
+        open={openDrawer}
+        onClose={() => setOpenDrawer(false)}
+        handleCurrentDay={handleCurrentDay}
       />
       {!openFilter && <Bottom />}
     </section>
