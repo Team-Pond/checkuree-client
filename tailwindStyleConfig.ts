@@ -14,6 +14,7 @@ const colors = {
   "bg-destructive-hover": "#f9a8a8",
   "bg-destructive-press": "#f37676",
   "bg-interactive-destructive": "#EA5353",
+  "bg-interactive-primary": "#BDDDC3",
   "bg-disabled": "#e7e7e7",
 
   // Border colors
@@ -39,10 +40,12 @@ const colors = {
   "text-success": "#306b44",
   "text-warning": "#ec9e14",
   "text-interactive-primary": "#20452e",
+  "text-interactive-primary-press": "#265637",
   "text-interactive-hover": "#1b3926",
   "text-interactive-press": "#0e2016",
   "text-interactive-destructive": "#951f1f",
   "text-interactive-inverse": "#f6f6f6",
+  "text-interactive-secondary": "#B0B0B0",
 
   // Shadow colors
   "shadow-12": "#0000001f",
