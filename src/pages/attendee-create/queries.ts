@@ -24,7 +24,6 @@ export const useScheduleAttendee = (
   enabled: boolean = false
 ) => {
   return useQuery({
-    enabled: !!hhmm && !!dayOfWeek,
     queryKey: attendeeKeys.schedules(attendanceBookId, dayOfWeek, hhmm)
       .queryKey,
     queryFn: async () => {
