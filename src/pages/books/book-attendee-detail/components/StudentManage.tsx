@@ -94,9 +94,9 @@ export default function StudentManage(props: IProps) {
         <div className="flex flex-col gap-2 text-left">
           <div className="flex flex-col gap-1 mt-4">
             <p className="text-xl-bold">
-              <span className="text-text-primary">{student.name}</span>
+              <span className="text-text-primary">{student.name || ""}</span>
               <span className="text-text-secondary ml-2">
-                {student.age + "세"}
+                {(student.age || "") + "세"}
               </span>
             </p>
             <p className="text-m-bold text-text-secondary">
