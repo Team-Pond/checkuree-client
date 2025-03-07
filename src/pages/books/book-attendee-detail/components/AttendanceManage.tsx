@@ -216,7 +216,7 @@ export default function AttendanceManage(props: IProps) {
               <tr>
                 {["일", "월", "화", "수", "목", "금", "토"].map((day) => {
                   return (
-                    <th className="w-1/7">
+                    <th key={day} className="w-1/7">
                       <div className="w-full h-[30px] flex justify-center items-center">
                         <p className="text-xs-medium text-center text-[#5d5d5d]">
                           {day}
@@ -237,9 +237,9 @@ export default function AttendanceManage(props: IProps) {
                     }
                     return acc;
                   }, [] as Date[][])
-                  .map((dates) => {
+                  .map((dates, index) => {
                     return (
-                      <tr>
+                      <tr key={index}>
                         {dates.map((date) => {
                           const isTextColor =
                             date.getDay() === 0
