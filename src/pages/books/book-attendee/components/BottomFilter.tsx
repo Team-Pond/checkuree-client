@@ -175,7 +175,7 @@ export default function BottomFilter(props: IProps) {
 
           <div className={"flex gap-4 w-full"}>
             <button
-              className="w-full h-[54px] bg-gray-300 rounded-2xl text-l-semibold"
+              className="w-full h-[54px] bg-gray-300 text-text-secondary  rounded-2xl text-l-semibold"
               onClick={resetFilter}
             >
               초기화
