@@ -101,15 +101,15 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
   const newSchedules = watch("schedulesRequest.schedules") || [];
   return (
     <div className="max-w-4xl mx-auto">
-      <table className="table-fixed w-full text-center border-collapse">
+      <table className="table-fixed w-full text-center border-separate border-spacing-0">
         <thead>
           <tr>
-            <th className="border border-[#f6f6f6] w-[21px] h-2"></th>
+            <th className="border-[#f6f6f6] w-[21px] h-2 border-t border-l rounded-tl-lg" />
             {filteredScheduleTable &&
               filteredScheduleTable.map((dayData, idx) => (
                 <th
                   key={dayData.dayOfWeek}
-                  className="border border-[#f6f6f6] w-auto w-max-[54px] h-2 text-xs-medium text-text-tertiary"
+                  className="border-t border-[#f6f6f6] w-auto w-max-[54px] h-2 text-xs-medium text-text-tertiary last:border-r last:rounded-tr-lg"
                 >
                   {dayMap[dayData.dayOfWeek]}
                 </th>
@@ -124,7 +124,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
             const firstRow = (
               <tr key={`${hour}-first`}>
                 <td
-                  className="border border-[#f6f6f6] text-xs-medium h-10 text-text-tertiary align-top"
+                  className="border-l border-b border-[#f6f6f6] text-xs-medium h-10 text-text-tertiary align-top first:border-t"
                   rowSpan={2}
                 >
                   {hour}
