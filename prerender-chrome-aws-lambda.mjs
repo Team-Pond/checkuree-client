@@ -11,7 +11,6 @@ class ChromeAwsLambdaRenderer {
     // 필요한 초기화 작업이 있다면 작성
   }
 
-  // 수정: 결과를 배열로 반환, 각 항목은 { route, html } 형태
   async renderRoutes(routes, context) {
     const results = [];
     for (const route of routes) {
@@ -31,11 +30,17 @@ class ChromeAwsLambdaRenderer {
         defaultViewport: chromium.defaultViewport,
       });
       const page = await browser.newPage();
-      // URL은 환경에 맞게 수정하세요. 예를 들어, localhost 대신 실제 주소 사용 가능.
-      await page.goto(`http://localhost:5000${route}`, {
+      // 페이지 이동: 로컬 개발 서버(5173) 사용
+      await page.goto(`http://localhost:5173${route}`, {
         waitUntil: "networkidle2",
         timeout: 30000,
       });
+
+      // document.title이 업데이트 될 때까지 대기 (예: 기본 title이 "My App"인 경우)
+      await page.waitForFunction(() => document.title !== "My App", {
+        timeout: 5000,
+      });
+
       const content = await page.content();
       return content;
     } catch (error) {
