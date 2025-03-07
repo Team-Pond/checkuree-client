@@ -172,7 +172,7 @@ export default function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
                   ? `${selectedSubject.title} > ${selectedSubjectItems.title}`
                   : ""
               }
-              className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#5D5D5D] text-left"
+              className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#5D5D5D] text-left cursor-pointer"
               readOnly
             />
             {errors?.progressRequest?.progresses && (
