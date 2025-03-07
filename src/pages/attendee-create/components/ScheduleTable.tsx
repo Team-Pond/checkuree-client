@@ -49,7 +49,6 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
   startHhmm,
   endHhmm,
   handleSchedule,
-  attendeeSchedules,
 }) => {
   const { bookId } = useParams();
 
@@ -99,7 +98,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
   }, [bookDetail]);
 
   const { watch } = useFormContext<CreateAttendeeSchema>();
-  const newSchedules = watch("schedulesRequest.schedules");
+  const newSchedules = watch("schedulesRequest.schedules") || [];
   return (
     <div className="max-w-4xl mx-auto">
       <table className="table-fixed w-full text-center border-collapse">
@@ -141,7 +140,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
 
                   // ▼ dayOfWeek, hhmm이 selectedSchedules에 있는지 체크
                   const isSelected =
-                    newSchedules.some(
+                    newSchedules?.some(
                       (schedule) =>
                         schedule.day === dayData.dayOfWeek &&
                         (schedule.hhmm === hhmm || schedule.hhmm === beforeHhmm)
