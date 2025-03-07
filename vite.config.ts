@@ -13,8 +13,7 @@ export default defineConfig({
     svgr(),
     prerender({
       routes: ["/book", "/book/create"],
-      // prerender 플러그인에 커스텀 렌더러 경로를 지정
-      renderer: "./prerender-chrome-aws-lambda.js",
+      renderer: path.resolve(__dirname, "prerender-chrome-aws-lambda.mjs"),
       rendererOptions: {
         maxConcurrentRoutes: 1,
         renderAfterTime: 500,
