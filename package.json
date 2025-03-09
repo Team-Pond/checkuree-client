@@ -18,13 +18,6 @@
   },
   "reactSnap": {
     "source": "dist",
-    "include": [
-      "/",
-      "/auth/signin",
-      "/kakao-auth/signin",
-      "/book",
-      "/book/create"
-    ],
     "puppeteerArgs": [
       "--no-sandbox",
       "--disable-setuid-sandbox"
