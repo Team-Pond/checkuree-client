@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "npm install & vite",
     "build": "tsc -b && vite build",
-    "postbuild": "react-snap",
+    "postbuild": "react-hydratable",
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
@@ -96,6 +96,7 @@
     "postcss": "^8.4.49",
     "postcss-loader": "^8.1.1",
     "puppeteer": "^24.4.0",
+    "react-hydratable": "^1.5.0",
     "react-snap": "^1.23.0",
     "storybook": "^8.4.7",
     "style-loader": "^4.0.0",
