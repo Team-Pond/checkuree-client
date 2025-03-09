@@ -1,7 +1,7 @@
 {
   "webroot": "dist",
   "host": "https://pond-client.vercel.app",
-  "port": 80,
+  "port": 443,
   "crawlingUrls": ["/", "/kakao-auth/signin"],
   "delay": 1500,
   "userAgent": "react-hydratable",
