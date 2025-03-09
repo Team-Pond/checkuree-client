@@ -15,15 +15,13 @@ const writeStream = createWriteStream("./dist/sitemap.xml");
 sitemap.pipe(writeStream);
 
 // sitemap에 경로 추가
-sitemap.write({ url: "//auth/signin", changefreq: "daily", priority: 1 });
+sitemap.write({ url: "/", changefreq: "daily", priority: 1 });
 
 sitemap.write({
   url: "/kakao-auth/signin",
   changefreq: "weekly",
-  priority: 0.9,
+  priority: 0.8,
 });
-sitemap.write({ url: "/book", changefreq: "weekly", priority: 0.8 });
-sitemap.write({ url: "/book/create", changefreq: "monthly", priority: 0.7 });
 
 sitemap.end();
 
