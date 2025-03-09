@@ -12,7 +12,7 @@ export default defineConfig({
     tsconfigPaths(),
     svgr(),
     createSitemap({
-      hostname: "http://pond-client.vercel.app",
+      hostname: "https://pond-client.vercel.app",
     }),
   ],
   css: {
