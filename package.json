@@ -16,13 +16,6 @@
     "typecheck": "tsc --noEmit",
     "generate-sitemap": "node generate-sitemap.js"
   },
-  "reactSnap": {
-    "source": "dist",
-    "puppeteerArgs": [
-      "--no-sandbox",
-      "--disable-setuid-sandbox"
-    ]
-  },
   "dependencies": {
     "@emotion/css": "^11.13.4",
     "@hookform/error-message": "^2.0.1",
