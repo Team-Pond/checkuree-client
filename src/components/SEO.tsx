@@ -22,6 +22,7 @@ export default function SEO(props: SEOProps) {
       <meta name="description" content={content} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={content} />
+
       <meta
         property="og:image"
         content="https://dev.checkuree.com/images/logos/checkuree_logo.svg"

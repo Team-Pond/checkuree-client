@@ -1,0 +1,10 @@
+{
+  "webroot": "dist",
+  "host": "https://pond-client.vercel.app",
+  "crawlingUrls": ["/", "/book"],
+  "delay": 1500,
+  "userAgent": "react-hydratable",
+  "htmlPrefix": "<!DOCTYPE html>",
+  "pageCount": 1,
+  "retryCount": 1
+}

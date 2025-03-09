@@ -70,7 +70,7 @@ export default function Calendar({ className, handleCurrentDay }: IProps) {
           <tr>
             {["일", "월", "화", "수", "목", "금", "토"].map((day) => {
               return (
-                <th className="w-1/7">
+                <th key={day} className="w-1/7">
                   <div className="w-full h-[30px] flex justify-center items-center">
                     <p
                       className={twMerge(

@@ -4,9 +4,17 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "tailwindcss";
 import svgr from "@svgr/rollup";
 import path from "path";
+import createSitemap from "vite-plugin-sitemap";
 
 export default defineConfig({
-  plugins: [react(), tsconfigPaths(), svgr()],
+  plugins: [
+    react(),
+    tsconfigPaths(),
+    svgr(),
+    createSitemap({
+      hostname: "https://pond-client.vercel.app",
+    }),
+  ],
   css: {
     postcss: {
       plugins: [tailwindcss()],
