@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "npm install & vite",
     "build": "tsc -b && vite build",
+    "postbuild": "react-snap",
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
@@ -19,8 +20,15 @@
     "source": "dist",
     "inlineCss": true,
     "include": [
+      "/",
+      "/auth/signin",
+      "/kakao-auth/signin",
       "/book",
       "/book/create"
+    ],
+    "puppeteerArgs": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox"
     ],
     "exclude": []
   },
