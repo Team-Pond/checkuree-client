@@ -17,7 +17,6 @@
     "generate-sitemap": "node generate-sitemap.js"
   },
   "reactSnap": {
-    "source": "dist",
     "include": [
       "/",
       "/auth/signin",
