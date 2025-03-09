@@ -38,6 +38,8 @@ const CounsellingCreate = lazy(
     )
 );
 
+const Dashboard = lazy(() => import("@/pages/books/dashboard/Dashboard"));
+
 interface RouteType {
   path: string;
   element: JSX.Element;
@@ -59,6 +61,14 @@ const routes: RouteType[] = [
   {
     path: "/book/:bookId/attendee/:attendeeId/counselling",
     element: <CounsellingCreate />,
+  },
+  {
+    path: "/book/:bookId/attendee/:attendeeId/counselling",
+    element: <CounsellingCreate />,
+  },
+  {
+    path: "/book/:bookId/dashboard",
+    element: <Dashboard />,
   },
 ];
 

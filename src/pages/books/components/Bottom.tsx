@@ -31,9 +31,7 @@ export default function Bottom() {
         <p
           className={twMerge(
             "text-xs ",
-            bookUrl && !attendeeUrl
-              ? "text-text-primary"
-              : "text-text-tertiary",
+            bookUrl && !attendeeUrl ? "text-text-primary" : "text-text-tertiary"
           )}
         >
           출석부
@@ -54,7 +52,7 @@ export default function Bottom() {
         <p
           className={twMerge(
             "text-xs ",
-            attendeeUrl ? "text-text-primary" : "text-text-tertiary",
+            attendeeUrl ? "text-text-primary" : "text-text-tertiary"
           )}
         >
           명단
@@ -62,15 +60,24 @@ export default function Bottom() {
       </div>
       <div
         className="flex flex-col gap-2 items-center"
-        onClick={() => toast("준비중인 기능입니다.")}
+        onClick={() => navigate(`/book/${bookId}/dashboard`)}
       >
         <img
-          src="/images/icons/book-check/ico-statistics.svg"
+          src={`/images/icons/book-check/${
+            attendeeUrl ? "ico-statistics-active" : "ico-statistics"
+          }.svg`}
           alt="출석부 아이콘"
           width={20}
           height={20}
         />
-        <p className="text-xs text-text-tertiary">통계</p>
+        <p
+          className={twMerge(
+            "text-xs ",
+            attendeeUrl ? "text-text-primary" : "text-text-tertiary"
+          )}
+        >
+          통계
+        </p>
       </div>
     </div>
   );
