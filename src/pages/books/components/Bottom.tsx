@@ -4,14 +4,18 @@ import { twMerge } from "tailwind-merge";
 
 export default function Bottom() {
   const location = useLocation();
-  const currentPath = location.pathname;
-  const attendeeUrl = location.pathname.split("/")[3];
+  const attendeeUrl = location.pathname.includes("attendee");
   const bookUrl = location.pathname.split("/")[1];
+
+  const dashBoardUrl = location.pathname.includes("dashboard");
 
   const navigate = useNavigate();
 
   const { bookId } = useParams();
 
+  const isBookActive = !!bookUrl && !!!dashBoardUrl && !!!attendeeUrl;
+  const isAttendeeActive = !!attendeeUrl;
+  const isDashBoardActive = !!dashBoardUrl;
   return (
     <div
       className="flex justify-between px-[44px] items-center fixed bottom-0 left-1/2 transform -translate-x-1/2 z-40
@@ -23,7 +27,7 @@ export default function Bottom() {
       >
         <img
           src={`/images/icons/book-check/${
-            bookUrl && !attendeeUrl ? "ico-book-active" : "ico-book"
+            isBookActive ? "ico-book-active" : "ico-book"
           }.svg`}
           alt="출석부 아이콘"
           width={20}
@@ -31,7 +35,7 @@ export default function Bottom() {
         <p
           className={twMerge(
             "text-xs ",
-            bookUrl && !attendeeUrl ? "text-text-primary" : "text-text-tertiary"
+            isBookActive ? "text-text-primary" : "text-text-tertiary"
           )}
         >
           출석부
@@ -43,7 +47,7 @@ export default function Bottom() {
       >
         <img
           src={`/images/icons/book-check/${
-            attendeeUrl ? "ico-roaster-active" : "ico-roaster"
+            isAttendeeActive ? "ico-roaster-active" : "ico-roaster"
           }.svg`}
           alt="출석부 아이콘"
           width={20}
@@ -52,7 +56,7 @@ export default function Bottom() {
         <p
           className={twMerge(
             "text-xs ",
-            attendeeUrl ? "text-text-primary" : "text-text-tertiary"
+            isAttendeeActive ? "text-text-primary" : "text-text-tertiary"
           )}
         >
           명단
@@ -60,11 +64,11 @@ export default function Bottom() {
       </div>
       <div
         className="flex flex-col gap-2 items-center"
-        onClick={() => navigate(`/book/${bookId}/dashboard`)}
+        onClick={() => navigate(`/book/${bookId}/dashboard${location.search}`)}
       >
         <img
           src={`/images/icons/book-check/${
-            attendeeUrl ? "ico-statistics-active" : "ico-statistics"
+            isDashBoardActive ? "ico-statistics-active" : "ico-statistics"
           }.svg`}
           alt="출석부 아이콘"
           width={20}
@@ -72,8 +76,8 @@ export default function Bottom() {
         />
         <p
           className={twMerge(
-            "text-xs ",
-            attendeeUrl ? "text-text-primary" : "text-text-tertiary"
+            "text-xs",
+            isDashBoardActive ? "text-text-primary" : "text-text-tertiary"
           )}
         >
           통계
