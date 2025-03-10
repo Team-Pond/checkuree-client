@@ -13,10 +13,10 @@ export default function Dashboard() {
       <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
         <p className="font-bold text-text-primary text-[22px]">{bookName}</p>
         <img
-          src="/images/icons/book-create/ico-close.svg"
-          alt="닫기 아이콘"
-          width={32}
-          height={32}
+          src="/images/icons/book-check/ico-book-active.svg"
+          alt="calendar Ico"
+          width={28}
+          height={28}
           onClick={() => {}}
         />
       </div>
