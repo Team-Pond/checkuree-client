@@ -218,7 +218,7 @@ export default function MainContents(props: IProps) {
         }
         openModifyRecordTimeModal={openModifyRecordTimeModal}
       />
-      <div className="mt-[92px]"></div>
+      <div className="mt-[92px]" />
     </MainContentWrapper>
   );
 }
