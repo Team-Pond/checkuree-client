@@ -111,7 +111,7 @@ export default function Calendar({ className, handleCurrentDay }: IProps) {
                           ? "text-text-tertiary"
                           : "text-[#5d5d5d]";
                       return (
-                        <td>
+                        <td key={date.toString()}>
                           <div
                             onClick={() => {
                               setSelectedDay(date);
