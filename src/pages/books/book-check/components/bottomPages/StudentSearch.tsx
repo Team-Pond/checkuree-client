@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { GenderType } from "@/api/type";
 import { searchAttendee } from "@/api/AttendeeApiClient";
-
+import GlassesIcon from "@/assets/icons/book-roaster/ico-glasses.svg?react";
 interface Props {
   attendanceBookId: number;
   onSelectStudent: (student: { id: number; name: string }) => void;
@@ -50,11 +50,9 @@ export const StudentSearchView = ({
           onChange={(e) => setSearch(e.target.value)}
           className="bg-bg-secondary rounded-lg w-full h-11 outline-none pl-11 text-m-bold"
         />
-        <img
+        <GlassesIcon
           width={40}
           height={40}
-          src={"/images/icons/book-roaster/ico-glasses.svg"}
-          alt="input placeholder 아이콘"
           className="absolute top-[2px] left-1"
         />
       </div>
