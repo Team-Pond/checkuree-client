@@ -96,9 +96,9 @@ export default function Calendar({ className, handleCurrentDay }: IProps) {
                 }
                 return acc;
               }, [] as Date[][])
-              .map((dates) => {
+              .map((dates, index) => {
                 return (
-                  <tr>
+                  <tr key={index}>
                     {dates.map((date) => {
                       const isTextColor =
                         isEqual(selectedDay, date) &&

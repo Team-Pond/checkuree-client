@@ -15,7 +15,7 @@ export default function TimeButtons({ timeStatus, handleTimeStatus }: IProps) {
           timeStatus === "DAILY" ? "bg-bg-interactive-primary" : ""
         )}
       >
-        <text
+        <span
           className={twMerge(
             "text-[14px]",
             timeStatus === "DAILY"
@@ -24,7 +24,7 @@ export default function TimeButtons({ timeStatus, handleTimeStatus }: IProps) {
           )}
         >
           일간
-        </text>
+        </span>
       </button>
       <button
         onClick={() => handleTimeStatus("WEEKLY")}
@@ -33,7 +33,7 @@ export default function TimeButtons({ timeStatus, handleTimeStatus }: IProps) {
           timeStatus === "WEEKLY" ? "bg-bg-interactive-primary" : ""
         )}
       >
-        <text
+        <span
           className={twMerge(
             "text-[14px]",
             timeStatus === "WEEKLY"
@@ -42,7 +42,7 @@ export default function TimeButtons({ timeStatus, handleTimeStatus }: IProps) {
           )}
         >
           주간
-        </text>
+        </span>
       </button>
       <button
         onClick={() => handleTimeStatus("MONTHLY")}
@@ -51,7 +51,7 @@ export default function TimeButtons({ timeStatus, handleTimeStatus }: IProps) {
           timeStatus === "MONTHLY" ? "bg-bg-interactive-primary" : ""
         )}
       >
-        <text
+        <span
           className={twMerge(
             "text-[14px]",
             timeStatus === "MONTHLY"
@@ -60,7 +60,7 @@ export default function TimeButtons({ timeStatus, handleTimeStatus }: IProps) {
           )}
         >
           월간
-        </text>
+        </span>
       </button>
     </div>
   );

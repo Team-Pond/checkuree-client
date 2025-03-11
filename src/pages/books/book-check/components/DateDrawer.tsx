@@ -22,9 +22,9 @@ export default function DateDrawer({
       <Calendar className="mx-auto" handleCurrentDay={handleDay} />
       <div className="flex gap-4 w-full">
         <Button type="button" onClick={onClose} className=" bg-bg-secondary">
-          <text className="text-text-secondary text-l-semibold select-none">
+          <span className="text-text-secondary text-l-semibold select-none">
             취소
-          </text>
+          </span>
         </Button>
         <Button
           type="button"
@@ -34,9 +34,9 @@ export default function DateDrawer({
             onClose();
           }}
         >
-          <text className="text-[#F1F8F3] text-l-semibold select-none">
+          <span className="text-[#F1F8F3] text-l-semibold select-none">
             이동하기
-          </text>
+          </span>
         </Button>
       </div>
     </BottomDrawer>
