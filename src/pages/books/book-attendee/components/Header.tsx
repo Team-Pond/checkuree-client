@@ -1,5 +1,8 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-
+import PlusIcon from "@/assets/icons/book-roaster/ico-plus-black.svg?react";
+import GlassesIcon from "@/assets/icons/book-roaster/ico-glasses.svg?react";
+import SliderIcon from "@/assets/icons/book-roaster/ico-slider.svg?react";
+import SettingIcon from "@/assets/icons/ico-settings.svg?react";
 type HeaderProps = {
   title: string;
   onDrawerChange: () => void;
@@ -21,26 +24,20 @@ export default function Header(props: HeaderProps) {
           >
             {title}
           </p>
-          <div className="flex gap-2">
-            <img
-              src="/images/icons/book-roaster/ico-plus-black.svg"
-              alt="학생 추가 아이콘"
+          <div className="flex gap-2 items-center">
+            <PlusIcon
               width={40}
               height={40}
               onClick={() =>
                 navigate(`/book/${bookId}/attendee/create${location.search}`)
               }
+              className="cursor-pointer"
             />
-            <img
-              src="/images/icons/ico-settings.svg"
-              alt="설정 아이콘"
-              width={32}
-              height={32}
-            />
+            <SettingIcon width={32} height={32} className="cursor-pointer" />
           </div>
         </div>
       </div>
-      <div className="flex gap-2 w-full justify-center p-[17px]">
+      <div className="flex gap-2 w-full items-center justify-center p-[17px]">
         <div className="relative w-full">
           <input
             type="text"
@@ -48,20 +45,17 @@ export default function Header(props: HeaderProps) {
             placeholder="이름 검색"
             onChange={(e) => onChangeSearch(e.target.value)}
           />
-          <img
+          <GlassesIcon
             width={40}
             height={40}
-            src={"/images/icons/book-roaster/ico-glasses.svg"}
-            alt="input placeholder 아이콘"
             className="absolute top-[2px] left-1"
           />
         </div>
-        <img
-          width={40}
-          height={40}
+        <SliderIcon
+          width={42}
+          height={42}
           onClick={onDrawerChange}
-          src={"/images/icons/book-roaster/ico-slider.svg"}
-          alt="필터 아이콘"
+          className="cursor-pointer"
         />
       </div>
     </>

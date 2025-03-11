@@ -9,7 +9,12 @@ import useModalStore from "@/store/dialogStore";
 import ConfirmModal from "./ConfirmModal";
 import toast from "react-hot-toast";
 import { BookStatus } from "@/api/type";
-
+import ZzzIcon from "@/assets/icons/ico-zzz.svg?react";
+import UserAddIcon from "@/assets/icons/ico-user-add.svg?react";
+import CheckIcon from "@/assets/icons/ico-check.svg?react";
+import SettingIcon from "@/assets/icons/ico-settings.svg?react";
+import LeftArrowIcon from "@/assets/icons/ico-arrow-left.svg?react";
+import RightArrowIcon from "@/assets/icons/ico-arrow-right.svg?react";
 type HeaderProps = {
   title: string;
   bookId: number;
@@ -58,19 +63,19 @@ export default function Header(props: HeaderProps) {
   const openModal = useModalStore((state) => state.openModal);
   const SUB_HEADER = [
     {
-      src: "/images/icons/ico-zzz.svg",
+      Icon: <ZzzIcon width={16} height={16} />,
       name: "휴원하기",
       onClick: async () => await handleBookStatus(formattedDate, "PAUSED"),
     },
     {
-      src: "/images/icons/ico-user-add.svg",
+      Icon: <UserAddIcon width={16} height={16} />,
       name: "인원 추가",
       onClick: () => {
         setOpenFilter(true);
       },
     },
     {
-      src: "/images/icons/ico-check.svg",
+      Icon: <CheckIcon width={16} height={16} />,
       name: "전체 출석",
       onClick: () =>
         totalScheduleCount > 0
@@ -84,38 +89,34 @@ export default function Header(props: HeaderProps) {
   return (
     <div className="flex flex-col sticky top-0 z-50 bg-white">
       <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
-        <p className="text-[22px] font-bold" onClick={() => navigate("/book")}>
+        <p
+          className="text-[22px] font-bold cursor-pointer"
+          onClick={() => navigate("/book")}
+        >
           {title}
         </p>
-        <img
-          src="/images/icons/ico-settings.svg"
-          alt="설정 아이콘"
-          width={32}
-          height={32}
-        />
+        <SettingIcon className="cursor-pointer" width={32} height={32} />
       </div>
       {/* Calendar */}
       <div className="w-full flex h-10 justify-between items-center px-4 border-b border-bg-disabled">
-        <img
-          src="/images/icons/ico-arrow-left.svg"
-          alt="왼쪽 화살"
-          width={9}
-          height={9}
+        <LeftArrowIcon
+          width={12}
+          height={12}
           onClick={handlePreviousDay}
+          className="cursor-pointer"
         />
         <p
-          className="text-xl font-bold"
+          className="text-xl font-bold cursor-pointer select-none"
           data-value={formattedDate}
           onClick={handleDrawer}
         >
           {displayDate}
         </p>
-        <img
-          src="/images/icons/ico-arrow-right.svg"
-          alt="오른쪽 화살"
-          width={9}
-          height={9}
+        <RightArrowIcon
+          width={12}
+          height={12}
           onClick={handleNextDay}
+          className="cursor-pointer"
         />
       </div>
       {/* SubHeader */}
@@ -131,12 +132,7 @@ export default function Header(props: HeaderProps) {
               onClick={header.onClick}
               className="w-[77px] h-[46px] flex flex-col items-center justify-center bg-bg-secondary rounded-lg"
             >
-              <motion.img
-                src={header.src}
-                alt={header.name}
-                width={16}
-                height={16}
-              />
+              {header.Icon}
               <motion.p className="text-xs font-medium">{header.name}</motion.p>
             </motion.button>
           ))}

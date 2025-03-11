@@ -33,6 +33,7 @@ export default function Loading() {
             repeatDelay: 1.5, // 전체 사이클 동안의 지연 시간
           }}
           className="mb-4"
+          loading="lazy"
         />
         {/* ico-checkuree-note-1 */}
         <motion.img
@@ -53,6 +54,7 @@ export default function Loading() {
             repeatDelay: 1.5,
           }}
           className="absolute top-[13px] right-5"
+          loading="lazy"
         />
         {/* ico-checkuree-note-2 */}
         <motion.img
@@ -73,6 +75,7 @@ export default function Loading() {
             repeatDelay: 1.5,
           }}
           className="absolute top-[13px] right-0"
+          loading="lazy"
         />
       </div>
     </div>

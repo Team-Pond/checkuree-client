@@ -6,7 +6,8 @@ import { formatLocalTimeString } from "@/utils";
 import { twMerge } from "tailwind-merge";
 import { useLessonUpdate, useRecordDelete } from "../queries";
 import { ScheduleData } from "@/api/type";
-
+import NoteActiveIcon from "@/assets/icons/book-check/ico-note-active.svg?react";
+import NoteIcon from "@/assets/icons/book-check/ico-note.svg?react";
 interface IProps {
   bookId: number;
   schedule: ScheduleData;
@@ -114,12 +115,7 @@ export default function LessonRow(props: IProps) {
           }}
           disabled={schedule.recordStatus !== "ATTEND"}
         >
-          <img
-            src={`/images/icons/book-check/${
-              schedule.isTaught ? "ico-note-active.svg" : "ico-note.svg"
-            }`}
-            alt=""
-          />
+          {schedule.isTaught ? <NoteActiveIcon /> : <NoteIcon />}
         </button>
       </div>
     </LessonWrapper>
