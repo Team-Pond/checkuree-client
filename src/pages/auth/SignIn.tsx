@@ -30,7 +30,7 @@ export default function SignIn() {
         <Hr />
         <LoginButton
           className="relative bg-[#FEE500]"
-          onClick={() => navigate("/kakao-auth/signin")}
+          onClick={() => navigate("/auth/login")}
         >
           <img
             src="/images/icons/ico-kakao-logo.svg"

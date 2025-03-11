@@ -82,7 +82,7 @@ function App() {
           <Route path="*" element={<NotFound />} /> {/* 404페이지 */}
           <Route path="/auth/signin" element={<SignIn />} />
           <Route path="/checkuree-auth/signin" element={<CheckureeSignIn />} />
-          <Route path="/kakao-auth/signin" element={<KakaoSignIn />} />
+          <Route path="/auth/login" element={<KakaoSignIn />} />
           {/* 인증 처리 */}
           {/* Book 관련 라우트 그룹 */}
           <Route element={<BookLayout />}>
