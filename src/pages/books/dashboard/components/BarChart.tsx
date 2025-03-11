@@ -89,8 +89,7 @@ export default function BarChart() {
     },
   };
   return (
-    <div style={{ width: 358, height: 284 }}>
-      {" "}
+    <div style={{ width: "100%", height: 284 }}>
       <Bar data={data} options={options} />
     </div>
   );

@@ -51,5 +51,5 @@ const Squre = tw.div`${({ bg }: { bg: string }) =>
 const Ratio = tw.div`${({ color }: { color: string }) =>
   color && color} text-[13px] font-semibold mt-[1px]`;
 
-const ChartWrapper = tw.div`flex flex-col items-center gap-2 w-[358px] h-[284px] bg-white rounded-2xl mx-auto py-4`;
+const ChartWrapper = tw.div`flex flex-col items-center gap-2 w-full px-2 h-[284px] bg-white rounded-2xl mx-auto py-4`;
 const ButtonsWrapper = tw.div`flex justify-between w-full items-center`;

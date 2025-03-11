@@ -20,7 +20,7 @@ export default function Dashboard() {
           onClick={() => {}}
         />
       </div>
-      <main className="w-full bg-bg-secondary flex flex-col gap-4 p-4">
+      <main className="w-full flex-1 bg-bg-secondary flex flex-col gap-4 p-4">
         <AttendanceRateChart />
         <AttendanceCategoryChart />
         <div className="h-[92px]" />
