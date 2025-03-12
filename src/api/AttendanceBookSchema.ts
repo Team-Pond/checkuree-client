@@ -68,7 +68,7 @@ export type GetBookDetailRequest = number;
 
 export type GetBookDetailResponse = ResponseBase & {
   status: 200;
-  data: GetMyBooksDataType[];
+  data: GetMyBooksDataType;
 };
 
 export type GetMyBooksResponse = GetBookResponse | ErrorResponse;
