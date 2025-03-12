@@ -52,7 +52,7 @@ export default function CheckureeSignIn() {
     defaultValues: initailValues,
   });
   return (
-    <section className="flex flex-col justify-center items-center gap-8 px-6 h-full">
+    <section className="flex flex-col justify-center items-center gap-8 h-full">
       <SEO
         title="체쿠리 | 출석부 로그인"
         content="체쿠리 음악학원 출석부 서비스의 사내 로그인 페이지입니다."
