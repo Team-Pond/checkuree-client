@@ -51,19 +51,15 @@ const routes: RouteType[] = [
   { path: "/book/:bookId/attendee", element: <BookRoaster /> }, // 출석부 명단
   {
     path: "/book/:bookId/attendee/:attendeeId",
-    element: <BookAttendeeDetail />,
+    element: <BookAttendeeDetail />, // 학생 상세
   },
   {
     path: "/book/:bookId/attendee/:attendeeId/schedule",
-    element: <ScheduleModify />,
+    element: <ScheduleModify />, //
   },
   {
     path: "/book/:bookId/attendee/:attendeeId/counselling",
-    element: <CounsellingCreate />,
-  },
-  {
-    path: "/book/:bookId/attendee/:attendeeId/counselling",
-    element: <CounsellingCreate />,
+    element: <CounsellingCreate />, // 상담 생성
   },
   {
     path: "/book/:bookId/dashboard",
