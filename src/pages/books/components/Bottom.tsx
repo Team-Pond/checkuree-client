@@ -1,6 +1,12 @@
-import toast from "react-hot-toast";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
+
+import BookActiveIcon from "@/assets/icons/book-check/ico-book-active.svg?react";
+import BookIcon from "@/assets/icons/book-check/ico-book.svg?react";
+import RoasterActiveIcon from "@/assets/icons/book-check/ico-roaster-active.svg?react";
+import RoasterIcon from "@/assets/icons/book-check/ico-roaster.svg?react";
+import StatisticsActiveIcon from "@/assets/icons/book-check/ico-statistics-active.svg?react";
+import StatisticsIcon from "@/assets/icons/book-check/ico-statistics.svg?react";
 
 export default function Bottom() {
   const location = useLocation();
@@ -25,13 +31,8 @@ export default function Bottom() {
         className="flex flex-col gap-2 items-center"
         onClick={() => navigate(`/book/${bookId}${location.search}`)}
       >
-        <img
-          src={`/images/icons/book-check/${
-            isBookActive ? "ico-book-active" : "ico-book"
-          }.svg`}
-          alt="출석부 아이콘"
-          width={20}
-        />
+        {isBookActive ? <BookActiveIcon width={20} /> : <BookIcon width={20} />}
+
         <p
           className={twMerge(
             "text-xs ",
@@ -45,14 +46,11 @@ export default function Bottom() {
         className="flex flex-col gap-2 items-center"
         onClick={() => navigate(`/book/${bookId}/attendee${location.search}`)}
       >
-        <img
-          src={`/images/icons/book-check/${
-            isAttendeeActive ? "ico-roaster-active" : "ico-roaster"
-          }.svg`}
-          alt="출석부 아이콘"
-          width={20}
-          height={20}
-        />
+        {isAttendeeActive ? (
+          <RoasterActiveIcon width={20} />
+        ) : (
+          <RoasterIcon width={20} />
+        )}
         <p
           className={twMerge(
             "text-xs ",
@@ -66,14 +64,11 @@ export default function Bottom() {
         className="flex flex-col gap-2 items-center"
         onClick={() => navigate(`/book/${bookId}/dashboard${location.search}`)}
       >
-        <img
-          src={`/images/icons/book-check/${
-            isDashBoardActive ? "ico-statistics-active" : "ico-statistics"
-          }.svg`}
-          alt="출석부 아이콘"
-          width={20}
-          height={20}
-        />
+        {isDashBoardActive ? (
+          <StatisticsActiveIcon width={20} />
+        ) : (
+          <StatisticsIcon width={20} />
+        )}
         <p
           className={twMerge(
             "text-xs",

@@ -11,7 +11,8 @@ import {
 } from "date-fns";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
-
+import LeftArrowIcon from "@/assets/icons/ico-arrow-left.svg?react";
+import RightArrowIcon from "@/assets/icons/ico-arrow-right.svg?react";
 interface IProps {
   className?: string;
   handleCurrentDay: (date: Date) => void;
@@ -40,15 +41,10 @@ export default function Calendar({ className, handleCurrentDay }: IProps) {
           className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] mr-2"
           onClick={() => setSelectedMonth(add(selectedMonth, { months: -1 }))}
         >
-          <img
-            src="/images/icons/ico-arrow-left.svg"
-            alt=""
-            width={10}
-            height={10}
-          />
+          <LeftArrowIcon width={12} height={12} />
         </button>
 
-        <span className="mt-1 focus:outline-none text-l-bold text-text-primary">
+        <span className="focus:outline-none text-l-bold text-text-primary">
           {format(selectedMonth, "yyyy년 MM월")}
         </span>
 
@@ -57,12 +53,7 @@ export default function Calendar({ className, handleCurrentDay }: IProps) {
           className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] ml-2"
           onClick={() => setSelectedMonth(add(selectedMonth, { months: 1 }))}
         >
-          <img
-            src="/images/icons/ico-arrow-right.svg"
-            alt=""
-            width={10}
-            height={10}
-          />
+          <RightArrowIcon width={12} height={12} />
         </button>
       </div>
       <table className={twMerge("w-full table-fixed", className)}>
@@ -96,9 +87,9 @@ export default function Calendar({ className, handleCurrentDay }: IProps) {
                 }
                 return acc;
               }, [] as Date[][])
-              .map((dates) => {
+              .map((dates, index) => {
                 return (
-                  <tr>
+                  <tr key={index}>
                     {dates.map((date) => {
                       const isTextColor =
                         isEqual(selectedDay, date) &&
@@ -111,7 +102,7 @@ export default function Calendar({ className, handleCurrentDay }: IProps) {
                           ? "text-text-tertiary"
                           : "text-[#5d5d5d]";
                       return (
-                        <td>
+                        <td key={date.toString()}>
                           <div
                             onClick={() => {
                               setSelectedDay(date);

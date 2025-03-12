@@ -7,7 +7,7 @@ if (!existsSync("./dist")) {
 }
 
 const sitemap = new SitemapStream({
-  hostname: "https://pond-client.vercel.app/",
+  hostname: "https://pond-client.vercel.app",
 });
 const writeStream = createWriteStream("./dist/sitemap.xml");
 
@@ -18,7 +18,7 @@ sitemap.pipe(writeStream);
 sitemap.write({ url: "/", changefreq: "daily", priority: 1 });
 
 sitemap.write({
-  url: "/kakao-auth/signin",
+  url: "/auth/login",
   changefreq: "weekly",
   priority: 0.8,
 });
