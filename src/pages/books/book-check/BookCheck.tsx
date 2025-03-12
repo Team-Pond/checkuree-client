@@ -1,7 +1,7 @@
 import Header from "./components/Header";
 import MainContents from "./components/MainContent";
 
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { BookContext } from "@/context/BookContext";
 import { useParams, useSearchParams } from "react-router-dom";
 import dayjs from "dayjs";
@@ -29,9 +29,9 @@ export default function BookCheck() {
 
   const formattedDate = currentDate.format("YYYY-MM-DD"); // 데이터 값
 
-  const onDrawerChange = () => {
+  const onDrawerChange = useCallback(() => {
     setOpenFilter(!openFilter);
-  };
+  }, [openFilter]);
 
   const handlePreviousDay = () => {
     setCurrentDate((prev) => prev.subtract(1, "day"));
@@ -41,9 +41,9 @@ export default function BookCheck() {
     setCurrentDate((prev) => prev.add(1, "day"));
   };
 
-  const handleCurrentDay = (date: Date) => {
+  const handleCurrentDay = useCallback((date: Date) => {
     setCurrentDate(dayjs(date));
-  };
+  }, []);
 
   const { data: bookSchedules } = useBookSchedules({
     bookId: Number(bookId),

@@ -15,7 +15,7 @@ const Modal = () => {
         `}
         onClick={(e) => e.stopPropagation()}
       >
-        <span className="select-none">{content}</span>
+        {content}
 
         <div className="flex gap-4 w-full mt-7">
           <Button
@@ -26,9 +26,7 @@ const Modal = () => {
             }}
             className=" bg-bg-secondary"
           >
-            <span className="text-text-secondary text-l-semibold select-none">
-              취소
-            </span>
+            <span className="text-text-secondary text-l-semibold">취소</span>
           </Button>
           <Button
             type="button"
@@ -40,7 +38,7 @@ const Modal = () => {
               closeModal();
             }}
           >
-            <span className="text-[#F1F8F3] text-l-semibold select-none">
+            <span className="text-[#F1F8F3] text-l-semibold">
               {buttonProps?.text ? buttonProps.text : "저장하기"}
             </span>
           </Button>
