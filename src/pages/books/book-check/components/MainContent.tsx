@@ -1,5 +1,5 @@
 import { useRecordCreate, useRecordUpdate, useStatusUpdate } from "../queries";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { ConfirmModal } from "./ConfirmModal";
 import ModifyRecordTimeModal from "./ModifyRecordTimeModal";
 
@@ -14,7 +14,6 @@ import {
   ScheduleDataType,
   STATUS,
 } from "@/api/type";
-import { set } from "lodash";
 
 type IProps = {
   bookSchedules: ScheduleDataType;
@@ -39,14 +38,6 @@ export default function MainContents(props: IProps) {
     id: 0,
     formattedTime: "",
   });
-
-  // 수업 중( 등원 후 && 수업 전)인 학생
-  const [needLessonStudents, setNeedLessonStudents] = useState<ScheduleData[]>(
-    []
-  );
-  // 출선 전 or 수업 완료 학생
-  const [noNeedLessonTimeScheduleTable, setNoNeedLessonTimeScheduleTable] =
-    useState<ScheduleDataContentType>([]);
 
   const { mutate: recordCreate } = useRecordCreate({
     bookId,
@@ -117,34 +108,40 @@ export default function MainContents(props: IProps) {
     });
   };
 
-  useEffect(() => {
-    if (bookSchedules?.content) {
-      const newNeedLessonStudents: ScheduleData[] = [];
-      const newNoNeedLessonTimeScheduleTable: ScheduleDataContentType = [];
-
-      bookSchedules.content.forEach((content) => {
-        const beforeLessonStudents = content.schedules.filter((schedule) => {
-          return schedule.recordStatus === "ATTEND" && !schedule.isTaught;
-        });
-        const noNeedToLessonSchedules = content.schedules.filter((schedule) => {
-          return schedule.recordStatus !== "ATTEND" || schedule.isTaught;
-        });
-
-        newNeedLessonStudents.push(...beforeLessonStudents);
-        newNoNeedLessonTimeScheduleTable.push({
-          ...content,
-          schedules: noNeedToLessonSchedules,
-        });
-      });
-
-      // 상태 업데이트
-      setNeedLessonStudents(
-        newNeedLessonStudents.sort((a, b) =>
-          a.recordTime > b.recordTime ? 1 : -1
-        )
-      );
-      setNoNeedLessonTimeScheduleTable(newNoNeedLessonTimeScheduleTable);
+  const computedLessonData = useMemo(() => {
+    if (!bookSchedules?.content) {
+      return {
+        computedNeedLessonStudents: [],
+        computedNoNeedLessonTimeScheduleTable: [],
+      };
     }
+
+    const tempNeedLessonStudents: ScheduleData[] = [];
+    const tempNoNeedLessonTimeScheduleTable: ScheduleDataContentType = [];
+
+    bookSchedules.content.forEach((content) => {
+      const beforeLessonStudents = content.schedules.filter(
+        (schedule) => schedule.recordStatus === "ATTEND" && !schedule.isTaught
+      );
+      const noNeedToLessonSchedules = content.schedules.filter(
+        (schedule) => schedule.recordStatus !== "ATTEND" || schedule.isTaught
+      );
+
+      tempNeedLessonStudents.push(...beforeLessonStudents);
+      tempNoNeedLessonTimeScheduleTable.push({
+        ...content,
+        schedules: noNeedToLessonSchedules,
+      });
+    });
+
+    tempNeedLessonStudents.sort((a, b) =>
+      a.recordTime > b.recordTime ? 1 : -1
+    );
+
+    return {
+      computedNeedLessonStudents: tempNeedLessonStudents,
+      computedNoNeedLessonTimeScheduleTable: tempNoNeedLessonTimeScheduleTable,
+    };
   }, [bookSchedules?.content]);
 
   const handleAttendanceStatusWithConfirmation = (
@@ -201,17 +198,21 @@ export default function MainContents(props: IProps) {
   return (
     <MainContentWrapper>
       {/* 수업중인 학생들 */}
+
       <NeedLessonTable
-        needLessonStudents={needLessonStudents}
+        needLessonStudents={computedLessonData.computedNeedLessonStudents}
         bookId={Number(bookId)}
         handleAttendanceStatusWithConfirmation={
           handleAttendanceStatusWithConfirmation
         }
         openModifyRecordTimeModal={openModifyRecordTimeModal}
       />
+
       {/* 수업중이 아닌 학생들 */}
       <NoNeedLessonTable
-        noNeedLessonTimeScheduleTable={noNeedLessonTimeScheduleTable}
+        noNeedLessonTimeScheduleTable={
+          computedLessonData.computedNoNeedLessonTimeScheduleTable
+        }
         bookId={Number(bookId)}
         handleAttendanceStatusWithConfirmation={
           handleAttendanceStatusWithConfirmation
