@@ -8,6 +8,7 @@ import { useLessonUpdate, useRecordDelete } from "../queries";
 import { ScheduleData } from "@/api/type";
 import NoteActiveIcon from "@/assets/icons/book-check/ico-note-active.svg?react";
 import NoteIcon from "@/assets/icons/book-check/ico-note.svg?react";
+import React from "react";
 interface IProps {
   bookId: number;
   schedule: ScheduleData;
@@ -17,7 +18,7 @@ interface IProps {
   ) => void;
   openModifyRecordTimeModal: (schedule: ScheduleData) => void;
 }
-export default function LessonRow(props: IProps) {
+function LessonRow(props: IProps) {
   const {
     bookId,
     schedule,
@@ -48,6 +49,7 @@ export default function LessonRow(props: IProps) {
     () => openModifyRecordTimeModal(schedule),
     { delay: 300 }
   );
+  console.log("test");
   return (
     <LessonWrapper key={schedule.scheduleId}>
       <div
@@ -123,3 +125,5 @@ export default function LessonRow(props: IProps) {
 }
 
 const LessonWrapper = tw.div`w-full h-[56px] flex items-center justify-between px-2`;
+
+export default React.memo(LessonRow);

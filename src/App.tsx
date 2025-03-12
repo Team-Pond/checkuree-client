@@ -37,7 +37,6 @@ const CounsellingCreate = lazy(
       "@/pages/books/book-attendee-detail/counsel/components/CounsellingCreate"
     )
 );
-
 const Dashboard = lazy(() => import("@/pages/books/dashboard/Dashboard"));
 
 interface RouteType {
