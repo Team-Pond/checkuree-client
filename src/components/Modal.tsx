@@ -11,11 +11,11 @@ const Modal = () => {
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
       <div
         className={`
-          relative bg-white rounded-xl shadow-xl p-6 max-w-xs items-center justify-between  w-full
+          relative bg-white rounded-xl shadow-xl p-6 max-w-xs items-center justify-between w-full
         `}
         onClick={(e) => e.stopPropagation()}
       >
-        {content}
+        <span className="select-none">{content}</span>
 
         <div className="flex gap-4 w-full mt-7">
           <Button
