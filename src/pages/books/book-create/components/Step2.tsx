@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { CourseData } from "@/api v2/AttendanceBookSchema";
+
 import { twMerge } from "tailwind-merge";
 import BottomDrawer from "@/components/BottomDrawer";
 import { useSubjectItems, useSubjects } from "../queries";
+import { CourseData } from "@/api/type";
+import FieldHeader from "@/components/FieldTitle";
 
 export type IProps = {
   handleCourseChange: (params: CourseData) => void;
@@ -69,10 +71,7 @@ export default function Step2(props: IProps) {
 
   return (
     <>
-      <div
-        key={"step2"}
-        className="flex flex-col justify-center gap-6 max-w-[342px] w-full"
-      >
+      <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
         {/* 커리큘럼 추가된 것 */}
         {courseCreateParam.map((course) => {
           return (
@@ -95,10 +94,7 @@ export default function Step2(props: IProps) {
           <>
             {/* 커리큘럼 이름 */}
             <div className="flex flex-col gap-2">
-              <div className="flex gap-1 items-center">
-                <p className="font-bold text-m-medium">커리큘럼 이름</p>
-                <p className="text-text-danger">*</p>
-              </div>
+              <FieldHeader title="커리큘럼 이름" essential />
 
               <input
                 type="text"
@@ -109,10 +105,7 @@ export default function Step2(props: IProps) {
             </div>
             {/* 커리큘럼 내용 */}
             <div className="flex flex-col gap-2">
-              <div className="flex gap-1 items-center">
-                <p className="font-bold text-m-medium">커리큘럼 내용</p>
-                <p className="text-text-danger">*</p>
-              </div>
+              <FieldHeader title="커리큘럼 내용" essential />
 
               <div className="max-w-[343px] rounded-2xl py-1 px-2 text-left bg-bg-base">
                 <ul>
@@ -259,6 +252,9 @@ export default function Step2(props: IProps) {
               </ul>
               <ul className="w-full overflow-y-scroll bg-[#f6f6f6] px-[14px] rounded-tr-lg">
                 {subjectItems?.map((subjectItem) => {
+                  const isFindIndex = selectedSubjectItems.find(
+                    (item) => item.subjectItemId === subjectItem.id
+                  );
                   return (
                     <li
                       key={subjectItem.level}
@@ -268,11 +264,16 @@ export default function Step2(props: IProps) {
                         {subjectItem.title}
                       </p>
                       <img
-                        src="/images/icons/book-create/ico-plus.svg"
+                        src={
+                          isFindIndex
+                            ? "/images/icons/ico-check.svg"
+                            : "/images/icons/book-create/ico-plus.svg"
+                        }
                         alt="플러스 아이콘"
                         width={19}
                         height={19}
                         onClick={() =>
+                          !isFindIndex &&
                           setSelectedSubjectItems([
                             ...selectedSubjectItems,
                             {

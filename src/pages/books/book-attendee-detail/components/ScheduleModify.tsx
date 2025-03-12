@@ -2,8 +2,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import ScheduleModifyDetail from "./modify_components/ScheduleModifyDetail";
 import { useOnlyScheduleUpdate } from "../../../attendee-create/queries";
 import { useEffect, useState } from "react";
-import { UpdateAttendeeScheduleRequest } from "../../../../api v2/AttendeeSchema";
+import { UpdateAttendeeScheduleRequest } from "../../../../api/AttendeeSchema";
 import { useAttendeeDetail } from "../queries";
+import SEO from "@/components/SEO";
 
 export const ScheduleModify = () => {
   const { bookId, attendeeId } = useParams();
@@ -37,6 +38,10 @@ export const ScheduleModify = () => {
 
   return (
     <form className="flex flex-col gap-7 w-full pb-[30px]">
+      <SEO
+        title="체쿠리 | 스케줄 변경"
+        content="체쿠리 음악학원 출석부 서비스의 스케줄 변경 페이지입니다."
+      />
       <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
         <p className="font-bold text-text-primary text-[22px]">클래스 수정</p>
         <img
@@ -55,10 +60,7 @@ export const ScheduleModify = () => {
 
         <div className="flex w-full justify-center">
           <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
-            <ScheduleModifyDetail
-              attendeeSchedules={attendeeSchedules}
-              setAttendeeSchedules={setAttendeeSchedules}
-            />
+            <ScheduleModifyDetail setAttendeeSchedules={setAttendeeSchedules} />
             <div className="flex gap-4 w-full">
               <button
                 type="button"

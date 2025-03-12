@@ -2,13 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: "AppleLiGothic";
-  src: url("/fonts/Apple-LiGothic-Medium") format("truetype");
-  font-weight: 500;
-  font-style: normal;
-}
-
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -34,4 +27,14 @@ body {
   color: #222222;
   margin: 0;
   font-family: "SUIT", sans-serif;
+
+  input:-webkit-autofill {
+    -webkit-text-fill-color: black !important;
+  }
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+  }
 }

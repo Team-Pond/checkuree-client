@@ -1,6 +1,6 @@
-import { DaysType } from "@/api v2/AttendanceBookSchema";
 import BottomDrawer from "@/components/BottomDrawer";
-import { convertEngDayToKorDay } from "../../../../utils";
+import { DaysType } from "@/api/type";
+import { convertEngDayToKorDay } from "@/utils";
 
 type Attendee = {
   name: string;
@@ -29,7 +29,7 @@ export default function AttendeeDrawer({
 
   return (
     <BottomDrawer isOpen={isOpen} onClose={onClose}>
-      <div className="flex flex-col gap-4 items-center h-[249px]">
+      <div className="flex flex-col gap-4 items-center h-[249px] overflow-auto">
         <div className="px-4 w-full">
           {/* Drawer 상단 영역 */}
           <div className="text-left w-full h-10 border-b border-[#f6f6f6] flex items-center">
@@ -45,9 +45,9 @@ export default function AttendeeDrawer({
           {scheduleData?.map((attendee) => (
             <div key={attendee.name} className="flex gap-2 w-[171px] h-9">
               <p className="text-m-bold text-text-primary">{attendee.name}</p>
-              <p className="text-m-semibold text-text-secondary">
-                {attendee.age}
-              </p>
+              {/*<p className="text-m-semibold text-text-secondary">*/}
+              {/*  {attendee.age}*/}
+              {/*</p>*/}
             </div>
           ))}
         </div>

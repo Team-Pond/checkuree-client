@@ -4,31 +4,27 @@ import {
   getBookCourse,
   getBookScheduleTable,
   updateBookProgress,
-} from "@/api v2/AttendanceBookApiClient";
+} from "@/api/AttendanceBookApiClient";
 import {
-  createAttendee,
   getScheduleAttendee,
   updateAttendeeSchedule,
   updateAttendeeVerify,
-} from "@/api v2/AttendeeApiClient";
-import {
-  Associates,
-  GenderType,
-  UpdateAttendeeScheduleRequest,
-} from "@/api v2/AttendeeSchema";
+} from "@/api/AttendeeApiClient";
+import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { attendeeKeys } from "@/queryKeys";
+import { GenderType } from "@/api/type";
 
 // 일정(요일, 시간)에 따른 수강생 데이터를 가져오는 커스텀 훅
 export const useScheduleAttendee = (
   attendanceBookId: number,
   dayOfWeek: string,
   hhmm: string,
-  enabled: boolean = false,
+  enabled: boolean = false
 ) => {
   return useQuery({
-    enabled: enabled && dayOfWeek !== "" && hhmm !== "",
+    enabled: !!hhmm && !!dayOfWeek,
     queryKey: attendeeKeys.schedules(attendanceBookId, dayOfWeek, hhmm)
       .queryKey,
     queryFn: async () => {
@@ -40,6 +36,7 @@ export const useScheduleAttendee = (
       if (res.status === 200) return res.data;
       throw new Error("Failed to fetch schedule attendee");
     },
+    staleTime: 6000,
   });
 };
 
@@ -83,39 +80,6 @@ interface Step1FormState {
     phoneNumber: string;
   }[];
 }
-
-export const useAttendeeCreate = ({
-  bookId,
-  formData,
-  guardian,
-  handleAttendeeId,
-  handleStep2Change,
-}: {
-  bookId: number;
-  formData: Step1FormState;
-  guardian: Associates;
-  handleAttendeeId: (id: number) => void;
-  handleStep2Change: (state: boolean) => void;
-}) => {
-  return useMutation({
-    mutationFn: async () =>
-      await createAttendee({
-        attendanceBookId: bookId,
-        params: {
-          ...formData,
-          birthDate: formData.birthDate.replaceAll(".", "-"),
-          actualName: formData.name,
-          enrollmentDate: formData.enrollmentDate.replaceAll(".", "-"),
-          associates: guardian ? [guardian] : [],
-        },
-      }),
-    onSuccess: (res) => {
-      handleAttendeeId(res.data.id);
-      handleStep2Change(true);
-    },
-    onError: (error) => {},
-  });
-};
 
 interface progressGrade {
   startAt: string;

@@ -3,10 +3,13 @@ import {
   updateRecordAll,
   updateRecordLesson,
   updateRecord,
-} from "@/api v2/RecordApiClient";
-import { STATUS } from "@/api v2/RecordSchema";
-import { getScheduleAttendee } from "@/api v2/ScheduleApiClient";
-import { bookKeys } from "@/queryKeys";
+  deleteRecord,
+} from "@/api/RecordApiClient";
+import { DeleteRecordRequest } from "@/api/RecordSchema";
+import { getScheduleAttendee } from "@/api/ScheduleApiClient";
+import { STATUS } from "@/api/type";
+import { attendeeKeys, bookKeys } from "@/queryKeys";
+import useFormDataStore from "@/store/recordStore";
 import { getCurrentTimeParts } from "@/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -34,6 +37,7 @@ export const useBookSchedules = ({
       }),
     refetchInterval: 5000,
     refetchIntervalInBackground: true,
+
     enabled: !!bookId && !!formattedDate,
   });
 };
@@ -76,6 +80,7 @@ export const useRecordUpdate = ({
   formattedTime: string;
 }) => {
   const queryClient = useQueryClient();
+  const { setFormData } = useFormDataStore();
   return useMutation({
     mutationFn: async () =>
       await updateRecord({
@@ -93,6 +98,7 @@ export const useRecordUpdate = ({
         queryKey: bookKeys.schedules._def,
       });
       toast.success("출석시간 변경 완료");
+      setFormData({ hour: "", minute: "" });
     },
     onError: () => {
       toast.error("출석시간 수정 실패");
@@ -201,5 +207,20 @@ export const useLessonUpdate = ({ bookId }: { bookId: number }) => {
       });
     },
     onError: () => {},
+  });
+};
+
+export const useRecordDelete = (bookId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (params: DeleteRecordRequest) =>
+      await deleteRecord(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: attendeeKeys.schedules(bookId),
+      });
+      toast.success("보강기록이 삭제되었습니다.");
+    },
   });
 };

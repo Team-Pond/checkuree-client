@@ -1,13 +1,28 @@
+import CounselList from "./CounselList";
+import { useCounsellingList } from "../queries";
+import { useNavigate, useParams } from "react-router-dom";
+import { Associates } from "@/api/type";
+
 type IProps = {
   studentInfo: {
     name: string;
     age: number;
     grade: string;
     scheduleDays: string;
+    associates: Associates[];
   };
 };
 export default function CounselManage(props: IProps) {
   const { studentInfo } = props;
+  const { bookId, attendeeId } = useParams();
+
+  const { data: counsellingList } = useCounsellingList({
+    bookId: parseInt(bookId!),
+    attendeeId: parseInt(attendeeId!),
+  });
+
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-8 items-center w-full h-[81px] rounded-2xl bg-white">
@@ -35,42 +50,41 @@ export default function CounselManage(props: IProps) {
           </div>
         </div>
       </div>
-
-      <div className="w-full rounded-2xl text-left bg-white p-4 flex flex-col gap-5">
-        <p className="flex text-s-bold text-[#5d5d5d]">
-          상담 내역 <img src="" alt="" />
-        </p>
-        <p className="text-m-semibold text-text-primary">2024.12.31</p>
-        <div className="flex items-center justify-between text-s-semibold">
-          <p className="text-text-tertiary">유형</p>
-          <p className="text-text-primary">전화</p>
-        </div>
-        <div className="flex items-center justify-between text-s-semibold">
-          <p className="text-text-tertiary">주제</p>
-          <p className="text-text-primary">진로 상담</p>
-        </div>
-        <div className="flex items-center justify-between text-s-semibold">
-          <p className="text-text-tertiary">상담자</p>
-          <p className="text-text-primary">학생 모</p>
-        </div>
-      </div>
-      <div className="w-full rounded-2xl text-left bg-white p-4 flex flex-col gap-5">
-        <p className="flex text-s-bold text-[#5d5d5d]">
-          상담 내역 <img src="" alt="" />
-        </p>
-        <p className="text-m-semibold text-text-primary">2024.12.31</p>
-        <div className="flex items-center justify-between text-s-semibold">
-          <p className="text-text-tertiary">유형</p>
-          <p className="text-text-primary">전화</p>
-        </div>
-        <div className="flex items-center justify-between text-s-semibold">
-          <p className="text-text-tertiary">주제</p>
-          <p className="text-text-primary">진로 상담</p>
-        </div>
-        <div className="flex items-center justify-between text-s-semibold">
-          <p className="text-text-tertiary">상담자</p>
-          <p className="text-text-primary">학생 모</p>
-        </div>
+      {counsellingList?.map((counsel) => (
+        <CounselList
+          counselType={counsel.counsellingType}
+          counselSubjects={counsel.counsellingTopicTypes}
+          counselleeType={counsel.counselee.relationType}
+          counsellingAt={new Date(counsel.counsellingAt)}
+          counsellingId={counsel.counsellingId}
+          counsellorName={counsel.counsellor.name}
+          counsellorId={counsel.counsellor.counsellorId}
+          counseleeId={counsel.counselee.counseleeId}
+        />
+      ))}
+      <div className="fixed bottom-11 right-[5%] max-w-[390px]">
+        <button
+          onClick={() =>
+            navigate(
+              `/book/${bookId}/attendee/${attendeeId}/counselling${location.search}`,
+              {
+                state: {
+                  associates: studentInfo.associates,
+                  name: studentInfo.name,
+                },
+              }
+            )
+          }
+          className="w-[88px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
+        >
+          <img
+            src="/images/icons/book/ico-plus.svg"
+            alt="플러스 아이콘"
+            width={16}
+            height={16}
+          />
+          <p className="text-white font-semibold text-lg">상담</p>
+        </button>
       </div>
     </div>
   );

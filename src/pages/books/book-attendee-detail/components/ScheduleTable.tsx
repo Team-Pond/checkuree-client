@@ -1,9 +1,7 @@
-// ScheduleTable.tsx
-
-import { UpdateAttendeeScheduleRequest } from "@/api v2/AttendeeSchema";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useBookDetail } from "../../queries";
+import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
 
 type DayOfWeek =
   | "MONDAY"
@@ -21,18 +19,16 @@ interface ScheduleItem {
 
 interface ScheduleProps {
   scheduleTable: ScheduleItem[];
+  timeSlots: number;
   startHhmm: string;
   endHhmm: string;
-  timeSlots: number;
   handleSchedule: (
     dayOfWeek: string,
     hhmm: string,
-    isSelected: boolean,
+    isSelected: boolean
   ) => void;
   handleAttendeeBottomDrawer: (state: boolean) => void;
-  // ▼ 추가
-
-  attendeeSchedules: UpdateAttendeeScheduleRequest | undefined;
+  attendeeSchedules?: UpdateAttendeeScheduleRequest;
 }
 
 const dayMap: Record<DayOfWeek, string> = {
@@ -52,24 +48,22 @@ function parseHhmm(hhmm: string) {
 
 const ScheduleTable: React.FC<ScheduleProps> = ({
   scheduleTable,
+  timeSlots,
   startHhmm,
   endHhmm,
   handleSchedule,
+  handleAttendeeBottomDrawer,
   attendeeSchedules,
 }) => {
   const { bookId } = useParams();
-
   const { data: bookDetail } = useBookDetail(Number(bookId));
-  const [filteredScheduleTable, setFilteredScheduleTable] =
-    useState(scheduleTable);
 
   const start = parseHhmm(startHhmm);
   const end = parseHhmm(endHhmm);
-
   const totalHours = end.hour - start.hour;
   const hoursArray = Array.from(
     { length: totalHours },
-    (_, i) => start.hour + i,
+    (_, i) => start.hour + i
   );
 
   const availableDaysSet = new Set([
@@ -80,34 +74,44 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
     "FRIDAY",
   ]);
 
+  const [filteredScheduleTable, setFilteredScheduleTable] =
+    useState(scheduleTable);
+
   useEffect(() => {
     if (bookDetail?.data?.availableDays) {
-      bookDetail.data.availableDays.forEach((day) => {
-        availableDaysSet.add(day);
-      });
-      setFilteredScheduleTable(
-        scheduleTable.filter((daySchedule) =>
-          availableDaysSet.has(daySchedule.dayOfWeek),
-        ),
+      bookDetail.data.availableDays.forEach((day) => availableDaysSet.add(day));
+
+      const weekendFiltered = scheduleTable.filter((daySchedule) =>
+        availableDaysSet.has(daySchedule.dayOfWeek)
       );
+
+      const isAvailableFrom30 = bookDetail?.data?.availableFrom?.endsWith("30");
+
+      const updatedScheduleTable = isAvailableFrom30
+        ? weekendFiltered.map((daySchedule) => ({
+            ...daySchedule,
+            scheduleCount: [0, ...daySchedule.scheduleCount, 0], // 30분 간격 보정
+          }))
+        : weekendFiltered;
+
+      setFilteredScheduleTable(updatedScheduleTable);
     }
-  }, [bookDetail]);
+  }, [bookDetail, scheduleTable]);
 
   return (
-    <div className="max-w-4xl mx-auto overflow-x-auto">
+    <div className="max-w-4xl mx-auto">
       <table className="table-fixed w-full text-center border-collapse">
         <thead>
           <tr>
             <th className="border border-[#f6f6f6] w-[21px] h-2"></th>
-            {filteredScheduleTable &&
-              filteredScheduleTable.map((dayData, idx) => (
-                <th
-                  key={dayData.dayOfWeek}
-                  className="border border-[#f6f6f6] w-[54px] h-2 text-xs-medium text-text-tertiary"
-                >
-                  {dayMap[dayData.dayOfWeek]}
-                </th>
-              ))}
+            {filteredScheduleTable.map((dayData) => (
+              <th
+                key={dayData.dayOfWeek}
+                className="border border-[#f6f6f6] w-auto max-w-[54px] h-2 text-xs-medium text-text-tertiary"
+              >
+                {dayMap[dayData.dayOfWeek]}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
@@ -123,7 +127,6 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                 >
                   {hour}
                 </td>
-
                 {filteredScheduleTable.map((dayData) => {
                   const count = dayData.scheduleCount[slotIndex];
                   const hhmm = `${hour}:00`;
@@ -132,28 +135,23 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                       ? `${String(hour - 1).padStart(2, "0")}:30`
                       : "00:00";
 
-                  // ▼ dayOfWeek, hhmm이 selectedSchedules에 있는지 체크
                   const isSelected =
                     attendeeSchedules?.schedules.some(
                       (schedule) =>
                         schedule.day === dayData.dayOfWeek &&
-                        (schedule.hhmm === hhmm ||
-                          schedule.hhmm === beforeHhmm),
+                        (schedule.hhmm === hhmm || schedule.hhmm === beforeHhmm)
                     ) ?? false;
 
                   return (
                     <td
                       key={`${dayData.dayOfWeek}-${slotIndex}`}
-                      // ▼ isSelected면 빨간색, 아니면 기존 로직
-                      className={`border border-[#f6f6f6] text-sm w-[54px] h-[34px] align-middle cursor-pointer
-                        ${
-                          isSelected
-                            ? "bg-bg-tertiary text-text-interactive-inverse text-xs-medium"
-                            : count > 0
-                              ? "bg-bg-primary text-text-secondary text-xs-medium"
-                              : "bg-bg-secondary text-text-secondary text-xs-medium"
-                        }
-                      `}
+                      className={`border border-[#f6f6f6] text-sm w-[54px] h-[34px] align-middle cursor-pointer ${
+                        isSelected
+                          ? "bg-bg-tertiary text-text-interactive-inverse text-xs-medium"
+                          : count > 0
+                          ? "bg-bg-primary text-text-secondary text-xs-medium"
+                          : "bg-bg-secondary text-text-secondary text-xs-medium"
+                      }`}
                       onClick={() =>
                         handleSchedule(dayData.dayOfWeek, hhmm, isSelected)
                       }
@@ -170,30 +168,25 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                 {filteredScheduleTable.map((dayData) => {
                   const count = dayData.scheduleCount[secondSlotIndex];
                   const hhmm = `${hour}:30`;
-
                   const beforeHhmm = `${hour}:00`;
 
-                  // ▼ dayOfWeek, hhmm이 selectedSchedules에 있는지 체크
                   const isSelected =
                     attendeeSchedules?.schedules.some(
                       (schedule) =>
                         schedule.day === dayData.dayOfWeek &&
-                        (schedule.hhmm === hhmm ||
-                          schedule.hhmm === beforeHhmm),
+                        (schedule.hhmm === hhmm || schedule.hhmm === beforeHhmm)
                     ) ?? false;
 
                   return (
                     <td
                       key={`${dayData.dayOfWeek}-${secondSlotIndex}`}
-                      className={`border border-[#f6f6f6] text-sm w-[54px] h-[34px] align-middle cursor-pointer
-                        ${
-                          isSelected
-                            ? "bg-bg-tertiary text-text-interactive-inverse text-xs-medium"
-                            : count > 0
-                              ? "bg-bg-primary text-text-secondary text-xs-medium"
-                              : "bg-bg-secondary text-text-secondary text-xs-medium"
-                        }
-                      `}
+                      className={`border border-[#f6f6f6] text-sm w-[54px] h-[34px] align-middle cursor-pointer ${
+                        isSelected
+                          ? "bg-bg-tertiary text-text-interactive-inverse text-xs-medium"
+                          : count > 0
+                          ? "bg-bg-primary text-text-secondary text-xs-medium"
+                          : "bg-bg-secondary text-text-secondary text-xs-medium"
+                      }`}
                       onClick={() =>
                         handleSchedule(dayData.dayOfWeek, hhmm, isSelected)
                       }

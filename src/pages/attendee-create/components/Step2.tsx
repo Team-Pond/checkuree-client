@@ -3,31 +3,27 @@ import { useParams } from "react-router-dom";
 
 import SubjectSelectionDrawer from "./SubjectSelectionDrawer";
 import AttendeeDrawer from "./AttendeeDrawer";
-import { DaysType } from "@/api v2/AttendanceBookSchema";
-import { UpdateAttendeeScheduleRequest } from "@/api v2/AttendeeSchema";
+
 import {
   useBookCourses,
   useScheduleAttendee,
   useScheduleTable,
 } from "../queries";
-import { getSub30MinuteHhmm } from "../../../utils";
-import ScheduleTable from "../../books/book-attendee-detail/components/ScheduleTable";
+
+import { useFormContext } from "react-hook-form";
+import { CreateAttendeeSchema } from "../_schema";
+import { DaysType } from "@/api/type";
+import ScheduleTable from "./ScheduleTable";
+import tw from "tailwind-styled-components";
+import FieldHeader from "@/components/FieldTitle";
+import { getSub30MinuteHhmm } from "@/utils";
 
 interface Step2Props {
-  setAttendeeSchedules: React.Dispatch<
-    React.SetStateAction<UpdateAttendeeScheduleRequest | undefined>
-  >;
-  attendeeSchedules: UpdateAttendeeScheduleRequest | undefined;
   attendanceBookId: number;
   onChangeGrade: (gradeId: number) => void;
 }
 
-export default function Step2({
-  setAttendeeSchedules,
-  attendeeSchedules,
-  attendanceBookId,
-  onChangeGrade,
-}: Step2Props) {
+export default function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
   const { bookId } = useParams();
 
   const [selectedSubject, setSelectedSubject] = useState<{
@@ -63,7 +59,7 @@ export default function Step2({
   const handleSchedule = (
     dayOfWeek: string,
     hhmm: string,
-    isSelected: boolean = false,
+    isSelected: boolean = false
   ) => {
     setScheduleParams({ dayOfWeek, hhmm, isSelected });
     handleAttendeeBottomDrawer(true);
@@ -77,7 +73,7 @@ export default function Step2({
     attendanceBookIdNumber,
     scheduleParams.dayOfWeek,
     scheduleParams.hhmm,
-    !!(scheduleParams.dayOfWeek && scheduleParams.hhmm),
+    !!(scheduleParams.dayOfWeek && scheduleParams.hhmm)
   );
 
   // 시간표 데이터
@@ -86,7 +82,7 @@ export default function Step2({
   // 커리큘럼 데이터를 가져옴
   const { data: bookCourses } = useBookCourses(
     attendanceBookIdNumber,
-    openDrawer,
+    openDrawer
   );
 
   useEffect(() => {
@@ -97,106 +93,99 @@ export default function Step2({
     }
   }, [openDrawer, attendeeOpenDrawer]);
 
+  const {
+    setValue,
+    getValues,
+    register,
+    formState: { errors },
+  } = useFormContext<CreateAttendeeSchema>();
   const handleAttendeeSchedules = (day: DaysType, hhmm: string) => {
-    setAttendeeSchedules((prev) => {
-      if (!prev) {
-        return {
-          schedules: [
-            {
-              day,
-              hhmm,
-            },
-          ],
-        };
-      }
-      return {
-        ...prev,
-        schedules: [
-          ...prev.schedules,
-          {
-            day,
-            hhmm,
-          },
-        ],
-      };
-    });
+    const currentSchedules = getValues("schedulesRequest.schedules");
+    const newSchedule = { day, hhmm };
+
+    if (!currentSchedules) {
+      setValue("schedulesRequest.schedules", [newSchedule]);
+    } else {
+      setValue("schedulesRequest.schedules", [
+        ...currentSchedules,
+        newSchedule,
+      ]);
+    }
   };
 
   const handleRemoveAttendeeSchedules = (day: DaysType, hhmm: string) => {
-    setAttendeeSchedules((prev) => {
-      // prev가 없는 경우
-      if (!prev) {
-        return {
-          schedules: [],
-        };
-      }
+    // 현재 schedules 배열을 가져옵니다. 없으면 빈 배열로 초기화
+    const currentSchedules = getValues("schedulesRequest.schedules") || [];
 
-      // prev 가 존재하는 경우 로직 시작
-      // 해당 시간이 존재하는지 확인
-      const isExist = prev.schedules.some(
-        (schedule) => schedule.day === day && schedule.hhmm === hhmm,
+    // 해당 시간(정확한 값)이 존재하면 이를 제거
+    if (
+      currentSchedules.some(
+        (schedule) => schedule.day === day && schedule.hhmm === hhmm
+      )
+    ) {
+      setValue(
+        "schedulesRequest.schedules",
+        currentSchedules.filter(
+          (schedule) => !(schedule.day === day && schedule.hhmm === hhmm)
+        )
       );
+      return;
+    }
 
-      // 존재하는 경우 삭제
-      if (isExist) {
-        return {
-          ...prev,
-          schedules: prev.schedules.filter(
-            (schedule) => schedule.day !== day && schedule.hhmm !== hhmm,
-          ),
-        };
-      }
-
-      // 존재하지 않는 경우 30분 전의 시간이 존재하는지 확인
-      const beforeHhmm = getSub30MinuteHhmm(hhmm);
-      const isExistBefore = prev.schedules.some(
-        (schedule) => schedule.day === day && schedule.hhmm === beforeHhmm,
+    // 해당 시간이 없으면 30분 전의 시간이 있는지 확인 후 제거
+    const beforeHhmm = getSub30MinuteHhmm(hhmm);
+    if (
+      currentSchedules.some(
+        (schedule) => schedule.day === day && schedule.hhmm === beforeHhmm
+      )
+    ) {
+      setValue(
+        "schedulesRequest.schedules",
+        currentSchedules.filter(
+          (schedule) => !(schedule.day === day && schedule.hhmm === beforeHhmm)
+        )
       );
+      return;
+    }
 
-      // 30분 전의 시간이 존재하는 경우 삭제
-      if (isExistBefore) {
-        return {
-          ...prev,
-          schedules: prev.schedules.filter(
-            (schedule) => schedule.day !== day && schedule.hhmm !== beforeHhmm,
-          ),
-        };
-      }
-
-      // 30분 전도 없으면 ... ? 넌 나가라 그냥
-      return prev;
-    });
+    // 조건에 맞는 일정이 없으면 기존 배열 그대로 설정
+    setValue("schedulesRequest.schedules", currentSchedules);
   };
 
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
-      <div className="flex flex-col gap-2">
-        <div className="flex gap-1 items-center">
-          <p className="font-bold text-m-medium">커리큘럼</p>
-          <p className="text-text-danger">*</p>
-        </div>
+      <FieldWrapper>
+        <FieldHeader title="커리큘럼" essential />
         <div
           className="w-full flex justify-center"
           onClick={() => handleBottomDrawer(true)}
         >
-          <input
-            type="input"
-            placeholder="커리큘럼 선택"
-            value={
-              selectedSubject && selectedSubjectItems
-                ? `${selectedSubject.title} > ${selectedSubjectItems.title}`
-                : ""
-            }
-            className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#5D5D5D] text-left"
-            readOnly
-          />
+          <div className="flex flex-col gap-[1px] w-full text-left">
+            <input
+              type="input"
+              {...register("progressRequest.progresses", {
+                required: "필수입니다.",
+              })}
+              placeholder="커리큘럼 선택"
+              value={
+                selectedSubject && selectedSubjectItems
+                  ? `${selectedSubject.title} > ${selectedSubjectItems.title}`
+                  : ""
+              }
+              className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#5D5D5D] text-left cursor-pointer"
+              readOnly
+            />
+            {errors?.progressRequest?.progresses && (
+              <p className="text-red-500 text-sm mt-1">
+                커리큘럼 선택 후 클래스 일정 선택은 필수입니다.
+              </p>
+            )}
+          </div>
         </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="flex gap-1 items-center">
-          <p className="font-bold text-m-medium">클래스 일정</p>
-          <p className="text-text-danger">*</p>
-        </div>
+        <input type="hidden" {...register("schedulesRequest.schedules")} />
+      </FieldWrapper>
+      <FieldWrapper>
+        <FieldHeader title="클래스 일정" essential />
         {scheduleTable && (
           <ScheduleTable
             scheduleTable={scheduleTable.scheduleTable}
@@ -205,10 +194,9 @@ export default function Step2({
             endHhmm={scheduleTable.endHhmm}
             handleSchedule={handleSchedule}
             handleAttendeeBottomDrawer={handleAttendeeBottomDrawer}
-            attendeeSchedules={attendeeSchedules}
           />
         )}
-      </div>
+      </FieldWrapper>
 
       {/* 커리큘럼 선택 Drawer */}
       <SubjectSelectionDrawer
@@ -234,3 +222,5 @@ export default function Step2({
     </div>
   );
 }
+
+const FieldWrapper = tw.div`flex flex-col gap-2`;

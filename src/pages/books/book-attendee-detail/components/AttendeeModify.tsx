@@ -1,7 +1,7 @@
-import { GenderType } from "@/api v2/AttendeeSchema";
 import React from "react";
 import { twMerge } from "tailwind-merge";
 import { useAttendeeUpdate } from "../queries";
+import { GenderType } from "@/api/type";
 
 interface AttendeeModifyFormState {
   birthDate: string;
@@ -98,7 +98,7 @@ export default function AttendeeModify({
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
-                        gender: e.target.value as "MALE" | "FEMALE",
+                        gender: e.target.value as GenderType,
                       }))
                     }
                   />
@@ -127,7 +127,7 @@ export default function AttendeeModify({
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
-                        gender: e.target.value as "MALE" | "FEMALE",
+                        gender: e.target.value as GenderType,
                       }))
                     }
                   />

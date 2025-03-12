@@ -1,34 +1,64 @@
 import {
   getBookCourse,
   getBookScheduleTable,
-} from "@/api v2/AttendanceBookApiClient";
+} from "@/api/AttendanceBookApiClient";
 import {
   getAttendeeDetail,
   getAttendeeProgressLog,
   getScheduleAttendee,
   updateAttendeeDetail,
   updateProgressPromote,
-} from "@/api v2/AttendeeApiClient";
-import { GenderType } from "@/api v2/AttendeeSchema";
-import { getRecordMonthAttendee } from "@/api v2/RecordApiClient";
+} from "@/api/AttendeeApiClient";
+import { getAttendeeRecords } from "@/api/RecordApiClient";
+import { GenderType } from "@/api/type";
 import { attendeeKeys } from "@/queryKeys";
 
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
+import { counsellingKeys } from "../../../queryKeys";
+import { getAttendeeCounsellings } from "@/api/CounselApiClient";
+
 // TODO: Calendar 작업 시 필요
-export const useAttendeeMonth = () => {
+export const useAttendeeRecords = ({
+  bookId,
+  attendeeId,
+  from,
+  to,
+}: {
+  bookId: number;
+  attendeeId: number;
+  from: string;
+  to: string;
+}) => {
   return useQuery({
     queryKey: [""],
     queryFn: async () =>
-      getRecordMonthAttendee({
+      await getAttendeeRecords({
         params: {
-          year: 2025,
-          month: 1,
+          from,
+          to,
         },
-        attendanceBookId: 5,
-        attendeeId: 0,
+        attendanceBookId: bookId,
+        attendeeId,
       }),
+  });
+};
+
+export const useCounsellingList = ({
+  bookId,
+  attendeeId,
+}: {
+  bookId: number;
+  attendeeId: number;
+}) => {
+  return useQuery({
+    queryKey: counsellingKeys.list(attendeeId).queryKey,
+    queryFn: async () =>
+      await getAttendeeCounsellings({
+        bookId,
+        attendeeId,
+      }).then((res) => res.data),
   });
 };
 
@@ -44,7 +74,7 @@ export const useScheduleData = ({
 }) => {
   return useQuery({
     enabled: !!dayOfWeek && !!hhmm,
-    queryKey: attendeeKeys.schedules(bookId, dayOfWeek, hhmm).queryKey,
+    queryKey: attendeeKeys.schedules(bookId, dayOfWeek).queryKey,
     queryFn: async () => {
       const res = await getScheduleAttendee({
         attendanceBookId: bookId,
@@ -129,8 +159,6 @@ interface AttendeeModifyFormState {
   description: string;
 }
 
-const queryClinet = new QueryClient();
-
 export const useAttendeeUpdate = ({
   bookId,
   attendeeId,
@@ -142,6 +170,7 @@ export const useAttendeeUpdate = ({
   formData: AttendeeModifyFormState;
   setIsAttendeeModify: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  const queryClinet = useQueryClient();
   return useMutation({
     mutationFn: async () =>
       await updateAttendeeDetail({
@@ -167,28 +196,24 @@ export const useAttendeeUpdate = ({
 
 export const useProgressPromote = ({
   bookId,
-  attendeeProgressId,
   formData,
   attendeeId,
-  onClose,
 }: {
   bookId: number;
-  attendeeProgressId: number;
   formData: {
     completeAt: string;
     startAt: string;
     nextGradeId: string;
   };
   attendeeId: number;
-  onClose: () => void;
 }) => {
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async () =>
+    mutationFn: async (progressId: number) =>
       await updateProgressPromote({
         attendanceBookId: Number(bookId),
         params: {
-          attendeeProgressId: attendeeProgressId,
+          attendeeProgressId: progressId,
           completedAt: formData.completeAt.replaceAll(".", "-"),
           startAt: formData.startAt.replaceAll(".", "-"),
           nextGradeId: !!formData.nextGradeId
@@ -198,10 +223,10 @@ export const useProgressPromote = ({
       }).then((res) => res.data),
     onSuccess: () => {
       toast.success("다음 과정이 저장되었습니다.");
+
       queryClient.invalidateQueries({
-        queryKey: attendeeKeys.detail(attendeeId).queryKey,
+        queryKey: attendeeKeys.progressLog(bookId, attendeeId).queryKey,
       });
-      onClose();
     },
   });
 };

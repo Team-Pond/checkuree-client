@@ -1,28 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
+import { DaysType } from "@/api/type";
+import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
 import {
   useScheduleAttendee,
   useScheduleTable,
-} from "../../../../attendee-create/queries";
-import {
-  DaysType,
-  UpdateAttendeeScheduleRequest,
-} from "../../../../../api v2/AttendeeSchema";
-import AttendeeDrawer from "../../../../attendee-create/components/AttendeeDrawer";
+} from "@/pages/attendee-create/queries";
+import { getSub30MinuteHhmm } from "@/utils";
+import AttendeeDrawer from "../AttendeeDrawer";
 import ScheduleTable from "../ScheduleTable";
-import { getSub30MinuteHhmm } from "../../../../../utils";
 
 interface IProps {
   setAttendeeSchedules: React.Dispatch<
     React.SetStateAction<UpdateAttendeeScheduleRequest | undefined>
   >;
-  attendeeSchedules: UpdateAttendeeScheduleRequest | undefined;
 }
-export default function ScheduleModifyDetail({
-  setAttendeeSchedules,
-  attendeeSchedules,
-}: IProps) {
-  const { bookId, attendeeId } = useParams();
+export default function ScheduleModifyDetail({ setAttendeeSchedules }: IProps) {
+  const { bookId } = useParams();
 
   const [scheduleParams, setScheduleParams] = useState<{
     dayOfWeek: string;
@@ -46,7 +41,7 @@ export default function ScheduleModifyDetail({
   const handleSchedule = (
     dayOfWeek: string,
     hhmm: string,
-    isSelected: boolean = false,
+    isSelected: boolean = false
   ) => {
     setScheduleParams({ dayOfWeek, hhmm, isSelected });
     handleAttendeeBottomDrawer(true);
@@ -60,7 +55,7 @@ export default function ScheduleModifyDetail({
     attendanceBookIdNumber,
     scheduleParams.dayOfWeek,
     scheduleParams.hhmm,
-    !!(scheduleParams.dayOfWeek && scheduleParams.hhmm),
+    !!(scheduleParams.dayOfWeek && scheduleParams.hhmm)
   );
 
   // 시간표 데이터
@@ -88,7 +83,7 @@ export default function ScheduleModifyDetail({
       }
 
       const isExist = prev.schedules.some(
-        (schedule) => schedule.day === day && schedule.hhmm === hhmm,
+        (schedule) => schedule.day === day && schedule.hhmm === hhmm
       );
 
       // 이미 존재하는 경우 return
@@ -120,7 +115,7 @@ export default function ScheduleModifyDetail({
       // prev 가 존재하는 경우 로직 시작
       // 해당 시간이 존재하는지 확인
       const isExist = prev.schedules.some(
-        (schedule) => schedule.day === day && schedule.hhmm === hhmm,
+        (schedule) => schedule.day === day && schedule.hhmm === hhmm
       );
 
       // 존재하는 경우 삭제
@@ -128,7 +123,7 @@ export default function ScheduleModifyDetail({
         return {
           ...prev,
           schedules: prev.schedules.filter(
-            (schedule) => schedule.day !== day || schedule.hhmm !== hhmm,
+            (schedule) => schedule.day !== day || schedule.hhmm !== hhmm
           ),
         };
       }
@@ -136,7 +131,7 @@ export default function ScheduleModifyDetail({
       // 존재하지 않는 경우 30분 전의 시간이 존재하는지 확인
       const beforeHhmm = getSub30MinuteHhmm(hhmm);
       const isExistBefore = prev.schedules.some(
-        (schedule) => schedule.day === day && schedule.hhmm === beforeHhmm,
+        (schedule) => schedule.day === day && schedule.hhmm === beforeHhmm
       );
 
       // 30분 전의 시간이 존재하는 경우 삭제
@@ -144,7 +139,7 @@ export default function ScheduleModifyDetail({
         return {
           ...prev,
           schedules: prev.schedules.filter(
-            (schedule) => schedule.day !== day || schedule.hhmm !== beforeHhmm,
+            (schedule) => schedule.day !== day || schedule.hhmm !== beforeHhmm
           ),
         };
       }
@@ -169,7 +164,6 @@ export default function ScheduleModifyDetail({
             endHhmm={scheduleTable.endHhmm}
             handleSchedule={handleSchedule}
             handleAttendeeBottomDrawer={handleAttendeeBottomDrawer}
-            attendeeSchedules={attendeeSchedules}
           />
         )}
       </div>
@@ -181,7 +175,6 @@ export default function ScheduleModifyDetail({
         scheduleParams={scheduleParams}
         scheduleData={scheduleData}
         handleAttendeeSchedules={handleAttendeeSchedules}
-        handleRemoveAttendeeSchedules={handleRemoveAttendeeSchedules}
       />
     </div>
   );

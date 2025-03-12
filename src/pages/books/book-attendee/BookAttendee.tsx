@@ -1,13 +1,16 @@
 import { useContext, useState } from "react";
-import { DaysType } from "@/api v2/AttendanceBookSchema";
+
 import Header from "./components/Header";
 import Bottom from "../components/Bottom";
 import BottomFilter from "./components/BottomFilter";
-import { GenderType } from "@/api v2/AttendeeSchema";
+
 import MainContent from "./components/MainContent";
 import { BookContext } from "@/context/BookContext";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useAttendeeList } from "./queries";
+import SEO from "@/components/SEO";
+import { set } from "lodash";
+import { DaysType, GenderType } from "@/api/type";
 
 const DaysMatch: Record<string, DaysType> = {
   월: "MONDAY",
@@ -31,26 +34,35 @@ export default function BookRoaster() {
     setOpenFilter(!openFilter);
   };
 
-  const [dayArrays, setDayArrays] = useState<DaysType[]>([]);
-  const [gender, setGender] = useState<GenderType>("");
   const [search, setSearch] = useState<string>("");
-  const onDaysChange = (day: DaysType) => {
-    if (dayArrays.includes(DaysMatch[day])) {
-      setDayArrays(dayArrays.filter((item) => item !== DaysMatch[day]));
-    } else {
-      setDayArrays([...dayArrays, DaysMatch[day]]);
-    }
-  };
-
-  const onChangeGender = (selectGender: GenderType) => {
-    setGender(gender === selectGender ? "" : selectGender);
-  };
-
-  const { data: attendeeList } = useAttendeeList({
-    bookId: Number(bookId) || context?.selectedBook?.id!,
-    dayArrays,
-    gender,
+  const [filter, setFilter] = useState<{
+    dayArrays: DaysType[];
+    gender: GenderType;
+    age: { min: number; max: number };
+  }>({
+    dayArrays: [],
+    gender: "",
+    age: { min: 0, max: 100 },
   });
+  const { data: attendeeList } = useAttendeeList({
+    bookId: Number(bookId),
+    dayArrays: filter.dayArrays,
+    gender: filter.gender,
+    age: filter.age,
+  });
+
+  const onChangeFilter = (
+    dayArrays: DaysType[],
+    gender: GenderType,
+    age: { min: number; max: number }
+  ) => {
+    setFilter({
+      dayArrays,
+      gender,
+      age,
+    });
+    setOpenFilter(false);
+  };
 
   const getGrades = (grades: { id: number; name: string }[]) => {
     const gradesBooks = grades.map((grade) => grade.name);
@@ -62,28 +74,45 @@ export default function BookRoaster() {
   };
 
   return (
-    <section className="flex flex-col w-full">
+    <section className="flex flex-col w-full h-full">
+      <SEO
+        title="체쿠리 | 학생 목록"
+        content="체쿠리 음악학원 출석부 서비스의 학생 목록 페이지입니다."
+      />
       <Header
         title={bookName || selectedBook?.title!}
         onDrawerChange={onDrawerChange}
         onChangeSearch={onChangeSearch}
       />
-      <MainContent roaster={attendeeList!} getGrades={getGrades} />
+      {attendeeList?.status === 200 && attendeeList?.data.content.length > 0 ? (
+        <MainContent
+          roaster={attendeeList}
+          getGrades={getGrades}
+          searchName={search}
+        />
+      ) : (
+        <div className="flex flex-col gap-2 items-center justify-center h-full">
+          <img
+            src="/images/icons/book-roaster/ico-error-frog.svg"
+            alt="체쿠리 에러 아이콘"
+            width={45}
+            height={45}
+          />
+          <p className="text-s-medium text-[#B0B0B0]">
+            등록된 학생이 없습니다.
+          </p>
+        </div>
+      )}
+
       <BottomFilter
         openFilter={openFilter}
         onDrawerChange={onDrawerChange}
-        onChangeGender={onChangeGender}
-        onDaysChange={onDaysChange}
-        gender={gender}
-        dayArrays={dayArrays}
         DaysMatch={DaysMatch}
+        onChangeFilter={onChangeFilter}
       />
-      {!openFilter && (
-        <>
-          <div className="flex justify-between px-[44px] items-center w-full h-[92px]" />
-          <Bottom />
-        </>
-      )}
+      {!openFilter && <Bottom />}
+
+      <div className="flex justify-between px-[44px] items-center w-full h-[92px]" />
     </section>
   );
 }

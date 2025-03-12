@@ -1,9 +1,8 @@
-import { DaysType } from "@/api v2/AttendanceBookSchema";
 import dayjs from "dayjs";
 
 export const dateFormat = (
   date: Date | string,
-  type: "slash" | "dash" | "dot" | "fullDash" | "fullDot",
+  type: "slash" | "dash" | "dot" | "fullDash" | "fullDot"
 ): string => {
   const formattedDate = dayjs(date); // dayjs로 날짜 객체 생성
 
@@ -71,7 +70,7 @@ export type DayOfWeek =
 // 요일 순서 정렬을 위한 비교 함수 (ex - weekdays: ["MONDAY", "TUESDAY"])
 export function sortWeekdays(weekdays: string[]): DayOfWeek[] {
   return weekdays.sort(
-    (a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b),
+    (a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b)
   ) as DayOfWeek[];
 }
 
@@ -85,7 +84,7 @@ const DayTransfer = {
   SUNDAY: "일",
 };
 
-export function getDayGroupFromInput(input: DaysType[]) {
+export function getDayGroupFromInput(input: DayOfWeek[]) {
   const weekdays = ["월", "화", "수", "목", "금"];
   const weekends = ["토", "일"];
   const allDays = ["월", "화", "수", "목", "금", "토", "일"];

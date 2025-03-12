@@ -1,16 +1,19 @@
 // BottomDrawer.tsx
 import React, { useEffect } from "react";
+import { twMerge } from "tailwind-merge";
 
 interface BottomDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  className?: string;
 }
 
 const BottomDrawer: React.FC<BottomDrawerProps> = ({
   isOpen,
   onClose,
   children,
+  className,
 }) => {
   // onBlur close하기
   useEffect(() => {
@@ -35,7 +38,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({
   return (
     // 배경 오버레이
     <div
-      className={` fixed inset-0 z-50 flex items-end justify-center bg-black bg-opacity-50 transition-opacity duration-300 ${
+      className={`fixed inset-0 z-50 flex items-end justify-center bg-black bg-opacity-50 transition-opacity duration-300 ${
         isOpen
           ? "opacity-100 pointer-events-auto"
           : "opacity-0 pointer-events-none"
@@ -50,7 +53,12 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({
         onClick={(e) => e.stopPropagation()} // 클릭 이벤트 전파 방지
       >
         {/* 드로어 내용 */}
-        <div className="px-4 py-[26px] pb-8 flex flex-col gap-8">
+        <div
+          className={twMerge(
+            "px-4 py-[26px] pb-8 flex flex-col gap-8",
+            className
+          )}
+        >
           {children}
         </div>
       </div>

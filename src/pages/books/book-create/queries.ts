@@ -1,6 +1,6 @@
-import { createBook } from "@/api v2/AttendanceBookApiClient";
-import { CreateBookRequest } from "@/api v2/AttendanceBookSchema";
-import { getSubjectItems, getSubjects } from "@/api v2/CourseApiClient";
+import { createBook } from "@/api/AttendanceBookApiClient";
+import { CreateBookRequest } from "@/api/AttendanceBookSchema";
+import { getSubjectItems, getSubjects } from "@/api/CourseApiClient";
 import { bookKeys } from "@/queryKeys";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -40,13 +40,11 @@ export const useBookCreate = () => {
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
-        console.log(error.response?.data);
         toast.error(
           error.response?.data.description ||
             "서버에 오류가 있습니다. 잠시 후에 생성해주세요."
         );
       } else {
-        console.log(error);
         toast.error("서버에 오류가 있습니다. 잠시 후에 생성해주세요.");
       }
     },
