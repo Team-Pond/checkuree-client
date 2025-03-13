@@ -25,13 +25,11 @@ export default defineConfig({
       },
       // 각 경로별 priority 설정 (RoutesOptionMap<number>)
       priority: {
-        "/": 1.0,
         "/auth/login": 0.8,
         "/auth/signin": 0.5,
       },
       // 각 경로별 lastmod 설정 (RoutesOptionMap<Date>)
       lastmod: {
-        "/": new Date(),
         "/auth/login": new Date(),
         "/auth/signin": new Date(),
       },
