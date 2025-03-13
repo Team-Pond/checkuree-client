@@ -14,12 +14,11 @@ export default defineConfig({
     createSitemap({
       hostname: "https://pond-client.vercel.app",
       // 동적 경로에 원하는 URL들을 명시합니다.
-      dynamicRoutes: ["/", "/auth/login", "/auth/signin"],
+      dynamicRoutes: ["/auth/login", "/auth/signin"],
       // 제외할 경로 (예: 네이버 소유권 확인 파일)
       exclude: ["/naver104*.html"],
       // 각 경로별 changefreq 설정 (RoutesOptionMap<string>)
       changefreq: {
-        "/": "daily",
         "/auth/login": "weekly",
         "/auth/signin": "monthly",
       },
