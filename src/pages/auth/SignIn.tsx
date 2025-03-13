@@ -15,8 +15,8 @@ export default function SignIn() {
   return (
     <section className="flex flex-col justify-center items-center h-full gap-8 ">
       <SEO
-        title="체쿠리 | 로그인"
-        content="체쿠리 음악학원 출석부 서비스의 로그인 페이지입니다."
+        title="체쿠리 | 음악 학원 출석부 서비스"
+        content="체쿠리의 로그인 페이지입니다."
       />
       <HeaderBanner />
       <div className="flex flex-col gap-4">
