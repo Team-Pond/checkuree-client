@@ -49,7 +49,7 @@ function LessonRow(props: IProps) {
     () => openModifyRecordTimeModal(schedule),
     { delay: 300 }
   );
-  console.log("test");
+
   return (
     <LessonWrapper key={schedule.scheduleId}>
       <div
