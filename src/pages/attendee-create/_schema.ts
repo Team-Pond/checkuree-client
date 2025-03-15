@@ -44,7 +44,7 @@ export const AttendeeRequestSchema = z.object({
   initialGradeId: z.number().default(0).optional(),
   isBeginner: z.boolean().optional(),
   attendeeId: z.number().optional(),
-  address_1: z.string().min(1, "주소는 필수 입니다."),
+  address_1: z.string().optional(),
   address_2: z.string().optional(),
   associates: z.array(AssociateSchema).optional(),
 });

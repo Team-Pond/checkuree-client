@@ -2,7 +2,7 @@ import { createBook } from "@/api/AttendanceBookApiClient";
 import { CreateBookRequest } from "@/api/AttendanceBookSchema";
 import { getSubjectItems, getSubjects } from "@/api/CourseApiClient";
 import { bookKeys } from "@/queryKeys";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -32,9 +32,14 @@ export const useSubjectItems = ({ subjectId }: { subjectId: number }) => {
 
 export const useBookCreate = () => {
   const navigate = useNavigate();
+  const QueryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (params: CreateBookRequest) => await createBook(params),
     onSuccess: () => {
+      QueryClient.invalidateQueries({
+        queryKey: bookKeys.list._def,
+      });
       toast.success("출석부를 생성하였습니다.");
       navigate("/book");
     },

@@ -59,7 +59,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
             className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
           />
           {errors?.attendeeRequest?.name && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className="text-red-500 text-xs mt-1">
               {errors.attendeeRequest.name.message}
             </p>
           )}
@@ -95,16 +95,19 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
               </div>
             </div>
           </div>
-          {errors?.attendeeRequest?.birthDate && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.attendeeRequest.birthDate.message}
-            </p>
-          )}
-          {errors?.attendeeRequest?.gender && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.attendeeRequest.gender.message}
-            </p>
-          )}
+          <div>
+            {errors.attendeeRequest?.birthDate && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.attendeeRequest.birthDate.message}
+              </p>
+            )}
+            {errors.attendeeRequest?.gender && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.attendeeRequest.gender.message}
+              </p>
+            )}
+          </div>
+
           <input type="hidden" {...register("attendeeRequest.gender")} />
         </div>
       </FieldWrapper>
@@ -147,7 +150,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
           </div>
 
           {errors.attendeeRequest?.enrollmentDate && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className="text-red-500 text-xs mt-1">
               {errors.attendeeRequest.enrollmentDate.message}
             </p>
           )}
@@ -155,7 +158,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
       </FieldWrapper>
       {/* 가족 연락처 */}
       <FieldWrapper>
-        <FieldHeader title="가족 연락처" essential />
+        <FieldHeader title="가족 연락처" />
         <div className="flex gap-2">
           <Select
             onChange={onChangeGuardian}
@@ -186,7 +189,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
       </FieldWrapper>
       {/* 학생 주소 */}
       <FieldWrapper>
-        <FieldHeader title="학생 주소" essential />
+        <FieldHeader title="학생 주소" />
         <div className="flex flex-col gap-[1px] w-full text-left">
           <input
             type="text"
@@ -194,11 +197,6 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
             {...register("attendeeRequest.address_1")}
             className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
           />
-          {errors.attendeeRequest?.address_1 && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.attendeeRequest.address_1.message}
-            </p>
-          )}
         </div>
       </FieldWrapper>
       {/* 학교(선택) */}
@@ -212,7 +210,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
       </FieldWrapper>
       {/* 비고(선택) */}
       <FieldWrapper>
-        <FieldHeader title="비고(선택)" essential />
+        <FieldHeader title="비고(선택)" />
         <input
           type="text"
           placeholder=""
