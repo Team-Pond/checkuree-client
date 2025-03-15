@@ -17,6 +17,7 @@ interface IProps {
     schedule: ScheduleData
   ) => void;
   openModifyRecordTimeModal: (schedule: ScheduleData) => void;
+  currentDate: string;
 }
 function LessonRow(props: IProps) {
   const {
@@ -24,12 +25,13 @@ function LessonRow(props: IProps) {
     schedule,
     handleAttendanceStatusWithConfirmation,
     openModifyRecordTimeModal,
+    currentDate,
   } = props;
   const { mutate: lessonMutation } = useLessonUpdate({
     bookId,
   });
 
-  const { mutate: deleteRecord } = useRecordDelete(bookId);
+  const { mutate: deleteRecord } = useRecordDelete(bookId, currentDate);
   const openModal = useModalStore((state) => state.openModal);
   const onLongPress = () => {
     openModal(

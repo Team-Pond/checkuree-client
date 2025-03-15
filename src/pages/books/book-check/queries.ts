@@ -210,7 +210,7 @@ export const useLessonUpdate = ({ bookId }: { bookId: number }) => {
   });
 };
 
-export const useRecordDelete = (bookId: number) => {
+export const useRecordDelete = (bookId: number, currentDate: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -218,7 +218,7 @@ export const useRecordDelete = (bookId: number) => {
       await deleteRecord(params),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: attendeeKeys.schedules(bookId),
+        queryKey: bookKeys.schedules(bookId, currentDate).queryKey,
       });
       toast.success("보강기록이 삭제되었습니다.");
     },

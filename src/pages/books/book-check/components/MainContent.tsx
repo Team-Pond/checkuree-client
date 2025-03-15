@@ -209,6 +209,7 @@ function MainContents(props: IProps) {
         handleAttendanceStatusWithConfirmation={
           handleAttendanceStatusWithConfirmation
         }
+        currentDate={currentDate}
         openModifyRecordTimeModal={openModifyRecordTimeModal}
       />
 
@@ -217,6 +218,7 @@ function MainContents(props: IProps) {
         noNeedLessonTimeScheduleTable={
           computedLessonData.computedNoNeedLessonTimeScheduleTable
         }
+        currentDate={currentDate}
         bookId={Number(bookId)}
         handleAttendanceStatusWithConfirmation={
           handleAttendanceStatusWithConfirmation

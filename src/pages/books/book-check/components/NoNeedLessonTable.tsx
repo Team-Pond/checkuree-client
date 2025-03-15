@@ -10,6 +10,7 @@ interface IProps {
     targetStatus: "ATTEND" | "ABSENT",
     schedule: ScheduleData
   ) => void;
+  currentDate: string;
 
   openModifyRecordTimeModal: (schedule: ScheduleData) => void;
 }
@@ -19,6 +20,7 @@ export default function NoNeedLessonTable(props: IProps) {
     bookId,
     handleAttendanceStatusWithConfirmation,
     openModifyRecordTimeModal,
+    currentDate,
   } = props;
 
   return (
@@ -40,6 +42,7 @@ export default function NoNeedLessonTable(props: IProps) {
                     handleAttendanceStatusWithConfirmation
                   }
                   openModifyRecordTimeModal={openModifyRecordTimeModal}
+                  currentDate={currentDate}
                 />
               ))}
             </LessonContainer>
