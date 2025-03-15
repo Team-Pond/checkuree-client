@@ -83,7 +83,7 @@ export default function CheckureeSignIn() {
                   className="bg-white w-full h-12 rounded-2xl p-4 border-[2px] focus:outline-none"
                 />
                 {errors.username && (
-                  <p className="text-red-500 text-sm mt-1">
+                  <p className="text-red-500 text-xs mt-1">
                     {errors.username.message}
                   </p>
                 )}
@@ -110,7 +110,7 @@ export default function CheckureeSignIn() {
                 </div>
 
                 {errors.password && (
-                  <p className="text-red-500 text-sm mt-1">
+                  <p className="text-red-500 text-xs mt-1">
                     {errors.password.message}
                   </p>
                 )}
