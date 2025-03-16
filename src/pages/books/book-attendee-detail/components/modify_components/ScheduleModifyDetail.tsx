@@ -15,8 +15,12 @@ interface IProps {
   setAttendeeSchedules: React.Dispatch<
     React.SetStateAction<UpdateAttendeeScheduleRequest | undefined>
   >;
+  attendeeSchedules: UpdateAttendeeScheduleRequest | undefined;
 }
-export default function ScheduleModifyDetail({ setAttendeeSchedules }: IProps) {
+export default function ScheduleModifyDetail({
+  setAttendeeSchedules,
+  attendeeSchedules,
+}: IProps) {
   const { bookId } = useParams();
 
   const [scheduleParams, setScheduleParams] = useState<{
@@ -149,6 +153,7 @@ export default function ScheduleModifyDetail({ setAttendeeSchedules }: IProps) {
     });
   };
 
+  console.log(scheduleTable);
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
       <div className="flex flex-col gap-2">
@@ -164,6 +169,7 @@ export default function ScheduleModifyDetail({ setAttendeeSchedules }: IProps) {
             endHhmm={scheduleTable.endHhmm}
             handleSchedule={handleSchedule}
             handleAttendeeBottomDrawer={handleAttendeeBottomDrawer}
+            attendeeSchedules={attendeeSchedules}
           />
         )}
       </div>
