@@ -60,7 +60,10 @@ export const ScheduleModify = () => {
 
         <div className="flex w-full justify-center">
           <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
-            <ScheduleModifyDetail setAttendeeSchedules={setAttendeeSchedules} />
+            <ScheduleModifyDetail
+              setAttendeeSchedules={setAttendeeSchedules}
+              attendeeSchedules={attendeeSchedules}
+            />
             <div className="flex gap-4 w-full">
               <button
                 type="button"
