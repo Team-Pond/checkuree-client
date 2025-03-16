@@ -51,12 +51,7 @@ export default function BookCreate() {
     // resolver는 폼 제출 시 실행되는 함수를 정의, Promise로 유효성 검사 결과를 반환
     resolver: zodResolver(bookSchema),
   });
-  const {
-    getValues,
-    trigger,
-    handleSubmit,
-    formState: { errors },
-  } = methods;
+  const { getValues, trigger, handleSubmit } = methods;
 
   const { mutate: bookMutation } = useBookCreate();
 
@@ -75,14 +70,15 @@ export default function BookCreate() {
       <form
         className="flex flex-col gap-7 w-full pb-[30px]"
         onSubmit={handleSubmit(() => {
-          bookMutation({
-            title: getValues("title"),
-            imageUrl: JSON.stringify(getValues("imageUrl")),
-            availableDays: getValues("availableDays"),
-            availableFrom: getValues("availableFrom"),
-            availableTo: getValues("availableTo"),
-            courses: courseCreateParam,
-          });
+          courseCreateParam.length > 0 &&
+            bookMutation({
+              title: getValues("title"),
+              imageUrl: JSON.stringify(getValues("imageUrl")),
+              availableDays: getValues("availableDays"),
+              availableFrom: getValues("availableFrom"),
+              availableTo: getValues("availableTo"),
+              courses: courseCreateParam,
+            });
         })}
       >
         <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">

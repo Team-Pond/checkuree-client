@@ -48,11 +48,9 @@ function parseHhmm(hhmm: string) {
 
 const ScheduleTable: React.FC<ScheduleProps> = ({
   scheduleTable,
-  timeSlots,
   startHhmm,
   endHhmm,
   handleSchedule,
-  handleAttendeeBottomDrawer,
   attendeeSchedules,
 }) => {
   const { bookId } = useParams();
@@ -98,6 +96,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
     }
   }, [bookDetail, scheduleTable]);
 
+  console.log(scheduleTable);
   return (
     <div className="max-w-4xl mx-auto">
       <table className="table-fixed w-full text-center border-collapse">

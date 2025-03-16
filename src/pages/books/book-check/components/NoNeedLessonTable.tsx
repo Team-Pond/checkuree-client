@@ -1,7 +1,5 @@
-import { twMerge } from "tailwind-merge";
 import tw from "tailwind-styled-components";
-import { useLessonUpdate } from "../queries";
-import { formatLocalTimeString, scheduleCheckformatTime } from "@/utils";
+import { scheduleCheckformatTime } from "@/utils";
 import LessonRow from "./LessonRow";
 import { ScheduleData, ScheduleDataContentType } from "@/api/type";
 
@@ -12,6 +10,7 @@ interface IProps {
     targetStatus: "ATTEND" | "ABSENT",
     schedule: ScheduleData
   ) => void;
+  currentDate: string;
 
   openModifyRecordTimeModal: (schedule: ScheduleData) => void;
 }
@@ -21,6 +20,7 @@ export default function NoNeedLessonTable(props: IProps) {
     bookId,
     handleAttendanceStatusWithConfirmation,
     openModifyRecordTimeModal,
+    currentDate,
   } = props;
 
   return (
@@ -42,6 +42,7 @@ export default function NoNeedLessonTable(props: IProps) {
                     handleAttendanceStatusWithConfirmation
                   }
                   openModifyRecordTimeModal={openModifyRecordTimeModal}
+                  currentDate={currentDate}
                 />
               ))}
             </LessonContainer>
@@ -53,5 +54,4 @@ export default function NoNeedLessonTable(props: IProps) {
 }
 
 const LessonContainer = tw.div`w-full text-left rounded-2xl bg-white px-6 pt-1 flex flex-col`;
-const LessonWrapper = tw.div`w-full h-[56px] flex items-center justify-between px-2`;
 const LessonStatusTime = tw.p`text-[#5d5d5d] text-s-bold h-12 flex items-center`;

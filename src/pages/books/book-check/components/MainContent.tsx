@@ -1,5 +1,5 @@
 import { useRecordCreate, useRecordUpdate, useStatusUpdate } from "../queries";
-import { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { ConfirmModal } from "./ConfirmModal";
 import ModifyRecordTimeModal from "./ModifyRecordTimeModal";
 
@@ -14,7 +14,6 @@ import {
   ScheduleDataType,
   STATUS,
 } from "@/api/type";
-import { set } from "lodash";
 
 type IProps = {
   bookSchedules: ScheduleDataType;
@@ -24,7 +23,11 @@ type IProps = {
   setCheckedCount: (count: number) => void;
 };
 
-export default function MainContents(props: IProps) {
+const CANCLE_CHECK = "출석체크를 취소하시겠어요?";
+const ATTEND_CHECK = "출석상태로 변경하시겠어요?";
+const ABSENT_CHECK = "결석상태로 변경하시겠어요?";
+
+function MainContents(props: IProps) {
   const openModal = useModalStore((state) => state.openModal);
 
   const {
@@ -39,14 +42,6 @@ export default function MainContents(props: IProps) {
     id: 0,
     formattedTime: "",
   });
-
-  // 수업 중( 등원 후 && 수업 전)인 학생
-  const [needLessonStudents, setNeedLessonStudents] = useState<ScheduleData[]>(
-    []
-  );
-  // 출선 전 or 수업 완료 학생
-  const [noNeedLessonTimeScheduleTable, setNoNeedLessonTimeScheduleTable] =
-    useState<ScheduleDataContentType>([]);
 
   const { mutate: recordCreate } = useRecordCreate({
     bookId,
@@ -117,34 +112,40 @@ export default function MainContents(props: IProps) {
     });
   };
 
-  useEffect(() => {
-    if (bookSchedules?.content) {
-      const newNeedLessonStudents: ScheduleData[] = [];
-      const newNoNeedLessonTimeScheduleTable: ScheduleDataContentType = [];
-
-      bookSchedules.content.forEach((content) => {
-        const beforeLessonStudents = content.schedules.filter((schedule) => {
-          return schedule.recordStatus === "ATTEND" && !schedule.isTaught;
-        });
-        const noNeedToLessonSchedules = content.schedules.filter((schedule) => {
-          return schedule.recordStatus !== "ATTEND" || schedule.isTaught;
-        });
-
-        newNeedLessonStudents.push(...beforeLessonStudents);
-        newNoNeedLessonTimeScheduleTable.push({
-          ...content,
-          schedules: noNeedToLessonSchedules,
-        });
-      });
-
-      // 상태 업데이트
-      setNeedLessonStudents(
-        newNeedLessonStudents.sort((a, b) =>
-          a.recordTime > b.recordTime ? 1 : -1
-        )
-      );
-      setNoNeedLessonTimeScheduleTable(newNoNeedLessonTimeScheduleTable);
+  const computedLessonData = useMemo(() => {
+    if (!bookSchedules?.content) {
+      return {
+        computedNeedLessonStudents: [],
+        computedNoNeedLessonTimeScheduleTable: [],
+      };
     }
+
+    const tempNeedLessonStudents: ScheduleData[] = [];
+    const tempNoNeedLessonTimeScheduleTable: ScheduleDataContentType = [];
+
+    bookSchedules.content.forEach((content) => {
+      const beforeLessonStudents = content.schedules.filter(
+        (schedule) => schedule.recordStatus === "ATTEND" && !schedule.isTaught
+      );
+      const noNeedToLessonSchedules = content.schedules.filter(
+        (schedule) => schedule.recordStatus !== "ATTEND" || schedule.isTaught
+      );
+
+      tempNeedLessonStudents.push(...beforeLessonStudents);
+      tempNoNeedLessonTimeScheduleTable.push({
+        ...content,
+        schedules: noNeedToLessonSchedules,
+      });
+    });
+
+    tempNeedLessonStudents.sort((a, b) =>
+      a.recordTime > b.recordTime ? 1 : -1
+    );
+
+    return {
+      computedNeedLessonStudents: tempNeedLessonStudents,
+      computedNoNeedLessonTimeScheduleTable: tempNoNeedLessonTimeScheduleTable,
+    };
   }, [bookSchedules?.content]);
 
   const handleAttendanceStatusWithConfirmation = (
@@ -154,10 +155,10 @@ export default function MainContents(props: IProps) {
     // targetStatus에 따라 메시지를 즉시 결정
     const message =
       schedule.recordStatus === targetStatus
-        ? "출석체크를 취소하시겠어요?"
+        ? CANCLE_CHECK
         : targetStatus === "ATTEND"
-        ? "출석상태로 변경하시겠어요?"
-        : "결석상태로 변경하시겠어요?";
+        ? ATTEND_CHECK
+        : ABSENT_CHECK;
 
     // 출석기록이 이미 있는 경우 확인 메시지 출력
     if (schedule.recordStatus !== "PENDING") {
@@ -201,17 +202,23 @@ export default function MainContents(props: IProps) {
   return (
     <MainContentWrapper>
       {/* 수업중인 학생들 */}
+
       <NeedLessonTable
-        needLessonStudents={needLessonStudents}
+        needLessonStudents={computedLessonData.computedNeedLessonStudents}
         bookId={Number(bookId)}
         handleAttendanceStatusWithConfirmation={
           handleAttendanceStatusWithConfirmation
         }
+        currentDate={currentDate}
         openModifyRecordTimeModal={openModifyRecordTimeModal}
       />
+
       {/* 수업중이 아닌 학생들 */}
       <NoNeedLessonTable
-        noNeedLessonTimeScheduleTable={noNeedLessonTimeScheduleTable}
+        noNeedLessonTimeScheduleTable={
+          computedLessonData.computedNoNeedLessonTimeScheduleTable
+        }
+        currentDate={currentDate}
         bookId={Number(bookId)}
         handleAttendanceStatusWithConfirmation={
           handleAttendanceStatusWithConfirmation
@@ -222,5 +229,7 @@ export default function MainContents(props: IProps) {
     </MainContentWrapper>
   );
 }
+
+export default React.memo(MainContents);
 
 const MainContentWrapper = tw.div`w-full flex flex-col gap-4 justify-center items-center py-3 px-4 scrollbar-hide custom-scrollbar-hide`;

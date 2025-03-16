@@ -118,7 +118,7 @@ export default function CounsellingCreateForm({
           </div>
         </div>
         {errors?.type && (
-          <p className="text-red-500 text-sm mt-1">{errors.type.message}</p>
+          <p className="text-red-500 text-xs mt-1">{errors.type.message}</p>
         )}
       </div>
 
@@ -141,7 +141,7 @@ export default function CounsellingCreateForm({
           </div>
         </div>
         {errors?.counsellingAt && (
-          <p className="text-red-500 text-sm mt-1">
+          <p className="text-red-500 text-xs mt-1">
             {errors.counsellingAt.message}
           </p>
         )}
@@ -184,7 +184,7 @@ export default function CounsellingCreateForm({
           </div>
         </div>
         {errors?.topics && (
-          <p className="text-red-500 text-sm mt-1">{errors.topics.message}</p>
+          <p className="text-red-500 text-xs mt-1">{errors.topics.message}</p>
         )}
       </div>
 

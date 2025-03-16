@@ -176,7 +176,7 @@ export default function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
               readOnly
             />
             {errors?.progressRequest?.progresses && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="text-red-500 text-xs mt-1">
                 커리큘럼 선택 후 클래스 일정 선택은 필수입니다.
               </p>
             )}

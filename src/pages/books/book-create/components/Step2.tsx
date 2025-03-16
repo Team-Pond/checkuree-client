@@ -73,9 +73,12 @@ export default function Step2(props: IProps) {
     <>
       <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
         {/* 커리큘럼 추가된 것 */}
-        {courseCreateParam.map((course) => {
+        {courseCreateParam.map((course, index) => {
           return (
-            <div className="border-t border-b border-[#f6f6f6] w-full h-16 flex justify-between items-center">
+            <div
+              key={[course.title, index].join("-")}
+              className="border-t border-b border-[#f6f6f6] w-full h-16 flex justify-between items-center"
+            >
               <p className="text-m-bold text-text-primary pl-2">
                 {course.title} <span className="text-text-danger">*</span>
               </p>
@@ -209,6 +212,12 @@ export default function Step2(props: IProps) {
             />
             <p className="text-m-medium text-[#B0B0B0]">커리큘럼 추가하기 </p>
           </button>
+        )}
+
+        {courseCreateParam.length < 1 && (
+          <p className="text-red-500 text-xs">
+            {"최소 1개의 커리큘럼을 추가해주세요"}
+          </p>
         )}
       </div>
       <BottomDrawer

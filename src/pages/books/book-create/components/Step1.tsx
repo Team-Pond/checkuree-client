@@ -142,7 +142,7 @@ export default function Step1() {
             className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
           />
           {errors.title && (
-            <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
+            <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>
           )}
         </div>
       </TextWrapper>
@@ -170,7 +170,7 @@ export default function Step1() {
             })}
           </div>
           {errors.availableDays && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className="text-red-500 text-xs mt-1">
               {errors.availableDays.message}
             </p>
           )}
@@ -209,7 +209,7 @@ export default function Step1() {
             })}
           </div>
           {(errors.availableFrom || errors.availableTo) && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className="text-red-500 text-xs mt-1">
               {"시작 날짜 및 종료 날짜를 입력해주세요."}
             </p>
           )}
@@ -245,7 +245,7 @@ export default function Step1() {
 
       {/* 설명*/}
       <TextWrapper>
-        <FieldHeader title="설명(선택)" essential />
+        <FieldHeader title="설명(선택)" />
         <input
           {...register("description")}
           type="text"
