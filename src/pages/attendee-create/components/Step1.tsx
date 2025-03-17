@@ -35,7 +35,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
 
     if (input.length >= 4) {
       const year = parseInt(input.slice(0, 4));
-      const convertedYear = Math.min(Math.max(year, new Date().getFullYear()), 1900);
+      const convertedYear = Math.min(Math.max(year, 1900), new Date().getFullYear() + 1); // 내년에 입학할 수도 있으니 최대 + 1 까지는 가능하도록
       input = convertedYear + input.slice(4);
     }
 
