@@ -36,7 +36,7 @@ export const AttendeeRequestSchema = z.object({
   name: z.string().min(1, "이름은 최소 1글자 이상이어야 합니다."),
   actualName: z.string().optional(),
   gender: z.enum(["MALE", "FEMALE"], { message: "성별을 선택해주세요." }),
-  birthDate: z.string().nonempty({ message: "생년월일은 필수입니다." }),
+  birthDate: z.string().min(10, { message: "생년월일은 필수입니다." }),
   enrollmentDate: z.string().nonempty({ message: "학생 입학일은 필수입니다." }),
   phoneNumber: z.string().optional(),
   description: z.string().optional(),
