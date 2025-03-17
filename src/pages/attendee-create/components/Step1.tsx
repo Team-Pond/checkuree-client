@@ -26,11 +26,29 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
     }
 
     if (input.length >= 5) {
-      input = input.slice(0, 4) + "." + input.slice(4);
+      input = input.slice(0, 4) + '.' + input.slice(4);
     }
 
     if (input.length >= 8) {
-      input = input.slice(0, 7) + "." + input.slice(7);
+      input = input.slice(0, 7) + '.' + input.slice(7);
+    }
+
+    if (input.length >= 4) {
+      const year = parseInt(input.slice(0, 4));
+      const convertedYear = Math.min(Math.max(year, 1900), new Date().getFullYear() + 1); // 내년에 입학할 수도 있으니 최대 + 1 까지는 가능하도록
+      input = convertedYear + input.slice(4);
+    }
+
+    if (input.length >= 7) {
+      const month = parseInt(input.slice(5, 7));
+      const convertedMonth = Math.min(Math.max(month, 1), 12);
+      input = input.slice(0, 5) + String(convertedMonth).padStart(2, '0') + input.slice(7);
+    }
+
+    if (input.length >= 10) {
+      const day = parseInt(input.slice(8, 10));
+      const convertedDay = Math.min(Math.max(day, 1), 31);
+      input = input.slice(0, 8) + String(convertedDay).padStart(2, '0');
     }
 
     setValue(parameter, input.replaceAll(".", "-"));
@@ -205,6 +223,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
         <input
           type="text"
           placeholder="개굴초등학교"
+          {...register("attendeeRequest.school")}
           className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />
       </FieldWrapper>
@@ -214,6 +233,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
         <input
           type="text"
           placeholder=""
+          {...register("attendeeRequest.description")}
           className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />
       </FieldWrapper>

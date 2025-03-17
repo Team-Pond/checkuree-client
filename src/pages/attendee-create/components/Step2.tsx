@@ -85,6 +85,32 @@ function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
     openDrawer
   );
 
+  // 선택된 커리큘럼이 있는 경우 subjectItem, subject 설정
+  useEffect(() => {
+    if (bookCourses && !selectedSubject && !selectedSubjectItems) {
+      const savedProgress = getValues('progressRequest.progresses')?.[0];
+
+      if (savedProgress) {
+        // 모든 courses 순회하며 해당 subjectItemId를 포함하는 grade 찾기
+        for (const course of bookCourses.courses) {
+          const foundGrade = course.grades.find(
+            (grade) => grade.id === savedProgress.gradeId,
+          );
+
+          if (foundGrade) {
+            setSelectedSubject({ id: course.id, title: course.title });
+            setSelectedSubjectItems({
+              level: foundGrade.level,
+              subjectItemId: foundGrade.subjectItemId,
+              title: foundGrade.title,
+            });
+            break; // 일치하는 첫 번째 항목 찾으면 반복 종료
+          }
+        }
+      }
+    }
+  }, [bookCourses]);
+
   useEffect(() => {
     if (openDrawer) {
       setAttendeeOpenDrawer(false);
