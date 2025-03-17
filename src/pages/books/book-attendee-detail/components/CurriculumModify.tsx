@@ -10,6 +10,7 @@ import {
   useScheduleTimeTable,
 } from "../queries";
 import { DaysType } from "@/api/type";
+import { getSub30MinuteHhmm } from "@/utils";
 
 interface CurriculumModifyProps {
   setAttendeeSchedules: React.Dispatch<
@@ -41,9 +42,11 @@ export default function CurriculumModify({
   const [scheduleParams, setScheduleParams] = useState<{
     dayOfWeek: string;
     hhmm: string;
+    isSelected: boolean;
   }>({
     dayOfWeek: "",
     hhmm: "",
+    isSelected: false,
   });
 
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
@@ -61,8 +64,12 @@ export default function CurriculumModify({
     setAttendeeOpenDrawer(!attendeeOpenDrawer);
 
   // 스케줄 클릭 시 선택된 요일/시간 저장
-  const handleSchedule = (dayOfWeek: string, hhmm: string) => {
-    setScheduleParams({ dayOfWeek, hhmm });
+  const handleSchedule = (
+    dayOfWeek: string,
+    hhmm: string,
+    isSelected: boolean = false
+  ) => {
+    setScheduleParams({ dayOfWeek, hhmm, isSelected });
     handleAttendeeBottomDrawer(true);
   };
 
@@ -121,6 +128,51 @@ export default function CurriculumModify({
     }
   }, [openDrawer, attendeeOpenDrawer]);
 
+  const handleRemoveAttendeeSchedules = (day: DaysType, hhmm: string) => {
+    setAttendeeSchedules((prev) => {
+      // prev가 없는 경우
+      if (!prev) {
+        return {
+          schedules: [],
+        };
+      }
+
+      // prev 가 존재하는 경우 로직 시작
+      // 해당 시간이 존재하는지 확인
+      const isExist = prev.schedules.some(
+        (schedule) => schedule.day === day && schedule.hhmm === hhmm
+      );
+
+      // 존재하는 경우 삭제
+      if (isExist) {
+        return {
+          ...prev,
+          schedules: prev.schedules.filter(
+            (schedule) => schedule.day !== day || schedule.hhmm !== hhmm
+          ),
+        };
+      }
+
+      // 존재하지 않는 경우 30분 전의 시간이 존재하는지 확인
+      const beforeHhmm = getSub30MinuteHhmm(hhmm);
+      const isExistBefore = prev.schedules.some(
+        (schedule) => schedule.day === day && schedule.hhmm === beforeHhmm
+      );
+
+      // 30분 전의 시간이 존재하는 경우 삭제
+      if (isExistBefore) {
+        return {
+          ...prev,
+          schedules: prev.schedules.filter(
+            (schedule) => schedule.day !== day || schedule.hhmm !== beforeHhmm
+          ),
+        };
+      }
+
+      // 30분 전도 없으면 ... ? 넌 나가라 그냥
+      return prev;
+    });
+  };
   return (
     <div className="flex bg-white flex-col justify-center gap-6  w-full p-3 rounded-2xl">
       {/* 커리큘럼 선택 영역 */}
@@ -186,6 +238,7 @@ export default function CurriculumModify({
         scheduleParams={scheduleParams}
         scheduleData={scheduleData}
         handleAttendeeSchedules={handleAttendeeSchedules}
+        handleRemoveAttendeeSchedules={handleRemoveAttendeeSchedules}
       />
       <div className="flex gap-4 w-full">
         <button
