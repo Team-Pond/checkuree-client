@@ -33,6 +33,12 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
       input = input.slice(0, 7) + '.' + input.slice(7);
     }
 
+    if (input.length >= 4) {
+      const year = parseInt(input.slice(0, 4));
+      const convertedYear = Math.min(Math.max(year, new Date().getFullYear()), 1900);
+      input = convertedYear + input.slice(4);
+    }
+
     if (input.length >= 7) {
       const month = parseInt(input.slice(5, 7));
       const convertedMonth = Math.min(Math.max(month, 1), 12);
