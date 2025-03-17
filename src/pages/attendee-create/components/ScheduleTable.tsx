@@ -1,6 +1,6 @@
 // ScheduleTable.tsx
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { DaysType } from "@/api/type";
@@ -74,7 +74,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
     "FRIDAY",
   ]);
 
-  useEffect(() => {
+  const updateScheduleData = useMemo(() => {
     if (bookDetail?.data?.availableDays) {
       bookDetail.data.availableDays.forEach((day) => {
         availableDaysSet.add(day);
@@ -93,12 +93,18 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
         : weekendFiltered;
 
       // 상태 업데이트
-      setFilteredScheduleTable(updatedScheduleTable);
+
+      return updatedScheduleTable;
     }
-  }, [bookDetail]);
+  }, [bookDetail]); // ▼ 추가
+
+  useEffect(() => {
+    if (updateScheduleData) setFilteredScheduleTable(updateScheduleData);
+  }, [updateScheduleData]);
 
   const { watch } = useFormContext<CreateAttendeeSchema>();
   const newSchedules = watch("schedulesRequest.schedules") || [];
+
   return (
     <div className="max-w-4xl mx-auto">
       <table className="table-fixed w-full text-center border-collapse">
@@ -222,4 +228,4 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
   );
 };
 
-export default ScheduleTable;
+export default React.memo(ScheduleTable);

@@ -13,9 +13,11 @@ interface AttendeeDrawerProps {
   scheduleParams: {
     dayOfWeek: string;
     hhmm: string;
+    isSelected: boolean;
   };
   scheduleData?: Attendee[];
   handleAttendeeSchedules: (day: DaysType, hhmm: string) => void;
+  handleRemoveAttendeeSchedules: (day: DaysType, hhmm: string) => void;
 }
 
 export default function AttendeeDrawer({
@@ -24,8 +26,9 @@ export default function AttendeeDrawer({
   scheduleParams,
   scheduleData,
   handleAttendeeSchedules,
+  handleRemoveAttendeeSchedules,
 }: AttendeeDrawerProps) {
-  const { dayOfWeek, hhmm } = scheduleParams;
+  const { dayOfWeek, hhmm, isSelected } = scheduleParams;
 
   return (
     <BottomDrawer isOpen={isOpen} onClose={onClose}>
@@ -64,11 +67,13 @@ export default function AttendeeDrawer({
             type="button"
             className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
             onClick={() => {
-              handleAttendeeSchedules(dayOfWeek as DaysType, hhmm);
-              onClose();
+              !isSelected
+                ? handleAttendeeSchedules(dayOfWeek as DaysType, hhmm)
+                : handleRemoveAttendeeSchedules(dayOfWeek as DaysType, hhmm),
+                onClose();
             }}
           >
-            추가하기
+            {isSelected ? "삭제하기" : "추가하기"}
           </button>
         </div>
       </div>
