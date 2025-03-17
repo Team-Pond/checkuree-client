@@ -191,7 +191,7 @@ export default function CounsellingCreateForm({
       {/* 비고(선택) */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
-          <p className="font-bold text-m-medium">상담 내용(선택)</p>
+          <p className="font-bold text-m-medium">상담 내용</p>
         </div>
         <textarea
           {...register("description")}
