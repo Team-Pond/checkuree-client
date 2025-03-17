@@ -83,8 +83,8 @@ export const TimeSelectionView = ({
                       className={twMerge(
                         "rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover",
                         selectedTime === time
-                          ? "border-border-brand text-text-brand bg-bg-tertiary text-white"
-                          : "text-border-secondary-hover",
+                          ? "border-border-brand text-text-brand bg-bg-tertiary "
+                          : "text-border-secondary-hover"
                       )}
                       onClick={() => {
                         if (selectedTime === time) {
@@ -116,7 +116,7 @@ export const TimeSelectionView = ({
                         "rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover",
                         selectedTime === time
                           ? "border-border-brand text-text-brand"
-                          : "text-border-secondary-hover",
+                          : "text-border-secondary-hover"
                       )}
                       onClick={() => {
                         if (selectedTime === time) {
@@ -146,7 +146,7 @@ export const TimeSelectionView = ({
             "w-full h-[54px] rounded-2xl text-l-semibold",
             selectedTime === ""
               ? "bg-gray-300 text-gray-500 cursor-not-allowed opacity-50" // 비활성화 스타일
-              : "bg-bg-tertiary text-[#f1f8f3]", // 활성화 스타일
+              : "bg-bg-tertiary text-[#f1f8f3]" // 활성화 스타일
           )}
           onClick={() => onConfirm(selectedTime)}
           disabled={!selectedTime}
