@@ -218,7 +218,7 @@ export default function Step1() {
 
       {/* 커버 이미지 */}
       <TextWrapper>
-        <FieldHeader title="커버 이미지(선택)" />
+        <FieldHeader title="커버 이미지" />
         <div
           className="w-[81px] h-[81px] bg-bg-base border border-[#E7E7E7] rounded-xl flex justify-center items-center"
           onClick={triggerFileInput}
@@ -245,7 +245,7 @@ export default function Step1() {
 
       {/* 설명*/}
       <TextWrapper>
-        <FieldHeader title="설명(선택)" />
+        <FieldHeader title="설명" />
         <input
           {...register("description")}
           type="text"

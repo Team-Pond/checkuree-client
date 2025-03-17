@@ -201,7 +201,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
       </FieldWrapper>
       {/* 학교(선택) */}
       <FieldWrapper>
-        <FieldHeader title="학교(선택)" />
+        <FieldHeader title="학교" />
         <input
           type="text"
           placeholder="개굴초등학교"
@@ -210,7 +210,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
       </FieldWrapper>
       {/* 비고(선택) */}
       <FieldWrapper>
-        <FieldHeader title="비고(선택)" />
+        <FieldHeader title="비고" />
         <input
           type="text"
           placeholder=""

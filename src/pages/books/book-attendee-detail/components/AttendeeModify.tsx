@@ -168,7 +168,7 @@ export default function AttendeeModify({
       {/* 비고(선택) */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
-          <p className="font-bold text-m-medium">비고(선택)</p>
+          <p className="font-bold text-m-medium">비고</p>
         </div>
         <input
           type="text"
