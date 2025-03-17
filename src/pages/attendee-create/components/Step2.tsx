@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import SubjectSelectionDrawer from "./SubjectSelectionDrawer";
@@ -23,7 +23,7 @@ interface Step2Props {
   onChangeGrade: (gradeId: number) => void;
 }
 
-export default function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
+function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
   const { bookId } = useParams();
 
   const [selectedSubject, setSelectedSubject] = useState<{
@@ -223,4 +223,5 @@ export default function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
   );
 }
 
+export default React.memo(Step2);
 const FieldWrapper = tw.div`flex flex-col gap-2`;

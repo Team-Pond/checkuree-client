@@ -153,7 +153,6 @@ export default function ScheduleModifyDetail({
     });
   };
 
-  console.log(scheduleTable);
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
       <div className="flex flex-col gap-2">
@@ -181,6 +180,7 @@ export default function ScheduleModifyDetail({
         scheduleParams={scheduleParams}
         scheduleData={scheduleData}
         handleAttendeeSchedules={handleAttendeeSchedules}
+        handleRemoveAttendeeSchedules={handleRemoveAttendeeSchedules}
       />
     </div>
   );

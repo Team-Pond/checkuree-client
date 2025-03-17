@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import NextProgressModal from "./NextProgressModal";
 import { useProgressLog, useProgressPromote } from "../queries";
 import useModalStore from "@/store/dialogStore";
