@@ -223,6 +223,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
         <input
           type="text"
           placeholder="개굴초등학교"
+          {...register("attendeeRequest.school")}
           className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />
       </FieldWrapper>
@@ -232,6 +233,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
         <input
           type="text"
           placeholder=""
+          {...register("attendeeRequest.description")}
           className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />
       </FieldWrapper>
