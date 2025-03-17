@@ -26,11 +26,23 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
     }
 
     if (input.length >= 5) {
-      input = input.slice(0, 4) + "." + input.slice(4);
+      input = input.slice(0, 4) + '.' + input.slice(4);
     }
 
     if (input.length >= 8) {
-      input = input.slice(0, 7) + "." + input.slice(7);
+      input = input.slice(0, 7) + '.' + input.slice(7);
+    }
+
+    if (input.length >= 7) {
+      const month = parseInt(input.slice(5, 7));
+      const convertedMonth = Math.min(Math.max(month, 1), 12);
+      input = input.slice(0, 5) + String(convertedMonth).padStart(2, '0') + input.slice(7);
+    }
+
+    if (input.length >= 10) {
+      const day = parseInt(input.slice(8, 10));
+      const convertedDay = Math.min(Math.max(day, 1), 31);
+      input = input.slice(0, 8) + String(convertedDay).padStart(2, '0');
     }
 
     setValue(parameter, input.replaceAll(".", "-"));
