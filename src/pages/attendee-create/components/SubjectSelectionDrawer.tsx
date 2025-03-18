@@ -2,6 +2,8 @@ import { CoursesResponse } from "@/api/AttendanceBookSchema";
 import BottomDrawer from "@/components/BottomDrawer";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
+import { CreateAttendeeSchema } from "../_schema";
+import { useFormContext } from "react-hook-form";
 
 type Subject = {
   id: number;
@@ -20,12 +22,7 @@ interface SubjectSelectionDrawerProps {
   subjects?: Subject[];
   subjectItems?: SubjectItem[];
   selectedSubject?: Subject;
-  setSelectedSubject: (subject: Subject) => void;
-  setSelectedSubjectItems: (item: {
-    subjectItemId: number;
-    level: number;
-    title: string;
-  }) => void;
+
   handleBottomDrawer: (open: boolean) => void;
   bookCourses: CoursesResponse;
   onChangeGrade: (gradeId: number) => void;
@@ -41,14 +38,20 @@ export default function SubjectSelectionDrawer({
   isOpen,
   onClose,
   selectedSubject,
-  setSelectedSubject,
-  setSelectedSubjectItems,
+
   handleBottomDrawer,
   bookCourses,
   onChangeGrade,
 }: SubjectSelectionDrawerProps) {
   const [grades, setGrades] = useState<Grade[]>([]);
 
+  const {
+    setValue,
+    getValues,
+    register,
+    formState: { errors },
+    watch,
+  } = useFormContext<CreateAttendeeSchema>();
   return (
     <BottomDrawer isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col gap-4 items-center">
@@ -67,7 +70,7 @@ export default function SubjectSelectionDrawer({
                       : "text-text-primary text-s-medium "
                   )}
                   onClick={() => {
-                    setSelectedSubject(subject);
+                    setValue("progressRequest.subject", subject);
                     setGrades(subject.grades);
                   }}
                 >
@@ -94,8 +97,8 @@ export default function SubjectSelectionDrawer({
                     width={19}
                     height={19}
                     onClick={() => {
-                      setSelectedSubjectItems({
-                        subjectItemId: subjectItem.id,
+                      setValue("progressRequest.subjectCourse", {
+                        subjectCourseId: subjectItem.id,
                         level: subjectItem.level,
                         title: subjectItem.title,
                       });
