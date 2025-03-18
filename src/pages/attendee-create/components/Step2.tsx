@@ -25,16 +25,6 @@ interface Step2Props {
 
 function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
   const { bookId } = useParams();
-
-  const [selectedSubject, setSelectedSubject] = useState<{
-    id: number;
-    title: string;
-  }>();
-  const [selectedSubjectItems, setSelectedSubjectItems] = useState<{
-    level: number;
-    subjectItemId: number;
-    title: string;
-  }>();
   const [scheduleParams, setScheduleParams] = useState<{
     dayOfWeek: string;
     hhmm: string;
@@ -44,6 +34,15 @@ function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
     hhmm: "",
     isSelected: false,
   });
+
+  const {
+    setValue,
+    getValues,
+    register,
+    formState: { errors },
+    watch,
+  } = useFormContext<CreateAttendeeSchema>();
+
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [attendeeOpenDrawer, setAttendeeOpenDrawer] = useState<boolean>(false);
 
@@ -85,23 +84,30 @@ function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
     openDrawer
   );
 
+  const selectedSubject = watch("progressRequest.subject");
+  const selectedSubjectItems = watch("progressRequest.subjectCourse");
+  const progress = watch("progressRequest.progresses");
+
   // 선택된 커리큘럼이 있는 경우 subjectItem, subject 설정
   useEffect(() => {
     if (bookCourses && !selectedSubject && !selectedSubjectItems) {
-      const savedProgress = getValues('progressRequest.progresses')?.[0];
+      const savedProgress = progress?.[0];
 
       if (savedProgress) {
         // 모든 courses 순회하며 해당 subjectItemId를 포함하는 grade 찾기
         for (const course of bookCourses.courses) {
           const foundGrade = course.grades.find(
-            (grade) => grade.id === savedProgress.gradeId,
+            (grade) => grade.id === savedProgress.gradeId
           );
 
           if (foundGrade) {
-            setSelectedSubject({ id: course.id, title: course.title });
-            setSelectedSubjectItems({
+            setValue("progressRequest.subject", {
+              id: course.id,
+              title: course.title,
+            });
+            setValue("progressRequest.subjectCourse", {
               level: foundGrade.level,
-              subjectItemId: foundGrade.subjectItemId,
+              subjectCourseId: foundGrade.subjectItemId,
               title: foundGrade.title,
             });
             break; // 일치하는 첫 번째 항목 찾으면 반복 종료
@@ -119,12 +125,6 @@ function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
     }
   }, [openDrawer, attendeeOpenDrawer]);
 
-  const {
-    setValue,
-    getValues,
-    register,
-    formState: { errors },
-  } = useFormContext<CreateAttendeeSchema>();
   const handleAttendeeSchedules = (day: DaysType, hhmm: string) => {
     const currentSchedules = getValues("schedulesRequest.schedules");
     const newSchedule = { day, hhmm };
@@ -189,19 +189,17 @@ function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
           <div className="flex flex-col gap-[1px] w-full text-left">
             <input
               type="input"
-              {...register("progressRequest.progresses", {
-                required: "필수입니다.",
-              })}
               placeholder="커리큘럼 선택"
               value={
-                selectedSubject && selectedSubjectItems
-                  ? `${selectedSubject.title} > ${selectedSubjectItems.title}`
+                selectedSubject?.title && selectedSubjectItems?.title
+                  ? `${selectedSubject.title} - ${selectedSubjectItems.title}`
                   : ""
               }
               className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#5D5D5D] text-left cursor-pointer"
               readOnly
             />
-            {errors?.progressRequest?.progresses && (
+
+            {(errors?.progressRequest || errors?.schedulesRequest) && (
               <p className="text-red-500 text-xs mt-1">
                 커리큘럼 선택 후 클래스 일정 선택은 필수입니다.
               </p>
@@ -229,8 +227,6 @@ function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
         isOpen={openDrawer}
         onClose={onDrawerChange}
         selectedSubject={selectedSubject}
-        setSelectedSubject={setSelectedSubject}
-        setSelectedSubjectItems={setSelectedSubjectItems}
         handleBottomDrawer={handleBottomDrawer}
         bookCourses={bookCourses!}
         onChangeGrade={onChangeGrade}
