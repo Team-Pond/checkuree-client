@@ -3,11 +3,12 @@ import React from "react";
 import { useFormContext } from "react-hook-form";
 import { CreateAttendeeSchema } from "../_schema";
 import { twMerge } from "tailwind-merge";
-import { Associates } from "@/api/type";
+import { Associates, RelationType } from "@/api/type";
 import Radio from "@/components/Radio";
 import CheckBox from "@/components/CheckBox";
 import tw from "tailwind-styled-components";
 import FieldHeader from "../../../components/FieldTitle";
+import { relationTypeToKor } from "@/utils/enumMapper";
 
 interface Step1Props {
   onChangeGuardian: (key: string, value: string) => void;
@@ -26,29 +27,35 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
     }
 
     if (input.length >= 5) {
-      input = input.slice(0, 4) + '.' + input.slice(4);
+      input = input.slice(0, 4) + "." + input.slice(4);
     }
 
     if (input.length >= 8) {
-      input = input.slice(0, 7) + '.' + input.slice(7);
+      input = input.slice(0, 7) + "." + input.slice(7);
     }
 
     if (input.length >= 4) {
       const year = parseInt(input.slice(0, 4));
-      const convertedYear = Math.min(Math.max(year, 1900), new Date().getFullYear() + 1); // 내년에 입학할 수도 있으니 최대 + 1 까지는 가능하도록
+      const convertedYear = Math.min(
+        Math.max(year, 1900),
+        new Date().getFullYear() + 1
+      ); // 내년에 입학할 수도 있으니 최대 + 1 까지는 가능하도록
       input = convertedYear + input.slice(4);
     }
 
     if (input.length >= 7) {
       const month = parseInt(input.slice(5, 7));
       const convertedMonth = Math.min(Math.max(month, 1), 12);
-      input = input.slice(0, 5) + String(convertedMonth).padStart(2, '0') + input.slice(7);
+      input =
+        input.slice(0, 5) +
+        String(convertedMonth).padStart(2, "0") +
+        input.slice(7);
     }
 
     if (input.length >= 10) {
       const day = parseInt(input.slice(8, 10));
       const convertedDay = Math.min(Math.max(day, 1), 31);
-      input = input.slice(0, 8) + String(convertedDay).padStart(2, '0');
+      input = input.slice(0, 8) + String(convertedDay).padStart(2, "0");
     }
 
     setValue(parameter, input.replaceAll(".", "-"));
@@ -63,6 +70,8 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
 
   // getValue를 사용하면 렌더링이 안되어 성별 선택을 실시간으로 볼 수 없기 때문에 watch 함수를 사용
   const gender = watch("attendeeRequest.gender");
+
+  const associate = watch("attendeeRequest.associates");
 
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
@@ -155,7 +164,6 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
                   const mm = String(today.getMonth() + 1).padStart(2, "0");
                   const dd = String(today.getDate()).padStart(2, "0");
                   const formattedDate = `${yyyy}.${mm}.${dd}`;
-
                   setValue(
                     "attendeeRequest.enrollmentDate",
                     formattedDate.replaceAll(".", "-")
@@ -179,29 +187,35 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
         <FieldHeader title="가족 연락처" />
         <div className="flex gap-2">
           <Select
-            onChange={onChangeGuardian}
+            value={relationTypeToKor(
+              associate?.[0]?.relationType as RelationType
+            )}
+            onChange={(value: string) => {
+              console.log(value);
+              setValue("attendeeRequest.associates", [
+                {
+                  relationType: "FATHER",
+                  phoneNumber: "",
+                },
+              ]);
+            }}
             options={[
               { name: "모", value: "MOTHER" },
               { name: "부", value: "FATHER" },
-              { name: "조부모", value: "GRANDPARENT" },
+              { name: "형제", value: "SIBLING" },
               { name: "기타", value: "ETC" },
             ]}
             placeholder="관계"
           />
           <input
-            type="number"
-            disabled={guardian?.relationType ? false : true}
+            type="text"
+            disabled={!associate?.[0]?.relationType}
+            {...register("attendeeRequest.associates.0.phoneNumber")}
             placeholder="01012345678"
             className={twMerge(
               "max-w-[342px] w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary",
-              guardian?.relationType ? "bg-white" : "bg-gray-200"
+              associate ? "bg-white" : "bg-gray-200"
             )}
-            onChange={(e) =>
-              onChangeGuardian(
-                "phoneNumber",
-                e.target.value.replaceAll("-", "")
-              )
-            }
           />
         </div>
       </FieldWrapper>

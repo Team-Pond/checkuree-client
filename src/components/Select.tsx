@@ -7,6 +7,7 @@ import {
 
 type IProps = {
   onChange: (key: string, value: string) => void;
+  value: string;
   options: {
     name: string;
     value: string;
@@ -15,12 +16,12 @@ type IProps = {
 };
 
 const CommonSelect = (props: IProps) => {
-  const { onChange, options, placeholder } = props;
+  const { onChange, options, placeholder, value } = props;
 
   return (
-    <Select.Root onValueChange={(value) => onChange("relationType", value)}>
+    <Select.Root onValueChange={(value) => onChange(value, value)}>
       <Select.Trigger className="rounded-md outline-none inline-flex items-center justify-between w-[120px] px-3 py-2 bg-white border border-border-brand ounded-md text-sm focus:outline-none  focus:ring-green-500 ">
-        <Select.Value placeholder={placeholder} />
+        <Select.Value placeholder={value || placeholder} />
         <Select.Icon>
           <ChevronDownIcon />
         </Select.Icon>
