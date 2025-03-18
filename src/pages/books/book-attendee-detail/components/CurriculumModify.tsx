@@ -3,7 +3,7 @@ import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
 import { useParams } from "react-router-dom";
 import ScheduleTable from "./ScheduleTable";
 import SubjectSelectionDrawer from "./SubjectSelectionDrawer";
-import AttendeeDrawer from "./AttendeeDrawer";
+
 import {
   useBookCourses,
   useScheduleData,
@@ -11,6 +11,7 @@ import {
 } from "../queries";
 import { DaysType } from "@/api/type";
 import { getSub30MinuteHhmm } from "@/utils";
+import AttendeeDrawer from "@/components/AttendeeDrawer";
 
 interface CurriculumModifyProps {
   setAttendeeSchedules: React.Dispatch<

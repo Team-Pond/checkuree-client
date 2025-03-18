@@ -8,8 +8,9 @@ import {
   useScheduleTable,
 } from "@/pages/attendee-create/queries";
 import { getSub30MinuteHhmm } from "@/utils";
-import AttendeeDrawer from "../AttendeeDrawer";
+
 import ScheduleTable from "../ScheduleTable";
+import AttendeeDrawer from "@/components/AttendeeDrawer";
 
 interface IProps {
   setAttendeeSchedules: React.Dispatch<
