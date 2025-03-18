@@ -3,11 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { BookContext } from "../../../../../context/BookContext";
 import { useBookDetail } from "../../../queries";
 import { useParams } from "react-router-dom";
-import {
-  ceil30Minute,
-  floor30Minute,
-  formatTimeWith12Hour,
-} from "../../../../../utils";
+import { ceil30Minute, floor30Minute, formatTimeWith12Hour } from "@/utils";
 
 interface Props {
   student: { id: number; name: string };
