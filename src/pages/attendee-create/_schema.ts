@@ -51,12 +51,25 @@ export const AttendeeRequestSchema = z.object({
 
 // SchedulesRequest 스키마
 export const SchedulesRequestSchema = z.object({
-  schedules: z.array(ScheduleSchema).min(1),
+  schedules: z
+    .array(ScheduleSchema)
+    .min(1, { message: "스케줄을 입력해주세요." }),
 });
 
 // ProgressRequest 스키마
 export const ProgressRequestSchema = z.object({
-  progresses: z.array(ProgressSchema).min(1),
+  progresses: z
+    .array(ProgressSchema)
+    .min(1, { message: "진도를 입력해주세요." }),
+  subject: z.object({
+    title: z.string(),
+    id: z.number(),
+  }),
+  subjectCourse: z.object({
+    level: z.number(),
+    subjectCourseId: z.number(),
+    title: z.string(),
+  }),
 });
 
 // 최종 메인 스키마

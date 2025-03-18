@@ -7,7 +7,6 @@
   "scripts": {
     "dev": "npm install & vite",
     "build": "tsc -b && vite build",
-    
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
