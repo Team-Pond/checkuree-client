@@ -4,8 +4,12 @@ import { z } from "zod";
 export const AssociateSchema = z.object({
   name: z.string().optional(),
   gender: z.enum(["MALE", "FEMALE"]).optional(), // 필요에 따라 값 수정
-  relationType: z.enum(["FATHER", "MOTHER", "SIBLING", "OTHER", ""]),
-  phoneNumber: z.string(),
+  relationType: z.enum(["FATHER", "MOTHER", "SIBLING", "OTHER"]),
+  phoneNumber: z
+    .string({})
+    .transform((val) =>
+      val === "" || val === undefined || val === null ? "01000000000" : val
+    ),
   relationDescription: z.string().optional(),
   description: z.string().optional(),
 });

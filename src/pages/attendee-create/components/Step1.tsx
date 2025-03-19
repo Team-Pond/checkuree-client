@@ -200,7 +200,7 @@ export default function Step1() {
               { name: "모", value: "MOTHER" },
               { name: "부", value: "FATHER" },
               { name: "형제", value: "SIBLING" },
-              { name: "기타", value: "ETC" },
+              { name: "기타", value: "OTHER" },
             ]}
             placeholder="관계"
           />
@@ -222,6 +222,10 @@ export default function Step1() {
                 : "bg-gray-100"
             )}
           />
+
+          {errors.attendeeRequest?.phoneNumber && (
+            <p className="text-red-500 text-xs mt-1">ㅅㄷㄴㅅ</p>
+          )}
         </div>
       </FieldWrapper>
       {/* 학생 주소 */}
