@@ -98,13 +98,7 @@ export default function Step1() {
               onChange={(e) => handleDateChange(e, "attendeeRequest.birthDate")}
               placeholder="YYYY.MM.DD"
             />
-            {/* <input
-              type="text"
-              {...register("attendeeRequest.birthDate")}
-              onChange={(e) => handleDateChange(e, "attendeeRequest.birthDate")}
-              placeholder="YYYY.MM.DD"
-              className="outline-none bg-white border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12 flex items-center pl-4"
-            /> */}
+
             <div className="flex px-2 max-w-[170px] w-full h-12">
               <div className="flex gap-8">
                 <Radio

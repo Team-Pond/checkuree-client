@@ -6,6 +6,7 @@ import { CreateBookSchema } from "../_schema";
 import { DaysType } from "@/api/type";
 import tw from "tailwind-styled-components";
 import FieldHeader from "@/components/FieldTitle";
+import Input from "@/components/Input";
 
 const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
 
@@ -126,6 +127,8 @@ export default function Step1() {
     },
   ];
 
+  const availableFrom = watch("availableFrom");
+  const availableTo = watch("availableTo");
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
       {/* 출석부 이름 */}
@@ -133,13 +136,10 @@ export default function Step1() {
         <FieldHeader title="출석부" essential />
 
         <div className="flex flex-col gap-[1px] w-full text-left">
-          <input
-            {...register("title", {
-              required: "출석부는 최소 4글자 이상 입력해주세요.",
-            })}
-            type="text"
+          <Input
+            {...register("title", { required: "필수" })}
+            onChange={(e) => setValue("title", e.target.value)}
             placeholder="출석부 이름"
-            className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
           />
           {errors.title && (
             <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>
@@ -176,7 +176,7 @@ export default function Step1() {
           )}
         </div>
       </TextWrapper>
-      <input
+      <Input
         type="hidden"
         {...register("availableDays", { required: "필수" })}
       />
@@ -223,8 +223,7 @@ export default function Step1() {
           className="w-[81px] h-[81px] bg-bg-base border border-[#E7E7E7] rounded-xl flex justify-center items-center"
           onClick={triggerFileInput}
         >
-          <input
-            {...register("imageUrl")}
+          <Input
             type="file"
             className="hidden"
             ref={fileRef}
@@ -246,10 +245,10 @@ export default function Step1() {
       {/* 설명*/}
       <TextWrapper>
         <FieldHeader title="설명" />
-        <input
+        <Input
           {...register("description")}
           type="text"
-          className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+          onChange={(e) => setValue("description", e.target.value)}
         />
       </TextWrapper>
 
