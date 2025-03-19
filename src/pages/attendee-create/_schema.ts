@@ -1,18 +1,27 @@
 import { z } from "zod";
 
 // Associate 스키마
-export const AssociateSchema = z.object({
-  name: z.string().optional(),
-  gender: z.enum(["MALE", "FEMALE"]).optional(), // 필요에 따라 값 수정
-  relationType: z.enum(["FATHER", "MOTHER", "SIBLING", "OTHER"]),
-  phoneNumber: z
-    .string({})
-    .transform((val) =>
-      val === "" || val === undefined || val === null ? "01000000000" : val
-    ),
-  relationDescription: z.string().optional(),
-  description: z.string().optional(),
-});
+export const AssociateSchema = z
+  .object({
+    name: z.string().optional(),
+    gender: z.enum(["MALE", "FEMALE"]).optional(), // 필요에 따라 값 수정
+    relationType: z.enum(["FATHER", "MOTHER", "SIBLING", "OTHER", "NONE"]),
+    phoneNumber: z.string({}),
+    relationDescription: z.string().optional(),
+    description: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.relationType !== "NONE") {
+        return data.phoneNumber !== undefined && data.phoneNumber.trim() !== "";
+      }
+      return true;
+    },
+    {
+      message: "가족을 선택한 경우, 전화번호 입력은 필수입니다.",
+      path: ["phoneNumber"],
+    }
+  );
 
 const ProgressSchema = z.object({
   startAt: z.string().refine((val) => !isNaN(Date.parse(val)), {
