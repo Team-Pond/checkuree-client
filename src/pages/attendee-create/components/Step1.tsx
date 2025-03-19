@@ -222,10 +222,6 @@ export default function Step1() {
                 : "bg-gray-100"
             )}
           />
-
-          {errors.attendeeRequest?.phoneNumber && (
-            <p className="text-red-500 text-xs mt-1">ㅅㄷㄴㅅ</p>
-          )}
         </div>
       </FieldWrapper>
       {/* 학생 주소 */}
