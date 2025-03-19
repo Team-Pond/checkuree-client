@@ -40,22 +40,24 @@ export default function AttendeeCreate() {
   const handleStep2Next = async (data: CreateAttendeeSchema) => {
     const isValid = await trigger("attendeeRequest");
     if (isValid) {
-      // attendeeRequest 객체를 별도로 생성합니다.
-      const attendeeRequestPayload = {
-        ...data.attendeeRequest,
-        actualName: data.attendeeRequest.name,
-      };
+      const { associates, ...attendeeRequestWithoutAssociates } =
+        data.attendeeRequest;
 
-      // associates가 존재하고 relationType이 "NONE"이 아닐 때만 추가합니다.
+      // any로 단언하여 타입 오류를 회피합니다.
+      const attendeeRequestPayload = {
+        ...attendeeRequestWithoutAssociates,
+        actualName: data.attendeeRequest.name,
+      } as any;
+
       if (
-        data.attendeeRequest.associates &&
-        data.attendeeRequest.associates[0] &&
-        data.attendeeRequest.associates[0].relationType !== "NONE"
+        associates &&
+        associates[0] &&
+        associates[0].relationType !== "NONE"
       ) {
         attendeeRequestPayload.associates = [
           {
-            relationType: data.attendeeRequest.associates[0].relationType,
-            phoneNumber: data.attendeeRequest.associates[0].phoneNumber,
+            relationType: associates[0].relationType,
+            phoneNumber: associates[0].phoneNumber,
           },
         ];
       }
