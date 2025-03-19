@@ -58,6 +58,7 @@ export default function Step1() {
 
   const {
     setValue,
+    getValues,
     register,
     watch,
     formState: { errors },
@@ -66,6 +67,11 @@ export default function Step1() {
   // getValue를 사용하면 렌더링이 안되어 성별 선택을 실시간으로 볼 수 없기 때문에 watch 함수를 사용
   const gender = watch("attendeeRequest.gender");
   const associate = watch("attendeeRequest.associates");
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const dd = String(today.getDate()).padStart(2, "0");
+  const formattedDate = `${yyyy}.${mm}.${dd}`;
 
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
@@ -151,13 +157,12 @@ export default function Step1() {
             <CheckBox
               label="오늘 입학"
               id="admittedToday"
+              checked={
+                watch("attendeeRequest.enrollmentDate") ===
+                formattedDate.replaceAll(".", "-")
+              }
               onChange={(e) => {
                 if (e.target.checked) {
-                  const today = new Date();
-                  const yyyy = today.getFullYear();
-                  const mm = String(today.getMonth() + 1).padStart(2, "0");
-                  const dd = String(today.getDate()).padStart(2, "0");
-                  const formattedDate = `${yyyy}.${mm}.${dd}`;
                   setValue(
                     "attendeeRequest.enrollmentDate",
                     formattedDate.replaceAll(".", "-")
@@ -179,53 +184,76 @@ export default function Step1() {
       {/* 가족 연락처 */}
       <FieldWrapper>
         <FieldHeader title="가족 연락처" />
-        <div className="flex gap-2">
-          <Select
-            value={
-              associate && associate[0]?.relationType
-                ? relationTypeToKor(
-                    associate?.[0]?.relationType as RelationType
-                  )
-                : "관계"
-            }
-            onChange={(value: string) => {
-              setValue("attendeeRequest.associates", [
-                {
-                  relationType: value as RelationType,
-                  phoneNumber: "",
-                },
-              ]);
-            }}
-            options={[
-              { name: "모", value: "MOTHER" },
-              { name: "부", value: "FATHER" },
-              { name: "형제", value: "SIBLING" },
-              { name: "기타", value: "OTHER" },
-            ]}
-            placeholder="관계"
-          />
-          <input
-            type="text"
-            value={associate?.[0]?.phoneNumber}
-            disabled={!associate?.[0]?.relationType}
-            onChange={(e) => {
-              setValue(
-                "attendeeRequest.associates.0.phoneNumber",
-                e.target.value.replace(/[^0-9]/g, "")
-              );
-            }}
-            placeholder="01012345678"
-            className={twMerge(
-              "max-w-[342px] w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary",
-              associate && associate[0].relationType
-                ? "bg-white"
-                : "bg-gray-100"
-            )}
-          />
+        <div className="flex flex-col gap-[1px] w-full text-left">
+          <div className="flex gap-2">
+            <Select
+              value={
+                associate && associate[0]?.relationType
+                  ? relationTypeToKor(
+                      associate?.[0]?.relationType as RelationType
+                    )
+                  : "관계"
+              }
+              onChange={(value: string) => {
+                const currentAssociates = getValues(
+                  "attendeeRequest.associates"
+                ) || [{ phoneNumber: "", relationType: "NONE" }];
+                setValue("attendeeRequest.associates", [
+                  {
+                    ...currentAssociates[0],
+                    relationType: value as RelationType,
+                    phoneNumber:
+                      value === "NONE" ? "" : currentAssociates[0].phoneNumber,
+                  },
+                ]);
+              }}
+              options={[
+                { name: "관계", value: "NONE" },
+                { name: "모", value: "MOTHER" },
+                { name: "부", value: "FATHER" },
+                { name: "형제", value: "SIBLING" },
+                { name: "기타", value: "OTHER" },
+              ]}
+              placeholder="관계"
+            />
+            <input
+              type="text"
+              value={associate?.[0]?.phoneNumber}
+              disabled={
+                !associate?.[0]?.relationType ||
+                associate[0].relationType === "NONE"
+              }
+              onChange={(e) => {
+                if (associate?.[0]?.relationType === "NONE") {
+                  setValue("attendeeRequest.associates.0.phoneNumber", "");
+                } else {
+                  setValue(
+                    "attendeeRequest.associates.0.phoneNumber",
+                    e.target.value.replace(/[^0-9]/g, "")
+                  );
+                }
+              }}
+              placeholder="01012345678"
+              className={twMerge(
+                "max-w-[342px] w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary",
+                associate &&
+                  associate[0].relationType &&
+                  associate[0].relationType !== "NONE"
+                  ? "bg-white"
+                  : "bg-gray-100"
+              )}
+            />
 
-          {errors.attendeeRequest?.phoneNumber && (
-            <p className="text-red-500 text-xs mt-1">ㅅㄷㄴㅅ</p>
-          )}
+            {errors.attendeeRequest?.phoneNumber && (
+              <p className="text-red-500 text-xs mt-1">ㅅㄷㄴㅅ</p>
+            )}
+          </div>
+          {errors.attendeeRequest?.associates &&
+            errors.attendeeRequest?.associates[0] && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.attendeeRequest.associates[0]?.phoneNumber?.message}
+              </p>
+            )}
         </div>
       </FieldWrapper>
       {/* 학생 주소 */}
