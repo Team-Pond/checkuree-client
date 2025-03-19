@@ -72,7 +72,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
     "FRIDAY",
   ]);
 
-  useEffect(() => {
+  const updateScheduleData = useMemo(() => {
     if (bookDetail?.data?.availableDays) {
       bookDetail.data.availableDays.forEach((day) => {
         availableDaysSet.add(day);
@@ -90,38 +90,13 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
           }))
         : weekendFiltered;
 
-      // 상태 업데이트
-      setFilteredScheduleTable(updatedScheduleTable);
+      return updatedScheduleTable;
     }
-  }, [bookDetail]);
+  }, [bookDetail]); // ▼ 추가
 
-  // const updateScheduleData = useMemo(() => {
-  //   if (bookDetail?.data?.availableDays) {
-  //     bookDetail.data.availableDays.forEach((day) => {
-  //       availableDaysSet.add(day);
-  //     });
-  //     const weekendFiltered = scheduleTable.filter((daySchedule) =>
-  //       availableDaysSet.has(daySchedule.dayOfWeek)
-  //     );
-
-  //     // availableFrom이 '30'으로 끝나는 경우 scheduleCount에 0을 추가
-  //     const isAvailableFrom30 = bookDetail?.data?.availableFrom?.endsWith("30");
-  //     const updatedScheduleTable = isAvailableFrom30
-  //       ? weekendFiltered.map((daySchedule) => ({
-  //           ...daySchedule,
-  //           scheduleCount: [0, ...daySchedule.scheduleCount, 0], // 시작시간이 30분 인 경우 앞에 0을 하나 추가
-  //         }))
-  //       : weekendFiltered;
-
-  //     // 상태 업데이트
-  //     console.log("test");
-  //     return updatedScheduleTable;
-  //   }
-  // }, [bookDetail]); // ▼ 추가
-
-  // useEffect(() => {
-  //   if (updateScheduleData) setFilteredScheduleTable(updateScheduleData);
-  // }, [updateScheduleData]);
+  useEffect(() => {
+    if (updateScheduleData) setFilteredScheduleTable(updateScheduleData);
+  }, [updateScheduleData]);
 
   const { watch } = useFormContext<CreateAttendeeSchema>();
   const newSchedules = watch("schedulesRequest.schedules") || [];
