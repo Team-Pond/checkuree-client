@@ -1,9 +1,4 @@
-import {
-  redirect,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import Step1 from "./components/Step1";
 import { useState } from "react";
@@ -15,7 +10,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createAttendee } from "@/api/AttendeeApiClient";
 import toast from "react-hot-toast";
 import SEO from "@/components/SEO";
-import { Associates, RelationType } from "@/api/type";
 
 export default function AttendeeCreate() {
   const navigate = useNavigate();
@@ -23,7 +17,6 @@ export default function AttendeeCreate() {
   const { bookId } = useParams();
 
   const [isStep2, setIsStep2] = useState<boolean>(false);
-  const [guardian, setGuardian] = useState<Associates>();
 
   const methods = useForm<CreateAttendeeSchema>({
     resolver: zodResolver(AttendeeSchema),
@@ -32,16 +25,8 @@ export default function AttendeeCreate() {
 
   const { trigger, setValue, handleSubmit } = methods;
 
-  const onChangeGuardian = (key: RelationType | string, value: string) => {
-    setGuardian((prev) => ({
-      ...prev!,
-      [key]: value,
-    }));
-  };
-
   const onChangeGrade = (gradeId: number) => {
     setValue("progressRequest.progresses", [
-      // ...getValues("progressRequest.progresses"),
       { gradeId: gradeId, startAt: getTodayYYYYMMDD() },
     ]);
   };
@@ -117,10 +102,7 @@ export default function AttendeeCreate() {
                   attendanceBookId={Number(bookId)}
                 />
               ) : (
-                <Step1
-                  onChangeGuardian={onChangeGuardian}
-                  guardian={guardian!}
-                />
+                <Step1 />
               )}
               {isStep2 ? (
                 <div className="flex gap-4 w-full">
