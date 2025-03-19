@@ -9,6 +9,7 @@ import CheckBox from "@/components/CheckBox";
 import tw from "tailwind-styled-components";
 import FieldHeader from "../../../components/FieldTitle";
 import { relationTypeToKor } from "@/utils/enumMapper";
+import Input from "@/components/Input";
 
 export default function Step1() {
   const handleDateChange = (
@@ -73,11 +74,12 @@ export default function Step1() {
       <FieldWrapper>
         <FieldHeader title="학생 이름" essential />
         <div className="flex flex-col gap-[1px] w-full text-left">
-          <input
-            type="text"
+          <Input
             placeholder="학생 이름"
             {...register("attendeeRequest.name")}
-            className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+            onChange={(e) => {
+              setValue("attendeeRequest.name", e.target.value);
+            }}
           />
           {errors?.attendeeRequest?.name && (
             <p className="text-red-500 text-xs mt-1">
@@ -91,13 +93,18 @@ export default function Step1() {
         <FieldHeader title="학생 생년월일/성별" essential />
         <div className="flex flex-col gap-[1px] w-full text-left">
           <div className="flex items-center gap-[9px]">
-            <input
+            <Input
+              {...register("attendeeRequest.birthDate")}
+              onChange={(e) => handleDateChange(e, "attendeeRequest.birthDate")}
+              placeholder="YYYY.MM.DD"
+            />
+            {/* <input
               type="text"
               {...register("attendeeRequest.birthDate")}
               onChange={(e) => handleDateChange(e, "attendeeRequest.birthDate")}
               placeholder="YYYY.MM.DD"
               className="outline-none bg-white border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12 flex items-center pl-4"
-            />
+            /> */}
             <div className="flex px-2 max-w-[170px] w-full h-12">
               <div className="flex gap-8">
                 <Radio
@@ -128,7 +135,7 @@ export default function Step1() {
             )}
           </div>
 
-          <input type="hidden" {...register("attendeeRequest.gender")} />
+          <Input type="hidden" {...register("attendeeRequest.gender")} />
         </div>
       </FieldWrapper>
 
@@ -138,14 +145,12 @@ export default function Step1() {
 
         <div className="flex flex-col gap-[1px] w-full text-left">
           <div className="flex items-center gap-[9px]">
-            <input
-              type="text"
+            <Input
               {...register("attendeeRequest.enrollmentDate")}
               placeholder="YYYY.MM.DD"
               onChange={(e) =>
                 handleDateChange(e, "attendeeRequest.enrollmentDate")
               }
-              className="outline-none bg-white border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12 flex items-center pl-4"
             />
 
             <CheckBox
@@ -204,8 +209,7 @@ export default function Step1() {
             ]}
             placeholder="관계"
           />
-          <input
-            type="text"
+          <Input
             value={associate?.[0]?.phoneNumber}
             disabled={!associate?.[0]?.relationType}
             onChange={(e) => {
@@ -216,10 +220,8 @@ export default function Step1() {
             }}
             placeholder="01012345678"
             className={twMerge(
-              "max-w-[342px] w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary",
-              associate && associate[0].relationType
-                ? "bg-white"
-                : "bg-gray-100"
+              "max-w-[342px] text-m-medium",
+              !(associate && associate[0].relationType) && "bg-gray-100"
             )}
           />
         </div>
@@ -228,33 +230,25 @@ export default function Step1() {
       <FieldWrapper>
         <FieldHeader title="학생 주소" />
         <div className="flex flex-col gap-[1px] w-full text-left">
-          <input
-            type="text"
+          <Input
             placeholder="학생 주소"
             {...register("attendeeRequest.address_1")}
-            className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
           />
         </div>
       </FieldWrapper>
       {/* 학교(선택) */}
       <FieldWrapper>
         <FieldHeader title="학교" />
-        <input
+        <Input
           type="text"
           placeholder="개굴초등학교"
           {...register("attendeeRequest.school")}
-          className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />
       </FieldWrapper>
       {/* 비고(선택) */}
       <FieldWrapper>
         <FieldHeader title="비고" />
-        <input
-          type="text"
-          placeholder=""
-          {...register("attendeeRequest.description")}
-          className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
-        />
+        <Input {...register("attendeeRequest.description")} />
       </FieldWrapper>
     </div>
   );
