@@ -3,19 +3,14 @@ import React from "react";
 import { useFormContext } from "react-hook-form";
 import { CreateAttendeeSchema } from "../_schema";
 import { twMerge } from "tailwind-merge";
-import { Associates, RelationType } from "@/api/type";
+import { RelationType } from "@/api/type";
 import Radio from "@/components/Radio";
 import CheckBox from "@/components/CheckBox";
 import tw from "tailwind-styled-components";
 import FieldHeader from "../../../components/FieldTitle";
 import { relationTypeToKor } from "@/utils/enumMapper";
 
-interface Step1Props {
-  onChangeGuardian: (key: string, value: string) => void;
-  guardian: Associates;
-}
-
-export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
+export default function Step1() {
   const handleDateChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     parameter: "attendeeRequest.birthDate" | "attendeeRequest.enrollmentDate"
@@ -70,7 +65,6 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
 
   // getValue를 사용하면 렌더링이 안되어 성별 선택을 실시간으로 볼 수 없기 때문에 watch 함수를 사용
   const gender = watch("attendeeRequest.gender");
-
   const associate = watch("attendeeRequest.associates");
 
   return (
@@ -95,7 +89,6 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
       {/* 학생 생년월일/성별 */}
       <FieldWrapper>
         <FieldHeader title="학생 생년월일/성별" essential />
-
         <div className="flex flex-col gap-[1px] w-full text-left">
           <div className="flex items-center gap-[9px]">
             <input
@@ -138,6 +131,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
           <input type="hidden" {...register("attendeeRequest.gender")} />
         </div>
       </FieldWrapper>
+
       {/* 학생 입학일 */}
       <FieldWrapper>
         <FieldHeader title="학생 입학일" essential />
@@ -187,14 +181,17 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
         <FieldHeader title="가족 연락처" />
         <div className="flex gap-2">
           <Select
-            value={relationTypeToKor(
-              associate?.[0]?.relationType as RelationType
-            )}
+            value={
+              associate && associate[0]?.relationType
+                ? relationTypeToKor(
+                    associate?.[0]?.relationType as RelationType
+                  )
+                : "관계"
+            }
             onChange={(value: string) => {
-              console.log(value);
               setValue("attendeeRequest.associates", [
                 {
-                  relationType: "FATHER",
+                  relationType: value as RelationType,
                   phoneNumber: "",
                 },
               ]);
@@ -209,12 +206,20 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
           />
           <input
             type="text"
+            value={associate?.[0]?.phoneNumber}
             disabled={!associate?.[0]?.relationType}
-            {...register("attendeeRequest.associates.0.phoneNumber")}
+            onChange={(e) => {
+              setValue(
+                "attendeeRequest.associates.0.phoneNumber",
+                e.target.value.replace(/[^0-9]/g, "")
+              );
+            }}
             placeholder="01012345678"
             className={twMerge(
               "max-w-[342px] w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary",
-              associate ? "bg-white" : "bg-gray-200"
+              associate && associate[0].relationType
+                ? "bg-white"
+                : "bg-gray-100"
             )}
           />
         </div>
