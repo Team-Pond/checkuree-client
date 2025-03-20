@@ -1,6 +1,6 @@
 import BottomDrawer from "@/components/BottomDrawer";
+import { convertEngDayToKorDay, getAddMinuteHhmm } from "@/utils";
 import { DaysType } from "@/api/type";
-import { convertEngDayToKorDay } from "@/utils";
 
 type Attendee = {
   name: string;
@@ -37,20 +37,21 @@ export default function AttendeeDrawer({
           {/* Drawer 상단 영역 */}
           <div className="text-left w-full h-10 border-b border-[#f6f6f6] flex items-center">
             <p className="text-s-semibold text-text-secondary">
-              ({convertEngDayToKorDay(dayOfWeek)}) {hhmm} -
-              {Number(hhmm.substring(0, 2)) + 1}:{hhmm.substring(3, 5)}
+              ({convertEngDayToKorDay(dayOfWeek)}) {hhmm}-{" "}
+              {getAddMinuteHhmm(hhmm, 30)}
             </p>
           </div>
         </div>
 
         {/* 수강생 목록 */}
         <div className="grid grid-cols-2 px-[24px]">
-          {scheduleData?.map((attendee) => (
-            <div key={attendee.name} className="flex gap-2 w-[171px] h-9">
+          {scheduleData?.map((attendee, index) => (
+            <div
+              // 중복 데이터가 발생하는 현상이 있어 key 변경
+              key={[attendee.name, attendee.age, index].join("-")}
+              className="flex gap-2 w-[171px] h-9"
+            >
               <p className="text-m-bold text-text-primary">{attendee.name}</p>
-              {/*<p className="text-m-semibold text-text-secondary">*/}
-              {/*  {attendee.age}*/}
-              {/*</p>*/}
             </div>
           ))}
         </div>

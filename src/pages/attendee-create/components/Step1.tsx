@@ -3,18 +3,14 @@ import React from "react";
 import { useFormContext } from "react-hook-form";
 import { CreateAttendeeSchema } from "../_schema";
 import { twMerge } from "tailwind-merge";
-import { Associates } from "@/api/type";
+import { RelationType } from "@/api/type";
 import Radio from "@/components/Radio";
 import CheckBox from "@/components/CheckBox";
 import tw from "tailwind-styled-components";
 import FieldHeader from "../../../components/FieldTitle";
+import { relationTypeToKor } from "@/utils/enumMapper";
 
-interface Step1Props {
-  onChangeGuardian: (key: string, value: string) => void;
-  guardian: Associates;
-}
-
-export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
+export default function Step1() {
   const handleDateChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     parameter: "attendeeRequest.birthDate" | "attendeeRequest.enrollmentDate"
@@ -26,29 +22,35 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
     }
 
     if (input.length >= 5) {
-      input = input.slice(0, 4) + '.' + input.slice(4);
+      input = input.slice(0, 4) + "." + input.slice(4);
     }
 
     if (input.length >= 8) {
-      input = input.slice(0, 7) + '.' + input.slice(7);
+      input = input.slice(0, 7) + "." + input.slice(7);
     }
 
     if (input.length >= 4) {
       const year = parseInt(input.slice(0, 4));
-      const convertedYear = Math.min(Math.max(year, 1900), new Date().getFullYear() + 1); // 내년에 입학할 수도 있으니 최대 + 1 까지는 가능하도록
+      const convertedYear = Math.min(
+        Math.max(year, 1900),
+        new Date().getFullYear() + 1
+      ); // 내년에 입학할 수도 있으니 최대 + 1 까지는 가능하도록
       input = convertedYear + input.slice(4);
     }
 
     if (input.length >= 7) {
       const month = parseInt(input.slice(5, 7));
       const convertedMonth = Math.min(Math.max(month, 1), 12);
-      input = input.slice(0, 5) + String(convertedMonth).padStart(2, '0') + input.slice(7);
+      input =
+        input.slice(0, 5) +
+        String(convertedMonth).padStart(2, "0") +
+        input.slice(7);
     }
 
     if (input.length >= 10) {
       const day = parseInt(input.slice(8, 10));
       const convertedDay = Math.min(Math.max(day, 1), 31);
-      input = input.slice(0, 8) + String(convertedDay).padStart(2, '0');
+      input = input.slice(0, 8) + String(convertedDay).padStart(2, "0");
     }
 
     setValue(parameter, input.replaceAll(".", "-"));
@@ -56,6 +58,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
 
   const {
     setValue,
+    getValues,
     register,
     watch,
     formState: { errors },
@@ -63,6 +66,12 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
 
   // getValue를 사용하면 렌더링이 안되어 성별 선택을 실시간으로 볼 수 없기 때문에 watch 함수를 사용
   const gender = watch("attendeeRequest.gender");
+  const associate = watch("attendeeRequest.associates");
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const dd = String(today.getDate()).padStart(2, "0");
+  const formattedDate = `${yyyy}.${mm}.${dd}`;
 
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
@@ -86,7 +95,6 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
       {/* 학생 생년월일/성별 */}
       <FieldWrapper>
         <FieldHeader title="학생 생년월일/성별" essential />
-
         <div className="flex flex-col gap-[1px] w-full text-left">
           <div className="flex items-center gap-[9px]">
             <input
@@ -129,6 +137,7 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
           <input type="hidden" {...register("attendeeRequest.gender")} />
         </div>
       </FieldWrapper>
+
       {/* 학생 입학일 */}
       <FieldWrapper>
         <FieldHeader title="학생 입학일" essential />
@@ -148,14 +157,12 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
             <CheckBox
               label="오늘 입학"
               id="admittedToday"
+              checked={
+                watch("attendeeRequest.enrollmentDate") ===
+                formattedDate.replaceAll(".", "-")
+              }
               onChange={(e) => {
                 if (e.target.checked) {
-                  const today = new Date();
-                  const yyyy = today.getFullYear();
-                  const mm = String(today.getMonth() + 1).padStart(2, "0");
-                  const dd = String(today.getDate()).padStart(2, "0");
-                  const formattedDate = `${yyyy}.${mm}.${dd}`;
-
                   setValue(
                     "attendeeRequest.enrollmentDate",
                     formattedDate.replaceAll(".", "-")
@@ -177,32 +184,76 @@ export default function Step1({ onChangeGuardian, guardian }: Step1Props) {
       {/* 가족 연락처 */}
       <FieldWrapper>
         <FieldHeader title="가족 연락처" />
-        <div className="flex gap-2">
-          <Select
-            onChange={onChangeGuardian}
-            options={[
-              { name: "모", value: "MOTHER" },
-              { name: "부", value: "FATHER" },
-              { name: "조부모", value: "GRANDPARENT" },
-              { name: "기타", value: "ETC" },
-            ]}
-            placeholder="관계"
-          />
-          <input
-            type="number"
-            disabled={guardian?.relationType ? false : true}
-            placeholder="01012345678"
-            className={twMerge(
-              "max-w-[342px] w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary",
-              guardian?.relationType ? "bg-white" : "bg-gray-200"
+        <div className="flex flex-col gap-[1px] w-full text-left">
+          <div className="flex gap-2">
+            <Select
+              value={
+                associate && associate[0]?.relationType
+                  ? relationTypeToKor(
+                      associate?.[0]?.relationType as RelationType
+                    )
+                  : "관계"
+              }
+              onChange={(value: string) => {
+                const currentAssociates = getValues(
+                  "attendeeRequest.associates"
+                ) || [{ phoneNumber: "", relationType: "NONE" }];
+                setValue("attendeeRequest.associates", [
+                  {
+                    ...currentAssociates[0],
+                    relationType: value as RelationType,
+                    phoneNumber:
+                      value === "NONE" ? "" : currentAssociates[0].phoneNumber,
+                  },
+                ]);
+              }}
+              options={[
+                { name: "관계", value: "NONE" },
+                { name: "모", value: "MOTHER" },
+                { name: "부", value: "FATHER" },
+                { name: "형제", value: "SIBLING" },
+                { name: "기타", value: "OTHER" },
+              ]}
+              placeholder="관계"
+            />
+            <input
+              type="text"
+              value={associate?.[0]?.phoneNumber}
+              disabled={
+                !associate?.[0]?.relationType ||
+                associate[0].relationType === "NONE"
+              }
+              onChange={(e) => {
+                if (associate?.[0]?.relationType === "NONE") {
+                  setValue("attendeeRequest.associates.0.phoneNumber", "");
+                } else {
+                  setValue(
+                    "attendeeRequest.associates.0.phoneNumber",
+                    e.target.value.replace(/[^0-9]/g, "")
+                  );
+                }
+              }}
+              placeholder="01012345678"
+              className={twMerge(
+                "max-w-[342px] w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary",
+                associate &&
+                  associate[0].relationType &&
+                  associate[0].relationType !== "NONE"
+                  ? "bg-white"
+                  : "bg-gray-100"
+              )}
+            />
+
+            {errors.attendeeRequest?.phoneNumber && (
+              <p className="text-red-500 text-xs mt-1">ㅅㄷㄴㅅ</p>
             )}
-            onChange={(e) =>
-              onChangeGuardian(
-                "phoneNumber",
-                e.target.value.replaceAll("-", "")
-              )
-            }
-          />
+          </div>
+          {errors.attendeeRequest?.associates &&
+            errors.attendeeRequest?.associates[0] && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.attendeeRequest.associates[0]?.phoneNumber?.message}
+              </p>
+            )}
         </div>
       </FieldWrapper>
       {/* 학생 주소 */}

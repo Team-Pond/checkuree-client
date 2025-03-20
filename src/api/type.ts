@@ -19,7 +19,7 @@ export interface Associates {
   relationescription?: string;
   description?: string;
 }
-export type RelationType = "FATHER" | "MOTHER" | "SIBLING" | "OTHER";
+export type RelationType = "FATHER" | "MOTHER" | "SIBLING" | "OTHER" | "NONE";
 
 export type ScheduleAttendeeDataType = {
   attendeeId: number;

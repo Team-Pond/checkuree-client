@@ -9,6 +9,8 @@ export const relationTypeToKor = (relationType: RelationType) => {
       return "모";
     case "SIBLING":
       return "형제";
+    case "NONE":
+      return "관계";
     default:
       return "기타";
   }

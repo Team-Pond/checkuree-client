@@ -1,24 +1,15 @@
-import {
-  redirect,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import Step1 from "./components/Step1";
 import { useState } from "react";
 import Step2 from "./components/Step2";
-
 import { getTodayYYYYMMDD } from "@/utils";
-
 import { FormProvider, useForm } from "react-hook-form";
-
 import { AttendeeSchema, CreateAttendeeSchema } from "./_schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createAttendee } from "@/api/AttendeeApiClient";
 import toast from "react-hot-toast";
 import SEO from "@/components/SEO";
-import { Associates, RelationType } from "@/api/type";
 
 export default function AttendeeCreate() {
   const navigate = useNavigate();
@@ -26,7 +17,6 @@ export default function AttendeeCreate() {
   const { bookId } = useParams();
 
   const [isStep2, setIsStep2] = useState<boolean>(false);
-  const [guardian, setGuardian] = useState<Associates>();
 
   const methods = useForm<CreateAttendeeSchema>({
     resolver: zodResolver(AttendeeSchema),
@@ -35,16 +25,8 @@ export default function AttendeeCreate() {
 
   const { trigger, setValue, handleSubmit } = methods;
 
-  const onChangeGuardian = (key: RelationType | string, value: string) => {
-    setGuardian((prev) => ({
-      ...prev!,
-      [key]: value,
-    }));
-  };
-
   const onChangeGrade = (gradeId: number) => {
     setValue("progressRequest.progresses", [
-      // ...getValues("progressRequest.progresses"),
       { gradeId: gradeId, startAt: getTodayYYYYMMDD() },
     ]);
   };
@@ -58,20 +40,33 @@ export default function AttendeeCreate() {
   const handleStep2Next = async (data: CreateAttendeeSchema) => {
     const isValid = await trigger("attendeeRequest");
     if (isValid) {
+      const { associates, ...attendeeRequestWithoutAssociates } =
+        data.attendeeRequest;
+
+      // any로 단언하여 타입 오류를 회피합니다.
+      const attendeeRequestPayload = {
+        ...attendeeRequestWithoutAssociates,
+        actualName: data.attendeeRequest.name,
+      } as any;
+
+      if (
+        associates &&
+        associates[0] &&
+        associates[0].relationType !== "NONE"
+      ) {
+        attendeeRequestPayload.associates = [
+          {
+            relationType: associates[0].relationType,
+            phoneNumber: associates[0].phoneNumber,
+          },
+        ];
+      }
+
       await createAttendee({
         attendanceBookId: Number(bookId),
         params: {
           ...data,
-          attendeeRequest: {
-            ...data.attendeeRequest,
-            actualName: data.attendeeRequest.name,
-            associates: guardian && [
-              {
-                relationType: guardian.relationType,
-                phoneNumber: guardian.phoneNumber,
-              },
-            ],
-          },
+          attendeeRequest: attendeeRequestPayload,
         },
       })
         .then(() => {
@@ -126,10 +121,7 @@ export default function AttendeeCreate() {
                   attendanceBookId={Number(bookId)}
                 />
               ) : (
-                <Step1
-                  onChangeGuardian={onChangeGuardian}
-                  guardian={guardian!}
-                />
+                <Step1 />
               )}
               {isStep2 ? (
                 <div className="flex gap-4 w-full">

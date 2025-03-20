@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import SubjectSelectionDrawer from "./SubjectSelectionDrawer";
-import AttendeeDrawer from "./AttendeeDrawer";
 
 import {
   useBookCourses,
@@ -17,6 +16,7 @@ import ScheduleTable from "./ScheduleTable";
 import tw from "tailwind-styled-components";
 import FieldHeader from "@/components/FieldTitle";
 import { getSub30MinuteHhmm } from "@/utils";
+import AttendeeDrawer from "@/components/AttendeeDrawer";
 
 interface Step2Props {
   attendanceBookId: number;
