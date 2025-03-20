@@ -36,6 +36,21 @@ export const AssociateSchema = z
       message: "전화번호는 최소 8자리 이상이어야 합니다.",
       path: ["phoneNumber"],
     }
+  )
+  .refine(
+    (data) => {
+      if (data.phoneNumber.length > 11 && data.relationType !== "NONE") {
+        return (
+          data.relationDescription !== undefined &&
+          data.relationDescription.trim() !== ""
+        );
+      }
+      return true;
+    },
+    {
+      message: "전화번호는 최대 11자리 이하여야 합니다.",
+      path: ["phoneNumber"],
+    }
   );
 
 const ProgressSchema = z.object({
