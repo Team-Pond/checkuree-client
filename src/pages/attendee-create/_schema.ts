@@ -21,6 +21,21 @@ export const AssociateSchema = z
       message: "가족을 선택한 경우, 전화번호 입력은 필수입니다.",
       path: ["phoneNumber"],
     }
+  )
+  .refine(
+    (data) => {
+      if (data.phoneNumber.length < 8 && data.relationType !== "NONE") {
+        return (
+          data.relationDescription !== undefined &&
+          data.relationDescription.trim() !== ""
+        );
+      }
+      return true;
+    },
+    {
+      message: "전화번호는 최소 8자리 이상이어야 합니다.",
+      path: ["phoneNumber"],
+    }
   );
 
 const ProgressSchema = z.object({
