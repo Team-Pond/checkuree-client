@@ -185,3 +185,19 @@ export type ScheduleCountOfDateType = {
   totalCount: number;
   checkedCount: number;
 };
+
+export type PeriodType = "DAILY" | "WEEKLY" | "MONTHLY";
+export type StatisticType = {
+  periodType: PeriodType;
+  from: string; // YYYY‑MM‑DD 형식의 날짜
+  to: string; // YYYY‑MM‑DD 형식의 날짜
+  totalCount: number;
+  attendCount: number;
+  absentCount: number;
+  makeupCount: number;
+  unCheckedCount: number;
+  attendRate: number; // (0–100)
+  absentRate: number; // (0–100)
+  makeupRate: number; // (0–100)
+  unCheckedRate: number; // (0–100)
+};
