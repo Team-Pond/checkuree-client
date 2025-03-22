@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createAttendee } from "@/api/AttendeeApiClient";
 import toast from "react-hot-toast";
 import SEO from "@/components/SEO";
+import FormHeader from "./components/FormHeader";
 
 export default function AttendeeCreate() {
   const navigate = useNavigate();
@@ -86,33 +87,12 @@ export default function AttendeeCreate() {
         content="체쿠리 음악학원 출석부 서비스의 학생 등록 페이지입니다."
       />
       <form
-        className="flex flex-col gap-7 w-full pb-[30px]"
+        className="flex flex-col gap-10 w-full pb-[30px]"
         onSubmit={handleSubmit(handleStep2Next)}
       >
-        <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
-          <p className="font-bold text-text-primary text-[22px]">학생 등록</p>
-          <img
-            src="/images/icons/book-create/ico-close.svg"
-            alt="닫기 아이콘"
-            width={32}
-            height={32}
-            onClick={() =>
-              navigate(`/book/${bookId}/attendee${location.search}`)
-            }
-          />
-        </div>
+        <FormHeader isStep2={isStep2} />
 
         <div className="w-full flex flex-col gap-10 items-center">
-          <div className="flex gap-2 w-full justify-center">
-            <hr className="border-[2px] border-bg-tertiary max-w-[174px] w-full rounded-full" />
-            <div
-              className={twMerge(
-                "border-[2px]  max-w-[174px] w-full rounded-full",
-                isStep2 ? "border-bg-tertiary" : "border-[#DDEEDF]"
-              )}
-            />
-          </div>
-
           <div className="flex w-full justify-center">
             <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
               {isStep2 ? (
