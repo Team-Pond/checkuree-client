@@ -1,7 +1,6 @@
 // src/queryKeys.ts
-// src/queryKeys.ts
 import { createQueryKeys } from "@lukemorales/query-key-factory";
-import { DaysType, GenderType } from "./api/type";
+import { DaysType, GenderType, PeriodType } from "./api/type";
 
 // 수강생 데이터를 위한 키
 export const attendeeKeys = createQueryKeys("attendee", {
@@ -42,6 +41,9 @@ export const bookKeys = createQueryKeys("book", {
   }),
   subjectCourses: (subjectId: number) => ({
     queryKey: [subjectId],
+  }),
+  statistic: (bookId: number, from: string, periodType: PeriodType) => ({
+    queryKey: [bookId, from, periodType],
   }),
 });
 
