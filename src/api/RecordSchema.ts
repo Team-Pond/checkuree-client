@@ -1,4 +1,4 @@
-import { AttendeeRecord, STATUS } from "./type";
+import { AttendeeRecord, StatisticType, STATUS } from "./type";
 
 type ResponseBase = {
   message: string;
@@ -102,5 +102,19 @@ export type DeleteRecordResponse =
       status: 200;
       message: string;
       data: {};
+    }
+  | ErrorResponse;
+
+export type GetStatisticsRequest = {
+  from: string;
+  to: string;
+  periodType: "DAILY" | "WEEKLY" | "MONTHLY";
+};
+
+export type GetStatisticsResponse =
+  | {
+      status: 200;
+      message: string;
+      data: StatisticType;
     }
   | ErrorResponse;

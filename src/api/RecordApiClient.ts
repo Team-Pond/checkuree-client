@@ -6,6 +6,8 @@ import {
   DeleteRecordResponse,
   GetAttendeeRecordsRequest,
   GetAttendeeRecordsResponse,
+  GetStatisticsRequest,
+  GetStatisticsResponse,
   UpdateRecordAllRequest,
   UpdateRecordAllResponse,
   UpdateRecordLessonRequest,
@@ -113,6 +115,21 @@ export const deleteRecord = async (
   const response = await ApiClient.request({
     method: "DELETE",
     url: `/book/${params.attendanceBookId}/record/${params.recordId}`,
+  });
+  return response.data;
+};
+
+//
+export const getStatistics = async ({
+  params,
+  attendanceBookId,
+}: {
+  params: GetStatisticsRequest;
+  attendanceBookId: number;
+}): Promise<GetStatisticsResponse> => {
+  const response = await ApiClient.request({
+    method: "GET",
+    url: `/book/${attendanceBookId}/record/statistic?from=${params.from}&periodType=${params.periodType}`,
   });
   return response.data;
 };
