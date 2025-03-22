@@ -19,7 +19,6 @@ interface DonutChartProps {
 }
 
 export default function DonutChart({ data }: DonutChartProps) {
-  console.log(data.filter((count) => count !== 0).length);
   const chartData = {
     dataLabels: {
       lables: {
@@ -59,7 +58,9 @@ export default function DonutChart({ data }: DonutChartProps) {
         annotations: {
           dLabel: {
             type: "doughnutLabel",
-            content: () => [`0명`],
+            content: () => {
+              return [`${data[0]}명`];
+            },
             font: [{ size: 20, weight: 700, family: "SUIT" }],
             color: ["#5D5D5D", "red", "grey"],
           },
