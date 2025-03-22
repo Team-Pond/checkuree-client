@@ -111,8 +111,6 @@ export default function BookRoaster() {
         onChangeFilter={onChangeFilter}
       />
       {!openFilter && <Bottom />}
-
-      <div className="flex justify-between px-[44px] items-center w-full h-[92px]" />
     </section>
   );
 }

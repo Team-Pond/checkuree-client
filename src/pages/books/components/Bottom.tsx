@@ -7,6 +7,7 @@ import RoasterActiveIcon from "@/assets/icons/book-check/ico-roaster-active.svg?
 import RoasterIcon from "@/assets/icons/book-check/ico-roaster.svg?react";
 import StatisticsActiveIcon from "@/assets/icons/book-check/ico-statistics-active.svg?react";
 import StatisticsIcon from "@/assets/icons/book-check/ico-statistics.svg?react";
+import tw from "tailwind-styled-components";
 
 export default function Bottom() {
   const location = useLocation();
@@ -22,15 +23,13 @@ export default function Bottom() {
   const isBookActive = !!bookUrl && !!!dashBoardUrl && !!!attendeeUrl;
   const isAttendeeActive = !!attendeeUrl;
   const isDashBoardActive = !!dashBoardUrl;
+
   return (
     <div
       className="flex justify-between px-[44px] items-center fixed bottom-0 left-1/2 transform -translate-x-1/2 z-40
              w-full max-w-[390px] h-[92px] bg-white rounded-2xl"
     >
-      <div
-        className="flex flex-col gap-2 items-center"
-        onClick={() => navigate(`/book/${bookId}${location.search}`)}
-      >
+      <Button onClick={() => navigate(`/book/${bookId}${location.search}`)}>
         {isBookActive ? <BookActiveIcon width={20} /> : <BookIcon width={20} />}
 
         <p
@@ -41,9 +40,8 @@ export default function Bottom() {
         >
           출석부
         </p>
-      </div>
-      <div
-        className="flex flex-col gap-2 items-center"
+      </Button>
+      <Button
         onClick={() => navigate(`/book/${bookId}/attendee${location.search}`)}
       >
         {isAttendeeActive ? (
@@ -59,9 +57,8 @@ export default function Bottom() {
         >
           명단
         </p>
-      </div>
-      <div
-        className="flex flex-col gap-2 items-center"
+      </Button>
+      <Button
         onClick={() => navigate(`/book/${bookId}/dashboard${location.search}`)}
       >
         {isDashBoardActive ? (
@@ -77,7 +74,9 @@ export default function Bottom() {
         >
           통계
         </p>
-      </div>
+      </Button>
     </div>
   );
 }
+
+const Button = tw.div`flex flex-col gap-2 items-center cursor-pointer`;

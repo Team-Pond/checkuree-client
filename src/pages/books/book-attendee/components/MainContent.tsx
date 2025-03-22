@@ -15,7 +15,7 @@ export default function MainContent(props: IProps) {
   return (
     <div className="w-full px-[17px]">
       <p className="text-left text-s-semibold text-text-secondary mb-1">전체</p>
-      <div className="border-t border-[#F6F6F6]">
+      <div className="border-t border-[#F6F6F6] mb-[92px]">
         {roaster.data.content
           .filter((student) => {
             return !searchName || student.name.includes(searchName);

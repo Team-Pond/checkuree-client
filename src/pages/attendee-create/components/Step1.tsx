@@ -219,6 +219,7 @@ export default function Step1() {
             <input
               type="text"
               value={associate?.[0]?.phoneNumber}
+              maxLength={11}
               disabled={
                 !associate?.[0]?.relationType ||
                 associate[0].relationType === "NONE"
