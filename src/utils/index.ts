@@ -1,3 +1,4 @@
+import { PeriodType } from "@/api/type";
 import dayjs from "dayjs";
 
 export const dateFormat = (
@@ -312,4 +313,21 @@ export const getAddMinuteHhmm = (hhmm: string, minute: number) => {
   return addedTime.isBefore(dayjs("2000-01-02 00:00:00"))
     ? addedTime.format("HH:mm")
     : "24:00";
+};
+
+export const statisticPeriodText = (period: PeriodType) => {
+  const today = dayjs().format("YYYY.MM.DD(ddd)");
+
+  const weekDayFirst = dayjs().subtract(7, "day").format("YYYY.MM.DD");
+  const weekDayLast = dayjs().format("YYYY.MM.DD");
+  const month = dayjs().format("YYYY년 M월");
+
+  switch (period) {
+    case "DAILY":
+      return `오늘 ${today}`;
+    case "WEEKLY":
+      return `${weekDayFirst} - ${weekDayLast}`;
+    case "MONTHLY":
+      return month;
+  }
 };
