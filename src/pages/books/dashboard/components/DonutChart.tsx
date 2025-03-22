@@ -18,9 +18,9 @@ interface DonutChartProps {
   labels: string[];
 }
 
-export default function DonutChart({ data, labels }: DonutChartProps) {
+export default function DonutChart({ data }: DonutChartProps) {
+  console.log(data.filter((count) => count !== 0).length);
   const chartData = {
-    labels: [],
     dataLabels: {
       lables: {
         title: {
@@ -30,7 +30,10 @@ export default function DonutChart({ data, labels }: DonutChartProps) {
     },
     datasets: [
       {
-        data: data,
+        data:
+          data.filter((count) => count !== 0).length === 0
+            ? [0]
+            : data.filter((count) => count !== 0),
         backgroundColor: ["#59996B", "#F2BD2D", "#EA5353"], // 색상을 원하는 대로 설정
         hoverBackgroundColor: ["#59996B", "#F2BD2D", "#EA5353"],
       },
@@ -56,7 +59,7 @@ export default function DonutChart({ data, labels }: DonutChartProps) {
         annotations: {
           dLabel: {
             type: "doughnutLabel",
-            content: () => ["15명"],
+            content: () => [`0명`],
             font: [{ size: 20, weight: 700, family: "SUIT" }],
             color: ["#5D5D5D", "red", "grey"],
           },
