@@ -13,10 +13,10 @@ import DateDrawer from "./components/DateDrawer";
 
 export default function BookCheck() {
   const context = useContext(BookContext);
-
+  const [searchParams] = useSearchParams();
   const { selectedBook } = context!;
   const { bookId } = useParams();
-  const [searchParams] = useSearchParams();
+
   const bookName = searchParams.get("bookName");
 
   const [currentDate, setCurrentDate] = useState(dayjs()); // dayjs로 초기화
