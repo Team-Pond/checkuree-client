@@ -1,19 +1,27 @@
-import { useState } from "react";
+import { Fragment } from "react";
 import TimeButtons from "./TimeButtons";
 import DonutChart from "./DonutChart";
 import tw from "tailwind-styled-components";
-
-type TimePeriod = "DAILY" | "WEEKLY" | "MONTHLY";
+import { PeriodType, StatisticType } from "@/api/type";
+import { statisticPeriodText } from "@/utils";
 
 const TODAY_TEXT = "오늘의 출석률";
 const WEEKLY_TEXT = "이번 주 출석률";
 const MONTHLY_TEXT = "이번 달의 출석률";
-export default function AttendanceRateChart() {
-  const data = [300, 50, 100]; // 도넛 차트의 데이터
-  const labels = ["Red", "Blue", "Yellow"]; // 각 부분에 대한 레이블
-  const [timeStatus, setTimeStatus] = useState<TimePeriod>("DAILY");
 
-  const attendanceTextChange = (timeStatus: TimePeriod) => {
+interface IProps {
+  statisticData: StatisticType;
+  tabChange: (tab: PeriodType) => void;
+  tab: PeriodType;
+}
+export default function AttendanceRateChart({
+  statisticData,
+  tabChange,
+  tab,
+}: IProps) {
+  const labels = ["Red", "Blue", "Yellow"];
+
+  const attendanceTextChange = (timeStatus: PeriodType) => {
     switch (timeStatus) {
       case "DAILY":
         return TODAY_TEXT;
@@ -23,50 +31,58 @@ export default function AttendanceRateChart() {
         return MONTHLY_TEXT;
     }
   };
+
   return (
-    <>
+    <Fragment>
       <ButtonsWrapper>
         <div className="flex flex-col text-left space-y-[-3px]">
-          <p className="text-m-bold">{attendanceTextChange(timeStatus)}</p>
-          <p className="text-s-semibold text-text-secondary">
-            오늘 2025.01.24(금)
+          <p className="text-m-bold">{attendanceTextChange(tab)}</p>
+          <p className="text-xs-semibold text-text-secondary">
+            {statisticPeriodText(tab)}
           </p>
         </div>
         <TimeButtons
-          timeStatus={timeStatus}
-          handleTimeStatus={(timeStatus) => setTimeStatus(timeStatus)}
+          timeStatus={tab}
+          handleTimeStatus={(timeStatus) => tabChange(timeStatus)}
         />
       </ButtonsWrapper>
       <ChartWrapper>
-        <DonutChart data={data} labels={labels} />
+        <DonutChart
+          data={[
+            statisticData.attendCount,
+            statisticData.makeupCount,
+            statisticData.absentCount,
+          ]}
+          labels={labels}
+        />
         <div className="flex gap-[10px]">
           <div className="flex gap-2 items-center">
             <div className="flex items-center gap-[6px]">
               <Squre bg="bg-border-brand" />
               <p className="text-xs-medium">출석</p>
             </div>
-            <Ratio color="text-text-brand">80%</Ratio>
+            <Ratio color="text-text-brand">{statisticData.attendRate}%</Ratio>
           </div>
           <div className="flex gap-2 items-center">
             <div className="flex items-center gap-[6px]">
               <Squre bg="bg-[#F2BD2D]" />
               <p className="text-xs-medium">보강</p>
             </div>
-            <Ratio color="text-[#EC9E14]">80%</Ratio>
+            <Ratio color="text-[#EC9E14]">{statisticData.makeupRate}%</Ratio>
           </div>
           <div className="flex gap-2 items-center">
             <div className="flex items-center gap-[6px]">
               <Squre bg="bg-[#EA5353]" />
               <p className="text-xs-medium">결석</p>
             </div>
-            <Ratio color="text-[#EA5353]">80%</Ratio>
+            <Ratio color="text-[#EA5353]">{statisticData.absentRate}%</Ratio>
           </div>
         </div>
         <p className="mt-4 text-s-semibold">
-          오늘은 약 80%의 학생들이 출석했어요.
+          오늘은 약 {statisticData.attendRate}%의 학생들이 출석했어요.
         </p>
       </ChartWrapper>
-    </>
+    </Fragment>
   );
 }
 
