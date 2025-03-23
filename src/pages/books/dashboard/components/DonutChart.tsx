@@ -59,7 +59,7 @@ export default function DonutChart({ data }: DonutChartProps) {
           dLabel: {
             type: "doughnutLabel",
             content: () => {
-              return [`${data[0]}명`];
+              return [`${data.reduce((acc, d) => acc + d, 0)}명`];
             },
             font: [{ size: 20, weight: 700, family: "SUIT" }],
             color: ["#5D5D5D", "red", "grey"],
