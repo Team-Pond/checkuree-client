@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import TimeButtons from "./TimeButtons";
 import DonutChart from "./DonutChart";
 import tw from "tailwind-styled-components";
@@ -14,11 +14,7 @@ interface IProps {
   tabChange: (tab: PeriodType) => void;
   tab: PeriodType;
 }
-export default function AttendanceRateChart({
-  statisticData,
-  tabChange,
-  tab,
-}: IProps) {
+function AttendanceRateChart({ statisticData, tabChange, tab }: IProps) {
   const labels = ["Red", "Blue", "Yellow"];
 
   const attendanceTextChange = (timeStatus: PeriodType) => {
@@ -94,3 +90,5 @@ const Ratio = tw.div`${({ color }: { color: string }) =>
 
 const ChartWrapper = tw.div`flex flex-col items-center gap-2 w-full h-[284px] bg-white rounded-2xl mx-auto py-4`;
 const ButtonsWrapper = tw.div`flex justify-between w-full items-center`;
+
+export default React.memo(AttendanceRateChart);
