@@ -3,17 +3,26 @@ import TimeButtons from "./TimeButtons";
 import DonutChart from "./DonutChart";
 import tw from "tailwind-styled-components";
 import BarChart from "./BarChart";
+import { AttendeeStatisticsType, AttendeeStatisticType } from "@/api/type";
 
 type TimePeriod = "DAILY" | "WEEKLY" | "MONTHLY";
 
 const TODAY_TEXT = "오늘의 출석률";
 const WEEKLY_TEXT = "이번 주 출석률";
 const MONTHLY_TEXT = "이번 달의 출석률";
-export default function AttendanceCategoryChart() {
-  const data = [300, 50, 100]; // 도넛 차트의 데이터
-  const labels = ["Red", "Blue", "Yellow"]; // 각 부분에 대한 레이블
-  const [timeStatus, setTimeStatus] = useState<TimePeriod>("DAILY");
 
+interface IProps {
+  statisticData: AttendeeStatisticType;
+  tabChange: (tab: AttendeeStatisticsType) => void;
+  tab: AttendeeStatisticsType;
+}
+
+export default function AttendanceCategoryChart({
+  statisticData,
+  tabChange,
+  tab,
+}: IProps) {
+  const [timeStatus, setTimeStatus] = useState<TimePeriod>("DAILY");
   const attendanceTextChange = (timeStatus: TimePeriod) => {
     switch (timeStatus) {
       case "DAILY":
