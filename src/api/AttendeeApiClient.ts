@@ -28,6 +28,8 @@ import {
   SearchAttendeeRequest,
   SearchAttendeeResponse,
   AttendeeNewRequest,
+  GetAttendeeStatisticsRequest,
+  GetAttendeeStatisticsResponse,
 } from "./AttendeeSchema";
 
 // TODO: ATTENDEENEW Request 작업하기
@@ -240,5 +242,20 @@ export const searchAttendee = async (
     url: `/book/${attendanceBookId}/attendee/search?searchName=${name}&size=100`,
   });
 
+  return response.data;
+};
+
+// 출석률 통계
+export const getAttendeeStatistics = async ({
+  params,
+  attendanceBookId,
+}: {
+  params: GetAttendeeStatisticsRequest;
+  attendanceBookId: number;
+}): Promise<GetAttendeeStatisticsResponse> => {
+  const response = await ApiClient.request({
+    method: "GET",
+    url: `/book/${attendanceBookId}/attendee/statistic?type=${params.type}`,
+  });
   return response.data;
 };
