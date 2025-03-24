@@ -119,7 +119,7 @@ export const deleteRecord = async (
   return response.data;
 };
 
-//
+// 출석률 통계
 export const getStatistics = async ({
   params,
   attendanceBookId,
