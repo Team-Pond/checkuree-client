@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { getBookDetail } from "@/api/AttendanceBookApiClient";
 import { getStatistics } from "@/api/RecordApiClient";
 import { GetStatisticsRequest } from "@/api/RecordSchema";
+import { GetAttendeeStatisticsRequest } from "@/api/AttendeeSchema";
+import { getAttendeeStatistics } from "@/api/AttendeeApiClient";
 
 export const useBookList = () => {
   return useQuery({
@@ -41,6 +43,25 @@ export const useBookStatistic = (
       .queryKey,
     queryFn: async () => {
       const response = await getStatistics({
+        params: params,
+        attendanceBookId: bookId,
+      });
+      if (response.status === 200) {
+        return response;
+      }
+    },
+  });
+};
+
+export const useAttendeeStatistic = (
+  bookId: number,
+  params: GetAttendeeStatisticsRequest
+) => {
+  return useQuery({
+    enabled: !!params.type,
+    queryKey: bookKeys.statisticAttendee(bookId, params.type).queryKey,
+    queryFn: async () => {
+      const response = await getAttendeeStatistics({
         params: params,
         attendanceBookId: bookId,
       });
