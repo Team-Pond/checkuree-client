@@ -201,3 +201,13 @@ export type StatisticType = {
   makeupRate: number; // (0–100)
   unCheckedRate: number; // (0–100)
 };
+
+export type AttendeeStatisticsType = "CURRICULUM" | "AGE" | "DAY";
+
+export type AttendeeStatisticType = {
+  type: AttendeeStatisticsType;
+  content: {
+    name: string;
+    count: number;
+  }[];
+};
