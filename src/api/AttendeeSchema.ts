@@ -4,12 +4,14 @@ import {
   Associates,
   DaysType,
   GenderType,
+  AttendeeStatisticsType,
   Progresses,
   ProgressLog,
   ScheduleAttendeeDataType,
   SearchAttendeeDataType,
   StudentStatus,
   UpdateScheduleAttendeeDataType,
+  AttendeeStatisticType,
 } from "./type";
 
 type ResponseBase = {
@@ -240,4 +242,13 @@ export type UpdateAttendeeDetailResponse = {
   data: {
     id: number;
   };
+} & ErrorResponse;
+
+export type GetAttendeeStatisticsRequest = {
+  type: AttendeeStatisticsType;
+};
+
+export type GetAttendeeStatisticsResponse = {
+  status: 200;
+  data: AttendeeStatisticType;
 } & ErrorResponse;
