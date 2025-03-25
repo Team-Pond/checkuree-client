@@ -25,6 +25,7 @@ export default function TimeButtons({ timeStatus, handleTimeStatus }: IProps) {
       {BUTTON_OPTIONS.map((option) => {
         return (
           <Button
+            key={option.status}
             timeStatus={timeStatus}
             handleTimeStatus={handleTimeStatus}
             status={option.status as PeriodType}
