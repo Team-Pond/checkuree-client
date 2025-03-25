@@ -1,25 +1,26 @@
-import { PeriodType } from "@/api/type";
+import { AttendeeStatisticsType, PeriodType } from "@/api/type";
+import React from "react";
 import { twMerge } from "tailwind-merge";
 
 type IProps = {
-  timeStatus: PeriodType;
-  handleTimeStatus: (timeStatus: PeriodType) => void;
+  timeStatus: AttendeeStatisticsType;
+  handleTimeStatus: (timeStatus: AttendeeStatisticsType) => void;
 };
 const BUTTON_OPTIONS = [
   {
-    status: "DAILY",
-    type: "일간",
+    status: "DAY",
+    type: "요일",
   },
   {
-    status: "WEEKLY",
-    type: "주간",
+    status: "AGE",
+    type: "나이",
   },
   {
-    status: "MONTHLY",
-    type: "월간",
+    status: "CURRICULUM",
+    type: "커리큘럼",
   },
 ];
-export default function TimeButtons({ timeStatus, handleTimeStatus }: IProps) {
+function CategoryButtons({ timeStatus, handleTimeStatus }: IProps) {
   return (
     <div className="flex">
       {BUTTON_OPTIONS.map((option) => {
@@ -28,7 +29,7 @@ export default function TimeButtons({ timeStatus, handleTimeStatus }: IProps) {
             key={option.status}
             timeStatus={timeStatus}
             handleTimeStatus={handleTimeStatus}
-            status={option.status as PeriodType}
+            status={option.status as AttendeeStatisticsType}
             type={option.type}
           />
         );
@@ -37,17 +38,19 @@ export default function TimeButtons({ timeStatus, handleTimeStatus }: IProps) {
   );
 }
 
+export default React.memo(CategoryButtons);
+
 function Button({
   timeStatus,
   handleTimeStatus,
   status,
   type,
-}: IProps & { status: PeriodType; type: string }) {
+}: IProps & { status: AttendeeStatisticsType; type: string }) {
   return (
     <button
       onClick={() => handleTimeStatus(status)}
       className={twMerge(
-        "w-[57px] h-[33px] rounded-lg",
+        "px-4 h-[33px] rounded-lg",
         timeStatus === status ? "bg-bg-interactive-primary" : ""
       )}
     >

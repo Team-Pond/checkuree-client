@@ -15,6 +15,7 @@ import CheckIcon from "@/assets/icons/ico-check.svg?react";
 import SettingIcon from "@/assets/icons/ico-settings.svg?react";
 import LeftArrowIcon from "@/assets/icons/ico-arrow-left.svg?react";
 import RightArrowIcon from "@/assets/icons/ico-arrow-right.svg?react";
+import DownArrowIcon from "@/assets/icons/ico-arrow-down.svg?react";
 type HeaderProps = {
   title: string;
   bookId: number;
@@ -105,13 +106,15 @@ export default function Header(props: HeaderProps) {
           onClick={handlePreviousDay}
           className="cursor-pointer"
         />
-        <p
-          className="text-xl font-bold cursor-pointer select-none"
-          data-value={formattedDate}
+        <div
+          className="flex items-center cursor-pointer select-none"
           onClick={handleDrawer}
         >
-          {displayDate}
-        </p>
+          <p className="text-xl font-bold" data-value={formattedDate}>
+            {displayDate}
+          </p>
+          <DownArrowIcon width={40} height={40} />
+        </div>
         <RightArrowIcon
           width={12}
           height={12}

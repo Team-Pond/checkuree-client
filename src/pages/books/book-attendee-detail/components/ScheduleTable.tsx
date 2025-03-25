@@ -2,15 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useBookDetail } from "../../queries";
 import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
-
-type DayOfWeek =
-  | "MONDAY"
-  | "TUESDAY"
-  | "WEDNESDAY"
-  | "THURSDAY"
-  | "FRIDAY"
-  | "SATURDAY"
-  | "SUNDAY";
+import { dayMap, DayOfWeek } from "@/api/type";
 
 interface ScheduleItem {
   dayOfWeek: DayOfWeek;
@@ -30,16 +22,6 @@ interface ScheduleProps {
   handleAttendeeBottomDrawer: (state: boolean) => void;
   attendeeSchedules?: UpdateAttendeeScheduleRequest;
 }
-
-const dayMap: Record<DayOfWeek, string> = {
-  MONDAY: "월",
-  TUESDAY: "화",
-  WEDNESDAY: "수",
-  THURSDAY: "목",
-  FRIDAY: "금",
-  SATURDAY: "토",
-  SUNDAY: "일",
-};
 
 function parseHhmm(hhmm: string) {
   const [hh, mm] = hhmm.split(":").map(Number);
