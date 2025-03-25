@@ -1,3 +1,4 @@
+import { AttendeeStatisticsType } from "@/api/type";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -6,9 +7,11 @@ import {
   Title,
   Tooltip,
   Legend,
+  Align,
 } from "chart.js";
 
 import { Bar } from "react-chartjs-2";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -17,29 +20,31 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-const labels = ["월", "화", "수", "목", "금", "토", "일"];
-export default function BarChart() {
+
+export default function BarChart({
+  labels,
+  statisticData,
+}: {
+  labels: string[];
+  statisticData: number[];
+}) {
+  let maxIndex = statisticData.indexOf(Math.max(...statisticData));
+
+  let backgroundColor = new Array(statisticData.length).fill("#BDDDC3");
+
+  backgroundColor[maxIndex] = "#59996B";
+
   const data = {
     labels,
     datasets: [
       {
-        data: [14, 17, 13, 14, 12, 8, 0],
-        backgroundColor: [
-          "#BDDDC3",
-          "#59996B",
-          "#BDDDC3",
-          "#BDDDC3",
-          "#BDDDC3",
-          "#BDDDC3",
-        ],
-        // borderColor: [
-        //   "#4ED3FF",
-        //   "#FFD54F",
-        //   "#81C784",
-        //   "#F48FB1",
-        //   "#B39DDB",
-        //   "#4DD0E1",
-        // ],
+        data: statisticData,
+        backgroundColor: backgroundColor,
+
+        datalabels: {
+          align: "end" as Align,
+          anchor: "end" as Align,
+        },
 
         barThickness: 32, // 막대 너비 설정 (px)
         borderRadius: {
@@ -52,6 +57,11 @@ export default function BarChart() {
     ],
   };
   const options = {
+    layout: {
+      padding: {
+        top: 20,
+      },
+    },
     plugins: {
       legend: {
         display: false,
@@ -61,8 +71,6 @@ export default function BarChart() {
         bodyColor: "#424242",
         titleColor: "#424242",
         displayColors: false,
-        // borderColor: "#E0E0E0",
-        // borderWidth: 1,
         padding: 10,
       },
     },
