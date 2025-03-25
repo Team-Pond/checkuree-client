@@ -33,8 +33,8 @@ export default function DonutChart({ data }: DonutChartProps) {
           data.filter((count) => count !== 0).length === 0
             ? [0]
             : data.filter((count) => count !== 0),
-        backgroundColor: ["#59996B", "#F2BD2D", "#EA5353"], // 색상을 원하는 대로 설정
-        hoverBackgroundColor: ["#59996B", "#F2BD2D", "#EA5353"],
+        backgroundColor: ["#59996B", "#F2BD2D", "#EA5353", "#E7E7E7"], // 색상을 원하는 대로 설정
+        hoverBackgroundColor: ["#59996B", "#F2BD2D", "#EA5353", "#E7E7E7"],
       },
     ],
   };
@@ -77,7 +77,7 @@ export default function DonutChart({ data }: DonutChartProps) {
   };
 
   return (
-    <div style={{ width: 180, height: 180 }}>
+    <div style={{ width: 180 }}>
       <Doughnut data={chartData} options={options} />
     </div>
   );
