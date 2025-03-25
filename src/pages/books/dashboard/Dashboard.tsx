@@ -43,7 +43,7 @@ export default function Dashboard() {
         <p className="font-bold text-text-primary text-[22px]">{bookName}</p>
         <ScheduleIcon width={40} height={40} className="mt-1" />
       </div>
-      <main className="w-full flex-1 bg-bg-secondary flex flex-col gap- p-4">
+      <main className="w-full flex-1 bg-bg-secondary flex flex-col gap-4 p-4">
         {statisticData?.status === 200 && (
           <AttendanceRateChart
             statisticData={statisticData.data}
