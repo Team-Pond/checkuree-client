@@ -2,22 +2,6 @@
 
 > **Service** : https://pond-client.vercel.app (dev - 작업중)
 
-# ⚙️ How to Start
-
-## 0️⃣ Prerequisites
-
-- [Node.js 22.9.0](https://nodejs.org/en/download/package-manager/)
-- [npm 10.8.3](https://www.npmjs.com/package/npm/v/10.7.0)
-
-## 1️⃣ Installation
-
-### Front-End
-
-```bash
-$ npm install
-$ npm run dev
-```
-
 # ⚒️ Stacks
 
 ## Front-End
