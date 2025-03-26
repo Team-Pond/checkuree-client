@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "types": ["cypress", "node"]
   },
-  "include": ["src", "/types/svg.d.ts"]
+  "include": ["src", "./cypress/**/*", "**/*.ts", "/types/svg.d.ts"]
 }
