@@ -13,7 +13,9 @@
     "build-storybook": "storybook build",
     "deploy-storybook": "gh-pages -d storybook-static",
     "typecheck": "tsc --noEmit",
-    "generate-sitemap": "node generate-sitemap.js"
+    "generate-sitemap": "node generate-sitemap.js",
+    "cypress": "npx cypress open",
+    "test": "playwright test"
   },
   "dependencies": {
     "@emotion/css": "^11.13.4",
@@ -67,6 +69,7 @@
     "@babel/node": "^7.26.0",
     "@chromatic-com/storybook": "^3.2.2",
     "@eslint/js": "^9.13.0",
+    "@playwright/test": "^1.51.1",
     "@prerenderer/renderer-puppeteer": "^1.2.4",
     "@prerenderer/rollup-plugin": "^0.3.12",
     "@storybook/addon-essentials": "^8.4.7",
@@ -77,11 +80,14 @@
     "@storybook/react-vite": "^8.4.7",
     "@storybook/test": "^8.4.7",
     "@svgr/rollup": "^8.1.0",
+    "@types/cypress": "^1.1.6",
+    "@types/node": "^22.13.13",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",
     "css-loader": "^7.1.2",
+    "cypress": "^14.2.1",
     "eslint": "^9.13.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-react-hooks": "^5.0.0",

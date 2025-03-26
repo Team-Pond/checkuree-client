@@ -24,7 +24,7 @@ if (container.hasChildNodes()) {
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <RootToaster />
-        <ReactQueryDevtools initialIsOpen={true} />
+        <ReactQueryDevtools initialIsOpen={false} />
         <BrowserRouter>
           <App />
         </BrowserRouter>
@@ -36,7 +36,7 @@ if (container.hasChildNodes()) {
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <RootToaster />
-        <ReactQueryDevtools initialIsOpen={true} />
+        <ReactQueryDevtools initialIsOpen={false} />
         <BrowserRouter>
           <App />
         </BrowserRouter>

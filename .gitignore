@@ -32,3 +32,13 @@ stories
 
 # TypeScript 빌드 정보 파일 무시
 tsconfig.tsbuildinfo
+
+# cypress
+cypress/videos
+cypress/screenshots
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
