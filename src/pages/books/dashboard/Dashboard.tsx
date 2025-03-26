@@ -5,10 +5,10 @@ import AttendanceCategoryChart from "./components/AttendanceCategoryChart";
 import ScheduleIcon from "@/assets/icons/dashboard/ico-schedule.svg?react";
 import Bottom from "../components/Bottom";
 import { useParams, useSearchParams } from "react-router-dom";
-import { useBookStatistic } from "../queries";
+import { useAttendeeStatistic, useBookStatistic } from "../queries";
 import dayjs from "dayjs";
 import { useState } from "react";
-import { PeriodType } from "@/api/type";
+import { AttendeeStatisticsType, PeriodType } from "@/api/type";
 
 export default function Dashboard() {
   const [searchParmas] = useSearchParams();
@@ -27,12 +27,16 @@ export default function Dashboard() {
   };
 
   const [attendRateTab, setAttendRateTab] = useState<PeriodType>("DAILY");
+  const [categoryTab, setCategoryTab] = useState<AttendeeStatisticsType>("AGE");
   const { data: statisticData } = useBookStatistic(Number(bookId), {
     from: getFromDate(attendRateTab), // ✅ 동적으로 계산된 from 날짜 사용
     to: dayjs().format("YYYY-MM-DD"),
     periodType: attendRateTab,
   });
 
+  const { data: statisticAttendeeData } = useAttendeeStatistic(Number(bookId), {
+    type: categoryTab,
+  });
   return (
     <PageContainer>
       <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
@@ -47,8 +51,13 @@ export default function Dashboard() {
             tab={attendRateTab}
           />
         )}
-
-        <AttendanceCategoryChart />
+        {statisticAttendeeData?.status === 200 && (
+          <AttendanceCategoryChart
+            statisticData={statisticAttendeeData.data}
+            tabChange={(tab: AttendeeStatisticsType) => setCategoryTab(tab)}
+            tab={categoryTab}
+          />
+        )}
         <div className="h-[92px]" />
       </main>
 

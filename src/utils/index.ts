@@ -75,7 +75,7 @@ export function sortWeekdays(weekdays: string[]): DayOfWeek[] {
   ) as DayOfWeek[];
 }
 
-const DayTransfer = {
+export const DayTransfer = {
   MONDAY: "월",
   TUESDAY: "화",
   WEDNESDAY: "수",
