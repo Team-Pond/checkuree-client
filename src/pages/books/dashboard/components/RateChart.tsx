@@ -21,6 +21,7 @@ interface DonutChartProps {
   labels: string[];
 }
 
+const backgroundColor = ["#59996B", "#F2BD2D", "#EA5353", "#E7E7E7"];
 function DonutChart({ data }: DonutChartProps) {
   const chartData = {
     dataLabels: {
@@ -33,8 +34,8 @@ function DonutChart({ data }: DonutChartProps) {
     datasets: [
       {
         data: data,
-        backgroundColor: ["#59996B", "#F2BD2D", "#EA5353", "#E7E7E7"], // 색상을 원하는 대로 설정
-        hoverBackgroundColor: ["#59996B", "#F2BD2D", "#EA5353", "#E7E7E7"],
+        backgroundColor: backgroundColor,
+        hoverBackgroundColor: backgroundColor,
       },
     ],
   };
