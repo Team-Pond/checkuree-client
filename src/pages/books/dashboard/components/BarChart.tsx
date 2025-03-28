@@ -1,4 +1,9 @@
-import { AttendeeStatisticsType } from "@/api/type";
+import {
+  AttendeeStatisticsType,
+  AttendeeStatisticType,
+  DayOfWeek,
+  dayMap,
+} from "@/api/type";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -21,7 +26,7 @@ ChartJS.register(
   Legend
 );
 
-export default function BarChart({
+function BarChart({
   labels,
   statisticData,
 }: {
@@ -100,5 +105,72 @@ export default function BarChart({
     <div style={{ width: "100%", height: 284 }}>
       <Bar data={data} options={options} />
     </div>
+  );
+}
+
+export function CategoryChart({
+  statisticData,
+  tab,
+}: {
+  statisticData: AttendeeStatisticType;
+  tab: AttendeeStatisticsType;
+}) {
+  let order: string[] = [];
+  let sortedData: {
+    name: string;
+    count: number;
+  }[] = [];
+  let labels: string[] = [];
+  let data: number[] = [];
+  const labelsSwitch = (tab: AttendeeStatisticsType) => {
+    switch (tab) {
+      case "DAY":
+        order = [
+          "MONDAY",
+          "TUESDAY",
+          "WEDNESDAY",
+          "THURSDAY",
+          "FRIDAY",
+          "SATURDAY",
+          "SUNDAY",
+        ];
+        sortedData = statisticData.contents.sort((a, b) => {
+          return order.indexOf(a.name) - order.indexOf(b.name);
+        });
+        labels = sortedData.map((data) => dayMap[data.name as DayOfWeek]);
+        data = sortedData.map((data) => data.count);
+        return {
+          data,
+          labels,
+        };
+      case "AGE":
+        order = ["유아", "초등저학년", "중등부", "성인부"];
+        sortedData = statisticData.contents.sort((a, b) => {
+          return order.indexOf(a.name) - order.indexOf(b.name);
+        });
+        labels = sortedData.map((data) => data.name);
+        data = sortedData.map((data) => data.count);
+        return {
+          data,
+          labels,
+        };
+      case "CURRICULUM":
+        sortedData = statisticData.contents.sort((a, b) => {
+          return order.indexOf(a.name) - order.indexOf(b.name);
+        });
+        labels = sortedData.map((data) => data.name);
+        data = sortedData.map((data) => data.count);
+        return {
+          labels,
+          data,
+        };
+    }
+  };
+
+  return (
+    <BarChart
+      labels={labelsSwitch(tab).labels}
+      statisticData={labelsSwitch(tab).data}
+    />
   );
 }
