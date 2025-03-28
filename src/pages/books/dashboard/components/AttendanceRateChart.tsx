@@ -17,6 +17,19 @@ interface IProps {
   tab: PeriodType;
 }
 function AttendanceRateChart({ statisticData, tabChange, tab }: IProps) {
+  const labels = ["Red", "Blue", "Yellow"];
+
+  const attendanceTextChange = (timeStatus: PeriodType) => {
+    switch (timeStatus) {
+      case "DAILY":
+        return TODAY_TEXT;
+      case "WEEKLY":
+        return WEEKLY_TEXT;
+      case "MONTHLY":
+        return MONTHLY_TEXT;
+    }
+  };
+
   return (
     <div className="flex flex-col gap-2">
       <ButtonsWrapper>
