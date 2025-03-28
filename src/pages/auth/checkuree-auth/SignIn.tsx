@@ -17,14 +17,13 @@ export interface LoginDataType {
 }
 
 const LoginSchema = z.object({
-  username: z.string().min(1, "이메일을 입력하세요."),
+  username: z.string().min(1, "아이디를 입력하세요."),
   password: z.string().min(1, "비밀번호를 입력하세요."),
   isAutoLogin: z.boolean(),
 });
 
 const initailValues = {
   username: "",
-
   password: "",
   isAutoLogin: false,
 };
@@ -78,7 +77,7 @@ export default function CheckureeSignIn() {
             <input
               id="id-input"
               {...register("username")}
-              placeholder="example@email.com"
+              placeholder="ID"
               className="bg-white w-full h-12 rounded-2xl p-4 border-[2px] focus:outline-none"
             />
             {errors.username && (

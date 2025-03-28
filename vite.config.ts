@@ -7,6 +7,9 @@ import path from "path";
 import createSitemap from "vite-plugin-sitemap";
 
 export default defineConfig({
+  build: {
+    minify: "terser",
+  },
   plugins: [
     react(),
     tsconfigPaths(),
