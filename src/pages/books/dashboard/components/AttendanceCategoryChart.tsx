@@ -1,5 +1,5 @@
 import tw from "tailwind-styled-components";
-import { CategoryChart } from "./BarChart";
+import { CategoryChart } from "./CategoryChart";
 import { AttendeeStatisticsType } from "@/api/type";
 import CategoryButtons from "./CategoryButtons";
 import { GetAttendeeStatisticsResponse } from "@/api/AttendeeSchema";
