@@ -1,22 +1,13 @@
-import { useState } from "react";
-import TimeButtons from "./TimeButtons";
-import DonutChart from "./DonutChart";
 import tw from "tailwind-styled-components";
-import BarChart from "./BarChart";
-import {
-  AttendeeStatisticsType,
-  AttendeeStatisticType,
-  dayMap,
-  DayOfWeek,
-} from "@/api/type";
+import { CategoryChart } from "./CategoryChart";
+import { AttendeeStatisticsType } from "@/api/type";
 import CategoryButtons from "./CategoryButtons";
-
-type TimePeriod = "DAILY" | "WEEKLY" | "MONTHLY";
+import { GetAttendeeStatisticsResponse } from "@/api/AttendeeSchema";
 
 const CATEGORY_TEXT = "카테고리별 학생 수";
 
 interface IProps {
-  statisticData: AttendeeStatisticType;
+  statisticData: GetAttendeeStatisticsResponse;
   tabChange: (tab: AttendeeStatisticsType) => void;
   tab: AttendeeStatisticsType;
 }
@@ -26,70 +17,6 @@ export default function AttendanceCategoryChart({
   tabChange,
   tab,
 }: IProps) {
-  // const labelsSwitch = (tab: AttendeeStatisticsType) => {
-  //   switch (tab) {
-  //     case "DAY":
-  //       return ["월", "화", "수", "목", "금", "토", "일"];
-  //     case "AGE":
-  //       return ["유아", "초등(저)", "초등(고)", "중등", "고등", "성인"];
-  //     case "CURRICULUM":
-  //       return ["가요", "고급반", "바이엘", "재즈1", "재즈2"];
-  //   }
-  // };
-
-  let order: string[] = [];
-  let sortedData: {
-    name: string;
-    count: number;
-  }[] = [];
-  let labels: string[] = [];
-  let data: number[] = [];
-
-  const labelsSwitch = (tab: AttendeeStatisticsType) => {
-    switch (tab) {
-      case "DAY":
-        order = [
-          "MONDAY",
-          "TUESDAY",
-          "WEDNESDAY",
-          "THURSDAY",
-          "FRIDAY",
-          "SATURDAY",
-          "SUNDAY",
-        ];
-        sortedData = statisticData.contents.sort((a, b) => {
-          return order.indexOf(a.name) - order.indexOf(b.name);
-        });
-        labels = sortedData.map((data) => dayMap[data.name as DayOfWeek]);
-        data = sortedData.map((data) => data.count);
-        return {
-          data,
-          labels,
-        };
-      case "AGE":
-        order = ["유아", "초등저학년", "중등부", "성인부"];
-        sortedData = statisticData.contents.sort((a, b) => {
-          return order.indexOf(a.name) - order.indexOf(b.name);
-        });
-        labels = sortedData.map((data) => data.name);
-        data = sortedData.map((data) => data.count);
-        return {
-          data,
-          labels,
-        };
-      case "CURRICULUM":
-        sortedData = statisticData.contents.sort((a, b) => {
-          return order.indexOf(a.name) - order.indexOf(b.name);
-        });
-        labels = sortedData.map((data) => data.name);
-        data = sortedData.map((data) => data.count);
-        return {
-          labels,
-          data,
-        };
-    }
-  };
-
   return (
     <div className="flex flex-col gap-2">
       <ButtonsWrapper>
@@ -102,10 +29,9 @@ export default function AttendanceCategoryChart({
         />
       </ButtonsWrapper>
       <ChartWrapper>
-        <BarChart
-          labels={labelsSwitch(tab).labels}
-          statisticData={labelsSwitch(tab).data}
-        />
+        {statisticData && statisticData.status === 200 && (
+          <CategoryChart statisticData={statisticData.data} tab={tab} />
+        )}
       </ChartWrapper>
     </div>
   );
