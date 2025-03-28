@@ -32,10 +32,7 @@ function DonutChart({ data }: DonutChartProps) {
     },
     datasets: [
       {
-        data:
-          data.filter((count) => count !== 0).length === 0
-            ? [0]
-            : data.filter((count) => count !== 0),
+        data: data,
         backgroundColor: ["#59996B", "#F2BD2D", "#EA5353", "#E7E7E7"], // 색상을 원하는 대로 설정
         hoverBackgroundColor: ["#59996B", "#F2BD2D", "#EA5353", "#E7E7E7"],
       },
@@ -49,6 +46,9 @@ function DonutChart({ data }: DonutChartProps) {
         labels: {
           title: {
             color: "white",
+            formatter: (value: number) => {
+              return value > 0 ? value : "";
+            },
             font: {
               weight: 800,
               size: 13,
@@ -96,6 +96,8 @@ interface IProps {
   statisticData: StatisticType;
 }
 
+const UNIT_TEXT = "단위: 명";
+
 export default function RateChart({ statisticData }: IProps) {
   const labels = ["Red", "Blue", "Yellow"];
 
@@ -141,7 +143,7 @@ export default function RateChart({ statisticData }: IProps) {
       <div className="flex gap-3">
         <div>
           <p className="text-xs-medium text-text-interactive-secondary text-left">
-            단위: 명
+            {UNIT_TEXT}
           </p>
           <DonutChart
             data={[
