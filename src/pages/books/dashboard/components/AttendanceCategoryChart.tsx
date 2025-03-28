@@ -18,7 +18,7 @@ export default function AttendanceCategoryChart({
   tab,
 }: IProps) {
   return (
-    <div className="flex flex-col gap-2">
+    <Wrapper>
       <ButtonsWrapper>
         <div className="flex flex-col text-left space-y-[-3px]">
           <p className="text-m-bold">{CATEGORY_TEXT}</p>
@@ -33,9 +33,10 @@ export default function AttendanceCategoryChart({
           <CategoryChart statisticData={statisticData.data} tab={tab} />
         )}
       </ChartWrapper>
-    </div>
+    </Wrapper>
   );
 }
 
+const Wrapper = tw.div`flex flex-col gap-2`;
 const ChartWrapper = tw.div`flex flex-col items-center gap-2 w-full px-2 h-[284px] bg-white rounded-2xl mx-auto py-3`;
 const ButtonsWrapper = tw.div`flex justify-between w-full items-center`;
