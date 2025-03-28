@@ -16,20 +16,10 @@ export default function Dashboard() {
   const bookName = searchParmas.get("bookName");
   const { bookId } = useParams();
 
-  // ✅ tab에 따라 from 날짜 계산
-  const getFromDate = (tab: PeriodType) => {
-    if (tab === "DAILY") return dayjs().format("YYYY-MM-DD");
-    if (tab === "WEEKLY")
-      return dayjs().subtract(7, "day").format("YYYY-MM-DD");
-    if (tab === "MONTHLY")
-      return dayjs().subtract(1, "month").format("YYYY-MM-DD");
-    return dayjs().format("YYYY-MM-DD"); // fallback
-  };
-
   const [attendRateTab, setAttendRateTab] = useState<PeriodType>("DAILY");
-  const [categoryTab, setCategoryTab] = useState<AttendeeStatisticsType>("AGE");
+  const [categoryTab, setCategoryTab] = useState<AttendeeStatisticsType>("DAY");
   const { data: statisticData } = useBookStatistic(Number(bookId), {
-    from: getFromDate(attendRateTab), // ✅ 동적으로 계산된 from 날짜 사용
+    from: getFromDate(attendRateTab),
     to: dayjs().format("YYYY-MM-DD"),
     periodType: attendRateTab,
   });
@@ -37,6 +27,7 @@ export default function Dashboard() {
   const { data: statisticAttendeeData } = useAttendeeStatistic(Number(bookId), {
     type: categoryTab,
   });
+
   return (
     <PageContainer>
       <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
@@ -44,20 +35,18 @@ export default function Dashboard() {
         <ScheduleIcon width={40} height={40} className="mt-1" />
       </div>
       <main className="w-full flex-1 bg-bg-secondary flex flex-col gap-4 p-4">
-        {statisticData?.status === 200 && (
-          <AttendanceRateChart
-            statisticData={statisticData.data}
-            tabChange={(tab: PeriodType) => setAttendRateTab(tab)}
-            tab={attendRateTab}
-          />
-        )}
-        {statisticAttendeeData?.status === 200 && (
-          <AttendanceCategoryChart
-            statisticData={statisticAttendeeData.data}
-            tabChange={(tab: AttendeeStatisticsType) => setCategoryTab(tab)}
-            tab={categoryTab}
-          />
-        )}
+        <AttendanceRateChart
+          statisticData={statisticData!}
+          tabChange={(tab: PeriodType) => setAttendRateTab(tab)}
+          tab={attendRateTab}
+        />
+
+        <AttendanceCategoryChart
+          statisticData={statisticAttendeeData!}
+          tabChange={(tab: AttendeeStatisticsType) => setCategoryTab(tab)}
+          tab={categoryTab}
+        />
+
         <div className="h-[92px]" />
       </main>
 
@@ -65,3 +54,12 @@ export default function Dashboard() {
     </PageContainer>
   );
 }
+
+// ✅ tab에 따라 from 날짜 계산
+const getFromDate = (tab: PeriodType) => {
+  if (tab === "DAILY") return dayjs().format("YYYY-MM-DD");
+  if (tab === "WEEKLY") return dayjs().subtract(7, "day").format("YYYY-MM-DD");
+  if (tab === "MONTHLY")
+    return dayjs().subtract(1, "month").format("YYYY-MM-DD");
+  return dayjs().format("YYYY-MM-DD"); // fallback
+};
