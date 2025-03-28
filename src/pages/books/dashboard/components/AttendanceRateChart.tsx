@@ -17,18 +17,6 @@ interface IProps {
   tab: PeriodType;
 }
 function AttendanceRateChart({ statisticData, tabChange, tab }: IProps) {
-  const attendanceTextChange = (timeStatus: PeriodType) => {
-    switch (timeStatus) {
-      case "DAILY":
-        return TODAY_TEXT;
-      case "WEEKLY":
-        return WEEKLY_TEXT;
-      case "MONTHLY":
-        return MONTHLY_TEXT;
-    }
-  };
-
-  console.log(statisticData?.status === 200);
   return (
     <div className="flex flex-col gap-2">
       <ButtonsWrapper>
@@ -54,3 +42,14 @@ function AttendanceRateChart({ statisticData, tabChange, tab }: IProps) {
 const ChartWrapper = tw.div`flex flex-col items-center gap-2 w-full h-[284px] bg-white rounded-2xl mx-auto py-4`;
 const ButtonsWrapper = tw.div`flex justify-between w-full items-center`;
 export default React.memo(AttendanceRateChart);
+
+const attendanceTextChange = (timeStatus: PeriodType) => {
+  switch (timeStatus) {
+    case "DAILY":
+      return TODAY_TEXT;
+    case "WEEKLY":
+      return WEEKLY_TEXT;
+    case "MONTHLY":
+      return MONTHLY_TEXT;
+  }
+};
