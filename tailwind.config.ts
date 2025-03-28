@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+import type { PluginAPI } from "tailwindcss/types/config";
 
 import { extend } from "./tailwindStyleConfig";
 import scrollbarHide from "tailwind-scrollbar-hide";
@@ -9,7 +10,7 @@ export default {
   },
   plugins: [
     scrollbarHide,
-    function ({ addUtilities }) {
+    function ({ addUtilities }: { addUtilities: PluginAPI["addUtilities"] }) {
       addUtilities({
         ".scrollbar-none": {
           "&::-webkit-scrollbar": {
