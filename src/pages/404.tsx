@@ -1,5 +1,11 @@
 import { Link } from "react-router-dom";
 
+const NOT_FOUND_TEXT = {
+  top: "해당 페이지를 찾을 수 없습니다.",
+  bottom: "출석부로 돌아가시려면",
+};
+const CLICK_TEXT = "를 눌러주세요!";
+
 const NotFound = () => {
   return (
     <section className="w-[393px] flex flex-col items-center justify-center h-full">
@@ -13,15 +19,16 @@ const NotFound = () => {
         />
 
         <h2 className="text-center mb-12 font-appleLiGothic font-semibold">
-          해당 페이지를 찾을 수 없습니다. <br />
-          출석부로 돌아가시려면 &nbsp;
+          {NOT_FOUND_TEXT.top}
+          <br />
+          {NOT_FOUND_TEXT.bottom} &nbsp;
           <Link
             to="/auth/signin"
             className="font-semibold text-bg-tertiary underline"
           >
             {"여기"}
           </Link>
-          를 눌러주세요!
+          {CLICK_TEXT}
         </h2>
       </div>
     </section>
