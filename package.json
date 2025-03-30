@@ -14,7 +14,6 @@
     "deploy-storybook": "gh-pages -d storybook-static",
     "typecheck": "tsc --noEmit",
     "generate-sitemap": "node generate-sitemap.js",
-    "cypress": "npx cypress open",
     "test": "playwright test",
     "prepare": "husky install"
   },
@@ -81,7 +80,6 @@
     "@storybook/react-vite": "^8.4.7",
     "@storybook/test": "^8.4.7",
     "@svgr/rollup": "^8.1.0",
-    "@types/cypress": "^1.1.6",
     "@types/node": "^22.13.13",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
@@ -97,6 +95,7 @@
     "eslint-plugin-react-refresh": "^0.4.14",
     "eslint-plugin-storybook": "^0.11.1",
     "globals": "^15.15.0",
+    "husky": "^8.0.0",
     "js-cookie": "^3.0.5",
     "path": "^0.12.7",
     "postcss": "^8.4.49",
@@ -115,8 +114,7 @@
     "vite-plugin-sitemap": "^0.7.1",
     "vite-plugin-svgr": "^4.3.0",
     "vite-tsconfig-paths": "^5.1.2",
-    "zustand": "^5.0.3",
-    "husky": "^8.0.0"
+    "zustand": "^5.0.3"
   },
   "eslintConfig": {
     "extends": [
