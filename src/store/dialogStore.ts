@@ -28,7 +28,6 @@ const useModalStore = create<ModalState>((set) => ({
   action: (action = () => {}) => set({ action }),
   openModal: (
     content,
-
     action = () => {},
     closeAction = () => {},
     buttonProps
