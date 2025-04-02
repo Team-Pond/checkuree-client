@@ -1,6 +1,7 @@
 # 🌐 Links
 
 > **Service** : https://pond-client.vercel.app (dev - 작업중)
+> **Service** : https://dev.checkuree.com (prod - 작업중)
 
 # ⚙️ How to Start
 
