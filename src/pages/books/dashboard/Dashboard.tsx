@@ -8,7 +8,7 @@ import ScheduleIcon from '@/assets/icons/dashboard/ico-schedule.svg?react'
 import Bottom from '../components/Bottom'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useAttendeeStatistic, useBookStatistic } from '../queries'
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 import { useCallback, useState } from 'react'
 import { AttendeeStatisticsType, PeriodType } from '@/api/type'
 import DateDrawer from '../book-check/components/DateDrawer'
@@ -38,8 +38,7 @@ export default function Dashboard() {
   const displayDate = currentDate.locale('ko').format('M월 D일')
 
   const { data: statisticData } = useBookStatistic(Number(bookId), {
-    from: getFromDate(currentDate, attendRateTab),
-    to: dayjs().format('YYYY-MM-DD'),
+    from: dayjs(currentDate).format('YYYY-MM-DD'),
     periodType: attendRateTab,
   })
 
@@ -80,6 +79,7 @@ export default function Dashboard() {
       <main className="w-full flex-1 bg-bg-secondary flex flex-col gap-4 p-4">
         <AttendanceRateChart
           statisticData={statisticData!}
+          currentDate={currentDate}
           tabChange={(tab: PeriodType) => setAttendRateTab(tab)}
           tab={attendRateTab}
         />
@@ -100,14 +100,4 @@ export default function Dashboard() {
       <Bottom />
     </PageContainer>
   )
-}
-
-// ✅ tab에 따라 from 날짜 계산
-const getFromDate = (date: Dayjs, tab: PeriodType) => {
-  if (tab === 'DAILY') return dayjs(date).format('YYYY-MM-DD')
-  if (tab === 'WEEKLY')
-    return dayjs(date).subtract(7, 'day').format('YYYY-MM-DD')
-  if (tab === 'MONTHLY')
-    return dayjs(date).subtract(1, 'month').format('YYYY-MM-DD')
-  return dayjs().format('YYYY-MM-DD')
 }
