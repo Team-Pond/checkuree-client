@@ -100,25 +100,30 @@ export default function AttendeeCreate() {
           )}
           {isStep2 ? (
             <div className="flex gap-4 w-full">
-              <button
+              <Button
                 type="button"
                 onClick={() => {
                   setIsStep2(false)
                 }}
-                className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
+                data-cy="previous-book-create"
+                aria-label="previous-book-create"
               >
                 이전으로
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
-                className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
+                isSubmit
+                data-cy="submit-attendee-create"
+                aria-label="submit-attendee-create"
               >
                 생성하기
-              </button>
+              </Button>
             </div>
           ) : (
             <button
               type="button"
+              data-cy="stepSubmit"
+              aria-label="stepSubmit"
               className={twMerge(
                 'max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl',
                 'bg-bg-tertiary text-[#f1f8f3]',
@@ -135,4 +140,5 @@ export default function AttendeeCreate() {
 }
 
 const Form = tw.form`flex flex-col gap-10 w-full pb-[30px]`
-const FormInner = tw.form`flex flex-col w-full mx-auto justify-center items-center gap-6 max-w-[342px]`
+const FormInner = tw.div`flex flex-col w-full mx-auto justify-center items-center gap-6 max-w-[342px]`
+const Button = tw.button`${({ isSubmit }: { isSubmit?: boolean }) => (isSubmit ? 'bg-bg-tertiary text-[#F1F8F3]' : 'bg-bg-secondary text-text-secondary')} text-lg font-semibold w-full h-[54px] flex justify-center items-center rounded-2xl `

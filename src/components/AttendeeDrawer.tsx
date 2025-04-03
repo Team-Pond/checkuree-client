@@ -1,23 +1,23 @@
-import BottomDrawer from "@/components/BottomDrawer";
-import { convertEngDayToKorDay, getAddMinuteHhmm } from "@/utils";
-import { DaysType } from "@/api/type";
+import BottomDrawer from '@/components/BottomDrawer'
+import { convertEngDayToKorDay, getAddMinuteHhmm } from '@/utils'
+import { DaysType } from '@/api/type'
 
 type Attendee = {
-  name: string;
-  age: number;
-};
+  name: string
+  age: number
+}
 
 interface AttendeeDrawerProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen: boolean
+  onClose: () => void
   scheduleParams: {
-    dayOfWeek: string;
-    hhmm: string;
-    isSelected: boolean;
-  };
-  scheduleData?: Attendee[];
-  handleAttendeeSchedules: (day: DaysType, hhmm: string) => void;
-  handleRemoveAttendeeSchedules: (day: DaysType, hhmm: string) => void;
+    dayOfWeek: string
+    hhmm: string
+    isSelected: boolean
+  }
+  scheduleData?: Attendee[]
+  handleAttendeeSchedules: (day: DaysType, hhmm: string) => void
+  handleRemoveAttendeeSchedules: (day: DaysType, hhmm: string) => void
 }
 
 export default function AttendeeDrawer({
@@ -28,7 +28,7 @@ export default function AttendeeDrawer({
   handleAttendeeSchedules,
   handleRemoveAttendeeSchedules,
 }: AttendeeDrawerProps) {
-  const { dayOfWeek, hhmm, isSelected } = scheduleParams;
+  const { dayOfWeek, hhmm, isSelected } = scheduleParams
 
   return (
     <BottomDrawer isOpen={isOpen} onClose={onClose}>
@@ -37,7 +37,7 @@ export default function AttendeeDrawer({
           {/* Drawer 상단 영역 */}
           <div className="text-left w-full h-10 border-b border-[#f6f6f6] flex items-center">
             <p className="text-s-semibold text-text-secondary">
-              ({convertEngDayToKorDay(dayOfWeek)}) {hhmm}-{" "}
+              ({convertEngDayToKorDay(dayOfWeek)}) {hhmm}-{' '}
               {getAddMinuteHhmm(hhmm, 30)}
             </p>
           </div>
@@ -48,7 +48,7 @@ export default function AttendeeDrawer({
           {scheduleData?.map((attendee, index) => (
             <div
               // 중복 데이터가 발생하는 현상이 있어 key 변경
-              key={[attendee.name, attendee.age, index].join("-")}
+              key={[attendee.name, attendee.age, index].join('-')}
               className="flex gap-2 w-[171px] h-9"
             >
               <p className="text-m-bold text-text-primary">{attendee.name}</p>
@@ -59,6 +59,8 @@ export default function AttendeeDrawer({
         <div className="flex gap-4 w-full fixed bottom-5 max-w-[357px]">
           <button
             type="button"
+            data-cy="close-schedule-button"
+            aria-label="close-schedule-button"
             onClick={() => onClose()}
             className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
           >
@@ -66,18 +68,20 @@ export default function AttendeeDrawer({
           </button>
           <button
             type="button"
+            data-cy="add-schedule-button"
+            aria-label="add-schedule-button"
             className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
             onClick={() => {
               !isSelected
                 ? handleAttendeeSchedules(dayOfWeek as DaysType, hhmm)
                 : handleRemoveAttendeeSchedules(dayOfWeek as DaysType, hhmm),
-                onClose();
+                onClose()
             }}
           >
-            {isSelected ? "삭제하기" : "추가하기"}
+            {isSelected ? '삭제하기' : '추가하기'}
           </button>
         </div>
       </div>
     </BottomDrawer>
-  );
+  )
 }

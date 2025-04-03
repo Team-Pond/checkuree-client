@@ -9,10 +9,12 @@ export default function MainContent({ bookList, handleNavigation }: IProps) {
   return (
     <div className="flex-1 bg-bg-secondary flex flex-col items-center">
       <div className="w-full max-w-[340px]  border-spacing-0 py-5 grid grid-cols-2  gap-y-6 gap-x-4 ">
-        {bookList.map((attendance) => {
+        {bookList.map((attendance, index) => {
           return (
             <div
               key={attendance.id}
+              data-cy={`book-${index}`}
+              aria-label={`book-${index}`}
               className="max-w-[162px] w-full"
               onClick={() => {
                 handleNavigation({

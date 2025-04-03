@@ -9,6 +9,7 @@ import CheckBox from '@/components/CheckBox'
 import tw from 'tailwind-styled-components'
 import FieldHeader from '../../../components/FieldTitle'
 import { relationTypeToKor } from '@/utils/enumMapper'
+import { spaceBlockKeyDown } from '@/utils'
 
 export default function Step1() {
   const handleDateChange = (
@@ -85,13 +86,13 @@ export default function Step1() {
         <FieldHeader title="학생 이름" essential />
         <div className="flex flex-col gap-[1px] w-full text-left">
           <input
+            data-cy="name-input"
+            aria-label="name-input"
             type="text"
             placeholder="학생 이름"
             {...register('attendeeRequest.name')}
             className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              if (e.key === ' ') e.preventDefault()
-            }}
+            onKeyDown={spaceBlockKeyDown}
           />
           {errors?.attendeeRequest?.name && (
             <p className="text-red-500 text-xs mt-1">
@@ -107,6 +108,8 @@ export default function Step1() {
           <div className="flex items-center gap-[9px]">
             <input
               type="text"
+              data-cy="birth-input"
+              aria-label="birth-input"
               {...register('attendeeRequest.birthDate')}
               onChange={(e) => handleDateChange(e, 'attendeeRequest.birthDate')}
               placeholder="YYYY.MM.DD"
@@ -118,12 +121,14 @@ export default function Step1() {
                   label="남성"
                   onChange={() => setValue('attendeeRequest.gender', 'MALE')}
                   id="gender"
+                  ariaLabel="male-radio"
                   checked={gender === 'MALE'}
                 />
                 <Radio
                   label="여성"
                   onChange={() => setValue('attendeeRequest.gender', 'FEMALE')}
                   id="gender"
+                  ariaLabel="female-radio"
                   checked={gender === 'FEMALE'}
                 />
               </div>
@@ -154,6 +159,8 @@ export default function Step1() {
           <div className="flex items-center gap-[9px]">
             <input
               type="text"
+              data-cy="enrolldate-input"
+              aria-label="enrolldate-input"
               {...register('attendeeRequest.enrollmentDate')}
               placeholder="YYYY.MM.DD"
               onChange={(e) =>
@@ -165,6 +172,7 @@ export default function Step1() {
             <CheckBox
               label="오늘 입학"
               id="admittedToday"
+              ariaLabel="today-enroll"
               checked={
                 watch('attendeeRequest.enrollmentDate') ===
                 formattedDate.replaceAll('.', '-')

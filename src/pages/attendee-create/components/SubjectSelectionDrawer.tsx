@@ -1,57 +1,56 @@
-import { CoursesResponse } from "@/api/AttendanceBookSchema";
-import BottomDrawer from "@/components/BottomDrawer";
-import { useState } from "react";
-import { twMerge } from "tailwind-merge";
-import { CreateAttendeeSchema } from "../_schema";
-import { useFormContext } from "react-hook-form";
+import { CoursesResponse } from '@/api/AttendanceBookSchema'
+import BottomDrawer from '@/components/BottomDrawer'
+import { useEffect, useState } from 'react'
+import { twMerge } from 'tailwind-merge'
+import { CreateAttendeeSchema } from '../_schema'
+import { useFormContext } from 'react-hook-form'
 
 type Subject = {
-  id: number;
-  title: string;
-};
+  id: number
+  title: string
+}
 
 type SubjectItem = {
-  id: number;
-  level: number;
-  title: string;
-};
+  id: number
+  level: number
+  title: string
+}
 
 interface SubjectSelectionDrawerProps {
-  isOpen: boolean;
-  onClose: () => void;
-  subjects?: Subject[];
-  subjectItems?: SubjectItem[];
-  selectedSubject?: Subject;
-
-  handleBottomDrawer: (open: boolean) => void;
-  bookCourses: CoursesResponse;
-  onChangeGrade: (gradeId: number) => void;
+  isOpen: boolean
+  onClose: () => void
+  subjects?: Subject[]
+  subjectItems?: SubjectItem[]
+  handleBottomDrawer: (open: boolean) => void
+  bookCourses: CoursesResponse
+  onChangeGrade: (gradeId: number) => void
 }
 type Grade = {
-  id: number;
-  title: string;
-  level: number;
-  subjectItemId: number;
-};
+  id: number
+  title: string
+  level: number
+  subjectItemId: number
+}
 
 export default function SubjectSelectionDrawer({
   isOpen,
   onClose,
-  selectedSubject,
-
   handleBottomDrawer,
   bookCourses,
   onChangeGrade,
 }: SubjectSelectionDrawerProps) {
-  const [grades, setGrades] = useState<Grade[]>([]);
+  const [grades, setGrades] = useState<Grade[]>([])
 
-  const {
-    setValue,
-    getValues,
-    register,
-    formState: { errors },
-    watch,
-  } = useFormContext<CreateAttendeeSchema>();
+  const { setValue, watch } = useFormContext<CreateAttendeeSchema>()
+
+  useEffect(() => {
+    if (bookCourses) {
+      setGrades(bookCourses?.courses[0].grades)
+      setValue('progressRequest.subject', bookCourses?.courses[0])
+    }
+  }, [bookCourses])
+
+  const selectedSub = watch('progressRequest.subject')
   return (
     <BottomDrawer isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col gap-4 items-center">
@@ -59,24 +58,24 @@ export default function SubjectSelectionDrawer({
           {/* 왼쪽: 과목 목록 */}
           <ul className="w-full max-w-[107px] overflow-y-scroll scrollbar-hide rounded-tl-lg">
             {bookCourses?.courses?.map((subject) => {
-              const isSelected = selectedSubject?.title === subject.title;
+              const isSelected = selectedSub?.title === subject.title
               return (
                 <li
                   key={subject.id}
                   className={twMerge(
-                    "bg-white h-[52px] flex items-center justify-center cursor-pointer",
+                    'bg-white h-[52px] flex items-center justify-center cursor-pointer',
                     isSelected
-                      ? "text-text-brand text-[14px] font-bold bg-bg-base"
-                      : "text-text-primary text-s-medium "
+                      ? 'text-text-brand text-[13px] font-bold bg-bg-base'
+                      : 'text-text-primary text-[13px] font-medium ',
                   )}
                   onClick={() => {
-                    setValue("progressRequest.subject", subject);
-                    setGrades(subject.grades);
+                    setValue('progressRequest.subject', subject)
+                    setGrades(subject.grades)
                   }}
                 >
                   {subject.title}
                 </li>
-              );
+              )
             })}
           </ul>
 
@@ -94,16 +93,18 @@ export default function SubjectSelectionDrawer({
                   <img
                     src="/images/icons/book-create/ico-plus.svg"
                     alt="플러스 아이콘"
+                    data-cy="add-icon"
+                    aria-label="add-icon"
                     width={19}
                     height={19}
                     onClick={() => {
-                      setValue("progressRequest.subjectCourse", {
+                      setValue('progressRequest.subjectCourse', {
                         subjectCourseId: subjectItem.id,
                         level: subjectItem.level,
                         title: subjectItem.title,
-                      });
-                      onChangeGrade(subjectItem.id);
-                      handleBottomDrawer(false);
+                      })
+                      onChangeGrade(subjectItem.id)
+                      handleBottomDrawer(false)
                     }}
                   />
                 </li>
@@ -113,5 +114,5 @@ export default function SubjectSelectionDrawer({
         </div>
       </div>
     </BottomDrawer>
-  );
+  )
 }

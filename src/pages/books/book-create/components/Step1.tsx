@@ -6,6 +6,7 @@ import { CreateBookSchema } from '../_schema'
 import { DaysType } from '@/api/type'
 import tw from 'tailwind-styled-components'
 import FieldHeader from '@/components/FieldTitle'
+import { spaceBlockKeyDown } from '@/utils'
 
 const DAYS = ['월', '화', '수', '목', '금', '토', '일']
 
@@ -144,9 +145,7 @@ export default function Step1() {
             {...register('title', {
               required: '출석부는 최소 4글자 이상 입력해주세요.',
             })}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              if (e.key === ' ') e.preventDefault()
-            }}
+            onKeyDown={spaceBlockKeyDown}
             data-cy="title"
             aria-label="title"
             type="text"

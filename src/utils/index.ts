@@ -331,3 +331,7 @@ export const statisticPeriodText = (date: Dayjs, period: PeriodType) => {
       return month
   }
 }
+
+export const spaceBlockKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  if (e.key === ' ') e.preventDefault()
+}

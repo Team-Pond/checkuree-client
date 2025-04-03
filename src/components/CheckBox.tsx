@@ -1,19 +1,33 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent } from 'react'
 
 interface IProps {
-  id: string;
-  label: string;
-  checked?: boolean;
-  onChange: (checked: ChangeEvent<HTMLInputElement>) => void;
+  id: string
+  label: string
+  checked?: boolean
+  onChange: (checked: ChangeEvent<HTMLInputElement>) => void
+  ariaLabel?: string
 }
 
-export default function CheckBox({ id, label, checked, onChange }: IProps) {
+export default function CheckBox({
+  id,
+  label,
+  checked,
+  onChange,
+  ariaLabel,
+}: IProps) {
   return (
     <div className="flex items-center w-[167px] h-9 px-4 py-2">
-      <label htmlFor={id} className="flex items-center cursor-pointer">
+      <label
+        aria-label={ariaLabel + '-label'}
+        data-cy={ariaLabel + '-label'}
+        htmlFor={id}
+        className="flex items-center cursor-pointer"
+      >
         <div className="flex items-center cursor-pointer relative">
           <input
             type="checkbox"
+            data-cy={ariaLabel + '-checkbox'}
+            aria-label={ariaLabel + '-checkbox'}
             id={id}
             checked={checked}
             onChange={(e) => onChange(e)}
@@ -43,5 +57,5 @@ export default function CheckBox({ id, label, checked, onChange }: IProps) {
         </span>
       </label>
     </div>
-  );
+  )
 }
