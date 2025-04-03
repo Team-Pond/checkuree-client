@@ -66,7 +66,7 @@ export default function BookCreate() {
         onSubmit={handleSubmit(() => {
           courseCreateParam.length > 0 &&
             bookMutation({
-              title: getValues('title'),
+              title: getValues('title').trim(),
               imageUrl: JSON.stringify(getValues('imageUrl')),
               availableDays: getValues('availableDays'),
               availableFrom: getValues('availableFrom'),
