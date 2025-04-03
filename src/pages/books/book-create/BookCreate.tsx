@@ -93,6 +93,7 @@ export default function BookCreate() {
               <button
                 type="button" // submit 대신 버튼 타입을 일반 button으로 변경
                 data-cy="stepSubmit"
+                aria-label="stepSubmit"
                 className={twMerge(
                   'max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl bg-bg-tertiary text-[#f1f8f3]',
                 )}
