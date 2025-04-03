@@ -1,15 +1,24 @@
 interface IProps {
-  id: string;
-  label: string;
-  checked: boolean;
-  onChange: (checked: boolean) => void;
+  id: string
+  label: string
+  checked: boolean
+  ariaLabel?: string
+  onChange: (checked: boolean) => void
 }
-export default function Radio({ id, label, checked, onChange }: IProps) {
+export default function Radio({
+  id,
+  label,
+  checked,
+  onChange,
+  ariaLabel,
+}: IProps) {
   return (
     <div className="inline-flex items-center">
       <div
         className="relative flex items-center"
         onClick={() => onChange(!checked)}
+        data-cy={ariaLabel}
+        aria-label={ariaLabel}
       >
         <input
           key={id}
@@ -24,5 +33,5 @@ export default function Radio({ id, label, checked, onChange }: IProps) {
       </div>
       <span className="ml-2 text-text-priary text-s-bold">{label}</span>
     </div>
-  );
+  )
 }
