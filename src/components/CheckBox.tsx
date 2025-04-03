@@ -18,8 +18,8 @@ export default function CheckBox({
   return (
     <div className="flex items-center w-[167px] h-9 px-4 py-2">
       <label
-        aria-label={ariaLabel + '-label'}
-        data-cy={ariaLabel + '-label'}
+        aria-label={[ariaLabel, 'label'].join('-')}
+        data-cy={[ariaLabel, 'label'].join('-')}
         htmlFor={id}
         className="flex items-center cursor-pointer"
       >

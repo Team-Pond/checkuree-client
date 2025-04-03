@@ -1,10 +1,6 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
-
-import { Associates } from '@/api/type'
-
 import CounsellerSelect from './Select'
-
 import { CreateCounsellingSchema } from '../../_schema'
 import { CounsellingTopicType } from '@/api/CounselSchema'
 import Radio from '@/components/Radio'

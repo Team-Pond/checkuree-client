@@ -1,77 +1,76 @@
-import { useContext, useState } from "react";
+import { useContext, useState } from 'react'
 
-import Header from "./components/Header";
-import Bottom from "../components/Bottom";
-import BottomFilter from "./components/BottomFilter";
+import Header from './components/Header'
+import Bottom from '../components/Bottom'
+import BottomFilter from './components/BottomFilter'
 
-import MainContent from "./components/MainContent";
-import { BookContext } from "@/context/BookContext";
-import { useParams, useSearchParams } from "react-router-dom";
-import { useAttendeeList } from "./queries";
-import SEO from "@/components/SEO";
-import { set } from "lodash";
-import { DaysType, GenderType } from "@/api/type";
+import MainContent from './components/MainContent'
+import { BookContext } from '@/context/BookContext'
+import { useParams, useSearchParams } from 'react-router-dom'
+import { useAttendeeList } from './queries'
+import SEO from '@/components/SEO'
+import { DaysType, GenderType } from '@/api/type'
 
 const DaysMatch: Record<string, DaysType> = {
-  월: "MONDAY",
-  화: "TUESDAY",
-  수: "WEDNESDAY",
-  목: "THURSDAY",
-  금: "FRIDAY",
-  토: "SATURDAY",
-  일: "SUNDAY",
-};
+  월: 'MONDAY',
+  화: 'TUESDAY',
+  수: 'WEDNESDAY',
+  목: 'THURSDAY',
+  금: 'FRIDAY',
+  토: 'SATURDAY',
+  일: 'SUNDAY',
+}
 export default function BookRoaster() {
-  const [searchParams] = useSearchParams();
-  const { bookId } = useParams();
-  const bookName = searchParams.get("bookName");
-  const context = useContext(BookContext);
-  const { selectedBook } = context!;
+  const [searchParams] = useSearchParams()
+  const { bookId } = useParams()
+  const bookName = searchParams.get('bookName')
+  const context = useContext(BookContext)
+  const { selectedBook } = context!
 
-  const [openFilter, setOpenFilter] = useState<boolean>(false);
+  const [openFilter, setOpenFilter] = useState<boolean>(false)
 
   const onDrawerChange = () => {
-    setOpenFilter(!openFilter);
-  };
+    setOpenFilter(!openFilter)
+  }
 
-  const [search, setSearch] = useState<string>("");
+  const [search, setSearch] = useState<string>('')
   const [filter, setFilter] = useState<{
-    dayArrays: DaysType[];
-    gender: GenderType;
-    age: { min: number; max: number };
+    dayArrays: DaysType[]
+    gender: GenderType
+    age: { min: number; max: number }
   }>({
     dayArrays: [],
-    gender: "",
+    gender: '',
     age: { min: 0, max: 100 },
-  });
+  })
   const { data: attendeeList } = useAttendeeList({
     bookId: Number(bookId),
     dayArrays: filter.dayArrays,
     gender: filter.gender,
     age: filter.age,
-  });
+  })
 
   const onChangeFilter = (
     dayArrays: DaysType[],
     gender: GenderType,
-    age: { min: number; max: number }
+    age: { min: number; max: number },
   ) => {
     setFilter({
       dayArrays,
       gender,
       age,
-    });
-    setOpenFilter(false);
-  };
+    })
+    setOpenFilter(false)
+  }
 
   const getGrades = (grades: { id: number; name: string }[]) => {
-    const gradesBooks = grades.map((grade) => grade.name);
-    return gradesBooks.join(" / ");
-  };
+    const gradesBooks = grades.map((grade) => grade.name)
+    return gradesBooks.join(' / ')
+  }
 
   const onChangeSearch = (value: string) => {
-    setSearch(value);
-  };
+    setSearch(value)
+  }
 
   return (
     <section className="flex flex-col w-full h-full">
@@ -112,5 +111,5 @@ export default function BookRoaster() {
       />
       {!openFilter && <Bottom />}
     </section>
-  );
+  )
 }
