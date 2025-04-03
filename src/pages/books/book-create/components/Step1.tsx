@@ -1,5 +1,5 @@
 import TimePicker from '@/components/TimePicker'
-import { ChangeEvent, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
 import { CreateBookSchema } from '../_schema'
@@ -27,6 +27,7 @@ type Time = {
 
 export default function Step1() {
   const {
+    setFocus,
     setValue,
     register,
     watch,
@@ -128,8 +129,12 @@ export default function Step1() {
     },
   ]
 
+  useEffect(() => {
+    setFocus('title')
+  }, [setFocus])
+
   return (
-    <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
+    <Step1Form>
       {/* 출석부 이름 */}
       <TextWrapper>
         <FieldHeader title="출석부" essential />
@@ -139,7 +144,11 @@ export default function Step1() {
             {...register('title', {
               required: '출석부는 최소 4글자 이상 입력해주세요.',
             })}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === ' ') e.preventDefault()
+            }}
             data-cy="title"
+            aria-label="title"
             type="text"
             placeholder="출석부 이름"
             className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
@@ -161,6 +170,7 @@ export default function Step1() {
                 <div
                   key={day}
                   data-cy={day}
+                  aria-label={day}
                   className={twMerge(
                     'max-w-11 h-11 rounded-lg flex justify-center items-center  cursor-pointer',
                     isActive
@@ -198,6 +208,7 @@ export default function Step1() {
                   onClick={() => time.handleOpen()}
                   key={index}
                   data-cy={time.dataCy}
+                  aria-label={time.dataCy}
                 >
                   <button
                     type="button"
@@ -272,9 +283,11 @@ export default function Step1() {
           handleOpenTimePicker={setIsEndPickerOpen}
         />
       )}
-    </div>
+    </Step1Form>
   )
 }
+
+const Step1Form = tw.div`flex flex-col justify-center gap-6 max-w-[342px] w-full`
 
 const TextWrapper = tw.div`
   flex flex-col gap-2
