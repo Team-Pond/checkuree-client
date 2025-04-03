@@ -15,6 +15,7 @@
     "typecheck": "tsc --noEmit",
     "generate-sitemap": "node generate-sitemap.js",
     "test": "npx cypress run",
+    "cypress": "npx cypress open",
     "prepare": "husky install"
   },
   "dependencies": {
