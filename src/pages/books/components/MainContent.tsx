@@ -1,9 +1,9 @@
-import { Book } from "@/context/BookContext";
-import { formatTimeRange, getDayGroupFromInput } from "@/utils";
+import { Book } from '@/context/BookContext'
+import { formatTimeRange, getDayGroupFromInput } from '@/utils'
 
 interface IProps {
-  bookList: Book[];
-  handleNavigation: (bookData: Book) => void;
+  bookList: Book[]
+  handleNavigation: (bookData: Book) => void
 }
 export default function MainContent({ bookList, handleNavigation }: IProps) {
   return (
@@ -22,17 +22,17 @@ export default function MainContent({ bookList, handleNavigation }: IProps) {
                   availableDays: attendance.availableDays,
                   availableFrom: attendance.availableFrom,
                   availableTo: attendance.availableTo,
-                });
+                })
               }}
             >
               <img
-                src={"/images/img-test.png"}
+                src={'/images/img-test.png'}
                 className="w-full h-[97px] rounded-t-2xl"
                 alt=""
               />
               <div className="flex flex-col gap-2 px-3 py-4 text-left rounded-b-2xl h-[98px] bg-white">
                 <div className="flex gap-2">
-                  <p className="font-bold text-text-primary">
+                  <p className="font-bold text-text-primary max-w-[119px] truncate">
                     {attendance.title}
                   </p>
                   <p className="font-semibold text-text-secondary">
@@ -44,14 +44,14 @@ export default function MainContent({ bookList, handleNavigation }: IProps) {
                     {getDayGroupFromInput(attendance.availableDays)}
                   </p>
                   <p className="text-text-secondary font-medium text-sm">
-                    {formatTimeRange("1200", "2000")}
+                    {formatTimeRange('1200', '2000')}
                   </p>
                 </div>
               </div>
             </div>
-          );
+          )
         })}
       </div>
     </div>
-  );
+  )
 }
