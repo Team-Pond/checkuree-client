@@ -42,4 +42,5 @@ cypress/videos/
 cypress/reports/
 # Cypress 캐시 디렉토리
 .cypress_cache/
+cypress.env.json
 
