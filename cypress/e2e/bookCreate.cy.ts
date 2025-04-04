@@ -4,7 +4,7 @@ import 'cypress-file-upload'
 describe('출석부 생성 페이지', () => {
   // Given
   beforeEach(() => {
-    cy.login()
+    cy.Login()
     cy.visit('/book/create')
   })
 

@@ -36,7 +36,7 @@
 //   }
 // }
 
-Cypress.Commands.add('login', () => {
+Cypress.Commands.add('Login', () => {
   return cy
     .request('POST', `${Cypress.env('api_server')}/auth/signin`, {
       username: 'dkandkdlel',

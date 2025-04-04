@@ -1,7 +1,7 @@
 // cypress/support/index.d.ts
 declare namespace Cypress {
   interface Chainable<Subject = any> {
-    login(): Chainable<any>
+    Login(): Chainable<any>
     StudentFormStep1(studentData: {
       name: string
       birth: string

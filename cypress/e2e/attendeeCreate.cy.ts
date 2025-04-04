@@ -3,8 +3,8 @@ import 'cypress-file-upload'
 // cypress/integration/bookCreate.spec.js
 describe('학생 등록 페이지', () => {
   // Given
-  beforeEach(() => {
-    cy.login()
+  before(() => {
+    cy.Login()
     cy.visit('/book')
   })
 
