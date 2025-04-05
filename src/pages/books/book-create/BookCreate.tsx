@@ -19,12 +19,7 @@ export default function BookCreate() {
   const handleStep2Change = (state: boolean) => setIsStep2(state)
   const handleCurriculum = (state: boolean) => setIsCurriculum(state)
 
-  const [courseCreateParam, setCourseCreateParams] = useState<CourseData[]>([])
   const [isCurriculum, setIsCurriculum] = useState<boolean>(false)
-
-  const handleCourseChange = (params: CourseData) => {
-    setCourseCreateParams([...courseCreateParam, params])
-  }
 
   const methods = useForm<CreateBookSchema>({
     shouldUnregister: false,
@@ -43,7 +38,12 @@ export default function BookCreate() {
   const { mutate: bookMutation } = useBookCreate()
 
   const handleNextStep = async () => {
-    const isValid = await trigger()
+    const isValid = await trigger([
+      'availableDays',
+      'availableFrom',
+      'availableTo',
+      'title',
+    ])
     if (isValid) {
       handleStep2Change(true)
     }
@@ -64,15 +64,14 @@ export default function BookCreate() {
       />
       <Form
         onSubmit={handleSubmit(() => {
-          courseCreateParam.length > 0 &&
-            bookMutation({
-              title: getValues('title').trim(),
-              imageUrl: JSON.stringify(getValues('imageUrl')),
-              availableDays: getValues('availableDays'),
-              availableFrom: getValues('availableFrom'),
-              availableTo: getValues('availableTo'),
-              courses: courseCreateParam,
-            })
+          bookMutation({
+            title: getValues('title').trim(),
+            imageUrl: JSON.stringify(getValues('imageUrl')),
+            availableDays: getValues('availableDays'),
+            availableFrom: getValues('availableFrom'),
+            availableTo: getValues('availableTo'),
+            courses: getValues('courses'),
+          })
         })}
       >
         <FormHeader isStep2={isStep2} />
@@ -80,8 +79,6 @@ export default function BookCreate() {
           <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
             {isStep2 ? (
               <Step2
-                handleCourseChange={handleCourseChange}
-                courseCreateParam={courseCreateParam}
                 handleCurriculum={handleCurriculum}
                 isCurriculum={isCurriculum}
               />
@@ -113,7 +110,7 @@ export default function BookCreate() {
                   이전으로
                 </Button>
                 <Button
-                  isSubmit
+                  issubmit
                   data-cy="submit-book-create"
                   aria-label="submit-book-create"
                 >
@@ -128,7 +125,7 @@ export default function BookCreate() {
   )
 }
 
-const Button = tw.button`${({ isSubmit }: { isSubmit?: boolean }) => (isSubmit ? 'bg-bg-tertiary text-[#F1F8F3]' : 'bg-bg-secondary text-text-secondary')} text-lg font-semibold w-full h-[54px] flex justify-center items-center rounded-2xl `
+const Button = tw.button`${({ issubmit }: { issubmit?: boolean }) => (issubmit ? 'bg-bg-tertiary text-[#F1F8F3]' : 'bg-bg-secondary text-text-secondary')} text-lg font-semibold w-full h-[54px] flex justify-center items-center rounded-2xl `
 
 const Form = tw.form`flex flex-col gap-10 w-full pb-[30px]`
 const FormInner = tw.div`w-full flex flex-col gap-10 items-center`
