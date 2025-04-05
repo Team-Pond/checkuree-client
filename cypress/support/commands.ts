@@ -68,8 +68,16 @@ Cypress.Commands.add('StudentFormStep2', () => {
 })
 
 Cypress.Commands.add('BookFormStep1', ({ name }) => {
+  // 타이틀 입력
   cy.get('[data-cy="title"]').should('be.visible').type(name)
+
+  // 가능 요일 선택
+  cy.get('[data-cy="availableDays"]').should('be.visible')
   cy.get('[data-cy="월"]').click()
+
+  // 가능 시간 선택
+  cy.get('[data-cy="startTime"]').should('be.visible')
+  cy.get('[data-cy="endTime"]').should('be.visible')
   cy.get('[data-cy="startTime"]').click()
   cy.get('.fixed.inset-0').click({ force: true })
   cy.get('.fixed.inset-0').should('not.exist')
@@ -84,5 +92,6 @@ Cypress.Commands.add('BookFormStep2', ({ name }) => {
   cy.get('[data-cy="subject-add-button"]').click()
   cy.get('[data-cy="add-icon"]').first().click()
   cy.get('[data-cy="bottom-drawer"]').click({ force: true })
+  cy.get('[data-cy="curriculum-confirm"]').should('be.visible')
   cy.get('[data-cy="curriculum-confirm"]').click()
 })

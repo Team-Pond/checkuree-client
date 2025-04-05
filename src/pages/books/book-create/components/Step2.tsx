@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import BottomDrawer from '@/components/BottomDrawer'
 import { useSubjectItems, useSubjects } from '../queries'
-import { CourseData } from '@/api/type'
+
 import FieldHeader from '@/components/FieldTitle'
+import { useFormContext } from 'react-hook-form'
+import { COURSE_ERROR_MESSAGE, CreateBookSchema } from '../_schema'
 
 export type IProps = {
-  handleCourseChange: (params: CourseData) => void
-  courseCreateParam: CourseData[]
   handleCurriculum: (state: boolean) => void
   isCurriculum: boolean
 }
@@ -16,12 +16,15 @@ export type IProps = {
 export type GradeItem = { level: number; subjectItemId: number; title: string }
 
 export default function Step2(props: IProps) {
+  const { handleCurriculum, isCurriculum } = props
+
   const {
-    handleCourseChange,
-    courseCreateParam,
-    handleCurriculum,
-    isCurriculum,
-  } = props
+    setValue,
+    watch,
+    formState: { errors },
+  } = useFormContext<CreateBookSchema>()
+
+  const courseData = watch('courses', [])
   const { data: subjects } = useSubjects()
   const [courseTitle, setCourseTitle] = useState<string>('')
 
@@ -73,7 +76,7 @@ export default function Step2(props: IProps) {
     <>
       <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
         {/* 커리큘럼 추가된 것 */}
-        {courseCreateParam.map((course, index) => {
+        {courseData.map((course, index) => {
           return (
             <div
               key={[course.title, index].join('-')}
@@ -168,7 +171,7 @@ export default function Step2(props: IProps) {
                   >
                     <img
                       src={'/images/icons/book-create/ico-plus.svg'}
-                      alt="이미지 추가 아이콘"
+                      alt="이미지 추가 아이 콘"
                       width={15}
                       height={15}
                       className=""
@@ -194,11 +197,18 @@ export default function Step2(props: IProps) {
               onClick={() => {
                 setSelectedSubjectItems([])
                 setCourseTitle('')
-                handleCourseChange({
-                  title: courseTitle,
-                  isPrimary: true,
-                  grades: selectedSubjectItems,
-                })
+                setValue(
+                  'courses',
+                  [
+                    ...courseData,
+                    {
+                      title: courseTitle,
+                      isPrimary: true,
+                      grades: selectedSubjectItems,
+                    },
+                  ],
+                  { shouldValidate: true },
+                )
                 handleCurriculum(false)
               }}
               type="button"
@@ -223,10 +233,8 @@ export default function Step2(props: IProps) {
           </button>
         )}
 
-        {courseCreateParam.length < 1 && (
-          <p className="text-red-500 text-xs">
-            {'최소 1개의 커리큘럼을 추가해주세요'}
-          </p>
+        {errors.courses && (
+          <p className="text-red-500 text-xs">{COURSE_ERROR_MESSAGE}</p>
         )}
       </div>
       <BottomDrawer

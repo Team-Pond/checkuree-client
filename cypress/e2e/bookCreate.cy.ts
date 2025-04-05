@@ -1,14 +1,14 @@
 import 'cypress-file-upload'
 
 // cypress/integration/bookCreate.spec.js
-describe('출석부 생성 페이지', () => {
+describe('출석부 생성 시나리오', () => {
   // Given
   beforeEach(() => {
     cy.Login()
     cy.visit('/book/create')
   })
 
-  it('출석부 생성 시나리오', () => {
+  it('Happy Path', () => {
     // When
     cy.BookFormStep1({
       name: '출석부 테스트',
@@ -44,5 +44,32 @@ describe('출석부 생성 페이지', () => {
         }
       })
     })
+  })
+  it('Bad Path', () => {
+    // When
+
+    cy.get('[data-cy="title"]').should('be.visible')
+    cy.get('[data-cy="availableDays"]').should('be.visible')
+    cy.get('[data-cy="startTime"]').should('be.visible')
+    cy.get('[data-cy="endTime"]').should('be.visible')
+
+    // 빈 폼에서 제출
+    cy.get('[data-cy="stepSubmit"]').click()
+
+    cy.get('[data-cy="title-error"]').should('be.visible')
+    cy.get('[data-cy="availableDays-error"]').should('be.visible')
+    cy.get('[data-cy="availTime-error"]').should('be.visible')
+
+    // 다시 입력
+    cy.BookFormStep1({
+      name: '테스트',
+    })
+
+    cy.get('[data-cy="stepSubmit"]').click()
+
+    cy.get('[data-cy="curriculum-add-button"]').should('be.visible')
+    cy.get('[data-cy="curriculum-input"]').should('be.visible')
+    cy.get('[data-cy="curriculum-confirm"]').should('be.visible')
+    cy.get('[data-cy="curriculum-confirm"]').click()
   })
 })
