@@ -153,7 +153,9 @@ export default function Step1() {
             className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
           />
           {errors.title && (
-            <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>
+            <p className="text-red-500 text-xs mt-1" data-cy="title-error">
+              {errors.title.message}
+            </p>
           )}
         </div>
       </TextWrapper>
@@ -162,7 +164,7 @@ export default function Step1() {
       <TextWrapper>
         <FieldHeader title="수업 요일" essential />
         <div className="flex flex-col gap-[1px] w-full text-left">
-          <div className="grid grid-cols-7 gap-0">
+          <div className="grid grid-cols-7 gap-0" data-cy="availableDays">
             {DAYS.map((day, index) => {
               const isActive = currentDays.includes(DaysMatch[DAYS[index]])
               return (
@@ -184,7 +186,10 @@ export default function Step1() {
             })}
           </div>
           {errors.availableDays && (
-            <p className="text-red-500 text-xs mt-1">
+            <p
+              className="text-red-500 text-xs mt-1"
+              data-cy="availableDays-error"
+            >
               {errors.availableDays.message}
             </p>
           )}
@@ -225,7 +230,7 @@ export default function Step1() {
             })}
           </div>
           {(errors.availableFrom || errors.availableTo) && (
-            <p className="text-red-500 text-xs mt-1">
+            <p className="text-red-500 text-xs mt-1" data-cy="availTime-error">
               {'시작 날짜 및 종료 날짜를 입력해주세요.'}
             </p>
           )}
