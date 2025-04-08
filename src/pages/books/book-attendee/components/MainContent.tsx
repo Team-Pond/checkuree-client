@@ -1,24 +1,24 @@
-import { GetAttendeeListResponse } from "@/api/AttendeeSchema";
-import { getDayGroupFromInput } from "@/utils";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-
+import { GetAttendeeListResponse } from '@/api/AttendeeSchema'
+import { getDayGroupFromInput } from '@/utils'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import IconStudent from '@/assets/icons/book-roaster/ico-student.svg?react'
 type IProps = {
-  roaster: GetAttendeeListResponse;
-  getGrades: (grades: { id: number; name: string }[]) => string;
-  searchName: string;
-};
+  roaster: GetAttendeeListResponse
+  getGrades: (grades: { id: number; name: string }[]) => string
+  searchName: string
+}
 export default function MainContent(props: IProps) {
-  const { roaster, getGrades, searchName } = props;
-  const { bookId } = useParams();
-  const location = useLocation();
-  const navigate = useNavigate();
+  const { roaster, getGrades, searchName } = props
+  const { bookId } = useParams()
+  const location = useLocation()
+  const navigate = useNavigate()
   return (
     <div className="w-full px-[17px]">
       <p className="text-left text-s-semibold text-text-secondary mb-1">전체</p>
       <div className="border-t border-[#F6F6F6] mb-[92px]">
         {roaster.data.content
           .filter((student) => {
-            return !searchName || student.name.includes(searchName);
+            return !searchName || student.name.includes(searchName)
           })
           .map((student) => (
             <div
@@ -29,26 +29,20 @@ export default function MainContent(props: IProps) {
                   `/book/${bookId}/attendee/${student.id}${
                     location.search
                   }&scheduleDays=${getDayGroupFromInput(
-                    student.scheduleDays
+                    student.scheduleDays,
                   )}&grade=${getGrades(student.grades)}`,
-                  { state: { from: location.pathname + location.search } }
+                  { state: { from: location.pathname + location.search } },
                 )
               }
             >
-              <img
-                src="/images/icons/book-roaster/ico-student.svg"
-                alt="학생 아이콘"
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
+              <IconStudent width={40} height={40} className="rounded-full" />
               <div className="gap-1 text-left">
                 <div className="flex gap-2">
                   <p className="text-m-bold text-text-primary">
                     {student.name}
                   </p>
                   <p className="text-m-semibold text-text-secondary">
-                    {student.age + "세"}
+                    {student.age + '세'}
                   </p>
                 </div>
                 <div className="flex gap-2">
@@ -64,5 +58,5 @@ export default function MainContent(props: IProps) {
           ))}
       </div>
     </div>
-  );
+  )
 }

@@ -1,26 +1,26 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import PlusIcon from "@/assets/icons/book-roaster/ico-plus-black.svg?react";
-import GlassesIcon from "@/assets/icons/book-roaster/ico-glasses.svg?react";
-import SliderIcon from "@/assets/icons/book-roaster/ico-slider.svg?react";
-import SettingIcon from "@/assets/icons/ico-settings.svg?react";
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import PlusIcon from '@/assets/icons/book-roaster/ico-plus-black.svg?react'
+import GlassesIcon from '@/assets/icons/book-roaster/ico-glasses.svg?react'
+import SliderIcon from '@/assets/icons/book-roaster/ico-slider.svg?react'
+import SettingIcon from '@/assets/icons/ico-settings.svg?react'
 type HeaderProps = {
-  title: string;
-  onDrawerChange: () => void;
-  onChangeSearch: (value: string) => void;
-};
+  title: string
+  onDrawerChange: () => void
+  onChangeSearch: (value: string) => void
+}
 
 export default function Header(props: HeaderProps) {
-  const { title, onDrawerChange, onChangeSearch } = props;
-  const navigate = useNavigate();
-  const { bookId } = useParams();
-  const location = useLocation();
+  const { title, onDrawerChange, onChangeSearch } = props
+  const navigate = useNavigate()
+  const { bookId } = useParams()
+  const location = useLocation()
   return (
     <>
       <div className="flex flex-col sticky top-0 z-50 bg-white border-b border-[#f6f6f6]">
         <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
           <p
             className="text-[22px] font-bold"
-            onClick={() => navigate("/book")}
+            onClick={() => navigate('/book')}
           >
             {title}
           </p>
@@ -31,6 +31,8 @@ export default function Header(props: HeaderProps) {
               onClick={() =>
                 navigate(`/book/${bookId}/attendee/create${location.search}`)
               }
+              data-cy="icon-attendee-create"
+              aria-label="icon-attendee-create"
               className="cursor-pointer"
             />
             <SettingIcon width={32} height={32} className="cursor-pointer" />
@@ -59,5 +61,5 @@ export default function Header(props: HeaderProps) {
         />
       </div>
     </>
-  );
+  )
 }

@@ -1,20 +1,20 @@
-import { useEffect } from "react";
-import toast, { Toaster, useToasterStore } from "react-hot-toast";
+import { useEffect } from 'react'
+import toast, { Toaster, useToasterStore } from 'react-hot-toast'
 
 export function RootToaster({
   max = 10,
   ...props
 }: React.ComponentProps<typeof Toaster> & {
-  max?: number;
+  max?: number
 }) {
-  const { toasts } = useToasterStore();
+  const { toasts } = useToasterStore()
 
   useEffect(() => {
     toasts
       .filter((t) => t.visible)
       .filter((_, i) => i >= max)
-      .forEach((t) => toast.dismiss(t.id));
-  }, [toasts, max]);
+      .forEach((t) => toast.dismiss(t.id))
+  }, [toasts, max])
 
   return (
     <Toaster
@@ -29,7 +29,7 @@ export function RootToaster({
           />
         ),
         className:
-          "!pl-5 min-w-[358px] !rounded-2xl  !h-[56px] !bg-[#6D6D6D] !text-white !font-medium !text-md !text-center",
+          '!pl-5 min-w-[358px] !rounded-2xl  !h-[56px] !bg-[#6D6D6D] !text-white !font-medium !text-md !text-center',
 
         // success
         success: {
@@ -38,10 +38,12 @@ export function RootToaster({
               src="/images/icons/toast/ico-success.svg"
               width={22}
               height={22}
+              data-cy="toast-success"
+              aria-label="toast-success"
             />
           ),
           className:
-            "!pl-5 min-w-[358px] !rounded-2xl !h-[56px] !bg-[#6D6D6D] !text-white !font-medium !text-md !text-center",
+            '!pl-5 min-w-[358px] !rounded-2xl !h-[56px] !bg-[#6D6D6D] !text-white !font-medium !text-md !text-center',
         },
         // error
         error: {
@@ -50,13 +52,15 @@ export function RootToaster({
               src="/images/icons/toast/ico-fail.svg"
               width={22}
               height={22}
+              data-cy="toast-error"
+              aria-label="toast-error"
             />
           ),
           className:
-            "!pl-5 min-w-[358px] !rounded-2xl !h-[56px] !bg-[#6D6D6D] !text-white !font-medium !text-md !text-center",
+            '!pl-5 min-w-[358px] !rounded-2xl !h-[56px] !bg-[#6D6D6D] !text-white !font-medium !text-md !text-center',
         },
       }}
       {...props}
     />
-  );
+  )
 }

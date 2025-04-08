@@ -32,3 +32,15 @@ stories
 
 # TypeScript 빌드 정보 파일 무시
 tsconfig.tsbuildinfo
+
+
+# 테스트 실행 시 생성되는 스크린샷과 비디오 파일
+cypress/screenshots/
+cypress/videos/
+
+# Cypress 보고서 (테스트 리포트 등)
+cypress/reports/
+# Cypress 캐시 디렉토리
+.cypress_cache/
+cypress.env.json
+

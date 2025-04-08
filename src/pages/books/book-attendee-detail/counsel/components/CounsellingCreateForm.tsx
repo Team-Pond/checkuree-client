@@ -1,22 +1,18 @@
-import React from "react";
-import { useFormContext } from "react-hook-form";
-
-import { Associates } from "@/api/type";
-
-import CounsellerSelect from "./Select";
-
-import { CreateCounsellingSchema } from "../../_schema";
-import { CounsellingTopicType } from "@/api/CounselSchema";
-import Radio from "@/components/Radio";
-import CheckBox from "@/components/CheckBox";
+import React from 'react'
+import { useFormContext } from 'react-hook-form'
+import CounsellerSelect from './Select'
+import { CreateCounsellingSchema } from '../../_schema'
+import { CounsellingTopicType } from '@/api/CounselSchema'
+import Radio from '@/components/Radio'
+import CheckBox from '@/components/CheckBox'
 
 interface Step1Props {
-  onChangeCounseleeId: (id: number) => void;
+  onChangeCounseleeId: (id: number) => void
   counselors: {
-    name: string;
-    value: string;
-  }[];
-  counsellorName: string;
+    name: string
+    value: string
+  }[]
+  counsellorName: string
 }
 
 export default function CounsellingCreateForm({
@@ -26,50 +22,50 @@ export default function CounsellingCreateForm({
 }: Step1Props) {
   const handleDateChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    parameter: "counsellingAt"
+    parameter: 'counsellingAt',
   ) => {
-    let input = e.target.value.replace(/\D/g, ""); // 숫자 이외 제거
+    let input = e.target.value.replace(/\D/g, '') // 숫자 이외 제거
 
     if (input.length > 8) {
-      input = input.slice(0, 8);
+      input = input.slice(0, 8)
     }
 
     if (input.length >= 5) {
-      input = input.slice(0, 4) + "." + input.slice(4);
+      input = input.slice(0, 4) + '.' + input.slice(4)
     }
 
     if (input.length >= 8) {
-      input = input.slice(0, 7) + "." + input.slice(7);
+      input = input.slice(0, 7) + '.' + input.slice(7)
     }
 
-    setValue(parameter, input.replaceAll(".", "-"));
-  };
+    setValue(parameter, input.replaceAll('.', '-'))
+  }
 
   const {
     setValue,
     register,
     watch,
     formState: { errors },
-  } = useFormContext<CreateCounsellingSchema>();
+  } = useFormContext<CreateCounsellingSchema>()
 
   // getValue를 사용하면 렌더링이 안되어 성별 선택을 실시간으로 볼 수 없기 때문에 watch 함수를 사용
-  const counsellingType = watch("type");
+  const counsellingType = watch('type')
 
   const handleCheckboxChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    topic: CounsellingTopicType
+    topic: CounsellingTopicType,
   ) => {
-    const updatedTopics = watch("topics") || [];
+    const updatedTopics = watch('topics') || []
 
     if (e.target.checked) {
-      setValue("topics", [...updatedTopics, topic]);
+      setValue('topics', [...updatedTopics, topic])
     } else {
       setValue(
-        "topics",
-        updatedTopics.filter((item) => item !== topic)
-      );
+        'topics',
+        updatedTopics.filter((item) => item !== topic),
+      )
     }
-  };
+  }
 
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
@@ -82,7 +78,7 @@ export default function CounsellingCreateForm({
           <CounsellerSelect
             onChange={onChangeCounseleeId}
             options={counselors || []}
-            placeholder={counsellorName ? counsellorName : "상담자"}
+            placeholder={counsellorName ? counsellorName : '상담자'}
             disabled={!!counsellorName}
           />
         </div>
@@ -99,21 +95,21 @@ export default function CounsellingCreateForm({
           <div className="flex gap-8">
             <Radio
               label="방문"
-              onChange={() => setValue("type", "VISIT")}
+              onChange={() => setValue('type', 'VISIT')}
               id="visit"
-              checked={counsellingType === "VISIT"}
+              checked={counsellingType === 'VISIT'}
             />
             <Radio
               label="카카오톡"
-              onChange={() => setValue("type", "KAKAOTALK")}
+              onChange={() => setValue('type', 'KAKAOTALK')}
               id="kakaoTalk"
-              checked={counsellingType === "KAKAOTALK"}
+              checked={counsellingType === 'KAKAOTALK'}
             />
             <Radio
               label="전화"
-              onChange={() => setValue("type", "PHONE")}
+              onChange={() => setValue('type', 'PHONE')}
               id="phone"
-              checked={counsellingType === "PHONE"}
+              checked={counsellingType === 'PHONE'}
             />
           </div>
         </div>
@@ -133,8 +129,8 @@ export default function CounsellingCreateForm({
           <div className="flex items-center gap-[9px]">
             <input
               type="text"
-              {...register("counsellingAt")}
-              onChange={(e) => handleDateChange(e, "counsellingAt")}
+              {...register('counsellingAt')}
+              onChange={(e) => handleDateChange(e, 'counsellingAt')}
               placeholder="YYYY.MM.DD"
               className="outline-none bg-white border border-[#E7E7E7] rounded-xl w-full h-12 flex items-center pl-4"
             />
@@ -155,30 +151,30 @@ export default function CounsellingCreateForm({
         <div className="flex flex-col w-full">
           <div className="flex gap-2">
             <CheckBox
-              label={"오늘 입학"}
-              checked={watch("topics")?.includes("FUTURE_PATH")}
-              onChange={(e) => handleCheckboxChange(e, "FUTURE_PATH")}
+              label={'오늘 입학'}
+              checked={watch('topics')?.includes('FUTURE_PATH')}
+              onChange={(e) => handleCheckboxChange(e, 'FUTURE_PATH')}
               id="0"
             />
             <CheckBox
-              label={"진도 상담"}
-              checked={watch("topics")?.includes("STUDY_PROGRESS")}
-              onChange={(e) => handleCheckboxChange(e, "STUDY_PROGRESS")}
+              label={'진도 상담'}
+              checked={watch('topics')?.includes('STUDY_PROGRESS')}
+              onChange={(e) => handleCheckboxChange(e, 'STUDY_PROGRESS')}
               id="1"
             />
           </div>
 
           <div className="flex gap-2">
             <CheckBox
-              label={"교우 관계"}
-              checked={watch("topics")?.includes("PEER_RELATIONS")}
-              onChange={(e) => handleCheckboxChange(e, "PEER_RELATIONS")}
+              label={'교우 관계'}
+              checked={watch('topics')?.includes('PEER_RELATIONS')}
+              onChange={(e) => handleCheckboxChange(e, 'PEER_RELATIONS')}
               id="2"
             />
             <CheckBox
-              label={"기타"}
-              checked={watch("topics")?.includes("ETC")}
-              onChange={(e) => handleCheckboxChange(e, "ETC")}
+              label={'기타'}
+              checked={watch('topics')?.includes('ETC')}
+              onChange={(e) => handleCheckboxChange(e, 'ETC')}
               id="3"
             />
           </div>
@@ -194,11 +190,11 @@ export default function CounsellingCreateForm({
           <p className="font-bold text-m-medium">상담 내용</p>
         </div>
         <textarea
-          {...register("description")}
+          {...register('description')}
           placeholder=""
           className="max-w-[342px] h-[92px] bg-white w-full border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />
       </div>
     </div>
-  );
+  )
 }

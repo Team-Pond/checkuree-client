@@ -1,55 +1,42 @@
-import { useState } from "react";
-import TimeButtons from "./TimeButtons";
-import DonutChart from "./DonutChart";
 import tw from "tailwind-styled-components";
-import BarChart from "./BarChart";
+import { CategoryChart } from "./CategoryChart";
+import { AttendeeStatisticsType } from "@/api/type";
+import CategoryButtons from "./CategoryButtons";
+import { GetAttendeeStatisticsResponse } from "@/api/AttendeeSchema";
 
-type TimePeriod = "DAILY" | "WEEKLY" | "MONTHLY";
+const CATEGORY_TEXT = "카테고리별 학생 수";
 
-const TODAY_TEXT = "오늘의 출석률";
-const WEEKLY_TEXT = "이번 주 출석률";
-const MONTHLY_TEXT = "이번 달의 출석률";
-export default function AttendanceCategoryChart() {
-  const data = [300, 50, 100]; // 도넛 차트의 데이터
-  const labels = ["Red", "Blue", "Yellow"]; // 각 부분에 대한 레이블
-  const [timeStatus, setTimeStatus] = useState<TimePeriod>("DAILY");
+interface IProps {
+  statisticData: GetAttendeeStatisticsResponse;
+  tabChange: (tab: AttendeeStatisticsType) => void;
+  tab: AttendeeStatisticsType;
+}
 
-  const attendanceTextChange = (timeStatus: TimePeriod) => {
-    switch (timeStatus) {
-      case "DAILY":
-        return TODAY_TEXT;
-      case "WEEKLY":
-        return WEEKLY_TEXT;
-      case "MONTHLY":
-        return MONTHLY_TEXT;
-    }
-  };
+export default function AttendanceCategoryChart({
+  statisticData,
+  tabChange,
+  tab,
+}: IProps) {
   return (
-    <>
+    <Wrapper>
       <ButtonsWrapper>
         <div className="flex flex-col text-left space-y-[-3px]">
-          <p className="text-m-bold">{attendanceTextChange(timeStatus)}</p>
-          <p className="text-s-semibold text-text-secondary">
-            오늘 2025.01.24(금)
-          </p>
+          <p className="text-m-bold">{CATEGORY_TEXT}</p>
         </div>
-        <TimeButtons
-          timeStatus={timeStatus}
-          handleTimeStatus={(timeStatus) => setTimeStatus(timeStatus)}
+        <CategoryButtons
+          timeStatus={tab}
+          handleTimeStatus={(timeStatus) => tabChange(timeStatus)}
         />
       </ButtonsWrapper>
       <ChartWrapper>
-        <BarChart />
+        {statisticData && statisticData.status === 200 && (
+          <CategoryChart statisticData={statisticData.data} tab={tab} />
+        )}
       </ChartWrapper>
-    </>
+    </Wrapper>
   );
 }
 
-const Squre = tw.div`${({ bg }: { bg: string }) =>
-  bg && bg} w-3 h-3 rounded-[4px]`;
-
-const Ratio = tw.div`${({ color }: { color: string }) =>
-  color && color} text-[13px] font-semibold mt-[1px]`;
-
-const ChartWrapper = tw.div`flex flex-col items-center gap-2 w-full px-2 h-[284px] bg-white rounded-2xl mx-auto py-4`;
+const Wrapper = tw.div`flex flex-col gap-2`;
+const ChartWrapper = tw.div`flex flex-col items-center gap-2 w-full px-2 h-[284px] bg-white rounded-2xl mx-auto py-3`;
 const ButtonsWrapper = tw.div`flex justify-between w-full items-center`;

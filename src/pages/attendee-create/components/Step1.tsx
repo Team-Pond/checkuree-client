@@ -1,89 +1,98 @@
-import Select from "@/components/Select";
-import React from "react";
-import { useFormContext } from "react-hook-form";
-import { CreateAttendeeSchema } from "../_schema";
-import { twMerge } from "tailwind-merge";
-import { RelationType } from "@/api/type";
-import Radio from "@/components/Radio";
-import CheckBox from "@/components/CheckBox";
-import tw from "tailwind-styled-components";
-import FieldHeader from "../../../components/FieldTitle";
-import { relationTypeToKor } from "@/utils/enumMapper";
+import Select from '@/components/Select'
+import React, { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
+import { CreateAttendeeSchema } from '../_schema'
+import { twMerge } from 'tailwind-merge'
+import { RelationType } from '@/api/type'
+import Radio from '@/components/Radio'
+import CheckBox from '@/components/CheckBox'
+import tw from 'tailwind-styled-components'
+import FieldHeader from '../../../components/FieldTitle'
+import { relationTypeToKor } from '@/utils/enumMapper'
+import { spaceBlockKeyDown } from '@/utils'
 
 export default function Step1() {
   const handleDateChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    parameter: "attendeeRequest.birthDate" | "attendeeRequest.enrollmentDate"
+    parameter: 'attendeeRequest.birthDate' | 'attendeeRequest.enrollmentDate',
   ) => {
-    let input = e.target.value.replace(/\D/g, ""); // 숫자 이외 제거
+    let input = e.target.value.replace(/\D/g, '') // 숫자 이외 제거
 
     if (input.length > 8) {
-      input = input.slice(0, 8);
+      input = input.slice(0, 8)
     }
 
     if (input.length >= 5) {
-      input = input.slice(0, 4) + "." + input.slice(4);
+      input = input.slice(0, 4) + '.' + input.slice(4)
     }
 
     if (input.length >= 8) {
-      input = input.slice(0, 7) + "." + input.slice(7);
+      input = input.slice(0, 7) + '.' + input.slice(7)
     }
 
     if (input.length >= 4) {
-      const year = parseInt(input.slice(0, 4));
+      const year = parseInt(input.slice(0, 4))
       const convertedYear = Math.min(
         Math.max(year, 1900),
-        new Date().getFullYear() + 1
-      ); // 내년에 입학할 수도 있으니 최대 + 1 까지는 가능하도록
-      input = convertedYear + input.slice(4);
+        new Date().getFullYear() + 1,
+      ) // 내년에 입학할 수도 있으니 최대 + 1 까지는 가능하도록
+      input = convertedYear + input.slice(4)
     }
 
     if (input.length >= 7) {
-      const month = parseInt(input.slice(5, 7));
-      const convertedMonth = Math.min(Math.max(month, 1), 12);
+      const month = parseInt(input.slice(5, 7))
+      const convertedMonth = Math.min(Math.max(month, 1), 12)
       input =
         input.slice(0, 5) +
-        String(convertedMonth).padStart(2, "0") +
-        input.slice(7);
+        String(convertedMonth).padStart(2, '0') +
+        input.slice(7)
     }
 
     if (input.length >= 10) {
-      const day = parseInt(input.slice(8, 10));
-      const convertedDay = Math.min(Math.max(day, 1), 31);
-      input = input.slice(0, 8) + String(convertedDay).padStart(2, "0");
+      const day = parseInt(input.slice(8, 10))
+      const convertedDay = Math.min(Math.max(day, 1), 31)
+      input = input.slice(0, 8) + String(convertedDay).padStart(2, '0')
     }
 
-    setValue(parameter, input.replaceAll(".", "-"));
-  };
+    setValue(parameter, input.replaceAll('.', '-'))
+  }
 
   const {
+    setFocus,
     setValue,
     getValues,
     register,
     watch,
     formState: { errors },
-  } = useFormContext<CreateAttendeeSchema>();
+  } = useFormContext<CreateAttendeeSchema>()
 
   // getValue를 사용하면 렌더링이 안되어 성별 선택을 실시간으로 볼 수 없기 때문에 watch 함수를 사용
-  const gender = watch("attendeeRequest.gender");
-  const associate = watch("attendeeRequest.associates");
-  const today = new Date();
-  const yyyy = today.getFullYear();
-  const mm = String(today.getMonth() + 1).padStart(2, "0");
-  const dd = String(today.getDate()).padStart(2, "0");
-  const formattedDate = `${yyyy}.${mm}.${dd}`;
+  const gender = watch('attendeeRequest.gender')
+  const associate = watch('attendeeRequest.associates')
+  const today = new Date()
+  const yyyy = today.getFullYear()
+  const mm = String(today.getMonth() + 1).padStart(2, '0')
+  const dd = String(today.getDate()).padStart(2, '0')
+  const formattedDate = `${yyyy}.${mm}.${dd}`
+
+  useEffect(() => {
+    setFocus('attendeeRequest.name')
+  }, [setFocus])
 
   return (
-    <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
+    <Step1Form>
       {/* 학생 이름 */}
       <FieldWrapper>
         <FieldHeader title="학생 이름" essential />
         <div className="flex flex-col gap-[1px] w-full text-left">
           <input
+            data-cy="name-input"
+            aria-label="name-input"
             type="text"
             placeholder="학생 이름"
-            {...register("attendeeRequest.name")}
+            {...register('attendeeRequest.name')}
             className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+            onKeyDown={spaceBlockKeyDown}
           />
           {errors?.attendeeRequest?.name && (
             <p className="text-red-500 text-xs mt-1">
@@ -99,8 +108,10 @@ export default function Step1() {
           <div className="flex items-center gap-[9px]">
             <input
               type="text"
-              {...register("attendeeRequest.birthDate")}
-              onChange={(e) => handleDateChange(e, "attendeeRequest.birthDate")}
+              data-cy="birth-input"
+              aria-label="birth-input"
+              {...register('attendeeRequest.birthDate')}
+              onChange={(e) => handleDateChange(e, 'attendeeRequest.birthDate')}
               placeholder="YYYY.MM.DD"
               className="outline-none bg-white border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12 flex items-center pl-4"
             />
@@ -108,15 +119,17 @@ export default function Step1() {
               <div className="flex gap-8">
                 <Radio
                   label="남성"
-                  onChange={() => setValue("attendeeRequest.gender", "MALE")}
+                  onChange={() => setValue('attendeeRequest.gender', 'MALE')}
                   id="gender"
-                  checked={gender === "MALE"}
+                  ariaLabel="male-radio"
+                  checked={gender === 'MALE'}
                 />
                 <Radio
                   label="여성"
-                  onChange={() => setValue("attendeeRequest.gender", "FEMALE")}
+                  onChange={() => setValue('attendeeRequest.gender', 'FEMALE')}
                   id="gender"
-                  checked={gender === "FEMALE"}
+                  ariaLabel="female-radio"
+                  checked={gender === 'FEMALE'}
                 />
               </div>
             </div>
@@ -134,7 +147,7 @@ export default function Step1() {
             )}
           </div>
 
-          <input type="hidden" {...register("attendeeRequest.gender")} />
+          <input type="hidden" {...register('attendeeRequest.gender')} />
         </div>
       </FieldWrapper>
 
@@ -146,10 +159,12 @@ export default function Step1() {
           <div className="flex items-center gap-[9px]">
             <input
               type="text"
-              {...register("attendeeRequest.enrollmentDate")}
+              data-cy="enrolldate-input"
+              aria-label="enrolldate-input"
+              {...register('attendeeRequest.enrollmentDate')}
               placeholder="YYYY.MM.DD"
               onChange={(e) =>
-                handleDateChange(e, "attendeeRequest.enrollmentDate")
+                handleDateChange(e, 'attendeeRequest.enrollmentDate')
               }
               className="outline-none bg-white border border-[#E7E7E7] rounded-xl max-w-[163px] w-full h-12 flex items-center pl-4"
             />
@@ -157,18 +172,19 @@ export default function Step1() {
             <CheckBox
               label="오늘 입학"
               id="admittedToday"
+              ariaLabel="today-enroll"
               checked={
-                watch("attendeeRequest.enrollmentDate") ===
-                formattedDate.replaceAll(".", "-")
+                watch('attendeeRequest.enrollmentDate') ===
+                formattedDate.replaceAll('.', '-')
               }
               onChange={(e) => {
                 if (e.target.checked) {
                   setValue(
-                    "attendeeRequest.enrollmentDate",
-                    formattedDate.replaceAll(".", "-")
-                  );
+                    'attendeeRequest.enrollmentDate',
+                    formattedDate.replaceAll('.', '-'),
+                  )
                 } else {
-                  setValue("attendeeRequest.enrollmentDate", "");
+                  setValue('attendeeRequest.enrollmentDate', '')
                 }
               }}
             />
@@ -190,29 +206,29 @@ export default function Step1() {
               value={
                 associate && associate[0]?.relationType
                   ? relationTypeToKor(
-                      associate?.[0]?.relationType as RelationType
+                      associate?.[0]?.relationType as RelationType,
                     )
-                  : "관계"
+                  : '관계'
               }
               onChange={(value: string) => {
                 const currentAssociates = getValues(
-                  "attendeeRequest.associates"
-                ) || [{ phoneNumber: "", relationType: "NONE" }];
-                setValue("attendeeRequest.associates", [
+                  'attendeeRequest.associates',
+                ) || [{ phoneNumber: '', relationType: 'NONE' }]
+                setValue('attendeeRequest.associates', [
                   {
                     ...currentAssociates[0],
                     relationType: value as RelationType,
                     phoneNumber:
-                      value === "NONE" ? "" : currentAssociates[0].phoneNumber,
+                      value === 'NONE' ? '' : currentAssociates[0].phoneNumber,
                   },
-                ]);
+                ])
               }}
               options={[
-                { name: "관계", value: "NONE" },
-                { name: "모", value: "MOTHER" },
-                { name: "부", value: "FATHER" },
-                { name: "형제", value: "SIBLING" },
-                { name: "기타", value: "OTHER" },
+                { name: '관계', value: 'NONE' },
+                { name: '모', value: 'MOTHER' },
+                { name: '부', value: 'FATHER' },
+                { name: '형제', value: 'SIBLING' },
+                { name: '기타', value: 'OTHER' },
               ]}
               placeholder="관계"
             />
@@ -222,26 +238,26 @@ export default function Step1() {
               maxLength={11}
               disabled={
                 !associate?.[0]?.relationType ||
-                associate[0].relationType === "NONE"
+                associate[0].relationType === 'NONE'
               }
               onChange={(e) => {
-                if (associate?.[0]?.relationType === "NONE") {
-                  setValue("attendeeRequest.associates.0.phoneNumber", "");
+                if (associate?.[0]?.relationType === 'NONE') {
+                  setValue('attendeeRequest.associates.0.phoneNumber', '')
                 } else {
                   setValue(
-                    "attendeeRequest.associates.0.phoneNumber",
-                    e.target.value.replace(/[^0-9]/g, "")
-                  );
+                    'attendeeRequest.associates.0.phoneNumber',
+                    e.target.value.replace(/[^0-9]/g, ''),
+                  )
                 }
               }}
               placeholder="01012345678"
               className={twMerge(
-                "max-w-[342px] w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary",
+                'max-w-[342px] w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary',
                 associate &&
                   associate[0].relationType &&
-                  associate[0].relationType !== "NONE"
-                  ? "bg-white"
-                  : "bg-gray-100"
+                  associate[0].relationType !== 'NONE'
+                  ? 'bg-white'
+                  : 'bg-gray-100',
               )}
             />
 
@@ -264,7 +280,7 @@ export default function Step1() {
           <input
             type="text"
             placeholder="학생 주소"
-            {...register("attendeeRequest.address_1")}
+            {...register('attendeeRequest.address_1')}
             className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
           />
         </div>
@@ -275,7 +291,7 @@ export default function Step1() {
         <input
           type="text"
           placeholder="개굴초등학교"
-          {...register("attendeeRequest.school")}
+          {...register('attendeeRequest.school')}
           className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />
       </FieldWrapper>
@@ -285,12 +301,13 @@ export default function Step1() {
         <input
           type="text"
           placeholder=""
-          {...register("attendeeRequest.description")}
+          {...register('attendeeRequest.description')}
           className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />
       </FieldWrapper>
-    </div>
-  );
+    </Step1Form>
+  )
 }
 
-const FieldWrapper = tw.div`flex flex-col gap-2`;
+const Step1Form = tw.div`flex flex-col justify-center gap-6 max-w-[342px] w-full`
+const FieldWrapper = tw.div`flex flex-col gap-2`

@@ -1,37 +1,50 @@
-import PageContainer from "@/components/PageContainer";
-import AttendanceRateChart from "./components/AttendanceRateChart";
-
-import AttendanceCategoryChart from "./components/AttendanceCategoryChart";
-import ScheduleIcon from "@/assets/icons/dashboard/ico-schedule.svg?react";
-import Bottom from "../components/Bottom";
-import { useParams, useSearchParams } from "react-router-dom";
-import { useBookStatistic } from "../queries";
-import dayjs from "dayjs";
-import { useState } from "react";
-import { PeriodType } from "@/api/type";
+import PageContainer from '@/components/PageContainer'
+import AttendanceRateChart from './components/AttendanceRateChart'
+import LeftArrowIcon from '@/assets/icons/ico-arrow-left.svg?react'
+import RightArrowIcon from '@/assets/icons/ico-arrow-right.svg?react'
+import DownArrowIcon from '@/assets/icons/ico-arrow-down.svg?react'
+import AttendanceCategoryChart from './components/AttendanceCategoryChart'
+import ScheduleIcon from '@/assets/icons/dashboard/ico-schedule.svg?react'
+import Bottom from '../components/Bottom'
+import { useParams, useSearchParams } from 'react-router-dom'
+import { useAttendeeStatistic, useBookStatistic } from '../queries'
+import dayjs from 'dayjs'
+import { useCallback, useState } from 'react'
+import { AttendeeStatisticsType, PeriodType } from '@/api/type'
+import DateDrawer from '../book-check/components/DateDrawer'
 
 export default function Dashboard() {
-  const [searchParmas] = useSearchParams();
+  const [searchParmas] = useSearchParams()
 
-  const bookName = searchParmas.get("bookName");
-  const { bookId } = useParams();
+  const bookName = searchParmas.get('bookName')
+  const { bookId } = useParams()
+  const [attendRateTab, setAttendRateTab] = useState<PeriodType>('DAILY')
+  const [categoryTab, setCategoryTab] = useState<AttendeeStatisticsType>('DAY')
 
-  // ✅ tab에 따라 from 날짜 계산
-  const getFromDate = (tab: PeriodType) => {
-    if (tab === "DAILY") return dayjs().format("YYYY-MM-DD");
-    if (tab === "WEEKLY")
-      return dayjs().subtract(7, "day").format("YYYY-MM-DD");
-    if (tab === "MONTHLY")
-      return dayjs().subtract(1, "month").format("YYYY-MM-DD");
-    return dayjs().format("YYYY-MM-DD"); // fallback
-  };
+  const [currentDate, setCurrentDate] = useState(dayjs()) // dayjs로 초기화
+  const handlePreviousDay = () => {
+    setCurrentDate((prev) => prev.subtract(1, 'day'))
+  }
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false)
+  const handleNextDay = () => {
+    setCurrentDate((prev) => prev.add(1, 'day'))
+  }
 
-  const [attendRateTab, setAttendRateTab] = useState<PeriodType>("DAILY");
+  const handleCurrentDay = useCallback((date: Date) => {
+    setCurrentDate(dayjs(date))
+  }, [])
+
+  const formattedDate = currentDate.format('YYYY-MM-DD')
+  const displayDate = currentDate.locale('ko').format('M월 D일')
+
   const { data: statisticData } = useBookStatistic(Number(bookId), {
-    from: getFromDate(attendRateTab), // ✅ 동적으로 계산된 from 날짜 사용
-    to: dayjs().format("YYYY-MM-DD"),
+    from: dayjs(currentDate).format('YYYY-MM-DD'),
     periodType: attendRateTab,
-  });
+  })
+
+  const { data: statisticAttendeeData } = useAttendeeStatistic(Number(bookId), {
+    type: categoryTab,
+  })
 
   return (
     <PageContainer>
@@ -39,20 +52,52 @@ export default function Dashboard() {
         <p className="font-bold text-text-primary text-[22px]">{bookName}</p>
         <ScheduleIcon width={40} height={40} className="mt-1" />
       </div>
+      {/* Calendar */}
+      <div className="w-full flex h-10 justify-between items-center px-4 border-b border-bg-disabled">
+        <LeftArrowIcon
+          width={12}
+          height={12}
+          onClick={handlePreviousDay}
+          className="cursor-pointer"
+        />
+        <div
+          className="flex items-center cursor-pointer select-none"
+          onClick={() => setOpenDrawer(true)}
+        >
+          <p className="text-xl font-bold" data-value={formattedDate}>
+            {displayDate}
+          </p>
+          <DownArrowIcon width={40} height={40} />
+        </div>
+        <RightArrowIcon
+          width={12}
+          height={12}
+          onClick={handleNextDay}
+          className="cursor-pointer"
+        />
+      </div>
       <main className="w-full flex-1 bg-bg-secondary flex flex-col gap-4 p-4">
-        {statisticData?.status === 200 && (
-          <AttendanceRateChart
-            statisticData={statisticData.data}
-            tabChange={(tab: PeriodType) => setAttendRateTab(tab)}
-            tab={attendRateTab}
-          />
-        )}
+        <AttendanceRateChart
+          statisticData={statisticData!}
+          currentDate={currentDate}
+          tabChange={(tab: PeriodType) => setAttendRateTab(tab)}
+          tab={attendRateTab}
+        />
 
-        <AttendanceCategoryChart />
+        <AttendanceCategoryChart
+          statisticData={statisticAttendeeData!}
+          tabChange={(tab: AttendeeStatisticsType) => setCategoryTab(tab)}
+          tab={categoryTab}
+        />
+
         <div className="h-[92px]" />
       </main>
-
+      <DateDrawer
+        open={openDrawer}
+        onClose={() => setOpenDrawer(false)}
+        handleCurrentDay={handleCurrentDay}
+      />
       <Bottom />
     </PageContainer>
-  );
+  )
 }
