@@ -1,23 +1,24 @@
-import SEO from "@/components/SEO";
-import axios from "axios";
-import Cookies from "js-cookie";
-import { useEffect } from "react";
-import LoginButton from "../component/LoginButton";
-import HeaderBanner from "../component/HeaderBanner";
+import SEO from '@/components/SEO'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import { useEffect } from 'react'
+import LoginButton from '../component/LoginButton'
+import HeaderBanner from '../component/HeaderBanner'
 
 export interface LoginDataType {
-  username: string;
-  password: string;
-  isAutoLogin: boolean;
+  username: string
+  password: string
+  isAutoLogin: boolean
 }
 
 export default function KakaoSignIn() {
-  const accessToken = Cookies.get("accessToken");
+  const accessToken = Cookies.get(import.meta.env.VITE_ACCESS_TOKEN)
+
   useEffect(() => {
     if (accessToken) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
     }
-  }, []);
+  }, [])
 
   return (
     <section className="relative flex flex-col justify-center items-center h-screen gap-8 mb-[31px]">
@@ -31,7 +32,7 @@ export default function KakaoSignIn() {
           className="relative bg-[#FEE500]"
           onClick={() =>
             (window.location.href =
-              "https://dev.checkuree.com/oauth2/authorization/kakao")
+              'https://dev.checkuree.com/oauth2/authorization/kakao')
           }
         >
           <img
@@ -47,5 +48,5 @@ export default function KakaoSignIn() {
         </LoginButton>
       </div>
     </section>
-  );
+  )
 }
