@@ -1,25 +1,25 @@
-import { AttendeeStatisticsType, PeriodType } from "@/api/type";
-import React from "react";
-import { twMerge } from "tailwind-merge";
+import { AttendeeStatisticsType } from '@/api/type'
+import React from 'react'
+import { twMerge } from 'tailwind-merge'
 
 type IProps = {
-  timeStatus: AttendeeStatisticsType;
-  handleTimeStatus: (timeStatus: AttendeeStatisticsType) => void;
-};
+  timeStatus: AttendeeStatisticsType
+  handleTimeStatus: (timeStatus: AttendeeStatisticsType) => void
+}
 const BUTTON_OPTIONS = [
   {
-    status: "DAY",
-    type: "요일",
+    status: 'DAY',
+    type: '요일',
   },
   {
-    status: "AGE",
-    type: "나이",
+    status: 'AGE',
+    type: '나이',
   },
   {
-    status: "CURRICULUM",
-    type: "커리큘럼",
+    status: 'CURRICULUM',
+    type: '커리큘럼',
   },
-];
+]
 function CategoryButtons({ timeStatus, handleTimeStatus }: IProps) {
   return (
     <div className="flex">
@@ -32,13 +32,13 @@ function CategoryButtons({ timeStatus, handleTimeStatus }: IProps) {
             status={option.status as AttendeeStatisticsType}
             type={option.type}
           />
-        );
+        )
       })}
     </div>
-  );
+  )
 }
 
-export default React.memo(CategoryButtons);
+export default React.memo(CategoryButtons)
 
 function Button({
   timeStatus,
@@ -50,20 +50,20 @@ function Button({
     <button
       onClick={() => handleTimeStatus(status)}
       className={twMerge(
-        "px-4 h-[33px] rounded-lg",
-        timeStatus === status ? "bg-bg-interactive-primary" : ""
+        'px-4 h-[33px] rounded-lg',
+        timeStatus === status ? 'bg-bg-interactive-primary' : '',
       )}
     >
       <span
         className={twMerge(
-          "text-[14px]",
+          'text-[14px]',
           timeStatus === status
-            ? "text-text-interactive-primary-press"
-            : "text-text-interactive-secondary"
+            ? 'text-text-interactive-primary-press'
+            : 'text-text-interactive-secondary',
         )}
       >
         {type}
       </span>
     </button>
-  );
+  )
 }

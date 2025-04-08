@@ -1,44 +1,44 @@
-import { twMerge } from "tailwind-merge";
-import axios from "axios";
+import { twMerge } from 'tailwind-merge'
+import axios from 'axios'
 
-import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
-import { z } from "zod";
+import Cookies from 'js-cookie'
+import { useEffect, useState } from 'react'
+import { z } from 'zod'
 
-import { useAuthLogin } from "./queries";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import SEO from "@/components/SEO";
+import { useAuthLogin } from './queries'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import SEO from '@/components/SEO'
 
 export interface LoginDataType {
-  username: string;
-  password: string;
-  isAutoLogin: boolean;
+  username: string
+  password: string
+  isAutoLogin: boolean
 }
 
 const LoginSchema = z.object({
-  username: z.string().min(1, "아이디를 입력하세요."),
-  password: z.string().min(1, "비밀번호를 입력하세요."),
+  username: z.string().min(1, '아이디를 입력하세요.'),
+  password: z.string().min(1, '비밀번호를 입력하세요.'),
   isAutoLogin: z.boolean(),
-});
+})
 
 const initailValues = {
-  username: "",
-  password: "",
+  username: '',
+  password: '',
   isAutoLogin: false,
-};
+}
 
 export default function CheckureeSignIn() {
-  const accessToken = Cookies.get("accessToken");
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const accessToken = Cookies.get('accessToken')
+  const [showPassword, setShowPassword] = useState<boolean>(false)
 
-  const { mutate: loginMutation } = useAuthLogin();
+  const { mutate: loginMutation } = useAuthLogin()
 
   useEffect(() => {
     if (accessToken) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
     }
-  }, []);
+  }, [])
 
   const {
     handleSubmit,
@@ -47,9 +47,9 @@ export default function CheckureeSignIn() {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(LoginSchema),
-    mode: "onSubmit",
+    mode: 'onSubmit',
     defaultValues: initailValues,
-  });
+  })
   return (
     <section className="flex flex-col justify-center items-center  gap-12 h-full">
       <SEO
@@ -57,7 +57,7 @@ export default function CheckureeSignIn() {
         content="체쿠리 사내 로그인 페이지입니다."
       />
       <img
-        src={"/images/logos/checkuree_logo.svg"}
+        src={'/images/logos/checkuree_logo.svg'}
         width={284}
         height={48}
         alt="로고 이미지"
@@ -66,17 +66,17 @@ export default function CheckureeSignIn() {
         className="flex flex-col gap-6 justify-center w-full"
         onSubmit={handleSubmit(() => {
           loginMutation({
-            username: getValues("username"),
-            password: getValues("password"),
-            isAutoLogin: getValues("isAutoLogin"),
-          });
+            username: getValues('username'),
+            password: getValues('password'),
+            isAutoLogin: getValues('isAutoLogin'),
+          })
         })}
       >
         <div className="flex flex-col gap-4 w-full items-start">
           <div className="flex flex-col gap-[1px] w-full text-left">
             <input
               id="id-input"
-              {...register("username")}
+              {...register('username')}
               placeholder="ID"
               className="bg-white w-full h-12 rounded-2xl p-4 border-[2px] focus:outline-none"
             />
@@ -91,15 +91,15 @@ export default function CheckureeSignIn() {
             <div className="relative flex items-center w-full">
               <input
                 id="password-input"
-                {...register("password")}
-                type={showPassword ? "text" : "password"}
+                {...register('password')}
+                type={showPassword ? 'text' : 'password'}
                 placeholder="비밀번호"
                 className="bg-white w-full h-12 rounded-2xl p-4 border-[2px] focus:outline-none"
               />
               <img
                 className="absolute right-4"
                 src={`/images/icons/ico-${
-                  showPassword ? "visible" : "invisible"
+                  showPassword ? 'visible' : 'invisible'
                 }-eye.svg`}
                 width={24}
                 height={24}
@@ -129,7 +129,7 @@ export default function CheckureeSignIn() {
         <button
           id="login-button"
           className={twMerge(
-            "w-full h-[54px] rounded-xl text-lg leading-[22px] font-semibold flex items-center justify-center text-[#FFFFFF] bg-[#59996B] cursor-pointer"
+            'w-full h-[54px] rounded-xl text-lg leading-[22px] font-semibold flex items-center justify-center text-[#FFFFFF] bg-[#59996B] cursor-pointer',
           )}
           type="submit"
         >
@@ -149,5 +149,5 @@ export default function CheckureeSignIn() {
         </div>
       </form>
     </section>
-  );
+  )
 }

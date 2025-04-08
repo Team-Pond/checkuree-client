@@ -4,22 +4,22 @@ import {
   updateRecordLesson,
   updateRecord,
   deleteRecord,
-} from "@/api/RecordApiClient";
-import { DeleteRecordRequest } from "@/api/RecordSchema";
-import { getScheduleAttendee } from "@/api/ScheduleApiClient";
-import { STATUS } from "@/api/type";
-import { attendeeKeys, bookKeys } from "@/queryKeys";
-import useFormDataStore from "@/store/recordStore";
-import { getCurrentTimeParts } from "@/utils";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+} from '@/api/RecordApiClient'
+import { DeleteRecordRequest } from '@/api/RecordSchema'
+import { getScheduleAttendee } from '@/api/ScheduleApiClient'
+import { STATUS } from '@/api/type'
+import { bookKeys } from '@/queryKeys'
+import useFormDataStore from '@/store/recordStore'
+import { getCurrentTimeParts } from '@/utils'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
 export const useBookSchedules = ({
   bookId,
   formattedDate,
 }: {
-  bookId: number;
-  formattedDate: string;
+  bookId: number
+  formattedDate: string
 }) => {
   return useQuery({
     queryKey: bookKeys.schedules(bookId, formattedDate).queryKey,
@@ -31,7 +31,7 @@ export const useBookSchedules = ({
           pageable: {
             page: 0,
             size: 100,
-            sort: ["asc"],
+            sort: ['asc'],
           },
         },
       }),
@@ -39,17 +39,17 @@ export const useBookSchedules = ({
     refetchIntervalInBackground: true,
 
     enabled: !!bookId && !!formattedDate,
-  });
-};
+  })
+}
 
 export const useRecordAllUpdate = ({
   bookId,
   formattedDate,
 }: {
-  bookId: number;
-  formattedDate: string;
+  bookId: number
+  formattedDate: string
 }) => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async () =>
       await updateRecordAll({
@@ -61,50 +61,50 @@ export const useRecordAllUpdate = ({
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: bookKeys.schedules._def,
-      });
-      toast.success("전체 출석 완료");
+      })
+      toast.success('전체 출석 완료')
     },
     onError: () => {
-      toast.success("전체 출석 실패");
+      toast.success('전체 출석 실패')
     },
-  });
-};
+  })
+}
 
 export const useRecordUpdate = ({
   bookId,
   recordId,
   formattedTime,
 }: {
-  bookId: number;
-  recordId: number;
-  formattedTime: string;
+  bookId: number
+  recordId: number
+  formattedTime: string
 }) => {
-  const queryClient = useQueryClient();
-  const { setFormData } = useFormDataStore();
+  const queryClient = useQueryClient()
+  const { setFormData } = useFormDataStore()
   return useMutation({
     mutationFn: async () =>
       await updateRecord({
         params: {
           attendanceBookId: bookId,
           attendTime: formattedTime
-            .split(":")
-            .map((time) => time.padStart(2, "0"))
-            .join(":"),
+            .split(':')
+            .map((time) => time.padStart(2, '0'))
+            .join(':'),
           recordId,
         },
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: bookKeys.schedules._def,
-      });
-      toast.success("출석시간 변경 완료");
-      setFormData({ hour: "", minute: "" });
+      })
+      toast.success('출석시간 변경 완료')
+      setFormData({ hour: '', minute: '' })
     },
     onError: () => {
-      toast.error("출석시간 수정 실패");
+      toast.error('출석시간 수정 실패')
     },
-  });
-};
+  })
+}
 
 /**
  * @param attendTime : 'HH:mm' 형식으로 입력
@@ -114,10 +114,10 @@ export const useRecordCreate = ({
   bookId,
   currentDate,
 }: {
-  bookId: number;
-  currentDate: string;
+  bookId: number
+  currentDate: string
 }) => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({
       attendeeId,
@@ -125,10 +125,10 @@ export const useRecordCreate = ({
       status,
       attendTime,
     }: {
-      attendeeId: number;
-      scheduleId?: number;
-      status: STATUS;
-      attendTime?: string;
+      attendeeId: number
+      scheduleId?: number
+      status: STATUS
+      attendTime?: string
     }) =>
       await createRecord({
         params: {
@@ -140,32 +140,32 @@ export const useRecordCreate = ({
             attendTime ??
             `${getCurrentTimeParts()
               .hour.toString()
-              .padStart(2, "0")}:${getCurrentTimeParts()
+              .padStart(2, '0')}:${getCurrentTimeParts()
               .minute.toString()
-              .padStart(2, "0")}`,
+              .padStart(2, '0')}`,
           status: status,
         },
       }),
     onSuccess: (res) => {
       queryClient.invalidateQueries({
         queryKey: bookKeys.schedules._def,
-      });
+      })
     },
     onError: () => {},
-  });
-};
+  })
+}
 
 export const useStatusUpdate = ({ bookId }: { bookId: number }) => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({
       recordId,
       scheduleId,
       status,
     }: {
-      recordId: number;
-      scheduleId: number;
-      status: STATUS;
+      recordId: number
+      scheduleId: number
+      status: STATUS
     }) =>
       await updateRecord({
         params: {
@@ -178,21 +178,21 @@ export const useStatusUpdate = ({ bookId }: { bookId: number }) => {
     onSuccess: (res) => {
       queryClient.invalidateQueries({
         queryKey: bookKeys.schedules._def,
-      });
+      })
     },
     onError: () => {},
-  });
-};
+  })
+}
 
 export const useLessonUpdate = ({ bookId }: { bookId: number }) => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({
       recordId,
       isTaught,
     }: {
-      recordId: number;
-      isTaught: boolean;
+      recordId: number
+      isTaught: boolean
     }) =>
       await updateRecordLesson({
         params: {
@@ -204,14 +204,14 @@ export const useLessonUpdate = ({ bookId }: { bookId: number }) => {
     onSuccess: (res) => {
       queryClient.invalidateQueries({
         queryKey: bookKeys.schedules._def,
-      });
+      })
     },
     onError: () => {},
-  });
-};
+  })
+}
 
 export const useRecordDelete = (bookId: number, currentDate: string) => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: async (params: DeleteRecordRequest) =>
@@ -219,8 +219,8 @@ export const useRecordDelete = (bookId: number, currentDate: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: bookKeys.schedules(bookId, currentDate).queryKey,
-      });
-      toast.success("보강기록이 삭제되었습니다.");
+      })
+      toast.success('보강기록이 삭제되었습니다.')
     },
-  });
-};
+  })
+}

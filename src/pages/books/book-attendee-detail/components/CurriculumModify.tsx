@@ -1,25 +1,25 @@
-import { useEffect, useState } from "react";
-import { UpdateAttendeeScheduleRequest } from "@/api/AttendeeSchema";
-import { useParams } from "react-router-dom";
-import ScheduleTable from "./ScheduleTable";
-import SubjectSelectionDrawer from "./SubjectSelectionDrawer";
+import { useEffect, useState } from 'react'
+import { UpdateAttendeeScheduleRequest } from '@/api/AttendeeSchema'
+import { useParams } from 'react-router-dom'
+import ScheduleTable from './ScheduleTable'
+import SubjectSelectionDrawer from './SubjectSelectionDrawer'
 
 import {
   useBookCourses,
   useScheduleData,
   useScheduleTimeTable,
-} from "../queries";
-import { DaysType } from "@/api/type";
-import { getSub30MinuteHhmm } from "@/utils";
-import AttendeeDrawer from "@/components/AttendeeDrawer";
+} from '../queries'
+import { DaysType } from '@/api/type'
+import { getSub30MinuteHhmm } from '@/utils'
+import AttendeeDrawer from '@/components/AttendeeDrawer'
 
 interface CurriculumModifyProps {
   setAttendeeSchedules: React.Dispatch<
     React.SetStateAction<UpdateAttendeeScheduleRequest | undefined>
-  >;
+  >
 
-  setIsCourseModify: React.Dispatch<React.SetStateAction<boolean>>;
-  onChangeGrade: (gradeId: number) => void;
+  setIsCourseModify: React.Dispatch<React.SetStateAction<boolean>>
+  onChangeGrade: (gradeId: number) => void
 }
 
 export default function CurriculumModify({
@@ -27,68 +27,68 @@ export default function CurriculumModify({
   onChangeGrade,
   setIsCourseModify,
 }: CurriculumModifyProps) {
-  const { bookId } = useParams();
+  const { bookId } = useParams()
 
   const [selectedSubject, setSelectedSubject] = useState<{
-    id: number;
-    title: string;
-  }>();
+    id: number
+    title: string
+  }>()
 
   const [selectedSubjectItems, setSelectedSubjectItems] = useState<{
-    level: number;
-    subjectItemId: number;
-    title: string;
-  }>();
+    level: number
+    subjectItemId: number
+    title: string
+  }>()
 
   const [scheduleParams, setScheduleParams] = useState<{
-    dayOfWeek: string;
-    hhmm: string;
-    isSelected: boolean;
+    dayOfWeek: string
+    hhmm: string
+    isSelected: boolean
   }>({
-    dayOfWeek: "",
-    hhmm: "",
+    dayOfWeek: '',
+    hhmm: '',
     isSelected: false,
-  });
+  })
 
-  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
-  const [attendeeOpenDrawer, setAttendeeOpenDrawer] = useState<boolean>(false);
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false)
+  const [attendeeOpenDrawer, setAttendeeOpenDrawer] = useState<boolean>(false)
 
   // 커리큘럼 선택 시 Drawer 열고/닫는 핸들러
-  const handleBottomDrawer = (open: boolean) => setOpenDrawer(open);
-  const onDrawerChange = () => setOpenDrawer(!openDrawer);
+  const handleBottomDrawer = (open: boolean) => setOpenDrawer(open)
+  const onDrawerChange = () => setOpenDrawer(!openDrawer)
 
   // 수강생 Drawer 열고/닫는 핸들러
   const handleAttendeeBottomDrawer = (open: boolean) =>
-    setAttendeeOpenDrawer(open);
+    setAttendeeOpenDrawer(open)
 
   const onAttendeeDrawerChange = () =>
-    setAttendeeOpenDrawer(!attendeeOpenDrawer);
+    setAttendeeOpenDrawer(!attendeeOpenDrawer)
 
   // 스케줄 클릭 시 선택된 요일/시간 저장
   const handleSchedule = (
     dayOfWeek: string,
     hhmm: string,
-    isSelected: boolean = false
+    isSelected: boolean = false,
   ) => {
-    setScheduleParams({ dayOfWeek, hhmm, isSelected });
-    handleAttendeeBottomDrawer(true);
-  };
+    setScheduleParams({ dayOfWeek, hhmm, isSelected })
+    handleAttendeeBottomDrawer(true)
+  }
 
   const { data: scheduleData } = useScheduleData({
     dayOfWeek: scheduleParams.dayOfWeek,
     hhmm: scheduleParams.hhmm,
     bookId: Number(bookId),
-  });
+  })
   // 시간표 정보 가져오기
   const { data: scheduleTimeTable } = useScheduleTimeTable({
     bookId: Number(bookId),
-  });
+  })
 
   // 일정 클릭 시 자동으로 수강생 Drawer 열기
   useEffect(() => {
     if (scheduleParams.dayOfWeek && scheduleParams.hhmm) {
     }
-  }, [scheduleParams.dayOfWeek, scheduleParams.hhmm]);
+  }, [scheduleParams.dayOfWeek, scheduleParams.hhmm])
 
   const handleAttendeeSchedules = (day: DaysType, hhmm: string) => {
     // 기존 로직 (attendeeSchedules에 추가)
@@ -101,7 +101,7 @@ export default function CurriculumModify({
               hhmm,
             },
           ],
-        };
+        }
       }
       return {
         ...prev,
@@ -112,22 +112,22 @@ export default function CurriculumModify({
             hhmm,
           },
         ],
-      };
-    });
-  };
+      }
+    })
+  }
 
   const { data: bookCourses } = useBookCourses({
     openDrawer,
     bookId: bookId!,
-  });
+  })
 
   useEffect(() => {
     if (openDrawer) {
-      setAttendeeOpenDrawer(false);
+      setAttendeeOpenDrawer(false)
     } else if (attendeeOpenDrawer) {
-      setOpenDrawer(false);
+      setOpenDrawer(false)
     }
-  }, [openDrawer, attendeeOpenDrawer]);
+  }, [openDrawer, attendeeOpenDrawer])
 
   const handleRemoveAttendeeSchedules = (day: DaysType, hhmm: string) => {
     setAttendeeSchedules((prev) => {
@@ -135,45 +135,45 @@ export default function CurriculumModify({
       if (!prev) {
         return {
           schedules: [],
-        };
+        }
       }
 
       // prev 가 존재하는 경우 로직 시작
       // 해당 시간이 존재하는지 확인
       const isExist = prev.schedules.some(
-        (schedule) => schedule.day === day && schedule.hhmm === hhmm
-      );
+        (schedule) => schedule.day === day && schedule.hhmm === hhmm,
+      )
 
       // 존재하는 경우 삭제
       if (isExist) {
         return {
           ...prev,
           schedules: prev.schedules.filter(
-            (schedule) => schedule.day !== day || schedule.hhmm !== hhmm
+            (schedule) => schedule.day !== day || schedule.hhmm !== hhmm,
           ),
-        };
+        }
       }
 
       // 존재하지 않는 경우 30분 전의 시간이 존재하는지 확인
-      const beforeHhmm = getSub30MinuteHhmm(hhmm);
+      const beforeHhmm = getSub30MinuteHhmm(hhmm)
       const isExistBefore = prev.schedules.some(
-        (schedule) => schedule.day === day && schedule.hhmm === beforeHhmm
-      );
+        (schedule) => schedule.day === day && schedule.hhmm === beforeHhmm,
+      )
 
       // 30분 전의 시간이 존재하는 경우 삭제
       if (isExistBefore) {
         return {
           ...prev,
           schedules: prev.schedules.filter(
-            (schedule) => schedule.day !== day || schedule.hhmm !== beforeHhmm
+            (schedule) => schedule.day !== day || schedule.hhmm !== beforeHhmm,
           ),
-        };
+        }
       }
 
       // 30분 전도 없으면 ... ? 넌 나가라 그냥
-      return prev;
-    });
-  };
+      return prev
+    })
+  }
   return (
     <div className="flex bg-white flex-col justify-center gap-6  w-full p-3 rounded-2xl">
       {/* 커리큘럼 선택 영역 */}
@@ -193,7 +193,7 @@ export default function CurriculumModify({
             value={
               selectedSubject && selectedSubjectItems
                 ? `${selectedSubject?.title} > ${selectedSubjectItems?.title}`
-                : ""
+                : ''
             }
             className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#5D5D5D] text-left"
             readOnly
@@ -245,7 +245,7 @@ export default function CurriculumModify({
         <button
           type="button"
           onClick={() => {
-            setIsCourseModify(false);
+            setIsCourseModify(false)
           }}
           className="w-full h-12 flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
         >
@@ -262,5 +262,5 @@ export default function CurriculumModify({
         </button>
       </div>
     </div>
-  );
+  )
 }

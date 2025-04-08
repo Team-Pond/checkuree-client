@@ -9,7 +9,6 @@ import { useBookCreate } from './queries'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { bookSchema, CreateBookSchema } from './_schema'
 import SEO from '@/components/SEO'
-import { CourseData } from '@/api/type'
 import FormHeader from './components/FormHeader'
 import tw from 'tailwind-styled-components'
 
