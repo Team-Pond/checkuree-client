@@ -1,4 +1,4 @@
-import ApiClient from "./ApiClient";
+import ApiClient from './ApiClient'
 import {
   CreateRecordRequest,
   CreateRecordResponse,
@@ -14,17 +14,17 @@ import {
   UpdateRecordLessonResponse,
   UpdateRecordRequest,
   UpdateRecordResponse,
-} from "./RecordSchema";
+} from './RecordSchema'
 
 // 출석 체크
 export const updateRecord = async ({
   params,
 }: {
-  params: UpdateRecordRequest;
+  params: UpdateRecordRequest
 }): Promise<UpdateRecordResponse> => {
-  const { recordId, status, attendanceBookId, scheduleId, attendTime } = params;
+  const { recordId, status, attendanceBookId, scheduleId, attendTime } = params
   const response = await ApiClient.request({
-    method: "POST",
+    method: 'POST',
     url: `/record/${recordId}`,
     data: {
       attendanceBookId,
@@ -32,62 +32,62 @@ export const updateRecord = async ({
       status,
       attendTime,
     },
-  });
+  })
 
-  return response.data;
-};
+  return response.data
+}
 
 // 출석 레슨
 export const updateRecordLesson = async ({
   params,
 }: {
-  params: UpdateRecordLessonRequest;
+  params: UpdateRecordLessonRequest
 }): Promise<UpdateRecordLessonResponse> => {
-  const { recordId, attendanceBookId, isTaught } = params;
+  const { recordId, attendanceBookId, isTaught } = params
   const response = await ApiClient.request({
-    method: "POST",
+    method: 'POST',
     url: `/record/${recordId}/lesson`,
     data: {
       attendanceBookId,
       isTaught,
     },
-  });
+  })
 
-  return response.data;
-};
+  return response.data
+}
 
 //  전체 출석
 export const updateRecordAll = async ({
   params,
 }: {
-  params: UpdateRecordAllRequest;
+  params: UpdateRecordAllRequest
 }): Promise<UpdateRecordAllResponse> => {
-  const { attendanceBookId, attendDate } = params;
+  const { attendanceBookId, attendDate } = params
   const response = await ApiClient.request({
-    method: "POST",
+    method: 'POST',
     url: `/record/all`,
     data: {
       attendanceBookId,
       attendDate,
     },
-  });
+  })
 
-  return response.data;
-};
+  return response.data
+}
 
 // 출석부 기록 생성
 export const createRecord = async ({
   params,
 }: {
-  params: CreateRecordRequest;
+  params: CreateRecordRequest
 }): Promise<CreateRecordResponse> => {
   const response = await ApiClient.request({
-    method: "POST",
+    method: 'POST',
     url: `/record`,
     data: params,
-  });
-  return response.data;
-};
+  })
+  return response.data
+}
 
 // 출석부 기록 생성
 export const getAttendeeRecords = async ({
@@ -95,41 +95,41 @@ export const getAttendeeRecords = async ({
   attendanceBookId,
   attendeeId,
 }: {
-  params: GetAttendeeRecordsRequest;
-  attendanceBookId: number;
-  attendeeId: number;
+  params: GetAttendeeRecordsRequest
+  attendanceBookId: number
+  attendeeId: number
 }): Promise<GetAttendeeRecordsResponse> => {
-  const { from, to } = params;
+  const { from, to } = params
   const response = await ApiClient.request({
-    method: "GET",
+    method: 'GET',
     url: `/book/${attendanceBookId}/attendee/${attendeeId}/record?from=${from}&to=${to}`,
     data: params,
-  });
-  return response.data;
-};
+  })
+  return response.data
+}
 
 // 출석부 기록 삭제
 export const deleteRecord = async (
-  params: DeleteRecordRequest
+  params: DeleteRecordRequest,
 ): Promise<DeleteRecordResponse> => {
   const response = await ApiClient.request({
-    method: "DELETE",
+    method: 'DELETE',
     url: `/book/${params.attendanceBookId}/record/${params.recordId}`,
-  });
-  return response.data;
-};
+  })
+  return response.data
+}
 
 // 출석률 통계
 export const getStatistics = async ({
   params,
   attendanceBookId,
 }: {
-  params: GetStatisticsRequest;
-  attendanceBookId: number;
+  params: GetStatisticsRequest
+  attendanceBookId: number
 }): Promise<GetStatisticsResponse> => {
   const response = await ApiClient.request({
-    method: "GET",
+    method: 'GET',
     url: `/book/${attendanceBookId}/record/statistic?from=${params.from}&periodType=${params.periodType}`,
-  });
-  return response.data;
-};
+  })
+  return response.data
+}
