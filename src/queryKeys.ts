@@ -1,19 +1,19 @@
 // src/queryKeys.ts
-import { createQueryKeys } from "@lukemorales/query-key-factory";
+import { createQueryKeys } from '@lukemorales/query-key-factory'
 import {
   AttendeeStatisticsType,
   DaysType,
   GenderType,
   PeriodType,
-} from "./api/type";
+} from './api/type'
 
 // 수강생 데이터를 위한 키
-export const attendeeKeys = createQueryKeys("attendee", {
+export const attendeeKeys = createQueryKeys('attendee', {
   list: (
     bookId: number,
     dayArrays: DaysType[],
     gender: GenderType,
-    age: { min: number; max: number }
+    age: { min: number; max: number },
   ) => ({
     queryKey: [bookId, dayArrays, gender, age],
   }),
@@ -29,20 +29,20 @@ export const attendeeKeys = createQueryKeys("attendee", {
   progressLog: (bookId: number, attendeeId: number) => ({
     queryKey: [bookId, attendeeId],
   }),
-});
+})
 
-export const bookKeys = createQueryKeys("book", {
+export const bookKeys = createQueryKeys('book', {
   schedules: (bookId?: number, formattedDate?: string) => ({
     queryKey: [bookId, formattedDate],
   }),
   list: () => ({
-    queryKey: [""],
+    queryKey: [''],
   }),
   detail: (bookId: number) => ({
     queryKey: [bookId],
   }),
   subjects: () => ({
-    queryKey: [""],
+    queryKey: [''],
   }),
   subjectCourses: (subjectId: number) => ({
     queryKey: [subjectId],
@@ -53,10 +53,10 @@ export const bookKeys = createQueryKeys("book", {
   statisticAttendee: (bookId: number, type: AttendeeStatisticsType) => ({
     queryKey: [bookId, type],
   }),
-});
+})
 
-export const counsellingKeys = createQueryKeys("counselling", {
+export const counsellingKeys = createQueryKeys('counselling', {
   list: (attendeeId: number) => ({
     queryKey: [attendeeId],
   }),
-});
+})
