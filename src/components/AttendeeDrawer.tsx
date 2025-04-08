@@ -33,14 +33,10 @@ export default function AttendeeDrawer({
   return (
     <BottomDrawer isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col gap-4 items-center h-[249px] overflow-auto">
-        <div className="px-4 w-full">
-          {/* Drawer 상단 영역 */}
-          <div className="text-left w-full h-10 border-b border-[#f6f6f6] flex items-center">
-            <p className="text-s-semibold text-text-secondary">
-              ({convertEngDayToKorDay(dayOfWeek)}) {hhmm}-{' '}
-              {getAddMinuteHhmm(hhmm, 30)}
-            </p>
-          </div>
+        {/* Drawer 상단 영역 */}
+        <div className="text-left w-full h-10 px-4 border-b border-[#f6f6f6] flex items-center text-s-semibold text-text-secondary">
+          ({convertEngDayToKorDay(dayOfWeek)}) {hhmm}-{' '}
+          {getAddMinuteHhmm(hhmm, 30)}
         </div>
 
         {/* 수강생 목록 */}
@@ -51,7 +47,9 @@ export default function AttendeeDrawer({
               key={[attendee.name, attendee.age, index].join('-')}
               className="flex gap-2 w-[171px] h-9"
             >
-              <p className="text-m-bold text-text-primary">{attendee.name}</p>
+              <span className="text-m-bold text-text-primary">
+                {attendee.name}
+              </span>
             </div>
           ))}
         </div>
