@@ -48,9 +48,11 @@ function AttendanceRateChart({
     </div>
   )
 }
+
+export default React.memo(AttendanceRateChart)
+
 const ChartWrapper = tw.div`flex flex-col items-center gap-2 w-full h-[284px] bg-white rounded-2xl mx-auto py-4`
 const ButtonsWrapper = tw.div`flex justify-between w-full items-center`
-export default React.memo(AttendanceRateChart)
 
 const TODAY_TEXT = '오늘의 출석률'
 const WEEKLY_TEXT = '이번 주 출석률'

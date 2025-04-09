@@ -18,14 +18,16 @@ export default function Dashboard() {
 
   const bookName = searchParmas.get('bookName')
   const { bookId } = useParams()
+
   const [attendRateTab, setAttendRateTab] = useState<PeriodType>('DAILY')
   const [categoryTab, setCategoryTab] = useState<AttendeeStatisticsType>('DAY')
-
   const [currentDate, setCurrentDate] = useState(dayjs()) // dayjs로 초기화
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false)
+
   const handlePreviousDay = () => {
     setCurrentDate((prev) => prev.subtract(1, 'day'))
   }
-  const [openDrawer, setOpenDrawer] = useState<boolean>(false)
+
   const handleNextDay = () => {
     setCurrentDate((prev) => prev.add(1, 'day'))
   }
