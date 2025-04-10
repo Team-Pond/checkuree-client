@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
 interface Props {
-  message: string;
+  message: string
 }
 
 export const ConfirmModal: React.FC<Props> = ({ message }) => {
@@ -9,7 +9,7 @@ export const ConfirmModal: React.FC<Props> = ({ message }) => {
     <div className="flex flex-col gap-6 justify-center items-center w-full">
       <p className="text-m-bold text-text-primary">{message}</p>
     </div>
-  );
-};
+  )
+}
 
-export default ConfirmModal;
+export default ConfirmModal
