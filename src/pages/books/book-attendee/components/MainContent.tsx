@@ -2,12 +2,12 @@ import { GetAttendeeListResponse } from '@/api/AttendeeSchema'
 import { getDayGroupFromInput } from '@/utils'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import IconStudent from '@/assets/icons/book-roaster/ico-student.svg?react'
-type IProps = {
+type MainContentProps = {
   roaster: GetAttendeeListResponse
   getGrades: (grades: { id: number; name: string }[]) => string
   searchName: string
 }
-export default function MainContent(props: IProps) {
+export default function MainContent(props: MainContentProps) {
   const { roaster, getGrades, searchName } = props
   const { bookId } = useParams()
   const location = useLocation()

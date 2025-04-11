@@ -8,7 +8,7 @@ import { GetStatisticsResponse } from '@/api/RecordSchema'
 import RateChart from './RateChart'
 import { Dayjs } from 'dayjs'
 
-interface IProps {
+interface AttendanceRateChartProps {
   statisticData: GetStatisticsResponse
   tabChange: (tab: PeriodType) => void
   tab: PeriodType
@@ -19,7 +19,7 @@ function AttendanceRateChart({
   tabChange,
   tab,
   currentDate,
-}: IProps) {
+}: AttendanceRateChartProps) {
   return (
     <div className="flex flex-col gap-2">
       <ButtonsWrapper>

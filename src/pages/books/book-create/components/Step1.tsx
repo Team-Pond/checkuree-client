@@ -5,9 +5,10 @@ import { twMerge } from 'tailwind-merge'
 import { CreateBookSchema } from '../_schema'
 import { DaysType } from '@/api/type'
 import tw from 'tailwind-styled-components'
-import FieldHeader from '@/components/FieldTitle'
+
 import { spaceBlockKeyDown } from '@/utils'
 import toast from 'react-hot-toast'
+import FieldTitle from '@/components/FieldTitle'
 
 const DAYS = ['월', '화', '수', '목', '금', '토', '일']
 
@@ -129,7 +130,7 @@ export default function Step1() {
     <Step1Form>
       {/* 출석부 이름 */}
       <TextWrapper>
-        <FieldHeader title="출석부" essential />
+        <FieldTitle title="출석부" essential />
 
         <div className="flex flex-col gap-[1px] w-full text-left">
           <input
@@ -153,7 +154,7 @@ export default function Step1() {
 
       {/* 수업 요일 */}
       <TextWrapper>
-        <FieldHeader title="수업 요일" essential />
+        <FieldTitle title="수업 요일" essential />
         <div className="flex flex-col gap-[1px] w-full text-left">
           <div className="grid grid-cols-7 gap-0" data-cy="availableDays">
             {DAYS.map((day, index) => {
@@ -193,7 +194,7 @@ export default function Step1() {
 
       {/* 수업 시간 */}
       <TextWrapper>
-        <FieldHeader title="수업 시간" essential />
+        <FieldTitle title="수업 시간" essential />
         <div className="flex flex-col gap-[1px] w-full text-left">
           <div className="flex items-center gap-4">
             {PICKER_RENDER.map((time, index) => {
@@ -230,7 +231,7 @@ export default function Step1() {
 
       {/* 커버 이미지 */}
       <TextWrapper>
-        <FieldHeader title="커버 이미지" />
+        <FieldTitle title="커버 이미지" />
         <div
           className="w-[81px] h-[81px] bg-bg-base border border-[#E7E7E7] rounded-xl flex justify-center items-center"
           onClick={triggerFileInput}
@@ -257,7 +258,7 @@ export default function Step1() {
 
       {/* 설명*/}
       <TextWrapper>
-        <FieldHeader title="설명" />
+        <FieldTitle title="설명" />
         <input
           {...register('description')}
           type="text"

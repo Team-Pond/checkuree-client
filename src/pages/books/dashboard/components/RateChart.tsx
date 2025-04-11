@@ -93,13 +93,13 @@ type Statistic = {
   bgColor: string
   textColor: string
 }
-interface IProps {
+type RateChartProps = {
   statisticData: StatisticType
 }
 
 const UNIT_TEXT = '단위: 명'
 
-export default function RateChart({ statisticData }: IProps) {
+export default function RateChart({ statisticData }: RateChartProps) {
   const labels = ['Red', 'Blue', 'Yellow']
 
   const statistics: Statistic[] = [

@@ -1,15 +1,13 @@
-import * as Select from "@radix-ui/react-select";
+import * as Select from '@radix-ui/react-select'
 import {
   CheckIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-} from "@radix-ui/react-icons";
+} from '@radix-ui/react-icons'
 
-type IProps = {};
+const options = [{ text: '(체르니50 다음 과정)', value: '1' }]
 
-const options = [{ text: "(체르니50 다음 과정)", value: "1" }];
-
-const NextProgressSelect = (props: IProps) => {
+const NextProgressSelect = () => {
   return (
     <Select.Root onValueChange={() => {}}>
       <Select.Trigger
@@ -46,7 +44,7 @@ const NextProgressSelect = (props: IProps) => {
         </Select.Content>
       </Select.Portal>
     </Select.Root>
-  );
-};
+  )
+}
 
-export default NextProgressSelect;
+export default NextProgressSelect

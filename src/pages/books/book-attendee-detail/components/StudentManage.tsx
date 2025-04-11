@@ -5,6 +5,7 @@ import CurriculumModify from './CurriculumModify'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import AttendeeModify from './AttendeeModify'
 import { DaysType, GenderType, Progresses } from '@/api/type'
+import tw from 'tailwind-styled-components'
 
 type ScheduleItem = {
   id: number
@@ -19,7 +20,7 @@ type studentInfo = {
   enrollDate: string
 }
 
-type IProps = {
+type StudentManageProps = {
   student: studentInfo
   lessonInfo: Progresses
   registerInfo: {
@@ -32,8 +33,8 @@ type IProps = {
   }
   scheduleItems: ScheduleItem
   associates?: {
-    relation?: string | ''
-    phoneNumber?: string | ''
+    relation?: string
+    phoneNumber?: string
   }
 }
 
@@ -49,7 +50,7 @@ interface AttendeeModifyFormState {
   description: string
 }
 
-export default function StudentManage(props: IProps) {
+export default function StudentManage(props: StudentManageProps) {
   const { student, registerInfo, scheduleItems, associates, lessonInfo } = props
 
   const location = useLocation()
@@ -69,7 +70,7 @@ export default function StudentManage(props: IProps) {
   }
   const { bookId, attendeeId } = useParams()
 
-  const [attendeeSchedules, setAttendeeSchedules] = useState<
+  const [_attendeeSchedules, setAttendeeSchedules] = useState<
     UpdateAttendeeScheduleRequest | undefined
   >()
 
@@ -184,37 +185,39 @@ export default function StudentManage(props: IProps) {
               {/*  }}*/}
               {/*/>*/}
             </p>
-            <div className="flex justify-between text-s-semibold">
+            <InfoWrapper>
               <p className="text-text-tertiary">기본 정보</p>
               <p className="text-text-primary">
                 {registerInfo.birthDate?.replaceAll('-', '.')},{' '}
                 {registerInfo.gender === 'MALE' ? '남' : '여'}
               </p>
-            </div>
-            <div className="flex justify-between text-s-semibold">
+            </InfoWrapper>
+            <InfoWrapper>
               <p className="text-text-tertiary">학교</p>
               <p className="text-text-primary">{registerInfo.school}</p>
-            </div>
-            <div className="flex justify-between text-s-semibold">
+            </InfoWrapper>
+            <InfoWrapper>
               <p className="text-text-tertiary">학생 주소</p>
               <p className="text-text-primary max-w-[250px] overflow-wrap break-word">
                 {registerInfo.address_1}
               </p>
-            </div>
-            <div className="flex justify-between text-s-semibold">
+            </InfoWrapper>
+            <InfoWrapper>
               <p className="text-text-tertiary">가족 연락처</p>
               <p className="text-text-primary">
                 {associates?.relation === 'MOTHER' ? '(모)' : '(부)'}
                 {associates?.phoneNumber}{' '}
               </p>
-            </div>
-            <div className="flex justify-between text-s-semibold">
+            </InfoWrapper>
+            <InfoWrapper>
               <p className="text-text-tertiary">비고</p>
               <p className="text-text-primary">{registerInfo.description}</p>
-            </div>
+            </InfoWrapper>
           </div>
         </>
       )}
     </div>
   )
 }
+
+const InfoWrapper = tw.div`flex justify-between text-s-semibold`
