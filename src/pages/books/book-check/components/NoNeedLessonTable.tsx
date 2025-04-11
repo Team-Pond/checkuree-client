@@ -29,7 +29,7 @@ export default function NoNeedLessonTable(props: IProps) {
       {noNeedLessonTimeScheduleTable?.map((content, index) => {
         return (
           content.schedules.length > 0 && (
-            <LessonContainer key={[content.schedules, index].join('-')}>
+            <LessonContainer key={[content.startTime, index].join('-')}>
               <LessonStatusTime>
                 {scheduleCheckformatTime(content.startTime)}
               </LessonStatusTime>
