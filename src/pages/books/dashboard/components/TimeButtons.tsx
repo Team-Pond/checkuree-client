@@ -1,25 +1,28 @@
-import { PeriodType } from "@/api/type";
-import { twMerge } from "tailwind-merge";
+import { PeriodType } from '@/api/type'
+import { twMerge } from 'tailwind-merge'
 
-type IProps = {
-  timeStatus: PeriodType;
-  handleTimeStatus: (timeStatus: PeriodType) => void;
-};
+type TimeButtonsProps = {
+  timeStatus: PeriodType
+  handleTimeStatus: (timeStatus: PeriodType) => void
+}
 const BUTTON_OPTIONS = [
   {
-    status: "DAILY",
-    type: "일간",
+    status: 'DAILY',
+    type: '일간',
   },
   {
-    status: "WEEKLY",
-    type: "주간",
+    status: 'WEEKLY',
+    type: '주간',
   },
   {
-    status: "MONTHLY",
-    type: "월간",
+    status: 'MONTHLY',
+    type: '월간',
   },
-];
-export default function TimeButtons({ timeStatus, handleTimeStatus }: IProps) {
+]
+export default function TimeButtons({
+  timeStatus,
+  handleTimeStatus,
+}: TimeButtonsProps) {
   return (
     <div className="flex">
       {BUTTON_OPTIONS.map((option) => {
@@ -31,10 +34,10 @@ export default function TimeButtons({ timeStatus, handleTimeStatus }: IProps) {
             status={option.status as PeriodType}
             type={option.type}
           />
-        );
+        )
       })}
     </div>
-  );
+  )
 }
 
 function Button({
@@ -42,25 +45,25 @@ function Button({
   handleTimeStatus,
   status,
   type,
-}: IProps & { status: PeriodType; type: string }) {
+}: TimeButtonsProps & { status: PeriodType; type: string }) {
   return (
     <button
       onClick={() => handleTimeStatus(status)}
       className={twMerge(
-        "w-[57px] h-[33px] rounded-lg",
-        timeStatus === status ? "bg-bg-interactive-primary" : ""
+        'w-[57px] h-[33px] rounded-lg',
+        timeStatus === status ? 'bg-bg-interactive-primary' : '',
       )}
     >
       <span
         className={twMerge(
-          "text-[14px]",
+          'text-[14px]',
           timeStatus === status
-            ? "text-text-interactive-primary-press"
-            : "text-text-interactive-secondary"
+            ? 'text-text-interactive-primary-press'
+            : 'text-text-interactive-secondary',
         )}
       >
         {type}
       </span>
     </button>
-  );
+  )
 }

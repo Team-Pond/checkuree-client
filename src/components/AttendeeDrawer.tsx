@@ -7,14 +7,16 @@ type Attendee = {
   age: number
 }
 
+type ScheduleParamsType = {
+  dayOfWeek: string
+  hhmm: string
+  isSelected: boolean
+}
+
 interface AttendeeDrawerProps {
   isOpen: boolean
   onClose: () => void
-  scheduleParams: {
-    dayOfWeek: string
-    hhmm: string
-    isSelected: boolean
-  }
+  scheduleParams: ScheduleParamsType
   scheduleData?: Attendee[]
   handleAttendeeSchedules: (day: DaysType, hhmm: string) => void
   handleRemoveAttendeeSchedules: (day: DaysType, hhmm: string) => void
@@ -40,7 +42,7 @@ export default function AttendeeDrawer({
         </div>
 
         {/* 수강생 목록 */}
-        <div className="grid grid-cols-2 px-[24px]">
+        <div className="grid grid-cols-2 px-6">
           {scheduleData?.map((attendee, index) => (
             <div
               // 중복 데이터가 발생하는 현상이 있어 key 변경

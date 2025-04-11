@@ -1,88 +1,93 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from 'react'
+import tw from 'tailwind-styled-components'
 
-const periods = ["오전", "오후"];
-const hours = Array.from({ length: 12 }, (_, i) => (i + 1).toString());
+const periods = ['오전', '오후']
+const hours = Array.from({ length: 12 }, (_, i) => (i + 1).toString())
 const minutes = Array.from({ length: 6 }, (_, i) =>
-  (i * 10).toString().padStart(2, "0")
-);
+  (i * 10).toString().padStart(2, '0'),
+)
 
-export type IProps = {
+export type TimePickerProps = {
   handleTimeChange: (time: {
-    period: string;
-    hour: string;
-    minute: string;
-  }) => void;
-  handleOpenTimePicker: (state: boolean) => void;
-};
+    period: string
+    hour: string
+    minute: string
+  }) => void
+  handleOpenTimePicker: (state: boolean) => void
+}
 
-const TimePicker = (props: IProps) => {
-  const { handleTimeChange, handleOpenTimePicker } = props;
-  const [selectedPeriod, setSelectedPeriod] = useState(periods[0]);
-  const [selectedHour, setSelectedHour] = useState(hours[0]);
-  const [selectedMinute, setSelectedMinute] = useState(minutes[0]);
+const TimePicker = (props: TimePickerProps) => {
+  const { handleTimeChange, handleOpenTimePicker } = props
 
-  const periodRef = useRef<HTMLDivElement>(null);
-  const hourRef = useRef<HTMLDivElement>(null);
-  const minuteRef = useRef<HTMLDivElement>(null);
+  const [selectedPeriod, setSelectedPeriod] = useState(periods[0])
+  const [selectedHour, setSelectedHour] = useState(hours[0])
+  const [selectedMinute, setSelectedMinute] = useState(minutes[0])
 
-  const itemHeight = 40; // Height of each item (in px)
+  const periodRef = useRef<HTMLDivElement>(null)
+  const hourRef = useRef<HTMLDivElement>(null)
+  const minuteRef = useRef<HTMLDivElement>(null)
+
+  const itemHeight = 40 // Height of each item (in px)
 
   // Helper function to snap to the nearest value
   const snapToNearest = (
     ref: React.RefObject<HTMLDivElement>,
     items: string[],
-    setSelected: React.Dispatch<React.SetStateAction<string>>
+    setSelected: React.Dispatch<React.SetStateAction<string>>,
   ) => {
-    if (!ref.current) return;
-    const scrollTop = ref.current.scrollTop;
-    const index = Math.round(scrollTop / itemHeight);
+    if (!ref.current) return
+    const scrollTop = ref.current.scrollTop
+    const index = Math.round(scrollTop / itemHeight)
     ref.current.scrollTo({
       top: index * itemHeight,
-      behavior: "smooth",
-    });
-    setSelected(items[index]);
-  };
+      behavior: 'auto',
+    })
+    setSelected(items[index])
+  }
 
   // Debounce function to optimize scroll performance
   const debounce = (func: Function, delay: number) => {
-    let timeoutId: NodeJS.Timeout;
+    let timeoutId: NodeJS.Timeout
     return (...args: any[]) => {
-      if (timeoutId) clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => func(...args), delay);
-    };
-  };
+      if (timeoutId) clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => func(...args), delay)
+    }
+  }
 
   // Scroll handler with debounce
   const handleScroll = debounce(
     (
       ref: React.RefObject<HTMLDivElement>,
       items: string[],
-      setSelected: React.Dispatch<React.SetStateAction<string>>
+      setSelected: React.Dispatch<React.SetStateAction<string>>,
     ) => {
-      snapToNearest(ref, items, setSelected);
+      snapToNearest(ref, items, setSelected)
     },
-    100 // Delay in milliseconds
-  );
+    100, // Delay in milliseconds
+  )
 
   // Render scrollable column
   const renderColumn = (
     ref: React.RefObject<HTMLDivElement>,
     items: string[],
     selectedValue: string,
-    setSelected: React.Dispatch<React.SetStateAction<string>>
+    setSelected: React.Dispatch<React.SetStateAction<string>>,
   ) => (
+    /**
+     * snap-mandatory: 스크롤이 각 항목에 딱 멈춰서 멈추게 만드는 css 기능
+     */
     <div
       ref={ref}
-      className="relative w-[34px] h-[87px] overflow-y-scroll scrollbar-none snap-y snap-mandatory will-change-transform"
+      className="relative w-[34px] h-[87px] overflow-y-scroll scrollbar-none "
       onScroll={() => handleScroll(ref, items, setSelected)}
     >
       {/* Spacer for top alignment */}
-      <div className="h-[40px]" />
+      <div className="h-[20px]" />
       {items.map((item, index) => (
         <div
           key={index}
-          className={`text-center py-2 snap-center ${
-            selectedValue === item ? "font-bold text-black" : "text-gray-400"
+          className={`text-center py-2  ${
+            selectedValue === item ? 'font-bold text-black' : 'text-gray-400'
           }`}
         >
           {item}
@@ -91,19 +96,19 @@ const TimePicker = (props: IProps) => {
       {/* Spacer for bottom alignment */}
       <div className="h-[40px]" />
     </div>
-  );
+  )
 
   // **Added:** Close modal when clicking outside the TimePicker
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
-      handleOpenTimePicker(false);
+      handleOpenTimePicker(false)
       handleTimeChange({
         period: selectedPeriod,
         hour: selectedHour,
         minute: selectedMinute,
-      });
+      })
     }
-  };
+  }
 
   return (
     // **Added:** Backdrop for modal
@@ -112,14 +117,14 @@ const TimePicker = (props: IProps) => {
       onClick={handleBackdropClick} // **Added:** Handle backdrop click
     >
       <div
-        className="flex space-x-4 w-[160px] h-[119px]  items-center justify-center bg-white max-w-[160px] rounded-2xl shadow-md"
+        className="flex space-x-4 w-full h-[150px] items-center justify-center bg-white max-w-[160px] rounded-2xl shadow-md"
         onBlur={() => {
-          handleOpenTimePicker(false);
+          handleOpenTimePicker(false)
           handleTimeChange({
             period: selectedPeriod,
             hour: selectedHour,
             minute: selectedMinute,
-          });
+          })
         }}
         tabIndex={0} // 포커스 가능하도록 추가
       >
@@ -133,7 +138,9 @@ const TimePicker = (props: IProps) => {
         {renderColumn(minuteRef, minutes, selectedMinute, setSelectedMinute)}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TimePicker;
+export default TimePicker
+
+const Button = tw.button`w-full h-12 flex justify-center items-center rounded-2xl`

@@ -4,18 +4,18 @@ import { twMerge } from 'tailwind-merge'
 import BottomDrawer from '@/components/BottomDrawer'
 import { useSubjectItems, useSubjects } from '../queries'
 
-import FieldHeader from '@/components/FieldTitle'
 import { useFormContext } from 'react-hook-form'
 import { COURSE_ERROR_MESSAGE, CreateBookSchema } from '../_schema'
+import FieldTitle from '@/components/FieldTitle'
 
-export type IProps = {
+export type GradeItemProps = {
   handleCurriculum: (state: boolean) => void
   isCurriculum: boolean
 }
 
 export type GradeItem = { level: number; subjectItemId: number; title: string }
 
-export default function Step2(props: IProps) {
+export default function Step2(props: GradeItemProps) {
   const { handleCurriculum, isCurriculum } = props
 
   const {
@@ -100,7 +100,7 @@ export default function Step2(props: IProps) {
           <>
             {/* 커리큘럼 이름 */}
             <div className="flex flex-col gap-2">
-              <FieldHeader title="커리큘럼 이름" essential />
+              <FieldTitle title="커리큘럼 이름" essential />
 
               <input
                 type="text"
@@ -113,7 +113,7 @@ export default function Step2(props: IProps) {
             </div>
             {/* 커리큘럼 내용 */}
             <div className="flex flex-col gap-2">
-              <FieldHeader title="커리큘럼 내용" essential />
+              <FieldTitle title="커리큘럼 내용" essential />
 
               <div className="max-w-[343px] rounded-2xl py-1 px-2 text-left bg-bg-base">
                 <ul>

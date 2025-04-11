@@ -1,12 +1,14 @@
 import TimePicker from '@/components/TimePicker'
-import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
 import { CreateBookSchema } from '../_schema'
 import { DaysType } from '@/api/type'
 import tw from 'tailwind-styled-components'
-import FieldHeader from '@/components/FieldTitle'
+
 import { spaceBlockKeyDown } from '@/utils'
+import toast from 'react-hot-toast'
+import FieldTitle from '@/components/FieldTitle'
 
 const DAYS = ['월', '화', '수', '목', '금', '토', '일']
 
@@ -72,24 +74,20 @@ export default function Step1() {
     fileRef.current?.click()
   }
 
-  const transfer = (time: Time) => {
-    const hourInt = Number(time.hour) + time.period === '오후' ? 12 : 0
-    const minuteInt = Number(time.minute)
+  const availableFrom = watch('availableFrom')
+  const availableTo = watch('availableTo')
 
-    return (
-      hourInt.toString().padStart(2, '0') +
-      minuteInt.toString().padStart(2, '0')
-    )
-  }
+  const transferCallback = useCallback(transfer, [])
+
+  const formatTimeToKoreanCallback = useCallback(formatTimeToKorean, [])
+
   const handleStartTimeChange = (time: Time) => {
-    setStartTime(time)
-    setValue('availableFrom', transfer(time))
+    setValue('availableFrom', transferCallback(time))
     setIsStartPickerOpen(false)
   }
 
   const handleEndTimeChange = (time: Time) => {
-    setEndTime(time)
-    setValue('availableTo', transfer(time))
+    setValue('availableTo', transferCallback(time))
     setIsEndPickerOpen(false)
   }
 
@@ -101,17 +99,13 @@ export default function Step1() {
     setIsEndPickerOpen(true)
   }
 
-  const [startTime, setStartTime] = useState<Time | null>(null)
-
-  const [endTime, setEndTime] = useState<Time | null>(null)
-
   const [isStartPickerOpen, setIsStartPickerOpen] = useState<boolean>(false)
   const [isEndPickerOpen, setIsEndPickerOpen] = useState<boolean>(false)
 
   const PICKER_RENDER = [
     {
-      text: startTime
-        ? `${startTime?.period} ${startTime?.hour}시 ${startTime?.minute}분`
+      text: availableFrom
+        ? formatTimeToKoreanCallback(availableFrom)
         : '시작 시간',
       timeText: '부터',
       onChange: handleStartTimeChange,
@@ -120,9 +114,7 @@ export default function Step1() {
     },
 
     {
-      text: endTime
-        ? `${endTime?.period} ${endTime?.hour}시 ${endTime?.minute}분`
-        : '종료 시간',
+      text: availableTo ? formatTimeToKoreanCallback(availableTo) : '종료 시간',
       timeText: '까지',
       onchange: handleEndTimeChange,
       handleOpen: handleOpenEndTimePicker,
@@ -138,7 +130,7 @@ export default function Step1() {
     <Step1Form>
       {/* 출석부 이름 */}
       <TextWrapper>
-        <FieldHeader title="출석부" essential />
+        <FieldTitle title="출석부" essential />
 
         <div className="flex flex-col gap-[1px] w-full text-left">
           <input
@@ -150,7 +142,7 @@ export default function Step1() {
             aria-label="title"
             type="text"
             placeholder="출석부 이름"
-            className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+            className="bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
           />
           {errors.title && (
             <p className="text-red-500 text-xs mt-1" data-cy="title-error">
@@ -162,7 +154,7 @@ export default function Step1() {
 
       {/* 수업 요일 */}
       <TextWrapper>
-        <FieldHeader title="수업 요일" essential />
+        <FieldTitle title="수업 요일" essential />
         <div className="flex flex-col gap-[1px] w-full text-left">
           <div className="grid grid-cols-7 gap-0" data-cy="availableDays">
             {DAYS.map((day, index) => {
@@ -202,7 +194,7 @@ export default function Step1() {
 
       {/* 수업 시간 */}
       <TextWrapper>
-        <FieldHeader title="수업 시간" essential />
+        <FieldTitle title="수업 시간" essential />
         <div className="flex flex-col gap-[1px] w-full text-left">
           <div className="flex items-center gap-4">
             {PICKER_RENDER.map((time, index) => {
@@ -239,7 +231,7 @@ export default function Step1() {
 
       {/* 커버 이미지 */}
       <TextWrapper>
-        <FieldHeader title="커버 이미지" />
+        <FieldTitle title="커버 이미지" />
         <div
           className="w-[81px] h-[81px] bg-bg-base border border-[#E7E7E7] rounded-xl flex justify-center items-center"
           onClick={triggerFileInput}
@@ -266,11 +258,11 @@ export default function Step1() {
 
       {/* 설명*/}
       <TextWrapper>
-        <FieldHeader title="설명" />
+        <FieldTitle title="설명" />
         <input
           {...register('description')}
           type="text"
-          className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+          className="w-full bg-white h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />
       </TextWrapper>
 
@@ -291,8 +283,35 @@ export default function Step1() {
   )
 }
 
-const Step1Form = tw.div`flex flex-col justify-center gap-6 max-w-[342px] w-full`
+const Step1Form = tw.div`flex flex-col justify-center gap-6 w-full`
 
 const TextWrapper = tw.div`
   flex flex-col gap-2
 `
+
+const transfer = (time: Time) => {
+  const hour = time.period === '오후' ? 12 : 0
+
+  const hourInt = Number(time.hour) + hour
+  const minuteInt = Number(time.minute)
+  const hourString = hourInt < 10 ? `0${hourInt}` : hourInt
+  const minuteString = minuteInt < 10 ? `0${minuteInt}` : String(minuteInt)
+  return hourString + minuteString
+}
+const formatTimeToKorean = (time: string): string => {
+  if (!/^\d{4}$/.test(time)) {
+    return toast.error('잘못된 시간 설정입니다')
+  }
+
+  const hour = parseInt(time.slice(0, 2), 10)
+  const minute = parseInt(time.slice(2, 4), 10)
+
+  if (hour > 23 || minute > 59) {
+    return '유효하지 않은 시간입니다'
+  }
+
+  const period = hour < 12 ? '오전' : '오후'
+  const displayHour = hour % 12 === 0 ? 12 : hour % 12
+
+  return `${period} ${displayHour}시 ${minute < 10 ? `0` + minute : minute}분`
+}

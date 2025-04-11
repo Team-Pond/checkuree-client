@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react'
 
-interface IProps {
+type CheckBoxProps = {
   id: string
   label: string
   checked?: boolean
@@ -14,7 +14,7 @@ export default function CheckBox({
   checked,
   onChange,
   ariaLabel,
-}: IProps) {
+}: CheckBoxProps) {
   return (
     <div className="flex items-center w-[167px] h-9 px-4 py-2">
       <label

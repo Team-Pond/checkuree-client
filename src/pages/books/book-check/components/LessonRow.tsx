@@ -1,38 +1,39 @@
-import useLongPress from "@/hook/useLongPress";
-import useModalStore from "@/store/dialogStore";
-import tw from "tailwind-styled-components";
-import ConfirmModal from "./ConfirmModal";
-import { formatLocalTimeString } from "@/utils";
-import { twMerge } from "tailwind-merge";
-import { useLessonUpdate, useRecordDelete } from "../queries";
-import { ScheduleData } from "@/api/type";
-import NoteActiveIcon from "@/assets/icons/book-check/ico-note-active.svg?react";
-import NoteIcon from "@/assets/icons/book-check/ico-note.svg?react";
-import React from "react";
-interface IProps {
-  bookId: number;
-  schedule: ScheduleData;
+import useLongPress from '@/hook/useLongPress'
+import useModalStore from '@/store/dialogStore'
+import tw from 'tailwind-styled-components'
+import ConfirmModal from './ConfirmModal'
+import { formatLocalTimeString } from '@/utils'
+import { twMerge } from 'tailwind-merge'
+import { useLessonUpdate, useRecordDelete } from '../queries'
+import { ScheduleData } from '@/api/type'
+import NoteActiveIcon from '@/assets/icons/book-check/ico-note-active.svg?react'
+import NoteIcon from '@/assets/icons/book-check/ico-note.svg?react'
+import React from 'react'
+
+type LessonRowProps = {
+  bookId: number
+  schedule: ScheduleData
   handleAttendanceStatusWithConfirmation: (
-    targetStatus: "ATTEND" | "ABSENT",
-    schedule: ScheduleData
-  ) => void;
-  openModifyRecordTimeModal: (schedule: ScheduleData) => void;
-  currentDate: string;
+    targetStatus: 'ATTEND' | 'ABSENT',
+    schedule: ScheduleData,
+  ) => void
+  openModifyRecordTimeModal: (schedule: ScheduleData) => void
+  currentDate: string
 }
-function LessonRow(props: IProps) {
+function LessonRow(props: LessonRowProps) {
   const {
     bookId,
     schedule,
     handleAttendanceStatusWithConfirmation,
     openModifyRecordTimeModal,
     currentDate,
-  } = props;
+  } = props
   const { mutate: lessonMutation } = useLessonUpdate({
     bookId,
-  });
+  })
 
-  const { mutate: deleteRecord } = useRecordDelete(bookId, currentDate);
-  const openModal = useModalStore((state) => state.openModal);
+  const { mutate: deleteRecord } = useRecordDelete(bookId, currentDate)
+  const openModal = useModalStore((state) => state.openModal)
   const onLongPress = () => {
     openModal(
       <ConfirmModal message="보강기록을 삭제하시겠습니까?" />,
@@ -42,15 +43,15 @@ function LessonRow(props: IProps) {
           recordId: schedule.recordId,
         }),
       () => {},
-      { text: "삭제하기", color: "bg-bg-interactive-destructive" }
-    );
-  };
+      { text: '삭제하기', color: 'bg-bg-interactive-destructive' },
+    )
+  }
 
   const deleteRecordHandlers = useLongPress(
     () => schedule.isMakeup && onLongPress(),
     () => openModifyRecordTimeModal(schedule),
-    { delay: 300 }
-  );
+    { delay: 300 },
+  )
 
   return (
     <LessonWrapper key={schedule.scheduleId}>
@@ -62,14 +63,14 @@ function LessonRow(props: IProps) {
           {schedule.name}
           {schedule.isMakeup && (
             <span className="text-[#EC9E14] text-xs-medium align-middle">
-              {" "}
+              {' '}
               보강
             </span>
           )}
         </p>
-        {schedule.recordStatus === "ATTEND" && (
+        {schedule.recordStatus === 'ATTEND' && (
           <p className="text-[12px] text-[#59996B] font-medium leading-[14.98px]">
-            {formatLocalTimeString(schedule.recordTime) + " 출석"}
+            {formatLocalTimeString(schedule.recordTime) + ' 출석'}
           </p>
         )}
       </div>
@@ -77,26 +78,26 @@ function LessonRow(props: IProps) {
         <div className="flex gap-2">
           <button
             onClick={() => {
-              handleAttendanceStatusWithConfirmation("ABSENT", schedule);
+              handleAttendanceStatusWithConfirmation('ABSENT', schedule)
             }}
             className={twMerge(
-              "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
-              schedule.recordStatus === "ABSENT"
-                ? "bg-bg-destructive text-text-interactive-destructive"
-                : "bg-bg-disabled text-text-disabled"
+              'rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center',
+              schedule.recordStatus === 'ABSENT'
+                ? 'bg-bg-destructive text-text-interactive-destructive'
+                : 'bg-bg-disabled text-text-disabled',
             )}
           >
             결석
           </button>
           <button
             onClick={() => {
-              handleAttendanceStatusWithConfirmation("ATTEND", schedule);
+              handleAttendanceStatusWithConfirmation('ATTEND', schedule)
             }}
             className={twMerge(
-              "rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center",
-              schedule.recordStatus === "ATTEND"
-                ? "bg-bg-primary text-text-interactive-primary"
-                : "bg-bg-disabled text-text-disabled"
+              'rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center',
+              schedule.recordStatus === 'ATTEND'
+                ? 'bg-bg-primary text-text-interactive-primary'
+                : 'bg-bg-disabled text-text-disabled',
             )}
           >
             출석
@@ -104,28 +105,28 @@ function LessonRow(props: IProps) {
         </div>
         <button
           className={twMerge(
-            "w-8 h-8 flex items-center justify-center rounded-lg",
-            schedule.recordStatus !== "ATTEND"
-              ? "bg-bg-disabled"
+            'w-8 h-8 flex items-center justify-center rounded-lg',
+            schedule.recordStatus !== 'ATTEND'
+              ? 'bg-bg-disabled'
               : schedule.isTaught
-              ? "bg-bg-tertiary"
-              : "bg-bg-base" // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?
+                ? 'bg-bg-tertiary'
+                : 'bg-bg-base', // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?
           )}
           onClick={() => {
             lessonMutation({
               recordId: schedule.recordId,
               isTaught: !schedule.isTaught,
-            });
+            })
           }}
-          disabled={schedule.recordStatus !== "ATTEND"}
+          disabled={schedule.recordStatus !== 'ATTEND'}
         >
           {schedule.isTaught ? <NoteActiveIcon /> : <NoteIcon />}
         </button>
       </div>
     </LessonWrapper>
-  );
+  )
 }
 
-const LessonWrapper = tw.div`w-full h-[56px] flex items-center justify-between px-2`;
+const LessonWrapper = tw.div`w-full h-[56px] flex items-center justify-between px-2`
 
-export default React.memo(LessonRow);
+export default React.memo(LessonRow)

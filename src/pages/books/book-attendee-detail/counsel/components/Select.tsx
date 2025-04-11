@@ -1,22 +1,22 @@
-import * as Select from "@radix-ui/react-select";
+import * as Select from '@radix-ui/react-select'
 import {
   CheckIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-} from "@radix-ui/react-icons";
+} from '@radix-ui/react-icons'
 
-type IProps = {
-  onChange: (id: number) => void;
+type CounsellerSelectProps = {
+  onChange: (id: number) => void
   options: {
-    name: string;
-    value: string;
-  }[];
-  placeholder: string;
-  disabled: boolean;
-};
+    name: string
+    value: string
+  }[]
+  placeholder: string
+  disabled: boolean
+}
 
-const CounsellerSelect = (props: IProps) => {
-  const { onChange, options, placeholder, disabled } = props;
+const CounsellerSelect = (props: CounsellerSelectProps) => {
+  const { onChange, options, placeholder, disabled } = props
 
   return (
     <Select.Root
@@ -54,7 +54,7 @@ const CounsellerSelect = (props: IProps) => {
         </Select.Content>
       </Select.Portal>
     </Select.Root>
-  );
-};
+  )
+}
 
-export default CounsellerSelect;
+export default CounsellerSelect

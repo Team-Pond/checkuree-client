@@ -4,7 +4,7 @@ import LessonRow from './LessonRow'
 import { ScheduleData, ScheduleDataContentType } from '@/api/type'
 import React from 'react'
 
-interface IProps {
+interface ScheduleDataContentTypeProps {
   noNeedLessonTimeScheduleTable: ScheduleDataContentType
   bookId: number
   handleAttendanceStatusWithConfirmation: (
@@ -15,7 +15,7 @@ interface IProps {
 
   openModifyRecordTimeModal: (schedule: ScheduleData) => void
 }
-export default function NoNeedLessonTable(props: IProps) {
+export default function NoNeedLessonTable(props: ScheduleDataContentTypeProps) {
   const {
     noNeedLessonTimeScheduleTable,
     bookId,

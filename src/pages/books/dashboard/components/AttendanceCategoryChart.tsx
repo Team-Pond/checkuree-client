@@ -6,7 +6,7 @@ import { GetAttendeeStatisticsResponse } from '@/api/AttendeeSchema'
 
 const CATEGORY_TEXT = '카테고리별 학생 수'
 
-interface IProps {
+interface AttendanceCategoryChartProps {
   statisticData: GetAttendeeStatisticsResponse
   tabChange: (tab: AttendeeStatisticsType) => void
   tab: AttendeeStatisticsType
@@ -16,7 +16,7 @@ export default function AttendanceCategoryChart({
   statisticData,
   tabChange,
   tab,
-}: IProps) {
+}: AttendanceCategoryChartProps) {
   return (
     <Wrapper>
       <ButtonsWrapper>

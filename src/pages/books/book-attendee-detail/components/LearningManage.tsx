@@ -1,46 +1,46 @@
-import { useParams } from "react-router-dom";
-import { Fragment } from "react";
-import NextProgressModal from "./NextProgressModal";
-import { useProgressLog, useProgressPromote } from "../queries";
-import useModalStore from "@/store/dialogStore";
-import useProgressFormStore from "@/store/progressStore";
-import { Progresses } from "@/api/type";
+import { useParams } from 'react-router-dom'
+import { Fragment } from 'react'
+import NextProgressModal from './NextProgressModal'
+import { useProgressLog, useProgressPromote } from '../queries'
+import useModalStore from '@/store/dialogStore'
+import useProgressFormStore from '@/store/progressStore'
+import { Progresses } from '@/api/type'
 
-type IProps = {
+type LearningManageProps = {
   studentInfo: {
-    name: string;
-    age: number;
-    grade: string;
-    scheduleDays: string;
-  };
-  progresses: Progresses;
-};
+    name: string
+    age: number
+    grade: string
+    scheduleDays: string
+  }
+  progresses: Progresses
+}
 
-export default function LearningManage(props: IProps) {
-  const { progresses, studentInfo } = props;
-  const { bookId, attendeeId } = useParams();
+export default function LearningManage(props: LearningManageProps) {
+  const { progresses, studentInfo } = props
+  const { bookId, attendeeId } = useParams()
 
   const { data: progressLog } = useProgressLog({
     bookId: Number(bookId),
     attendeeId: Number(attendeeId),
-  });
+  })
 
-  const openModal = useModalStore((state) => state.openModal);
+  const openModal = useModalStore((state) => state.openModal)
 
-  const { formData } = useProgressFormStore();
+  const { formData } = useProgressFormStore()
 
   // TODO: mutation 후 데이터 최신작업 필요
   const { mutate: progressMutation } = useProgressPromote({
     bookId: Number(bookId),
     formData,
     attendeeId: Number(attendeeId),
-  });
+  })
 
   const openNextProgressModal = (progressId: number) => {
     openModal(<NextProgressModal bookId={Number(bookId)} />, () => {
-      progressMutation(progressId);
-    });
-  };
+      progressMutation(progressId)
+    })
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -53,21 +53,17 @@ export default function LearningManage(props: IProps) {
           height={40}
           className="rounded-full ml-[23px]"
         />
-        <div className="flex flex-col gap-2 text-left">
-          <div className="flex flex-col gap-1">
-            <p className="text-m-bold">
-              <span className="text-text-primary">{studentInfo.name}</span>
-              <span className="text-text-secondary text-m-semibold ml-2">
-                {studentInfo.age}
-              </span>
-            </p>
-            <p className="text-s-medium">
-              <span className="text-text-brand">
-                {studentInfo.scheduleDays}
-              </span>
-              <span className="text-[#b0b0b0]"> {studentInfo.grade}</span>
-            </p>
-          </div>
+        <div className="flex flex-col gap-1 text-left">
+          <p className="text-m-bold">
+            <span className="text-text-primary">{studentInfo.name}</span>
+            <span className="text-text-secondary text-m-semibold ml-2">
+              {studentInfo.age}
+            </span>
+          </p>
+          <p className="text-s-medium">
+            <span className="text-text-brand">{studentInfo.scheduleDays}</span>
+            <span className="text-[#b0b0b0]"> {studentInfo.grade}</span>
+          </p>
         </div>
       </div>
 
@@ -115,8 +111,8 @@ export default function LearningManage(props: IProps) {
             >
               <div className="text-center truncate">{progress.gradeTitle}</div>
               <div className="text-center">
-                {progress.startedAt.substring(5).replaceAll("-", ".")}-
-                {progress.endedAt.substring(5).replaceAll("-", ".")}
+                {progress.startedAt.substring(5).replaceAll('-', '.')}-
+                {progress.endedAt.substring(5).replaceAll('-', '.')}
               </div>
               <div className="text-center">{progress.lessonCount}</div>
               <div className="text-center">2주</div>
@@ -125,5 +121,5 @@ export default function LearningManage(props: IProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }

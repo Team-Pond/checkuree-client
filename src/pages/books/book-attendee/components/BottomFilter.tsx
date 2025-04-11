@@ -1,62 +1,62 @@
-import { DaysType, GenderType } from "@/api/type";
-import BottomDrawer from "@/components/BottomDrawer";
-import { useState } from "react";
-import { twMerge } from "tailwind-merge";
+import { DaysType, GenderType } from '@/api/type'
+import BottomDrawer from '@/components/BottomDrawer'
+import { useState } from 'react'
+import { twMerge } from 'tailwind-merge'
 
-type IProps = {
+type BottomFilterProps = {
   onChangeFilter: (
     dayArrays: DaysType[],
     gender: GenderType,
-    age: { min: number; max: number }
-  ) => void;
-  openFilter: boolean;
-  onDrawerChange: () => void;
-  DaysMatch: Record<string, DaysType>;
-};
+    age: { min: number; max: number },
+  ) => void
+  openFilter: boolean
+  onDrawerChange: () => void
+  DaysMatch: Record<string, DaysType>
+}
 
-const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
+const DAYS = ['월', '화', '수', '목', '금', '토', '일']
 
 const GENDER_BUTTONS: { gender: GenderType; name: string }[] = [
   {
-    gender: "MALE",
-    name: "남성",
+    gender: 'MALE',
+    name: '남성',
   },
   {
-    gender: "FEMALE",
-    name: "여성",
+    gender: 'FEMALE',
+    name: '여성',
   },
-];
+]
 
-export default function BottomFilter(props: IProps) {
-  const { onChangeFilter, openFilter, onDrawerChange, DaysMatch } = props;
-  const [dayArrays, setDayArrays] = useState<DaysType[]>([]);
-  const [gender, setGender] = useState<GenderType>("");
+export default function BottomFilter(props: BottomFilterProps) {
+  const { onChangeFilter, openFilter, onDrawerChange, DaysMatch } = props
+  const [dayArrays, setDayArrays] = useState<DaysType[]>([])
+  const [gender, setGender] = useState<GenderType>('')
 
   const [age, setAge] = useState<{
-    min: number;
-    max: number;
-  }>({ min: 0, max: 100 });
+    min: number
+    max: number
+  }>({ min: 0, max: 100 })
   const onAgeChange = (min: number, max: number) => {
-    setAge({ min, max });
-  };
+    setAge({ min, max })
+  }
 
   const onDaysChange = (day: DaysType) => {
     if (dayArrays.includes(DaysMatch[day])) {
-      setDayArrays(dayArrays.filter((item) => item !== DaysMatch[day]));
+      setDayArrays(dayArrays.filter((item) => item !== DaysMatch[day]))
     } else {
-      setDayArrays([...dayArrays, DaysMatch[day]]);
+      setDayArrays([...dayArrays, DaysMatch[day]])
     }
-  };
+  }
 
   const onChangeGender = (selectGender: GenderType) => {
-    setGender(gender === selectGender ? "" : selectGender);
-  };
+    setGender(gender === selectGender ? '' : selectGender)
+  }
 
   const resetFilter = () => {
-    setDayArrays([]);
-    setGender("");
-    setAge({ min: 0, max: 100 });
-  };
+    setDayArrays([])
+    setGender('')
+    setAge({ min: 0, max: 100 })
+  }
   return (
     <BottomDrawer
       isOpen={openFilter}
@@ -74,15 +74,15 @@ export default function BottomFilter(props: IProps) {
                       key={button.gender}
                       onClick={() => onChangeGender(button.gender)}
                       className={twMerge(
-                        "rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover",
+                        'rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover',
                         gender === button.gender
-                          ? "border-border-brand text-text-brand"
-                          : "text-border-secondary-hover"
+                          ? 'border-border-brand text-text-brand'
+                          : 'text-border-secondary-hover',
                       )}
                     >
                       {button.name}
                     </button>
-                  );
+                  )
                 })}
               </div>
             </div>
@@ -94,10 +94,10 @@ export default function BottomFilter(props: IProps) {
                 <button
                   onClick={() => onAgeChange(0, 6)}
                   className={twMerge(
-                    "rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium",
+                    'rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium',
                     age.min === 0 && age.max === 6
-                      ? "border-border-brand text-text-brand"
-                      : "text-border-secondary-hover"
+                      ? 'border-border-brand text-text-brand'
+                      : 'text-border-secondary-hover',
                   )}
                 >
                   미취학
@@ -105,10 +105,10 @@ export default function BottomFilter(props: IProps) {
                 <button
                   onClick={() => onAgeChange(7, 12)}
                   className={twMerge(
-                    "rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium",
+                    'rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium',
                     age.min === 7 && age.max === 12
-                      ? "border-border-brand text-text-brand"
-                      : "text-border-secondary-hover"
+                      ? 'border-border-brand text-text-brand'
+                      : 'text-border-secondary-hover',
                   )}
                 >
                   초등
@@ -116,10 +116,10 @@ export default function BottomFilter(props: IProps) {
                 <button
                   onClick={() => onAgeChange(13, 15)}
                   className={twMerge(
-                    "rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium",
+                    'rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium',
                     age.min === 13 && age.max === 15
-                      ? "border-border-brand text-text-brand"
-                      : "text-border-secondary-hover"
+                      ? 'border-border-brand text-text-brand'
+                      : 'text-border-secondary-hover',
                   )}
                 >
                   중등
@@ -127,10 +127,10 @@ export default function BottomFilter(props: IProps) {
                 <button
                   onClick={() => onAgeChange(16, 18)}
                   className={twMerge(
-                    "rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium",
+                    'rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium',
                     age.min === 16 && age.max === 18
-                      ? "border-border-brand text-text-brand"
-                      : "text-border-secondary-hover"
+                      ? 'border-border-brand text-text-brand'
+                      : 'text-border-secondary-hover',
                   )}
                 >
                   고등
@@ -138,10 +138,10 @@ export default function BottomFilter(props: IProps) {
                 <button
                   onClick={() => onAgeChange(19, 100)}
                   className={twMerge(
-                    "rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium",
+                    'rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium',
                     age.min === 19 && age.max === 100
-                      ? "border-border-brand text-text-brand"
-                      : "text-border-secondary-hover"
+                      ? 'border-border-brand text-text-brand'
+                      : 'text-border-secondary-hover',
                   )}
                 >
                   성인
@@ -158,22 +158,22 @@ export default function BottomFilter(props: IProps) {
                     <button
                       key={day}
                       className={twMerge(
-                        "rounded-lg border border-[#d1d1d1] w-[41px] h-[33px] text-s-medium text-border-secondary-hover",
+                        'rounded-lg border border-[#d1d1d1] w-[41px] h-[33px] text-s-medium text-border-secondary-hover',
                         dayArrays.includes(DaysMatch[DAYS[index]])
-                          ? "border-border-brand text-text-brand"
-                          : "text-border-secondary-hover"
+                          ? 'border-border-brand text-text-brand'
+                          : 'text-border-secondary-hover',
                       )}
                       onClick={() => onDaysChange(DAYS[index] as DaysType)}
                     >
                       {DAYS[index]}
                     </button>
-                  );
+                  )
                 })}
               </div>
             </div>
           </div>
 
-          <div className={"flex gap-4 w-full"}>
+          <div className={'flex gap-4 w-full'}>
             <button
               className="w-full h-[54px] bg-gray-300 text-text-secondary  rounded-2xl text-l-semibold"
               onClick={resetFilter}
@@ -190,5 +190,5 @@ export default function BottomFilter(props: IProps) {
         </>
       }
     />
-  );
+  )
 }
