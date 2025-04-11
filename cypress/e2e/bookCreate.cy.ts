@@ -47,7 +47,6 @@ describe('출석부 생성 시나리오', () => {
   })
   it('Bad Path', () => {
     // When
-
     cy.get('[data-cy="title"]').should('be.visible')
     cy.get('[data-cy="availableDays"]').should('be.visible')
     cy.get('[data-cy="startTime"]').should('be.visible')
