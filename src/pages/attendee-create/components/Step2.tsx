@@ -18,6 +18,12 @@ import FieldHeader from '@/components/FieldTitle'
 import { getSub30MinuteHhmm } from '@/utils'
 import AttendeeDrawer from '@/components/AttendeeDrawer'
 
+export interface ScheduleParamsType {
+  dayOfWeek: string
+  hhmm: string
+  isSelected: boolean
+}
+
 interface Step2Props {
   attendanceBookId: number
   onChangeGrade: (gradeId: number) => void
@@ -25,11 +31,7 @@ interface Step2Props {
 
 function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
   const { bookId } = useParams()
-  const [scheduleParams, setScheduleParams] = useState<{
-    dayOfWeek: string
-    hhmm: string
-    isSelected: boolean
-  }>({
+  const [scheduleParams, setScheduleParams] = useState<ScheduleParamsType>({
     dayOfWeek: '',
     hhmm: '',
     isSelected: false,
@@ -180,30 +182,28 @@ function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
       <FieldWrapper>
         <FieldHeader title="커리큘럼" essential />
         <div
-          className="w-full flex justify-center"
+          className="w-full flex flex-col gap-[1px] text-left justify-center"
           onClick={() => handleBottomDrawer(true)}
         >
-          <div className="flex flex-col gap-[1px] w-full text-left">
-            <input
-              type="input"
-              placeholder="커리큘럼 선택"
-              aria-label="curriculum-select"
-              data-cy="curriculum-select"
-              value={
-                selectedSubject?.title && selectedSubjectItems?.title
-                  ? `${selectedSubject.title} - ${selectedSubjectItems.title}`
-                  : ''
-              }
-              className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#5D5D5D] text-left cursor-pointer"
-              readOnly
-            />
+          <input
+            type="input"
+            placeholder="커리큘럼 선택"
+            aria-label="curriculum-select"
+            data-cy="curriculum-select"
+            value={
+              selectedSubject?.title && selectedSubjectItems?.title
+                ? `${selectedSubject.title} - ${selectedSubjectItems.title}`
+                : ''
+            }
+            className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#5D5D5D] text-left cursor-pointer"
+            readOnly
+          />
 
-            {(errors?.progressRequest || errors?.schedulesRequest) && (
-              <p className="text-red-500 text-xs mt-1">
-                커리큘럼 선택 후 클래스 일정 선택은 필수입니다.
-              </p>
-            )}
-          </div>
+          {(errors?.progressRequest || errors?.schedulesRequest) && (
+            <p className="text-red-500 text-xs mt-1">
+              커리큘럼 선택 후 클래스 일정 선택은 필수입니다.
+            </p>
+          )}
         </div>
         <input type="hidden" {...register('schedulesRequest.schedules')} />
       </FieldWrapper>

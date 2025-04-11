@@ -7,14 +7,15 @@ type Attendee = {
   age: number
 }
 
+type ScheduleParamsType = {
+  dayOfWeek: string
+  hhmm: string
+  isSelected: boolean
+}
 interface AttendeeDrawerProps {
   isOpen: boolean
   onClose: () => void
-  scheduleParams: {
-    dayOfWeek: string
-    hhmm: string
-    isSelected: boolean
-  }
+  scheduleParams: ScheduleParamsType
   scheduleData?: Attendee[]
   handleAttendeeSchedules: (day: DaysType, hhmm: string) => void
   handleRemoveAttendeeSchedules: (day: DaysType, hhmm: string) => void

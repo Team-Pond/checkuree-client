@@ -22,6 +22,12 @@ interface CurriculumModifyProps {
   onChangeGrade: (gradeId: number) => void
 }
 
+export interface ScheduleParamsType {
+  dayOfWeek: string
+  hhmm: string
+  isSelected: boolean
+}
+
 export default function CurriculumModify({
   setAttendeeSchedules,
   onChangeGrade,
@@ -40,11 +46,7 @@ export default function CurriculumModify({
     title: string
   }>()
 
-  const [scheduleParams, setScheduleParams] = useState<{
-    dayOfWeek: string
-    hhmm: string
-    isSelected: boolean
-  }>({
+  const [scheduleParams, setScheduleParams] = useState<ScheduleParamsType>({
     dayOfWeek: '',
     hhmm: '',
     isSelected: false,
