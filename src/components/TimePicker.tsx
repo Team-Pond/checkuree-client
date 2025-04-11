@@ -78,7 +78,7 @@ const TimePicker = (props: IProps) => {
      */
     <div
       ref={ref}
-      className="relative w-[34px] h-[87px] overflow-y-scroll scrollbar-none snap-y snap-mandatory will-change-transform"
+      className="relative w-[34px] h-[87px] overflow-y-scroll scrollbar-none "
       onScroll={() => handleScroll(ref, items, setSelected)}
     >
       {/* Spacer for top alignment */}

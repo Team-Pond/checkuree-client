@@ -54,6 +54,18 @@ export default function BookCreate() {
 
   const { mutate: bookMutation } = useBookCreate()
 
+  const handleNextStep = async () => {
+    const isValid = await trigger([
+      'availableDays',
+      'availableFrom',
+      'availableTo',
+      'title',
+    ])
+    if (isValid) {
+      handleStep2Change(true)
+    }
+  }
+
   useEffect(() => {
     const fetchSubjects = async () => {
       await getSubjects()
@@ -80,6 +92,7 @@ export default function BookCreate() {
         })}
       >
         <FormHeader isStep2={funnel.step === 'Step2'} />
+
         <FormInner>
           <funnel.Render
             Step1={({ history }) => (
