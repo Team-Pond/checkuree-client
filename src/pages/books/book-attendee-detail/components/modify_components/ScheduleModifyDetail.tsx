@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-
 import { DaysType } from '@/api/type'
 import { UpdateAttendeeScheduleRequest } from '@/api/AttendeeSchema'
 import {
@@ -13,17 +12,17 @@ import ScheduleTable from '../ScheduleTable'
 import AttendeeDrawer from '@/components/AttendeeDrawer'
 import { ScheduleParamsType } from '../CurriculumModify'
 
-interface IProps {
+type ScheduleModifyDetailProps = {
   setAttendeeSchedules: React.Dispatch<
     React.SetStateAction<UpdateAttendeeScheduleRequest | undefined>
   >
-  attendeeSchedules: UpdateAttendeeScheduleRequest | undefined
+  attendeeSchedules: UpdateAttendeeScheduleRequest
 }
 
 export default function ScheduleModifyDetail({
   setAttendeeSchedules,
   attendeeSchedules,
-}: IProps) {
+}: ScheduleModifyDetailProps) {
   const { bookId } = useParams()
 
   const [scheduleParams, setScheduleParams] = useState<ScheduleParamsType>({
@@ -147,7 +146,6 @@ export default function ScheduleModifyDetail({
         }
       }
 
-      // 30분 전도 없으면 ... ? 넌 나가라 그냥
       return prev
     })
   }

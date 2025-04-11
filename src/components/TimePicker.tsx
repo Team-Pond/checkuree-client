@@ -7,7 +7,7 @@ const minutes = Array.from({ length: 6 }, (_, i) =>
   (i * 10).toString().padStart(2, '0'),
 )
 
-export type IProps = {
+export type TimePickerProps = {
   handleTimeChange: (time: {
     period: string
     hour: string
@@ -16,7 +16,7 @@ export type IProps = {
   handleOpenTimePicker: (state: boolean) => void
 }
 
-const TimePicker = (props: IProps) => {
+const TimePicker = (props: TimePickerProps) => {
   const { handleTimeChange, handleOpenTimePicker } = props
 
   const [selectedPeriod, setSelectedPeriod] = useState(periods[0])

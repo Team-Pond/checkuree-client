@@ -1,29 +1,28 @@
-import { useNavigate, useParams } from "react-router-dom";
-import ScheduleModifyDetail from "./modify_components/ScheduleModifyDetail";
-import { useOnlyScheduleUpdate } from "../../../attendee-create/queries";
-import { useEffect, useState } from "react";
-import { UpdateAttendeeScheduleRequest } from "../../../../api/AttendeeSchema";
-import { useAttendeeDetail } from "../queries";
-import SEO from "@/components/SEO";
+import { useNavigate, useParams } from 'react-router-dom'
+import ScheduleModifyDetail from './modify_components/ScheduleModifyDetail'
+import { useOnlyScheduleUpdate } from '../../../attendee-create/queries'
+import { useEffect, useState } from 'react'
+import { UpdateAttendeeScheduleRequest } from '../../../../api/AttendeeSchema'
+import { useAttendeeDetail } from '../queries'
+import SEO from '@/components/SEO'
 
 export const ScheduleModify = () => {
-  const { bookId, attendeeId } = useParams();
-  const navigate = useNavigate();
+  const { bookId, attendeeId } = useParams()
+  const navigate = useNavigate()
 
   const attendeeDetail = useAttendeeDetail({
     bookId: Number(bookId),
     attendeeId: Number(attendeeId),
-  });
+  })
 
-  const [attendeeSchedules, setAttendeeSchedules] = useState<
-    UpdateAttendeeScheduleRequest | undefined
-  >();
+  const [attendeeSchedules, setAttendeeSchedules] =
+    useState<UpdateAttendeeScheduleRequest>()
 
   const { mutate: scheduleMutation } = useOnlyScheduleUpdate({
     paramBookId: Number(bookId),
     attendeeId: Number(attendeeId),
     attendeeSchedules: attendeeSchedules!,
-  });
+  })
 
   useEffect(() => {
     if (attendeeDetail.data) {
@@ -32,9 +31,9 @@ export const ScheduleModify = () => {
           day: schedule.day,
           hhmm: schedule.time.substring(0, 5),
         })),
-      });
+      })
     }
-  }, [attendeeDetail?.data]);
+  }, [attendeeDetail?.data])
 
   return (
     <form className="flex flex-col gap-7 w-full pb-[30px]">
@@ -62,13 +61,13 @@ export const ScheduleModify = () => {
           <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
             <ScheduleModifyDetail
               setAttendeeSchedules={setAttendeeSchedules}
-              attendeeSchedules={attendeeSchedules}
+              attendeeSchedules={attendeeSchedules!}
             />
             <div className="flex gap-4 w-full">
               <button
                 type="button"
                 onClick={() => {
-                  navigate(-1);
+                  navigate(-1)
                 }}
                 className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
               >
@@ -76,8 +75,8 @@ export const ScheduleModify = () => {
               </button>
               <button
                 onClick={() => {
-                  scheduleMutation();
-                  navigate(-1);
+                  scheduleMutation()
+                  navigate(-1)
                 }}
                 type="button"
                 className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
@@ -89,5 +88,5 @@ export const ScheduleModify = () => {
         </div>
       </div>
     </form>
-  );
-};
+  )
+}

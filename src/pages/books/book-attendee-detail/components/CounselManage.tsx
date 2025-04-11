@@ -1,27 +1,26 @@
-import CounselList from "./CounselList";
-import { useCounsellingList } from "../queries";
-import { useNavigate, useParams } from "react-router-dom";
-import { Associates } from "@/api/type";
+import CounselList from './CounselList'
+import { useCounsellingList } from '../queries'
+import { useNavigate, useParams } from 'react-router-dom'
+import { Associates } from '@/api/type'
 
-type IProps = {
+type CounselManageProps = {
   studentInfo: {
-    name: string;
-    age: number;
-    grade: string;
-    scheduleDays: string;
-    associates: Associates[];
-  };
-};
-export default function CounselManage(props: IProps) {
-  const { studentInfo } = props;
-  const { bookId, attendeeId } = useParams();
+    name: string
+    age: number
+    grade: string
+    scheduleDays: string
+    associates: Associates[]
+  }
+}
+export default function CounselManage(props: CounselManageProps) {
+  const { studentInfo } = props
+  const { bookId, attendeeId } = useParams()
+  const navigate = useNavigate()
 
   const { data: counsellingList } = useCounsellingList({
     bookId: parseInt(bookId!),
     attendeeId: parseInt(attendeeId!),
-  });
-
-  const navigate = useNavigate();
+  })
 
   return (
     <div className="flex flex-col gap-4">
@@ -44,7 +43,7 @@ export default function CounselManage(props: IProps) {
             <p className="text-s-medium">
               <span className="text-text-brand">
                 {studentInfo.scheduleDays}
-              </span>{" "}
+              </span>{' '}
               <span className="text-[#b0b0b0]"> {studentInfo.grade}</span>
             </p>
           </div>
@@ -72,7 +71,7 @@ export default function CounselManage(props: IProps) {
                   associates: studentInfo.associates,
                   name: studentInfo.name,
                 },
-              }
+              },
             )
           }
           className="w-[88px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
@@ -87,5 +86,5 @@ export default function CounselManage(props: IProps) {
         </button>
       </div>
     </div>
-  );
+  )
 }

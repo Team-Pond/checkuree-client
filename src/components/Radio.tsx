@@ -1,4 +1,4 @@
-interface IProps {
+type RadioProps = {
   id: string
   label: string
   checked: boolean
@@ -11,7 +11,7 @@ export default function Radio({
   checked,
   onChange,
   ariaLabel,
-}: IProps) {
+}: RadioProps) {
   return (
     <div className="inline-flex items-center">
       <div

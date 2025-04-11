@@ -1,11 +1,14 @@
 import { Book } from '@/context/BookContext'
 import { formatTimeRange, getDayGroupFromInput } from '@/utils'
 
-interface IProps {
+interface MainContentProps {
   bookList: Book[]
   handleNavigation: (bookData: Book) => void
 }
-export default function MainContent({ bookList, handleNavigation }: IProps) {
+export default function MainContent({
+  bookList,
+  handleNavigation,
+}: MainContentProps) {
   return (
     <div className="flex-1 bg-bg-secondary flex flex-col items-center">
       <div className="w-full max-w-[340px]  border-spacing-0 py-5 grid grid-cols-2  gap-y-6 gap-x-4 ">

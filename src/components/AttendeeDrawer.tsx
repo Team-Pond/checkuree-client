@@ -12,6 +12,7 @@ type ScheduleParamsType = {
   hhmm: string
   isSelected: boolean
 }
+
 interface AttendeeDrawerProps {
   isOpen: boolean
   onClose: () => void
@@ -41,7 +42,7 @@ export default function AttendeeDrawer({
         </div>
 
         {/* 수강생 목록 */}
-        <div className="grid grid-cols-2 px-[24px]">
+        <div className="grid grid-cols-2 px-6">
           {scheduleData?.map((attendee, index) => (
             <div
               // 중복 데이터가 발생하는 현상이 있어 key 변경

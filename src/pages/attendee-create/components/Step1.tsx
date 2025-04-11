@@ -7,9 +7,10 @@ import { RelationType } from '@/api/type'
 import Radio from '@/components/Radio'
 import CheckBox from '@/components/CheckBox'
 import tw from 'tailwind-styled-components'
-import FieldHeader from '../../../components/FieldTitle'
+
 import { relationTypeToKor } from '@/utils/enumMapper'
 import { spaceBlockKeyDown } from '@/utils'
+import FieldTitle from '../../../components/FieldTitle'
 
 export default function Step1() {
   const handleDateChange = (
@@ -83,7 +84,7 @@ export default function Step1() {
     <Step1Form>
       {/* 학생 이름 */}
       <FieldWrapper>
-        <FieldHeader title="학생 이름" essential />
+        <FieldTitle title="학생 이름" essential />
         <div className="flex flex-col gap-[1px] w-full text-left">
           <input
             data-cy="name-input"
@@ -103,7 +104,7 @@ export default function Step1() {
       </FieldWrapper>
       {/* 학생 생년월일/성별 */}
       <FieldWrapper>
-        <FieldHeader title="학생 생년월일/성별" essential />
+        <FieldTitle title="학생 생년월일/성별" essential />
         <div className="flex flex-col gap-[1px] w-full text-left">
           <div className="flex items-center gap-[9px]">
             <input
@@ -153,7 +154,7 @@ export default function Step1() {
 
       {/* 학생 입학일 */}
       <FieldWrapper>
-        <FieldHeader title="학생 입학일" essential />
+        <FieldTitle title="학생 입학일" essential />
 
         <div className="flex flex-col gap-[1px] w-full text-left">
           <div className="flex items-center gap-[9px]">
@@ -199,7 +200,7 @@ export default function Step1() {
       </FieldWrapper>
       {/* 가족 연락처 */}
       <FieldWrapper>
-        <FieldHeader title="가족 연락처" />
+        <FieldTitle title="가족 연락처" />
         <div className="flex flex-col gap-[1px] w-full text-left">
           <div className="flex gap-2">
             <Select
@@ -275,7 +276,7 @@ export default function Step1() {
       </FieldWrapper>
       {/* 학생 주소 */}
       <FieldWrapper>
-        <FieldHeader title="학생 주소" />
+        <FieldTitle title="학생 주소" />
         <div className="flex flex-col gap-[1px] w-full text-left">
           <input
             type="text"
@@ -287,7 +288,7 @@ export default function Step1() {
       </FieldWrapper>
       {/* 학교(선택) */}
       <FieldWrapper>
-        <FieldHeader title="학교" />
+        <FieldTitle title="학교" />
         <input
           type="text"
           placeholder="개굴초등학교"
@@ -297,7 +298,7 @@ export default function Step1() {
       </FieldWrapper>
       {/* 비고(선택) */}
       <FieldWrapper>
-        <FieldHeader title="비고" />
+        <FieldTitle title="비고" />
         <input
           type="text"
           placeholder=""

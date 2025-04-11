@@ -14,9 +14,10 @@ import { CreateAttendeeSchema } from '../_schema'
 import { DaysType } from '@/api/type'
 import ScheduleTable from './ScheduleTable'
 import tw from 'tailwind-styled-components'
-import FieldHeader from '@/components/FieldTitle'
+
 import { getSub30MinuteHhmm } from '@/utils'
 import AttendeeDrawer from '@/components/AttendeeDrawer'
+import FieldTitle from '@/components/FieldTitle'
 
 export interface ScheduleParamsType {
   dayOfWeek: string
@@ -180,7 +181,7 @@ function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
       <FieldWrapper>
-        <FieldHeader title="커리큘럼" essential />
+        <FieldTitle title="커리큘럼" essential />
         <div
           className="w-full flex flex-col gap-[1px] text-left justify-center"
           onClick={() => handleBottomDrawer(true)}
@@ -208,7 +209,7 @@ function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
         <input type="hidden" {...register('schedulesRequest.schedules')} />
       </FieldWrapper>
       <FieldWrapper>
-        <FieldHeader title="클래스 일정" essential />
+        <FieldTitle title="클래스 일정" essential />
         {scheduleTable && (
           <ScheduleTable
             scheduleTable={scheduleTable.scheduleTable}

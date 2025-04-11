@@ -1,41 +1,39 @@
-import React from "react";
-
 import {
   counsellingTopicTypeToKor,
   counsellingTypeToKor,
   relationTypeToKor,
-} from "../../../../utils/enumMapper";
+} from '@/utils/enumMapper'
 
-import { useNavigate, useParams } from "react-router-dom";
-import { RelationType } from "@/api/type";
-import { CounsellingTopicType, CounsellingType } from "@/api/CounselSchema";
-import dayjs from "dayjs";
+import { useNavigate, useParams } from 'react-router-dom'
+import { RelationType } from '@/api/type'
+import { CounsellingTopicType, CounsellingType } from '@/api/CounselSchema'
+import dayjs from 'dayjs'
 
-interface IProps {
-  counselType: CounsellingType;
-  counselSubjects: CounsellingTopicType[];
-  counselleeType: RelationType;
-  counsellingAt: Date;
-  counsellingId: number;
-  counsellorName?: string;
-  counsellorId?: number;
-  counseleeId: number; // 상담자 번호
+interface CounselListProps {
+  counselType: CounsellingType
+  counselSubjects: CounsellingTopicType[]
+  counselleeType: RelationType
+  counsellingAt: Date
+  counsellingId: number
+  counsellorName?: string
+  counsellorId?: number
+  counseleeId: number // 상담자 번호
 }
-const CounselList = (args: IProps) => {
-  const navigate = useNavigate();
+const CounselList = (args: CounselListProps) => {
+  const navigate = useNavigate()
 
-  const { bookId, attendeeId } = useParams();
+  const { bookId, attendeeId } = useParams()
 
-  const { counselType, counselleeType, counsellingAt, counselSubjects } = args;
-  const slicedSubjects = [];
+  const { counselType, counselleeType, counsellingAt, counselSubjects } = args
+  const slicedSubjects = []
   for (let i = 0; i < counselSubjects.length; i += 2) {
-    slicedSubjects.push(counselSubjects.slice(i, i + 2));
+    slicedSubjects.push(counselSubjects.slice(i, i + 2))
   }
 
   return (
     <div className="w-full rounded-2xl text-left bg-white p-4 flex flex-col gap-5">
       <p className="flex text-s-bold text-[#5d5d5d]">
-        상담 내역{" "}
+        상담 내역{' '}
         <img
           src="/images/icons/ico-pencil.svg"
           width={20}
@@ -44,14 +42,14 @@ const CounselList = (args: IProps) => {
           onClick={() => {
             navigate(
               `/book/${bookId}/attendee/${attendeeId}/counselling${location.search}`,
-              { state: args }
-            );
+              { state: args },
+            )
           }}
         />
       </p>
       <div className="flex flex-col gap-2">
         <p className="text-m-semibold text-text-primary">
-          {dayjs(counsellingAt).format("YYYY.MM.DD")}
+          {dayjs(counsellingAt).format('YYYY.MM.DD')}
         </p>
         <div className="flex flex-col space-y-1">
           <div className="flex items-center text-sm">
@@ -67,20 +65,20 @@ const CounselList = (args: IProps) => {
                 .reduce<CounsellingTopicType[][]>((acc, cur) => {
                   if (
                     !acc.length ||
-                    acc[acc.length - 1].join(", ").length >= 17
+                    acc[acc.length - 1].join(', ').length >= 17
                   )
-                    acc.push([]); // 길이가 17이 넘어가는 경우 줄 띄우기
-                  acc[acc.length - 1].push(cur);
-                  return acc;
+                    acc.push([]) // 길이가 17이 넘어가는 경우 줄 띄우기
+                  acc[acc.length - 1].push(cur)
+                  return acc
                 }, [])
                 .map((subjects) => {
                   return (
                     <p className="break-keep text-left text-s-semibold">
                       {subjects
                         .map((subject) => counsellingTopicTypeToKor(subject))
-                        .join(", ")}
+                        .join(', ')}
                     </p>
-                  );
+                  )
                 })}
             </div>
           </div>
@@ -93,7 +91,7 @@ const CounselList = (args: IProps) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CounselList;
+export default CounselList
