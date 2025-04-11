@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
 import Step1 from './components/Step1'
 import Step2 from './components/Step2'
-import { twMerge } from 'tailwind-merge'
 import { getSubjects } from '@/api/CourseApiClient'
-
 import { FormProvider, useForm } from 'react-hook-form'
 import { useBookCreate } from './queries'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -11,18 +9,38 @@ import { bookSchema, CreateBookSchema } from './_schema'
 import SEO from '@/components/SEO'
 import FormHeader from './components/FormHeader'
 import tw from 'tailwind-styled-components'
+import { useFunnel } from '@use-funnel/react-router-dom'
+import { Context } from './useFunnel/context'
+
+// 각 단계의 컨텍스트 타입 정의 (앞서 정의한 타입 활용 가능)
+type FunnelContext = {
+  Step1: Context
+  Step2: Context & {
+    courses?: CreateBookSchema['courses']
+  }
+}
 
 export default function BookCreate() {
-  const [isStep2, setIsStep2] = useState<boolean>(false)
+  const funnel = useFunnel<FunnelContext>({
+    id: 'book-create',
+    initial: {
+      step: 'Step1',
+      context: {
+        availableFrom: '',
+        availableTo: '',
+        availableDays: [],
+        title: '',
+      },
+    },
+  })
 
-  const handleStep2Change = (state: boolean) => setIsStep2(state)
   const handleCurriculum = (state: boolean) => setIsCurriculum(state)
 
   const [isCurriculum, setIsCurriculum] = useState<boolean>(false)
 
   const methods = useForm<CreateBookSchema>({
     shouldUnregister: false,
-    mode: 'onSubmit',
+    mode: 'onChange',
     defaultValues: {
       availableTo: '',
       availableFrom: '',
@@ -35,18 +53,6 @@ export default function BookCreate() {
   const { getValues, trigger, handleSubmit } = methods
 
   const { mutate: bookMutation } = useBookCreate()
-
-  const handleNextStep = async () => {
-    const isValid = await trigger([
-      'availableDays',
-      'availableFrom',
-      'availableTo',
-      'title',
-    ])
-    if (isValid) {
-      handleStep2Change(true)
-    }
-  }
 
   useEffect(() => {
     const fetchSubjects = async () => {
@@ -73,51 +79,56 @@ export default function BookCreate() {
           })
         })}
       >
-        <FormHeader isStep2={isStep2} />
+        <FormHeader isStep2={funnel.step === 'Step2'} />
+
         <FormInner>
-          <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
-            {isStep2 ? (
-              <Step2
-                handleCurriculum={handleCurriculum}
-                isCurriculum={isCurriculum}
-              />
-            ) : (
-              <Step1 />
-            )}
-
-            {!isStep2 && (
-              <button
-                type="button" // submit 대신 버튼 타입을 일반 button으로 변경
-                data-cy="stepSubmit"
-                aria-label="stepSubmit"
-                className={twMerge(
-                  'max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl bg-bg-tertiary text-[#f1f8f3]',
-                )}
-                onClick={handleNextStep}
-              >
-                <p className="font-semibold text-lg">다음으로</p>
-              </button>
-            )}
-
-            {!isCurriculum && isStep2 && (
-              <div className="flex gap-4 w-full">
+          <funnel.Render
+            Step1={({ history }) => (
+              <>
+                <Step1 />
                 <Button
-                  onClick={() => handleStep2Change(false)}
-                  data-cy="previous-book-create"
-                  aria-label="previous-book-create"
-                >
-                  이전으로
-                </Button>
-                <Button
+                  type="button" // submit 대신 버튼 타입을 일반 button으로 변경
+                  data-cy="stepSubmit"
+                  aria-label="stepSubmit"
                   issubmit
-                  data-cy="submit-book-create"
-                  aria-label="submit-book-create"
+                  onClick={async () =>
+                    (await trigger([
+                      'availableDays',
+                      'availableFrom',
+                      'availableTo',
+                      'title',
+                    ])) && history.push('Step2', getValues())
+                  }
                 >
-                  생성하기
+                  다음으로
                 </Button>
-              </div>
+              </>
             )}
-          </div>
+            Step2={({ history }) => (
+              <>
+                <Step2
+                  handleCurriculum={handleCurriculum}
+                  isCurriculum={isCurriculum}
+                />
+                <div className="flex gap-4 w-full">
+                  <Button
+                    onClick={() => history.back()}
+                    data-cy="previous-book-create"
+                    aria-label="previous-book-create"
+                  >
+                    이전으로
+                  </Button>
+                  <Button
+                    issubmit
+                    data-cy="submit-book-create"
+                    aria-label="submit-book-create"
+                  >
+                    생성하기
+                  </Button>
+                </div>
+              </>
+            )}
+          />
         </FormInner>
       </Form>
     </FormProvider>
@@ -126,5 +137,5 @@ export default function BookCreate() {
 
 const Button = tw.button`${({ issubmit }: { issubmit?: boolean }) => (issubmit ? 'bg-bg-tertiary text-[#F1F8F3]' : 'bg-bg-secondary text-text-secondary')} text-lg font-semibold w-full h-[54px] flex justify-center items-center rounded-2xl `
 
-const Form = tw.form`flex flex-col gap-10 w-full pb-[30px]`
-const FormInner = tw.div`w-full flex flex-col gap-10 items-center`
+const Form = tw.form`flex flex-col gap-10 w-full pb-[30px] `
+const FormInner = tw.div`w-full flex flex-col gap-6 items-center max-w-[342px] justify-center mx-auto`
