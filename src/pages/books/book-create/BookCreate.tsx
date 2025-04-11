@@ -54,13 +54,6 @@ export default function BookCreate() {
 
   const { mutate: bookMutation } = useBookCreate()
 
-  const isValid = trigger([
-    'availableDays',
-    'availableFrom',
-    'availableTo',
-    'title',
-  ])
-
   useEffect(() => {
     const fetchSubjects = async () => {
       await getSubjects()
@@ -98,7 +91,12 @@ export default function BookCreate() {
                   aria-label="stepSubmit"
                   issubmit
                   onClick={async () =>
-                    (await isValid) && history.push('Step2', getValues())
+                    (await trigger([
+                      'availableDays',
+                      'availableFrom',
+                      'availableTo',
+                      'title',
+                    ])) && history.push('Step2', getValues())
                   }
                 >
                   다음으로
