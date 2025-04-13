@@ -16,6 +16,9 @@
     "generate-sitemap": "node generate-sitemap.js",
     "test": "npx cypress run",
     "cypress": "npx cypress open",
+    "cy:run:chrome": "npx cypress run --browser chrome",
+    "cy:run:firefox": "npx cypress run --browser firefox",
+    "cy:run:webkit": "npx cypress run --browser webkit",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -49,6 +52,7 @@
     "lucide-react": "^0.474.0",
     "npm": "^11.2.0",
     "path-browserify": "^1.0.1",
+    "playwright-webkit": "^1.51.1",
     "pond-client": "file:",
     "react": "^18.0.0",
     "react-chartjs-2": "^5.3.0",

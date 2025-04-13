@@ -8284,6 +8284,18 @@ pkg-dir@^3.0.0:
   dependencies:
     find-up "^3.0.0"
 
+playwright-core@1.51.1:
+  version "1.51.1"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.51.1.tgz#d57f0393e02416f32a47cf82b27533656a8acce1"
+  integrity sha512-/crRMj8+j/Nq5s8QcvegseuyeZPxpQCZb6HNk3Sos3BlZyAknRjoyJPFWkpNn8v0+P3WiwqFF8P+zQo4eqiNuw==
+
+playwright-webkit@^1.51.1:
+  version "1.51.1"
+  resolved "https://registry.yarnpkg.com/playwright-webkit/-/playwright-webkit-1.51.1.tgz#7f7f172cb0b79a831c17f191c19942ce01018f52"
+  integrity sha512-gajQIzOmBYjv9SK2DOwUqfzIYau5M7e6h96ZW7RuRJIQk8yGOB9zlIKSyhSqmyG2Oz1o4ofgKO87rccXSw9I0g==
+  dependencies:
+    playwright-core "1.51.1"
+
 polished@^4.2.2:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/polished/-/polished-4.3.1.tgz#5a00ae32715609f83d89f6f31d0f0261c6170548"
@@ -8324,7 +8336,7 @@ polished@^4.2.2:
     lucide-react "^0.474.0"
     npm "^11.2.0"
     path-browserify "^1.0.1"
-    pond-client "file:../../Library/Caches/Yarn/v6/npm-pond-client-0.0.0-d50e538f-fb30-4701-8de6-1b5638ff93a7-1744550070893/node_modules/pond-client"
+    pond-client "file:../../Library/Caches/Yarn/v6/npm-pond-client-0.0.0-5bbd8903-d986-4e7e-9fce-438bdfb06505-1744560582365/node_modules/pond-client"
     react "^18.0.0"
     react-chartjs-2 "^5.3.0"
     react-dom "^18.0.0"
