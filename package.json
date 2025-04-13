@@ -5,7 +5,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "npm install & vite",
+    "dev": "yarn install && vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -121,5 +121,9 @@
     "extends": [
       "plugin:storybook/recommended"
     ]
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/Team-Pond/pond-client.git",
+  "author": "HandsomeBoy <87753974+GanziMan@users.noreply.github.com>",
+  "license": "MIT"
 }
