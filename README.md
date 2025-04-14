@@ -51,7 +51,7 @@ Formik을 고려하였으나 큰 폼에서 렌더링이 자주 트리거 되며 
 ### husky 설정
 
 깃 훅에 타입 체크를 추가하여 커밋 및 배포 과정에서 발생할 수 있는 타입 관련 오류를 미연에 방지하기 위함입니다.  
-(`npm run prepare` 명령어로 husky 설정을 초기화하여 git hook을 설치)
+(`yarn prepare` 명령어로 husky 설정을 초기화하여 git hook을 설치)
 
 ### Cypress
 
