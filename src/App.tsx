@@ -53,7 +53,7 @@ const routes: RouteType[] = [
   },
   {
     path: '/book/:bookId/attendee/:attendeeId/schedule',
-    element: <ScheduleModify />, //
+    element: <ScheduleModify />, // 학생 일정 수정
   },
   {
     path: '/book/:bookId/attendee/:attendeeId/counselling',
