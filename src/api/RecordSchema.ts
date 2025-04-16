@@ -107,7 +107,6 @@ export type DeleteRecordResponse =
 
 export type GetStatisticsRequest = {
   from: string
-
   periodType: 'DAILY' | 'WEEKLY' | 'MONTHLY'
 }
 
