@@ -53,7 +53,7 @@ const routes: RouteType[] = [
   },
   {
     path: '/book/:bookId/attendee/:attendeeId/schedule',
-    element: <ScheduleModify />, //
+    element: <ScheduleModify />, // 학생 일정 수정
   },
   {
     path: '/book/:bookId/attendee/:attendeeId/counselling',
@@ -77,7 +77,6 @@ function App() {
           <Route path="/checkuree-auth/signin" element={<CheckureeSignIn />} />
           <Route path="/auth/login" element={<KakaoSignIn />} />
           {/* 인증 처리 */}
-          {/* Book 관련 라우트 그룹 */}
           <Route element={<BookLayout />}>
             {routes.map((route) => (
               <Route
