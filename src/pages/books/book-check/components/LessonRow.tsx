@@ -9,6 +9,7 @@ import { ScheduleData } from '@/api/type'
 import NoteActiveIcon from '@/assets/icons/book-check/ico-note-active.svg?react'
 import NoteIcon from '@/assets/icons/book-check/ico-note.svg?react'
 import React from 'react'
+import { start } from 'repl'
 
 type LessonRowProps = {
   bookId: number
@@ -16,9 +17,11 @@ type LessonRowProps = {
   handleAttendanceStatusWithConfirmation: (
     targetStatus: 'ATTEND' | 'ABSENT',
     schedule: ScheduleData,
+    startTIme?: string,
   ) => void
   openModifyRecordTimeModal: (schedule: ScheduleData) => void
   currentDate: string
+  startTime?: string
 }
 function LessonRow(props: LessonRowProps) {
   const {
@@ -27,6 +30,7 @@ function LessonRow(props: LessonRowProps) {
     handleAttendanceStatusWithConfirmation,
     openModifyRecordTimeModal,
     currentDate,
+    startTime,
   } = props
   const { mutate: lessonMutation } = useLessonUpdate({
     bookId,
@@ -78,7 +82,11 @@ function LessonRow(props: LessonRowProps) {
         <div className="flex gap-2">
           <button
             onClick={() => {
-              handleAttendanceStatusWithConfirmation('ABSENT', schedule)
+              handleAttendanceStatusWithConfirmation(
+                'ABSENT',
+                schedule,
+                startTime,
+              )
             }}
             className={twMerge(
               'rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center',
@@ -91,7 +99,11 @@ function LessonRow(props: LessonRowProps) {
           </button>
           <button
             onClick={() => {
-              handleAttendanceStatusWithConfirmation('ATTEND', schedule)
+              handleAttendanceStatusWithConfirmation(
+                'ATTEND',
+                schedule,
+                startTime,
+              )
             }}
             className={twMerge(
               'rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center',

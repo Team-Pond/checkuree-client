@@ -7,12 +7,14 @@ import {
 } from '@/api/RecordApiClient'
 import { DeleteRecordRequest } from '@/api/RecordSchema'
 import { getScheduleAttendee } from '@/api/ScheduleApiClient'
+import { GetScheduleAttendeeResponse } from '@/api/ScheduleSchema'
 import { STATUS } from '@/api/type'
 import { bookKeys } from '@/queryKeys'
 import useFormDataStore from '@/store/recordStore'
 import { getCurrentTimeParts } from '@/utils'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
+import { s } from 'vite/dist/node/types.d-aGj9QkWt'
 
 export const useBookSchedules = ({
   bookId,
@@ -35,8 +37,8 @@ export const useBookSchedules = ({
           },
         },
       }),
-    refetchInterval: 5000,
-    refetchIntervalInBackground: true,
+    // refetchInterval: 5000,
+    // refetchIntervalInBackground: true,
 
     enabled: !!bookId && !!formattedDate,
   })
@@ -123,12 +125,13 @@ export const useRecordCreate = ({
       attendeeId,
       scheduleId,
       status,
-      attendTime,
+      startTime,
     }: {
       attendeeId: number
       scheduleId?: number
       status: STATUS
-      attendTime?: string
+
+      startTime?: string
     }) =>
       await createRecord({
         params: {
@@ -136,26 +139,62 @@ export const useRecordCreate = ({
           attendeeId: attendeeId,
           scheduleId: scheduleId,
           attendDate: currentDate,
-          attendTime:
-            attendTime ??
-            `${getCurrentTimeParts()
-              .hour.toString()
-              .padStart(2, '0')}:${getCurrentTimeParts()
-              .minute.toString()
-              .padStart(2, '0')}`,
+          attendTime: `${getCurrentTimeParts()
+            .hour.toString()
+            .padStart(2, '0')}:${getCurrentTimeParts()
+            .minute.toString()
+            .padStart(2, '0')}`,
+
           status: status,
         },
       }),
+
+    onMutate: async ({ attendeeId, scheduleId, status, startTime }) => {
+      // 2. 이전 데이터를 가져오되, 없으면 빈 객체로 처리
+      const previousRecords = queryClient.getQueryData(
+        bookKeys.schedules(bookId, currentDate).queryKey,
+      ) as GetScheduleAttendeeResponse
+
+      const updateRecords = previousRecords
+
+      if (updateRecords.status === 200 && updateRecords.data.content) {
+        const targetSchedule = updateRecords.data.content
+          ?.find((item) => item.startTime === startTime)
+          ?.schedules?.find((item) => item.scheduleId === scheduleId)
+        if (targetSchedule) {
+          targetSchedule.recordStatus = status
+          targetSchedule.scheduleId = scheduleId!
+          targetSchedule.recordTime = `${getCurrentTimeParts()
+            .hour.toString()
+            .padStart(2, '0')}:${getCurrentTimeParts()
+            .minute.toString()
+            .padStart(2, '0')}`
+        }
+        // 3. 낙관적 업데이트] 후 새로운 상태를 `setQueryData`로 저장
+        queryClient.setQueryData(
+          bookKeys.schedules(bookId, currentDate).queryKey,
+          updateRecords,
+        )
+      }
+      return { previousRecords } // 롤백을 위해 이전 상태 반환
+    },
+
     onSuccess: (res) => {
       queryClient.invalidateQueries({
-        queryKey: bookKeys.schedules._def,
+        queryKey: bookKeys.schedules(bookId, currentDate).queryKey,
       })
     },
     onError: () => {},
   })
 }
 
-export const useStatusUpdate = ({ bookId }: { bookId: number }) => {
+export const useStatusUpdate = ({
+  bookId,
+  currentDate,
+}: {
+  bookId: number
+  currentDate: string
+}) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({
@@ -166,6 +205,7 @@ export const useStatusUpdate = ({ bookId }: { bookId: number }) => {
       recordId: number
       scheduleId: number
       status: STATUS
+      startTime?: string
     }) =>
       await updateRecord({
         params: {
@@ -175,12 +215,42 @@ export const useStatusUpdate = ({ bookId }: { bookId: number }) => {
           recordId,
         },
       }),
+    onMutate: async ({ recordId, scheduleId, status, startTime }) => {
+      // 1. 이전 데이터를 가져오되, 없으면 빈 객체로 처리
+
+      const previousRecords = queryClient.getQueryData(
+        bookKeys.schedules(bookId, currentDate).queryKey,
+      ) as GetScheduleAttendeeResponse
+
+      const updateRecords = previousRecords
+
+      if (updateRecords.status === 200 && updateRecords.data.content) {
+        const targetSchedule = updateRecords.data.content
+          ?.find((item) => item.startTime === startTime)
+          ?.schedules?.find((item) => item.scheduleId === scheduleId)
+        if (targetSchedule) {
+          targetSchedule.recordStatus = status
+        }
+        // 3. 낙관적 업데이트] 후 새로운 상태를 `setQueryData`로 저장
+        queryClient.setQueryData(
+          bookKeys.schedules(bookId, currentDate).queryKey,
+          updateRecords,
+        )
+      }
+
+      return { previousRecords } // 롤백을 위해 이전 상태 반환
+    },
     onSuccess: (res) => {
       queryClient.invalidateQueries({
-        queryKey: bookKeys.schedules._def,
+        queryKey: bookKeys.schedules(bookId, currentDate).queryKey,
       })
     },
-    onError: () => {},
+    onError: (_error, _variables, context) => {
+      queryClient.setQueryData(
+        bookKeys.schedules(bookId, currentDate).queryKey,
+        context?.previousRecords,
+      )
+    },
   })
 }
 

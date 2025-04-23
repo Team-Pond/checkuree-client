@@ -43,14 +43,18 @@ function MainContents(props: MainContentsProps) {
     formattedTime: '',
   })
 
+  const { formData, setFormData } = useFormDataStore()
+
+  // 출석체크
   const { mutate: recordCreate } = useRecordCreate({
     bookId,
     currentDate,
   })
-  const { mutate: statusMutation } = useStatusUpdate({ bookId })
 
-  const { formData, setFormData } = useFormDataStore()
+  //
+  const { mutate: statusMutation } = useStatusUpdate({ bookId, currentDate })
 
+  // 출석시간 변경
   const { mutate: recordUpdate } = useRecordUpdate({
     bookId: Number(bookId),
     recordId: Number(record.id),
@@ -80,9 +84,11 @@ function MainContents(props: MainContentsProps) {
   const handleStatusChange = ({
     schedule,
     targetStatus,
+    startTime,
   }: {
     schedule: ScheduleData
     targetStatus: Omit<STATUS, 'PENDING'>
+    startTime?: string
   }) => {
     // 출석 기록이 없는 경우 출석 기록 생성
     if (!schedule.recordId) {
@@ -90,26 +96,28 @@ function MainContents(props: MainContentsProps) {
         attendeeId: schedule.attendeeId,
         scheduleId: schedule.scheduleId,
         status: targetStatus as STATUS,
+        startTime: startTime,
       })
       return
     }
-
     // 이미 출석인 경우 다시 누르면 PENDING 상태로 수정
     if (schedule.recordStatus === targetStatus) {
       statusMutation({
         recordId: schedule.recordId,
         scheduleId: schedule.scheduleId,
         status: 'PENDING',
+        startTime: startTime,
       })
       return
+    } else {
+      // 출석 상태를 targetStatus로 변경
+      statusMutation({
+        recordId: schedule.recordId,
+        scheduleId: schedule.scheduleId,
+        status: targetStatus as STATUS,
+        startTime: startTime,
+      })
     }
-
-    // 출석 상태를 targetStatus로 변경
-    statusMutation({
-      recordId: schedule.recordId,
-      scheduleId: schedule.scheduleId,
-      status: targetStatus as STATUS,
-    })
   }
 
   const computedLessonData = useMemo(() => {
@@ -146,11 +154,12 @@ function MainContents(props: MainContentsProps) {
       computedNeedLessonStudents: tempNeedLessonStudents,
       computedNoNeedLessonTimeScheduleTable: tempNoNeedLessonTimeScheduleTable,
     }
-  }, [bookSchedules?.content])
+  }, [bookSchedules]) // bookSchedules와 그 내부 content 모두 감지
 
   const handleAttendanceStatusWithConfirmation = (
     targetStatus: 'ATTEND' | 'ABSENT',
     schedule: ScheduleData,
+    startTime?: string,
   ) => {
     // targetStatus에 따라 메시지를 즉시 결정
     const message =
@@ -170,19 +179,12 @@ function MainContents(props: MainContentsProps) {
     }
     // 출석기록이 없는 경우 바로 상태 변경
     handleCheckedCountChange({ schedule, targetStatus })
-    handleStatusChange({ schedule, targetStatus })
-  }
-
-  const handleRecord = (id: number, formattedTime: string) => {
-    setRecord({
-      id,
-      formattedTime,
-    })
+    handleStatusChange({ schedule, targetStatus, startTime })
   }
 
   const openModifyRecordTimeModal = (schedule: ScheduleData) => {
     if (schedule.recordStatus === 'ATTEND') {
-      handleRecord(schedule.recordId, schedule.recordTime)
+      setRecord({ id: schedule.recordId, formattedTime: schedule.recordTime })
       setFormData({
         hour: schedule.recordTime.split(':')[0],
         minute: schedule.recordTime.split(':')[1],
@@ -202,7 +204,6 @@ function MainContents(props: MainContentsProps) {
   return (
     <MainContentWrapper>
       {/* 수업중인 학생들 */}
-
       <NeedLessonTable
         needLessonStudents={computedLessonData.computedNeedLessonStudents}
         bookId={Number(bookId)}
