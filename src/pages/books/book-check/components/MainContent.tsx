@@ -121,7 +121,6 @@ function MainContents(props: MainContentsProps) {
   }
 
   const computedLessonData = useMemo(() => {
-    console.log('연산이 일어나니?')
     if (!bookSchedules?.content) {
       return {
         computedNeedLessonStudents: [],
@@ -155,7 +154,7 @@ function MainContents(props: MainContentsProps) {
       computedNeedLessonStudents: tempNeedLessonStudents,
       computedNoNeedLessonTimeScheduleTable: tempNoNeedLessonTimeScheduleTable,
     }
-  }, [bookSchedules])
+  }, [bookSchedules]) // bookSchedules와 그 내부 content 모두 감지
 
   const handleAttendanceStatusWithConfirmation = (
     targetStatus: 'ATTEND' | 'ABSENT',
@@ -177,12 +176,10 @@ function MainContents(props: MainContentsProps) {
         handleStatusChange({ schedule, targetStatus })
       })
       return
-    } else {
-      console.log('출석기록이 없는 경우')
-      // 출석기록이 없는 경우 바로 상태 변경
-      handleCheckedCountChange({ schedule, targetStatus })
-      handleStatusChange({ schedule, targetStatus, startTime })
     }
+    // 출석기록이 없는 경우 바로 상태 변경
+    handleCheckedCountChange({ schedule, targetStatus })
+    handleStatusChange({ schedule, targetStatus, startTime })
   }
 
   const openModifyRecordTimeModal = (schedule: ScheduleData) => {
