@@ -10,6 +10,7 @@ interface ScheduleDataContentTypeProps {
   handleAttendanceStatusWithConfirmation: (
     targetStatus: 'ATTEND' | 'ABSENT',
     schedule: ScheduleData,
+    startTime?: string,
   ) => void
   currentDate: string
 
@@ -44,6 +45,7 @@ export default function NoNeedLessonTable(props: ScheduleDataContentTypeProps) {
                   }
                   openModifyRecordTimeModal={openModifyRecordTimeModal}
                   currentDate={currentDate}
+                  startTime={content.startTime}
                 />
               ))}
             </LessonContainer>

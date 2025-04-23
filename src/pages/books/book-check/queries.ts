@@ -7,6 +7,7 @@ import {
 } from '@/api/RecordApiClient'
 import { DeleteRecordRequest } from '@/api/RecordSchema'
 import { getScheduleAttendee } from '@/api/ScheduleApiClient'
+import { GetScheduleAttendeeResponse } from '@/api/ScheduleSchema'
 import { STATUS } from '@/api/type'
 import { bookKeys } from '@/queryKeys'
 import useFormDataStore from '@/store/recordStore'
@@ -35,8 +36,8 @@ export const useBookSchedules = ({
           },
         },
       }),
-    refetchInterval: 5000,
-    refetchIntervalInBackground: true,
+    // refetchInterval: 5000,
+    // refetchIntervalInBackground: true,
 
     enabled: !!bookId && !!formattedDate,
   })
@@ -123,12 +124,13 @@ export const useRecordCreate = ({
       attendeeId,
       scheduleId,
       status,
-      attendTime,
+      startTime,
     }: {
       attendeeId: number
       scheduleId?: number
       status: STATUS
-      attendTime?: string
+
+      startTime?: string
     }) =>
       await createRecord({
         params: {
@@ -136,36 +138,76 @@ export const useRecordCreate = ({
           attendeeId: attendeeId,
           scheduleId: scheduleId,
           attendDate: currentDate,
-          attendTime:
-            attendTime ??
-            `${getCurrentTimeParts()
-              .hour.toString()
-              .padStart(2, '0')}:${getCurrentTimeParts()
-              .minute.toString()
-              .padStart(2, '0')}`,
+          attendTime: `${getCurrentTimeParts()
+            .hour.toString()
+            .padStart(2, '0')}:${getCurrentTimeParts()
+            .minute.toString()
+            .padStart(2, '0')}`,
+
           status: status,
         },
       }),
+
+    onMutate: async ({ attendeeId, scheduleId, status, startTime }) => {
+      // 1. 로컬에서 데이터 낙관적 업데이트
+      const optimisticRecord = {
+        attendeeId,
+        scheduleId,
+        status,
+        attendDate: currentDate,
+      }
+
+      // 2. 이전 데이터를 가져오되, 없으면 빈 객체로 처리
+      const previousRecords =
+        (queryClient.getQueryData(
+          bookKeys.schedules(bookId, currentDate).queryKey,
+        ) as GetScheduleAttendeeResponse) || {}
+
+      let target
+      // 3. 이전 데이터 백업 후, 낙관적 업데이트
+      if (previousRecords.status === 200) {
+        target = previousRecords.data.content.find(
+          (item) => item.startTime === startTime,
+        )
+      }
+
+      // 4. 낙관적 업데이트된 데이터를 `content`에 반영
+      queryClient.setQueryData(
+        bookKeys.schedules(bookId, currentDate).queryKey,
+        previousRecords,
+      )
+
+      return { previousRecords } // 롤백을 위해 이전 상태 반환
+    },
     onSuccess: (res) => {
       queryClient.invalidateQueries({
-        queryKey: bookKeys.schedules._def,
+        queryKey: bookKeys.schedules(bookId).queryKey,
       })
+      console.log('성공', res)
     },
     onError: () => {},
   })
 }
 
-export const useStatusUpdate = ({ bookId }: { bookId: number }) => {
+export const useStatusUpdate = ({
+  bookId,
+  currentDate,
+}: {
+  bookId: number
+  currentDate: string
+}) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({
       recordId,
       scheduleId,
       status,
+      startTime,
     }: {
       recordId: number
       scheduleId: number
       status: STATUS
+      startTime?: string
     }) =>
       await updateRecord({
         params: {
@@ -175,12 +217,36 @@ export const useStatusUpdate = ({ bookId }: { bookId: number }) => {
           recordId,
         },
       }),
+
+    onMutate: async ({ recordId, scheduleId, status, startTime }) => {
+      // 1. 이전 데이터를 가져오되, 없으면 빈 객체로 처리
+      console.log('여기오나')
+      const previousRecords = queryClient.getQueryData(
+        bookKeys.schedules(bookId, currentDate).queryKey,
+      ) as GetScheduleAttendeeResponse
+
+      const updateRecrods = previousRecords
+
+      // 3. 낙관적 업데이트 후 새로운 상태를 `setQueryData`로 저장
+      queryClient.setQueryData(
+        bookKeys.schedules(bookId, currentDate).queryKey,
+        updateRecrods,
+      )
+
+      return { previousRecords } // 롤백을 위해 이전 상태 반환
+    },
     onSuccess: (res) => {
       queryClient.invalidateQueries({
-        queryKey: bookKeys.schedules._def,
+        queryKey: bookKeys.schedules(bookId, currentDate).queryKey,
       })
     },
-    onError: () => {},
+
+    onError: (_error, _variables, context) => {
+      queryClient.setQueryData(
+        bookKeys.schedules(bookId, currentDate).queryKey,
+        context?.previousRecords,
+      )
+    },
   })
 }
 

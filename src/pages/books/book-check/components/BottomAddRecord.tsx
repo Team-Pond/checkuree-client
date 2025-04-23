@@ -68,7 +68,6 @@ export const BottomAddRecord = (props: BottomAddRecordProps) => {
               recordMutation({
                 attendeeId: selectedStudent.id,
                 status: 'PENDING',
-                attendTime: time,
               })
               toast.success(
                 `${selectedStudent.name} 학생의 스케쥴이 \n${time}에 추가되었습니다.`,
