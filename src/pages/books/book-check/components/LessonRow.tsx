@@ -9,7 +9,6 @@ import { ScheduleData } from '@/api/type'
 import NoteActiveIcon from '@/assets/icons/book-check/ico-note-active.svg?react'
 import NoteIcon from '@/assets/icons/book-check/ico-note.svg?react'
 import React from 'react'
-import { start } from 'repl'
 
 type LessonRowProps = {
   bookId: number
@@ -63,7 +62,7 @@ function LessonRow(props: LessonRowProps) {
         className="flex flex-col items-start select-none"
         {...deleteRecordHandlers}
       >
-        <p className="font-bold text-text-primary">
+        <p className="font-bold text-text-primary max-w-[78px] overflow-hidden text-ellipsis whitespace-nowrap">
           {schedule.name}
           {schedule.isMakeup && (
             <span className="text-[#EC9E14] text-xs-medium align-middle">

@@ -50,7 +50,7 @@ function getRefreshToken(): string | undefined {
 async function refresh(config: AxiosRequestConfig) {
   const refreshToken = getRefreshToken()
 
-  if (!!refreshToken) {
+  if (refreshToken) {
     try {
       const refreshResult = await axios.request({
         baseURL: import.meta.env.VITE_API_DEV_ROOT,

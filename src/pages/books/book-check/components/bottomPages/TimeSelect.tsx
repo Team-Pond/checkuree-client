@@ -42,7 +42,7 @@ export const TimeSelectionView = ({
   const context = useContext(BookContext);
   const { bookId } = useParams();
 
-  let { selectedBook } = context!;
+  const { selectedBook } = context!;
 
   // 선택된 책이 없을 경우, 책 상세 정보를 가져옴
   const { data: bookDetailResult } = !selectedBook

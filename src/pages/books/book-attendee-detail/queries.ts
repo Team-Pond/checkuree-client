@@ -216,7 +216,7 @@ export const useProgressPromote = ({
           attendeeProgressId: progressId,
           completedAt: formData.completeAt.replaceAll(".", "-"),
           startAt: formData.startAt.replaceAll(".", "-"),
-          nextGradeId: !!formData.nextGradeId
+          nextGradeId: formData.nextGradeId
             ? Number(formData.nextGradeId)
             : undefined, // "" 빈 문자열일 경우 보내지 않음
         },
