@@ -75,7 +75,6 @@ export const attendeeKeys = createQueryKeys('attendee', {
     queryFn: async () => {
       const res = await getBookScheduleTable({ attendanceBookId })
       if (res.status === 200) return res.data
-      throw new Error('Failed to fetch schedule table')
     },
   }),
 
