@@ -2,10 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { DaysType } from '@/api/type'
 import { UpdateAttendeeScheduleRequest } from '@/api/AttendeeSchema'
-import {
-  useScheduleAttendee,
-  useScheduleTable,
-} from '@/pages/attendee-create/queries'
+import { useSchedule, useScheduleTable } from '@/pages/attendee-create/queries'
 import { getSub30MinuteHhmm } from '@/utils'
 
 import ScheduleTable from '../ScheduleTable'
@@ -53,7 +50,7 @@ export default function ScheduleModifyDetail({
   const attendanceBookIdNumber = Number(bookId)
 
   // 수강생 데이터
-  const { data: scheduleData } = useScheduleAttendee(
+  const { data: scheduleData } = useSchedule(
     attendanceBookIdNumber,
     scheduleParams.dayOfWeek,
     scheduleParams.hhmm,

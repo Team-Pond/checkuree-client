@@ -1,39 +1,39 @@
-import ApiClient from "./ApiClient";
+import ApiClient from './ApiClient'
 import {
   GetScheduleAttendeeRequest,
   GetScheduleAttendeeResponse,
   GetScheduleCountOfDateRequest,
   GetScheduleCountOfDateResponse,
-} from "./ScheduleSchema";
+} from './ScheduleSchema'
 
-export const getScheduleAttendee = async ({
+export const getSchedule = async ({
   params,
   attendanceBookId,
 }: {
-  params: GetScheduleAttendeeRequest;
-  attendanceBookId: number;
+  params: GetScheduleAttendeeRequest
+  attendanceBookId: number
 }): Promise<GetScheduleAttendeeResponse> => {
-  const { date, pageable } = params;
+  const { date, pageable } = params
   const response = await ApiClient.request({
-    method: "GET",
+    method: 'GET',
     url: `/book/${attendanceBookId}/schedule?date=${date}&page=${pageable.page}&size=${pageable.size}&sort=${pageable.sort}`,
-  });
+  })
 
-  return response.data;
-};
+  return response.data
+}
 
 export const getScheduleCountOfDate = async ({
   params,
   attendanceBookId,
 }: {
-  params: GetScheduleCountOfDateRequest;
-  attendanceBookId: number;
+  params: GetScheduleCountOfDateRequest
+  attendanceBookId: number
 }): Promise<GetScheduleCountOfDateResponse> => {
-  const { date } = params;
+  const { date } = params
   const response = await ApiClient.request({
-    method: "GET",
+    method: 'GET',
     url: `/book/${attendanceBookId}/schedule/count?date=${date}`,
-  });
+  })
 
-  return response.data;
-};
+  return response.data
+}

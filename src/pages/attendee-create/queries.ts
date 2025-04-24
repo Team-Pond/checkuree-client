@@ -1,12 +1,7 @@
 // src/querys.ts
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { updateBookProgress } from '@/api/AttendanceBookApiClient'
 import {
-  getBookCourse,
-  getBookScheduleTable,
-  updateBookProgress,
-} from '@/api/AttendanceBookApiClient'
-import {
-  getScheduleAttendee,
   updateAttendeeSchedule,
   updateAttendeeVerify,
 } from '@/api/AttendeeApiClient'
@@ -14,57 +9,30 @@ import { UpdateAttendeeScheduleRequest } from '@/api/AttendeeSchema'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { attendeeKeys } from '@/queryKeys'
-import { GenderType } from '@/api/type'
 
 // 일정(요일, 시간)에 따른 수강생 데이터를 가져오는 커스텀 훅
-export const useScheduleAttendee = (
+export const useSchedule = (
   attendanceBookId: number,
   dayOfWeek: string,
   hhmm: string,
   enabled: boolean = false,
-) => {
-  return useQuery({
+) =>
+  useQuery({
+    ...attendeeKeys.schedules(attendanceBookId, dayOfWeek, hhmm),
     enabled: enabled,
-    queryKey: attendeeKeys.schedules(attendanceBookId, dayOfWeek, hhmm)
-      .queryKey,
-    queryFn: async () => {
-      const res = await getScheduleAttendee({
-        attendanceBookId,
-        dayOfWeek,
-        hhmm,
-      })
-      if (res.status === 200) return res.data
-      throw new Error('Failed to fetch schedule attendee')
-    },
     staleTime: 6000,
   })
-}
 
 // 시간표 데이터를 가져오는 커스텀 훅
-export const useScheduleTable = (attendanceBookId: number) => {
-  return useQuery({
-    // queryKey: ["table-schedule", attendanceBookId],
-    queryKey: attendeeKeys.schedules(attendanceBookId).queryKey,
-    queryFn: async () => {
-      const res = await getBookScheduleTable({ attendanceBookId })
-      if (res.status === 200) return res.data
-      throw new Error('Failed to fetch schedule table')
-    },
-  })
-}
+export const useScheduleTable = (attendanceBookId: number) =>
+  useQuery(attendeeKeys.scheduleTable(attendanceBookId))
 
 // 커리큘럼(강좌) 정보를 가져오는 커스텀 훅
-export const useBookCourses = (id: number, enabled: boolean) => {
-  return useQuery({
+export const useBookCourses = (id: number, enabled: boolean) =>
+  useQuery({
     enabled,
-    queryKey: attendeeKeys.courses(id).queryKey,
-    queryFn: async () => {
-      const res = await getBookCourse(String(id))
-      if (res.status === 200) return res.data
-      throw new Error('Failed to fetch book courses')
-    },
+    ...attendeeKeys.courses(id),
   })
-}
 
 interface progressGrade {
   startAt: string

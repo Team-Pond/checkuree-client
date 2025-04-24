@@ -88,7 +88,6 @@ export default function BookCheck() {
       {bookSchedules?.status === 200 &&
       bookSchedules.data.content.length > 0 ? (
         <MainContents
-          bookSchedules={bookSchedules.data}
           currentDate={formattedDate}
           bookId={Number(bookId!)}
           checkedScheduleCount={checkedScheduleCount}

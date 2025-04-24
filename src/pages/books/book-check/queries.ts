@@ -6,7 +6,6 @@ import {
   deleteRecord,
 } from '@/api/RecordApiClient'
 import { DeleteRecordRequest } from '@/api/RecordSchema'
-import { getScheduleAttendee } from '@/api/ScheduleApiClient'
 import { GetScheduleAttendeeResponse } from '@/api/ScheduleSchema'
 import { STATUS } from '@/api/type'
 import { bookKeys } from '@/queryKeys'
@@ -14,7 +13,6 @@ import useFormDataStore from '@/store/recordStore'
 import { getCurrentTimeParts } from '@/utils'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
-import { s } from 'vite/dist/node/types.d-aGj9QkWt'
 
 export const useBookSchedules = ({
   bookId,
@@ -22,27 +20,13 @@ export const useBookSchedules = ({
 }: {
   bookId: number
   formattedDate: string
-}) => {
-  return useQuery({
-    queryKey: bookKeys.schedules(bookId, formattedDate).queryKey,
-    queryFn: async () =>
-      await getScheduleAttendee({
-        attendanceBookId: Number(bookId!),
-        params: {
-          date: formattedDate,
-          pageable: {
-            page: 0,
-            size: 100,
-            sort: ['asc'],
-          },
-        },
-      }),
-    // refetchInterval: 5000,
-    // refetchIntervalInBackground: true,
-
+}) =>
+  useQuery({
+    ...bookKeys.schedules(bookId, formattedDate),
+    refetchInterval: 5000,
+    refetchIntervalInBackground: true,
     enabled: !!bookId && !!formattedDate,
   })
-}
 
 export const useRecordAllUpdate = ({
   bookId,
@@ -62,7 +46,7 @@ export const useRecordAllUpdate = ({
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: bookKeys.schedules._def,
+        queryKey: bookKeys.schedules(bookId, formattedDate).queryKey,
       })
       toast.success('전체 출석 완료')
     },
@@ -76,10 +60,12 @@ export const useRecordUpdate = ({
   bookId,
   recordId,
   formattedTime,
+  currentDate,
 }: {
   bookId: number
   recordId: number
   formattedTime: string
+  currentDate: string
 }) => {
   const queryClient = useQueryClient()
   const { setFormData } = useFormDataStore()
@@ -97,7 +83,7 @@ export const useRecordUpdate = ({
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: bookKeys.schedules._def,
+        queryKey: bookKeys.schedules(bookId, currentDate).queryKey,
       })
       toast.success('출석시간 변경 완료')
       setFormData({ hour: '', minute: '' })
@@ -125,7 +111,6 @@ export const useRecordCreate = ({
       attendeeId,
       scheduleId,
       status,
-      startTime,
     }: {
       attendeeId: number
       scheduleId?: number
@@ -149,8 +134,8 @@ export const useRecordCreate = ({
         },
       }),
 
-    onMutate: async ({ attendeeId, scheduleId, status, startTime }) => {
-      // 2. 이전 데이터를 가져오되, 없으면 빈 객체로 처리
+    onMutate: async ({ scheduleId, status, startTime }) => {
+      // 1. 이전 데이터를 가져오되, 없으면 빈 객체로 처리
       const previousRecords = queryClient.getQueryData(
         bookKeys.schedules(bookId, currentDate).queryKey,
       ) as GetScheduleAttendeeResponse
@@ -170,7 +155,7 @@ export const useRecordCreate = ({
             .minute.toString()
             .padStart(2, '0')}`
         }
-        // 3. 낙관적 업데이트] 후 새로운 상태를 `setQueryData`로 저장
+        // 2. 낙관적 업데이트] 후 새로운 상태를 `setQueryData`로 저장
         queryClient.setQueryData(
           bookKeys.schedules(bookId, currentDate).queryKey,
           updateRecords,
@@ -215,7 +200,7 @@ export const useStatusUpdate = ({
           recordId,
         },
       }),
-    onMutate: async ({ recordId, scheduleId, status, startTime }) => {
+    onMutate: async ({ scheduleId, status, startTime }) => {
       // 1. 이전 데이터를 가져오되, 없으면 빈 객체로 처리
 
       const previousRecords = queryClient.getQueryData(
@@ -231,7 +216,7 @@ export const useStatusUpdate = ({
         if (targetSchedule) {
           targetSchedule.recordStatus = status
         }
-        // 3. 낙관적 업데이트] 후 새로운 상태를 `setQueryData`로 저장
+        // 2. 낙관적 업데이트] 후 새로운 상태를 `setQueryData`로 저장
         queryClient.setQueryData(
           bookKeys.schedules(bookId, currentDate).queryKey,
           updateRecords,
@@ -271,7 +256,7 @@ export const useLessonUpdate = ({ bookId }: { bookId: number }) => {
           recordId,
         },
       }),
-    onSuccess: (res) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: bookKeys.schedules._def,
       })
