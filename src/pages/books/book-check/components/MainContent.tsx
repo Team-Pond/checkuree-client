@@ -52,6 +52,7 @@ function MainContents(props: MainContentsProps) {
   const { mutate: recordUpdate } = useRecordUpdate({
     bookId: Number(bookId),
     recordId: Number(record.id),
+    currentDate: currentDate,
     formattedTime: `${formData?.hour}:${formData?.minute}`,
   })
 
