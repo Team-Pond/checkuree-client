@@ -6,7 +6,6 @@ import {
   deleteRecord,
 } from '@/api/RecordApiClient'
 import { DeleteRecordRequest } from '@/api/RecordSchema'
-import { getScheduleAttendee } from '@/api/ScheduleApiClient'
 import { GetScheduleAttendeeResponse } from '@/api/ScheduleSchema'
 import { STATUS } from '@/api/type'
 import { bookKeys } from '@/queryKeys'
@@ -14,7 +13,6 @@ import useFormDataStore from '@/store/recordStore'
 import { getCurrentTimeParts } from '@/utils'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
-import { s } from 'vite/dist/node/types.d-aGj9QkWt'
 
 export const useBookSchedules = ({
   bookId,
@@ -24,22 +22,9 @@ export const useBookSchedules = ({
   formattedDate: string
 }) => {
   return useQuery({
-    queryKey: bookKeys.schedules(bookId, formattedDate).queryKey,
-    queryFn: async () =>
-      await getScheduleAttendee({
-        attendanceBookId: Number(bookId!),
-        params: {
-          date: formattedDate,
-          pageable: {
-            page: 0,
-            size: 100,
-            sort: ['asc'],
-          },
-        },
-      }),
-    // refetchInterval: 5000,
-    // refetchIntervalInBackground: true,
-
+    ...bookKeys.schedules(bookId, formattedDate),
+    refetchInterval: 5000,
+    refetchIntervalInBackground: true,
     enabled: !!bookId && !!formattedDate,
   })
 }
@@ -215,7 +200,7 @@ export const useStatusUpdate = ({
           recordId,
         },
       }),
-    onMutate: async ({ recordId, scheduleId, status, startTime }) => {
+    onMutate: async ({ scheduleId, status, startTime }) => {
       // 1. 이전 데이터를 가져오되, 없으면 빈 객체로 처리
 
       const previousRecords = queryClient.getQueryData(

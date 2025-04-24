@@ -6,6 +6,7 @@ import {
   GenderType,
   PeriodType,
 } from './api/type'
+import { getScheduleAttendee } from './api/ScheduleApiClient'
 
 // 수강생 데이터를 위한 키
 export const attendeeKeys = createQueryKeys('attendee', {
@@ -34,6 +35,18 @@ export const attendeeKeys = createQueryKeys('attendee', {
 export const bookKeys = createQueryKeys('book', {
   schedules: (bookId?: number, formattedDate?: string) => ({
     queryKey: [bookId, formattedDate],
+    queryFn: async () =>
+      await getScheduleAttendee({
+        attendanceBookId: Number(bookId!),
+        params: {
+          date: formattedDate!,
+          pageable: {
+            page: 0,
+            size: 100,
+            sort: ['asc'],
+          },
+        },
+      }),
   }),
   list: () => ({
     queryKey: [''],
