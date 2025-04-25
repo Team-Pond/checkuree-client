@@ -14,7 +14,6 @@ import useFormDataStore from '@/store/recordStore'
 import { getCurrentTimeParts } from '@/utils'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
-import { s } from 'vite/dist/node/types.d-aGj9QkWt'
 
 export const useBookSchedules = ({
   bookId,
