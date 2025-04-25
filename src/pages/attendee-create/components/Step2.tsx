@@ -3,11 +3,7 @@ import { useParams } from 'react-router-dom'
 
 import SubjectSelectionDrawer from './SubjectSelectionDrawer'
 
-import {
-  useBookCourses,
-  useScheduleAttendee,
-  useScheduleTable,
-} from '../queries'
+import { useBookCourses, useSchedule, useScheduleTable } from '../queries'
 
 import { useFormContext } from 'react-hook-form'
 import { CreateAttendeeSchema } from '../_schema'
@@ -71,7 +67,7 @@ function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
   const attendanceBookIdNumber = Number(bookId) || attendanceBookId
 
   // 수강생 데이터
-  const { data: scheduleData } = useScheduleAttendee(
+  const { data: scheduleData } = useSchedule(
     attendanceBookIdNumber,
     scheduleParams.dayOfWeek,
     scheduleParams.hhmm,

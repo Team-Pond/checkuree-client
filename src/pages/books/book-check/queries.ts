@@ -6,7 +6,7 @@ import {
   deleteRecord,
 } from '@/api/RecordApiClient'
 import { DeleteRecordRequest } from '@/api/RecordSchema'
-import { getScheduleAttendee } from '@/api/ScheduleApiClient'
+import { getSchedule } from '@/api/ScheduleApiClient'
 import { GetScheduleAttendeeResponse } from '@/api/ScheduleSchema'
 import { STATUS } from '@/api/type'
 import { bookKeys } from '@/queryKeys'
@@ -26,7 +26,7 @@ export const useBookSchedules = ({
   return useQuery({
     queryKey: bookKeys.schedules(bookId, formattedDate).queryKey,
     queryFn: async () =>
-      await getScheduleAttendee({
+      await getSchedule({
         attendanceBookId: Number(bookId!),
         params: {
           date: formattedDate,
@@ -37,8 +37,8 @@ export const useBookSchedules = ({
           },
         },
       }),
-    // refetchInterval: 5000,
-    // refetchIntervalInBackground: true,
+    refetchInterval: 5000,
+    refetchIntervalInBackground: true,
 
     enabled: !!bookId && !!formattedDate,
   })
@@ -305,7 +305,7 @@ export const useLessonUpdate = ({
           recordId,
         },
       }),
-    onSuccess: (res) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: bookKeys.schedules(bookId, currentDate).queryKey,
       })

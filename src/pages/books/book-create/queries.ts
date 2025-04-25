@@ -19,6 +19,7 @@ export const useSubjects = () => {
 
 export const useSubjectItems = ({ subjectId }: { subjectId: number }) => {
   return useQuery({
+    ...bookKeys.subjectCourses(subjectId),
     enabled: !!subjectId,
     queryKey: bookKeys.subjectCourses(subjectId).queryKey,
     queryFn: async () =>

@@ -14,9 +14,6 @@ import {
   ScheduleDataType,
   STATUS,
 } from '@/api/type'
-import { useQueryClient } from '@tanstack/react-query'
-import { bookKeys } from '@/queryKeys'
-
 type MainContentsProps = {
   bookSchedules: ScheduleDataType
   bookId: number

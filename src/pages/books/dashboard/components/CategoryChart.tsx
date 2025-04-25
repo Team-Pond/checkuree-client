@@ -33,9 +33,9 @@ function BarChart({
   labels: string[];
   statisticData: number[];
 }) {
-  let maxIndex = statisticData.indexOf(Math.max(...statisticData));
+  const maxIndex = statisticData.indexOf(Math.max(...statisticData));
 
-  let backgroundColor = new Array(statisticData.length).fill("#BDDDC3");
+  const backgroundColor = new Array(statisticData.length).fill("#BDDDC3");
 
   backgroundColor[maxIndex] = "#59996B";
 

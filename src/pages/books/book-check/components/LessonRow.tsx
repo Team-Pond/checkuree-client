@@ -64,7 +64,7 @@ function LessonRow(props: LessonRowProps) {
         className="flex flex-col items-start select-none"
         {...deleteRecordHandlers}
       >
-        <p className="font-bold text-text-primary">
+        <p className="font-bold text-text-primary max-w-[78px] overflow-hidden text-ellipsis whitespace-nowrap">
           {schedule.name}
           {schedule.isMakeup && (
             <span className="text-[#EC9E14] text-xs-medium align-middle">

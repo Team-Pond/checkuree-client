@@ -20,7 +20,7 @@ export default function Bottom() {
 
   const { bookId } = useParams()
 
-  const isBookActive = !!bookUrl && !!!dashBoardUrl && !!!attendeeUrl
+  const isBookActive = !!bookUrl && !dashBoardUrl && !attendeeUrl
   const isAttendeeActive = !!attendeeUrl
   const isDashBoardActive = !!dashBoardUrl
 
