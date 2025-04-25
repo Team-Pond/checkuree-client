@@ -9,6 +9,7 @@ import { ScheduleData } from '@/api/type'
 import NoteActiveIcon from '@/assets/icons/book-check/ico-note-active.svg?react'
 import NoteIcon from '@/assets/icons/book-check/ico-note.svg?react'
 import React from 'react'
+import { start } from 'repl'
 
 type LessonRowProps = {
   bookId: number
@@ -33,6 +34,7 @@ function LessonRow(props: LessonRowProps) {
   } = props
   const { mutate: lessonMutation } = useLessonUpdate({
     bookId,
+    currentDate,
   })
 
   const { mutate: deleteRecord } = useRecordDelete(bookId, currentDate)

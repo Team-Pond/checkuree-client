@@ -8,11 +8,14 @@ import NeedLessonTable from './NeedLessonTable'
 import NoNeedLessonTable from './NoNeedLessonTable'
 import tw from 'tailwind-styled-components'
 import useFormDataStore from '@/store/recordStore'
-import { ScheduleData, ScheduleDataContentType, STATUS } from '@/api/type'
-import { bookKeys } from '@/queryKeys'
-import { useQuery } from '@tanstack/react-query'
-
+import {
+  ScheduleData,
+  ScheduleDataContentType,
+  ScheduleDataType,
+  STATUS,
+} from '@/api/type'
 type MainContentsProps = {
+  bookSchedules: ScheduleDataType
   bookId: number
   currentDate: string
   checkedScheduleCount: number
@@ -26,11 +29,13 @@ const ABSENT_CHECK = '결석상태로 변경하시겠어요?'
 function MainContents(props: MainContentsProps) {
   const openModal = useModalStore((state) => state.openModal)
 
-  const { bookId, currentDate, checkedScheduleCount, setCheckedCount } = props
-
-  const { data: bookSchedules } = useQuery(
-    bookKeys.schedules(bookId, currentDate),
-  )
+  const {
+    bookId,
+    bookSchedules,
+    currentDate,
+    checkedScheduleCount,
+    setCheckedCount,
+  } = props
 
   const [record, setRecord] = useState({
     id: 0,
@@ -52,8 +57,8 @@ function MainContents(props: MainContentsProps) {
   const { mutate: recordUpdate } = useRecordUpdate({
     bookId: Number(bookId),
     recordId: Number(record.id),
-    currentDate: currentDate,
     formattedTime: `${formData?.hour}:${formData?.minute}`,
+    currentDate: currentDate,
   })
 
   // 출석체크 화면의 체크 인원 수 변경
@@ -103,6 +108,7 @@ function MainContents(props: MainContentsProps) {
         status: 'PENDING',
         startTime: startTime,
       })
+      return
     } else {
       // 출석 상태를 targetStatus로 변경
       statusMutation({
@@ -114,48 +120,47 @@ function MainContents(props: MainContentsProps) {
     }
   }
 
-  const getNeedLessonStudents = (schedules: ScheduleData[]) =>
-    schedules.filter((s) => s.recordStatus === 'ATTEND' && !s.isTaught)
-
-  const getNoNeedLessonSchedules = (schedules: ScheduleData[]) =>
-    schedules.filter((s) => s.recordStatus !== 'ATTEND' || s.isTaught)
-
-  const sortByRecordTime = (a: ScheduleData, b: ScheduleData) =>
-    a.recordTime > b.recordTime ? 1 : -1
+  console.log(bookSchedules)
 
   const computedLessonData = useMemo(() => {
-    if (bookSchedules?.status === 200 && !bookSchedules?.data.content) {
+    if (!bookSchedules?.content) {
       return {
         computedNeedLessonStudents: [],
         computedNoNeedLessonTimeScheduleTable: [],
       }
     }
 
-    const needLessonStudents: ScheduleData[] = []
-    const noNeedLessonTimeScheduleTable: ScheduleDataContentType = []
+    const tempNeedLessonStudents: ScheduleData[] = []
+    const tempNoNeedLessonTimeScheduleTable: ScheduleDataContentType = []
 
-    bookSchedules?.status === 200 &&
-      bookSchedules?.data.content.forEach((content) => {
-        const need = getNeedLessonStudents(content.schedules)
-        const noNeed = getNoNeedLessonSchedules(content.schedules)
+    // bookSchedules.content의 변경을 감지
+    bookSchedules.content.forEach((content) => {
+      const beforeLessonStudents = content.schedules.filter(
+        (schedule) => schedule.recordStatus === 'ATTEND' && !schedule.isTaught,
+      )
+      const noNeedToLessonSchedules = content.schedules.filter(
+        (schedule) => schedule.recordStatus !== 'ATTEND' || schedule.isTaught,
+      )
 
-        needLessonStudents.push(...need)
-        noNeedLessonTimeScheduleTable.push({
-          ...content,
-          schedules: noNeed,
-        })
+      tempNeedLessonStudents.push(...beforeLessonStudents)
+      tempNoNeedLessonTimeScheduleTable.push({
+        ...content,
+        schedules: noNeedToLessonSchedules,
       })
+    })
 
-    needLessonStudents.sort(sortByRecordTime)
+    tempNeedLessonStudents.sort((a, b) =>
+      a.recordTime > b.recordTime ? 1 : -1,
+    )
 
     return {
-      computedNeedLessonStudents: needLessonStudents,
-      computedNoNeedLessonTimeScheduleTable: noNeedLessonTimeScheduleTable,
+      computedNeedLessonStudents: tempNeedLessonStudents,
+      computedNoNeedLessonTimeScheduleTable: tempNoNeedLessonTimeScheduleTable,
     }
-  }, [bookSchedules])
+  }, [bookSchedules]) // bookSchedules를 의존성 배열에 추가
 
   const handleAttendanceStatusWithConfirmation = (
-    targetStatus: 'ATTEND' | 'ABSENT',
+    targetStatus: Omit<STATUS, 'PENDING'>,
     schedule: ScheduleData,
     startTime?: string,
   ) => {
