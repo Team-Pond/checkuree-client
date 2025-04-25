@@ -14,6 +14,8 @@ import {
   ScheduleDataType,
   STATUS,
 } from '@/api/type'
+import { useQueryClient } from '@tanstack/react-query'
+import { bookKeys } from '@/queryKeys'
 
 type MainContentsProps = {
   bookSchedules: ScheduleDataType
@@ -120,6 +122,8 @@ function MainContents(props: MainContentsProps) {
     }
   }
 
+  console.log(bookSchedules)
+
   const computedLessonData = useMemo(() => {
     if (!bookSchedules?.content) {
       return {
@@ -131,6 +135,7 @@ function MainContents(props: MainContentsProps) {
     const tempNeedLessonStudents: ScheduleData[] = []
     const tempNoNeedLessonTimeScheduleTable: ScheduleDataContentType = []
 
+    // bookSchedules.content의 변경을 감지
     bookSchedules.content.forEach((content) => {
       const beforeLessonStudents = content.schedules.filter(
         (schedule) => schedule.recordStatus === 'ATTEND' && !schedule.isTaught,
@@ -154,10 +159,10 @@ function MainContents(props: MainContentsProps) {
       computedNeedLessonStudents: tempNeedLessonStudents,
       computedNoNeedLessonTimeScheduleTable: tempNoNeedLessonTimeScheduleTable,
     }
-  }, [bookSchedules]) // bookSchedules와 그 내부 content 모두 감지
+  }, [bookSchedules]) // bookSchedules를 의존성 배열에 추가
 
   const handleAttendanceStatusWithConfirmation = (
-    targetStatus: 'ATTEND' | 'ABSENT',
+    targetStatus: Omit<STATUS, 'PENDING'>,
     schedule: ScheduleData,
     startTime?: string,
   ) => {

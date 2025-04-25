@@ -34,6 +34,7 @@ function LessonRow(props: LessonRowProps) {
   } = props
   const { mutate: lessonMutation } = useLessonUpdate({
     bookId,
+    currentDate,
   })
 
   const { mutate: deleteRecord } = useRecordDelete(bookId, currentDate)
