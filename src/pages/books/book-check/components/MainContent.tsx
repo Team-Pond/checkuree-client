@@ -61,6 +61,7 @@ function MainContents(props: MainContentsProps) {
     bookId: Number(bookId),
     recordId: Number(record.id),
     formattedTime: `${formData?.hour}:${formData?.minute}`,
+    currentDate: currentDate,
   })
 
   // 출석체크 화면의 체크 인원 수 변경

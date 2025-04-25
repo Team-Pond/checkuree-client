@@ -62,7 +62,7 @@ export const useRecordAllUpdate = ({
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: bookKeys.schedules._def,
+        queryKey: bookKeys.schedules(bookId, formattedDate).queryKey,
       })
       toast.success('전체 출석 완료')
     },
@@ -76,10 +76,12 @@ export const useRecordUpdate = ({
   bookId,
   recordId,
   formattedTime,
+  currentDate,
 }: {
   bookId: number
   recordId: number
   formattedTime: string
+  currentDate: string
 }) => {
   const queryClient = useQueryClient()
   const { setFormData } = useFormDataStore()
@@ -97,7 +99,7 @@ export const useRecordUpdate = ({
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: bookKeys.schedules._def,
+        queryKey: bookKeys.schedules(bookId, currentDate).queryKey,
       })
       toast.success('출석시간 변경 완료')
       setFormData({ hour: '', minute: '' })
@@ -308,7 +310,6 @@ export const useLessonUpdate = ({
         queryKey: bookKeys.schedules(bookId, currentDate).queryKey,
       })
     },
-    onError: () => {},
   })
 }
 
