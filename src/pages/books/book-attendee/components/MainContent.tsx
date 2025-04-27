@@ -23,7 +23,7 @@ export default function MainContent(props: MainContentProps) {
           .map((student) => (
             <div
               key={student.id}
-              className="py-4 px-2 flex gap-4"
+              className="py-4 px-2 flex gap-4 cursor-pointer"
               onClick={() =>
                 navigate(
                   `/book/${bookId}/attendee/${student.id}${

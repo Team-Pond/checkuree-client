@@ -1,10 +1,11 @@
 import { useMutation } from '@tanstack/react-query'
 import { LoginDataType } from './SignIn'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { setTokens } from '@/lib/auth'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { SignIn } from '@/api/AuthApiClient'
+import { handleError } from '@/utils/handleError'
 
 export const useAuthLogin = () => {
   const navigate = useNavigate()
@@ -22,15 +23,6 @@ export const useAuthLogin = () => {
       toast.success('로그인 되었습니다.')
       navigate('/')
     },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        toast.error(
-          error.response?.data.message ||
-            '서버에 오류가 있습니다. 잠시 후에 생성해주세요.',
-        )
-      } else {
-        toast.error('서버에 오류가 있습니다. 잠시 후에 생성해주세요.')
-      }
-    },
+    onError: handleError,
   })
 }
