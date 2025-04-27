@@ -11,6 +11,7 @@ import toast from 'react-hot-toast'
 
 import { counsellingKeys } from '../../../queryKeys'
 import { AxiosError } from 'axios'
+import { handleError } from '@/utils/handleError'
 
 // TODO: Calendar 작업 시 필요
 export const useAttendeeRecords = ({
@@ -173,13 +174,6 @@ export const useProgressPromote = ({
         queryKey: attendeeKeys.progressLog(bookId, attendeeId).queryKey,
       })
     },
-    onError: (err: AxiosError) => {
-      const errorData = err.response?.data as
-        | { description: string }
-        | undefined
-      if (errorData && errorData.description) {
-        toast.error(errorData.description)
-      }
-    },
+    onError: handleError,
   })
 }

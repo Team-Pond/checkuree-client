@@ -9,6 +9,8 @@ import { UpdateAttendeeScheduleRequest } from '@/api/AttendeeSchema'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { attendeeKeys } from '@/queryKeys'
+import { AxiosError } from 'axios'
+import { handleError } from '@/utils/handleError'
 
 // 일정(요일, 시간)에 따른 수강생 데이터를 가져오는 커스텀 훅
 export const useSchedule = (
@@ -58,9 +60,7 @@ export const useOnlyScheduleUpdate = ({
     onSuccess: () => {
       toast.success('수강생 일정이 수정되었습니다.')
     },
-    onError: () => {
-      toast.error('클래스 일정 수정에 실패했습니다.')
-    },
+    onError: handleError,
   })
 }
 
@@ -103,6 +103,6 @@ export const useScheduleUpdate = ({
         }
       })
     },
-    onError: () => {},
+    onError: handleError,
   })
 }

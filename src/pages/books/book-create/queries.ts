@@ -2,8 +2,9 @@ import { createBook } from '@/api/AttendanceBookApiClient'
 import { CreateBookRequest } from '@/api/AttendanceBookSchema'
 import { getSubjectItems, getSubjects } from '@/api/CourseApiClient'
 import { bookKeys } from '@/queryKeys'
+import { handleError } from '@/utils/handleError'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 
@@ -44,15 +45,6 @@ export const useBookCreate = () => {
       toast.success('출석부를 생성하였습니다.')
       navigate('/book')
     },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        toast.error(
-          error.response?.data.message ||
-            '서버에 오류가 발생했습니다.\n잠시 후 다시 시도해 주세요.',
-        )
-      } else {
-        toast.error('서버에 오류가 발생했습니다.\n잠시 후 다시 시도해 주세요.')
-      }
-    },
+    onError: handleError,
   })
 }

@@ -12,7 +12,9 @@ import { STATUS } from '@/api/type'
 import { bookKeys } from '@/queryKeys'
 import useFormDataStore from '@/store/recordStore'
 import { getCurrentTimeParts } from '@/utils'
+import { handleError } from '@/utils/handleError'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import toast from 'react-hot-toast'
 
 export const useBookSchedules = ({
@@ -65,9 +67,7 @@ export const useRecordAllUpdate = ({
       })
       toast.success('전체 출석 완료')
     },
-    onError: () => {
-      toast.success('전체 출석 실패')
-    },
+    onError: handleError,
   })
 }
 
@@ -103,9 +103,7 @@ export const useRecordUpdate = ({
       toast.success('출석시간 변경 완료')
       setFormData({ hour: '', minute: '' })
     },
-    onError: () => {
-      toast.error('출석시간 수정 실패')
-    },
+    onError: handleError,
   })
 }
 
@@ -191,7 +189,7 @@ export const useRecordCreate = ({
         queryKey: key,
       })
     },
-    onError: () => {},
+    onError: handleError,
   })
 }
 
