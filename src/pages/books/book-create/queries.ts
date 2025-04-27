@@ -47,11 +47,11 @@ export const useBookCreate = () => {
     onError: (error) => {
       if (axios.isAxiosError(error)) {
         toast.error(
-          error.response?.data.description ||
-            '서버에 오류가 있습니다. 잠시 후에 생성해주세요.',
+          error.response?.data.message ||
+            '서버에 오류가 발생했습니다.\n잠시 후 다시 시도해 주세요.',
         )
       } else {
-        toast.error('서버에 오류가 있습니다. 잠시 후에 생성해주세요.')
+        toast.error('서버에 오류가 발생했습니다.\n잠시 후 다시 시도해 주세요.')
       }
     },
   })
