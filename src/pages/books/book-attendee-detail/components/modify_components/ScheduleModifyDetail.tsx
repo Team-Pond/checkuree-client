@@ -153,6 +153,17 @@ export default function ScheduleModifyDetail({
         <div className="flex gap-1 items-center">
           <p className="font-bold text-m-medium">클래스 일정</p>
           <p className="text-text-danger">*</p>
+
+          <div className="flex items-center gap-2 ml-auto text-xs-semibold text-text-secondary">
+            <div className="flex items-center gap-1">
+              <span className="w-2 h-2 bg-bg-tertiary rounded-full inline-block" />
+              <span>현재 스케쥴</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="w-2 h-2 bg-red-500 rounded-full inline-block" />
+              <span>예정 스케쥴</span>
+            </div>
+          </div>
         </div>
         {scheduleTable && (
           <ScheduleTable
