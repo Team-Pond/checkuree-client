@@ -120,8 +120,6 @@ function MainContents(props: MainContentsProps) {
     }
   }
 
-  console.log(bookSchedules)
-
   const computedLessonData = useMemo(() => {
     if (!bookSchedules?.content) {
       return {

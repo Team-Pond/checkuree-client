@@ -14,7 +14,7 @@ const ApiClient: AxiosInstance = axios.create({
 ApiClient.interceptors.request.use(
   (config) => {
     const token = getAccessToken()
-    config.withCredentials = true // 쿠키를 포함한 요청을 보냅니다.
+    config.withCredentials = true
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useBookDetail } from '../../queries'
 import { UpdateAttendeeScheduleRequest } from '@/api/AttendeeSchema'
 import { dayMap, DayOfWeek } from '@/api/type'
+import { twMerge } from 'tailwind-merge'
 
 interface ScheduleItem {
   dayOfWeek: DayOfWeek
@@ -180,14 +181,15 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                   return (
                     <td
                       key={`${dayData.dayOfWeek}-${slotIndex}`}
-                      className={`border border-[#f6f6f6] ${borderClass}
-                      text-sm w-[54px] h-[34px] align-middle cursor-pointer ${
+                      className={twMerge(
+                        `border border-[#f6f6f6] ${borderClass}
+                      text-sm w-[54px] h-[34px] align-middle cursor-pointer`,
                         isSelected
                           ? 'bg-bg-tertiary text-text-interactive-inverse text-xs-medium'
                           : count > 0
                             ? 'bg-bg-primary text-text-secondary text-xs-medium'
-                            : 'bg-bg-secondary text-text-secondary text-xs-medium'
-                      }`}
+                            : 'bg-bg-secondary text-text-secondary text-xs-medium',
+                      )}
                       onClick={() =>
                         handleSchedule(dayData.dayOfWeek, hhmm, isSelected)
                       }
