@@ -189,6 +189,10 @@ export const useRecordCreate = ({
         queryClient.setQueryData(key, context.previous)
       }
     },
+    onSettled: () => {
+      // 최종적으로 서버 상태와 동기화
+      queryClient.invalidateQueries({ queryKey: key })
+    },
   })
 }
 
@@ -262,6 +266,11 @@ export const useStatusUpdate = ({
 
       // 3. 롤백용 컨텍스트 반환
       return { previous }
+    },
+
+    onSettled: () => {
+      // 최종적으로 서버 상태와 동기화
+      queryClient.invalidateQueries({ queryKey: key })
     },
 
     onError: (_err, _vars, context) => {
