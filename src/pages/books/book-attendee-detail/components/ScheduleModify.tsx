@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 import { UpdateAttendeeScheduleRequest } from '../../../../api/AttendeeSchema'
 import { useAttendeeDetail } from '../queries'
 import SEO from '@/components/SEO'
-import FieldTitle from '@/components/FieldTitle'
 
 export const ScheduleModify = () => {
   const { bookId, attendeeId } = useParams()
@@ -58,53 +57,33 @@ export const ScheduleModify = () => {
           <hr className="border-[2px] border-bg-tertiary max-w-[356px] w-full rounded-full" />
         </div>
 
-        <div className="flex flex-col w-full max-w-[342px] ">
-          <div className="flex flex-col justify-center gap-6 w-full">
+        <div className="flex w-full justify-center">
+          <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
             <ScheduleModifyDetail
               setAttendeeSchedules={setAttendeeSchedules}
               attendeeSchedules={attendeeSchedules!}
             />
-            <div>
-              <div className="flex justify-between">
-                <FieldTitle title="변경 일자" essential />
-                <div className="text-text-brand text-s-bold">
-                  오늘부터 시작하기
-                </div>
-              </div>
-              <div className="flex items-center gap-2 mt-2">
-                <input
-                  data-cy="name-input"
-                  aria-label="name-input"
-                  type="text"
-                  placeholder="YYYY.MM.DD"
-                  className="max-w-[167px] text-s-bold bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-text-secondary"
-                />
-                <span className="ml-2 text-s-bold">
-                  부터 일정이 변경됩니다.
-                </span>
-              </div>
+            <div className="flex gap-4 w-full">
+              <button
+                type="button"
+                onClick={() => {
+                  navigate(-1)
+                }}
+                className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
+              >
+                이전으로
+              </button>
+              <button
+                onClick={() => {
+                  scheduleMutation()
+                  navigate(-1)
+                }}
+                type="button"
+                className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
+              >
+                수정하기
+              </button>
             </div>
-          </div>
-          <div className="flex gap-4 w-full mt-20">
-            <button
-              type="button"
-              onClick={() => {
-                navigate(-1)
-              }}
-              className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
-            >
-              이전으로
-            </button>
-            <button
-              onClick={() => {
-                scheduleMutation()
-                navigate(-1)
-              }}
-              type="button"
-              className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
-            >
-              저장하기
-            </button>
           </div>
         </div>
       </div>
