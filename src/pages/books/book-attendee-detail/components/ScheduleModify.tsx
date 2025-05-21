@@ -81,7 +81,7 @@ export const ScheduleModify = () => {
                 type="button"
                 className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
               >
-                수정하기
+                저장하기
               </button>
             </div>
           </div>
