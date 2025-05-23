@@ -1,16 +1,23 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import ScheduleModifyDetail from './modify_components/ScheduleModifyDetail'
 import { useOnlyScheduleUpdate } from '../../../attendee-create/queries'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { UpdateAttendeeScheduleRequest } from '../../../../api/AttendeeSchema'
 import { useAttendeeDetail } from '../queries'
 import SEO from '@/components/SEO'
-import FieldTitle from '@/components/FieldTitle'
+
+import ScheduleModifyDetailDate from './modify_components/ScheduleModifyDetailDate'
+import DateDrawer from '../../book-check/components/DateDrawer'
+import dayjs from 'dayjs'
+import useModalStore from '@/store/dialogStore'
+import ConfirmModal from '../../book-check/components/ConfirmModal'
 
 export const ScheduleModify = () => {
   const { bookId, attendeeId } = useParams()
   const navigate = useNavigate()
-
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false)
+  const [selectedDate, setSelectedDate] = useState(dayjs()) // dayjs로 초기화
+  const openModal = useModalStore((state) => state.openModal)
   const attendeeDetail = useAttendeeDetail({
     bookId: Number(bookId),
     attendeeId: Number(attendeeId),
@@ -19,11 +26,19 @@ export const ScheduleModify = () => {
   const [attendeeSchedules, setAttendeeSchedules] =
     useState<UpdateAttendeeScheduleRequest>()
 
+  const handleCurrentDay = useCallback((date: Date) => {
+    setSelectedDate(dayjs(date))
+  }, [])
+
   const { mutate: scheduleMutation } = useOnlyScheduleUpdate({
     paramBookId: Number(bookId),
     attendeeId: Number(attendeeId),
     attendeeSchedules: attendeeSchedules!,
   })
+
+  const onClickStartToday = () => {
+    setSelectedDate(dayjs())
+  }
 
   useEffect(() => {
     if (attendeeDetail.data) {
@@ -35,6 +50,11 @@ export const ScheduleModify = () => {
       })
     }
   }, [attendeeDetail?.data])
+
+  console.log(
+    'attendeeSchedules',
+    attendeeSchedules?.schedules.map((schedule) => schedule.day),
+  )
 
   return (
     <form className="flex flex-col gap-7 w-full">
@@ -64,26 +84,11 @@ export const ScheduleModify = () => {
               setAttendeeSchedules={setAttendeeSchedules}
               attendeeSchedules={attendeeSchedules!}
             />
-            <div>
-              <div className="flex justify-between">
-                <FieldTitle title="변경 일자" essential />
-                <div className="text-text-brand text-s-bold">
-                  오늘부터 시작하기
-                </div>
-              </div>
-              <div className="flex items-center gap-2 mt-2">
-                <input
-                  data-cy="name-input"
-                  aria-label="name-input"
-                  type="text"
-                  placeholder="YYYY.MM.DD"
-                  className="max-w-[167px] text-s-bold bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-text-secondary"
-                />
-                <span className="ml-2 text-s-bold">
-                  부터 일정이 변경됩니다.
-                </span>
-              </div>
-            </div>
+            <ScheduleModifyDetailDate
+              selectedDate={selectedDate}
+              onClickStartToday={onClickStartToday}
+              handleDrawer={() => setOpenDrawer(true)}
+            />
           </div>
           <div className="flex gap-4 w-full mt-20">
             <button
@@ -96,10 +101,15 @@ export const ScheduleModify = () => {
               이전으로
             </button>
             <button
-              onClick={() => {
-                scheduleMutation()
-                navigate(-1)
-              }}
+              onClick={() =>
+                openModal(
+                  <ConfirmModal message="변경된 스케줄로 저장하시겠습니까?" />,
+                  () => {
+                    scheduleMutation()
+                    navigate(-1)
+                  },
+                )
+              }
               type="button"
               className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
             >
@@ -108,6 +118,12 @@ export const ScheduleModify = () => {
           </div>
         </div>
       </div>
+      <DateDrawer
+        open={openDrawer}
+        onClose={() => setOpenDrawer(false)}
+        handleCurrentDay={handleCurrentDay}
+        saveButtonText="선택하기"
+      />
     </form>
   )
 }

@@ -7,11 +7,13 @@ type DateDrawerProps = {
   open: boolean
   onClose: () => void
   handleCurrentDay: (date: Date) => void
+  saveButtonText?: string
 }
 export default function DateDrawer({
   onClose,
   open = false,
   handleCurrentDay,
+  saveButtonText = '이동하기',
 }: DateDrawerProps) {
   const [selectedDay, setSelectedDay] = useState<Date>(new Date())
   const handleDay = (date: Date) => {
@@ -35,7 +37,7 @@ export default function DateDrawer({
           }}
         >
           <span className="text-[#F1F8F3] text-l-semibold select-none">
-            이동하기
+            {saveButtonText}
           </span>
         </Button>
       </div>
