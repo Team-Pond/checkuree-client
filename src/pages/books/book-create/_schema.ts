@@ -25,14 +25,12 @@ export const bookSchema = z.object({
       z.object({
         title: z.string().min(1, '커리큘럼명은 최소 1자 이상이어야 합니다.'),
         isPrimary: z.boolean(),
-        grades: z
-          .array(
-            z.object({
-              subjectItemId: z.number(),
-              level: z.number(),
-            }),
-          )
-          .length(1, '최소 과목 1개 이상 추가해주세요 '),
+        grades: z.array(
+          z.object({
+            subjectItemId: z.number(),
+            level: z.number(),
+          }),
+        ),
       }),
     )
     .min(1, COURSE_ERROR_MESSAGE),
