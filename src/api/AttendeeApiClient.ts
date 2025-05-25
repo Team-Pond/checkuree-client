@@ -121,13 +121,14 @@ export const updateAttendeeSchedule = async ({
   attendanceBookId: number
   attendeeId: number
 }): Promise<UpdateAttendeeScheduleResponse> => {
-  const { schedules } = params
+  const { schedules, appliedFrom } = params
 
   const response = await ApiClient.request({
     method: 'PUT',
     url: `/book/${attendanceBookId}/attendee/${attendeeId}/schedule`,
     data: {
-      schedules: schedules,
+      schedules,
+      appliedFrom,
     },
   })
 

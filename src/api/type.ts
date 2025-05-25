@@ -221,6 +221,12 @@ export type DayOfWeek =
   | 'SATURDAY'
   | 'SUNDAY'
 
+export type FutureScheduleType = {
+  id: number
+  time: string
+  day: DaysType
+}
+
 export const dayMap: Record<DayOfWeek, string> = {
   MONDAY: '월',
   TUESDAY: '화',

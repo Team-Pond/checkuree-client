@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface Props {
-  message: string
+  message: string | React.ReactNode
 }
 
 export const ConfirmModal: React.FC<Props> = ({ message }) => {

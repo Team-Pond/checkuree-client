@@ -9,15 +9,17 @@ import {
   useScheduleData,
   useScheduleTimeTable,
 } from '../queries'
-import { DaysType } from '@/api/type'
+import { DaysType, FutureScheduleType } from '@/api/type'
 import { getSub30MinuteHhmm } from '@/utils'
 import AttendeeDrawer from '@/components/AttendeeDrawer'
 
 interface CurriculumModifyProps {
+  futureSchedules: FutureScheduleType[]
   setAttendeeSchedules: React.Dispatch<
-    React.SetStateAction<UpdateAttendeeScheduleRequest | undefined>
+    React.SetStateAction<
+      Omit<UpdateAttendeeScheduleRequest, 'appliedFrom'> | undefined
+    >
   >
-
   setIsCourseModify: React.Dispatch<React.SetStateAction<boolean>>
   onChangeGrade: (gradeId: number) => void
 }
@@ -32,6 +34,7 @@ export default function CurriculumModify({
   setAttendeeSchedules,
   onChangeGrade,
   setIsCourseModify,
+  futureSchedules,
 }: CurriculumModifyProps) {
   const { bookId } = useParams()
 
@@ -212,6 +215,7 @@ export default function CurriculumModify({
 
         {scheduleTimeTable && (
           <ScheduleTable
+            futureSchedules={futureSchedules}
             scheduleTable={scheduleTimeTable?.scheduleTable!}
             timeSlots={scheduleTimeTable?.timeSlots!}
             startHhmm={scheduleTimeTable?.startHhmm!}

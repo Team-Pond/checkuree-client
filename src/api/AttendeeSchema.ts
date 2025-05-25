@@ -1,5 +1,5 @@
-import { AttendeeSchema } from "@/pages/attendee-create/_schema";
-import { z } from "zod";
+import { AttendeeSchema } from '@/pages/attendee-create/_schema'
+import { z } from 'zod'
 import {
   Associates,
   DaysType,
@@ -12,243 +12,247 @@ import {
   StudentStatus,
   UpdateScheduleAttendeeDataType,
   AttendeeStatisticType,
-} from "./type";
+  FutureScheduleType,
+} from './type'
 
 type ResponseBase = {
-  status: number;
-  message: string;
-};
+  status: number
+  message: string
+}
 
 type SuccessResponse = ResponseBase & {
-  data: Record<string, unknown>;
-};
+  data: Record<string, unknown>
+}
 
 type ErrorResponse = ResponseBase & {
-  data: Record<string, unknown>;
-  timeStamp: string;
-};
+  data: Record<string, unknown>
+  timeStamp: string
+}
 
-export type AttendeeNewRequest = z.infer<typeof AttendeeSchema>;
+export type AttendeeNewRequest = z.infer<typeof AttendeeSchema>
 
 export type AttendeeNewResponse = {
-  status: 200;
+  status: 200
   data: {
-    id: number;
-  };
-} & ErrorResponse;
+    id: number
+  }
+} & ErrorResponse
 
 export type AttendeeCheckNameRequest = {
-  attendanceBookId: string;
-  name: string;
-};
+  attendanceBookId: string
+  name: string
+}
 
-export type AttendeeCheckNameResponse = SuccessResponse | ErrorResponse;
+export type AttendeeCheckNameResponse = SuccessResponse | ErrorResponse
 
 // 출석 체크
 
 export type AttendeeCheckRequest = {
-  attendanceBookId: number;
-  attendeeId: number;
-  status: string;
-};
+  attendanceBookId: number
+  attendeeId: number
+  status: string
+}
 
-export type AttendeeCheckResponse = SuccessResponse | ErrorResponse;
+export type AttendeeCheckResponse = SuccessResponse | ErrorResponse
 
 export type GetAttendeeListRequest = {
-  attendanceBookId: number;
+  attendanceBookId: number
   filter: {
     age: {
-      min: number;
-      max: number;
-    };
-    gender: GenderType;
-    gradeIds: number[];
-    scheduleDays: DaysType[];
-    status: StudentStatus;
-  };
-};
+      min: number
+      max: number
+    }
+    gender: GenderType
+    gradeIds: number[]
+    scheduleDays: DaysType[]
+    status: StudentStatus
+  }
+}
 
 type AttendeeListType = {
   content: {
-    id: number;
-    name: string;
-    gender: GenderType;
-    status: StudentStatus;
+    id: number
+    name: string
+    gender: GenderType
+    status: StudentStatus
     grades: {
-      id: number;
-      name: string;
-    }[];
-    age: number;
-    scheduleDays: DaysType[];
-  }[];
-  empty: boolean;
-  first: boolean;
-  last: boolean;
-  number: number;
-  numberOfelements: number;
-  size: number;
+      id: number
+      name: string
+    }[]
+    age: number
+    scheduleDays: DaysType[]
+  }[]
+  empty: boolean
+  first: boolean
+  last: boolean
+  number: number
+  numberOfelements: number
+  size: number
   pageable: {
-    offset: number;
-    pageNumber: number;
-    pageSize: number;
-    paged: boolean;
+    offset: number
+    pageNumber: number
+    pageSize: number
+    paged: boolean
     sort: {
-      empty: boolean;
-      sorted: boolean;
-      unsorted: boolean;
-    };
-  };
+      empty: boolean
+      sorted: boolean
+      unsorted: boolean
+    }
+  }
   sort: {
-    emply: boolean;
-    sorted: boolean;
-    unsorted: boolean;
-  };
-};
+    emply: boolean
+    sorted: boolean
+    unsorted: boolean
+  }
+}
 export type GetAttendeeListResponse = {
-  status: 200;
-  data: AttendeeListType;
-} & ErrorResponse;
+  status: 200
+  data: AttendeeListType
+} & ErrorResponse
 
 export type GetScheduleAttendeeRequest = {
-  attendanceBookId: number;
-  dayOfWeek: string;
-  hhmm: string;
-};
+  attendanceBookId: number
+  dayOfWeek: string
+  hhmm: string
+}
 
 export type GetScheduleAttendeeResponse = {
-  status: 200;
-  data: ScheduleAttendeeDataType[];
-} & ErrorResponse;
+  status: 200
+  data: ScheduleAttendeeDataType[]
+} & ErrorResponse
 
 export type UpdateAttendeeScheduleRequest = {
   schedules: {
-    hhmm: string;
-    day: DaysType;
-  }[];
-};
+    hhmm: string
+    day: DaysType
+  }[]
+  appliedFrom: string
+}
 
 export type UpdateAttendeeScheduleResponse = {
-  status: 200;
-  data: UpdateScheduleAttendeeDataType[];
-} & ErrorResponse;
+  status: 200
+  data: UpdateScheduleAttendeeDataType[]
+} & ErrorResponse
 
 // 진도 관리 API
 export type UpdateBookProgressRequest = {
-  attendeeId: number;
+  attendeeId: number
   progresses: {
-    startAt: string;
-    gradeId: number;
-  }[];
-};
+    startAt: string
+    gradeId: number
+  }[]
+}
 
 export type UpdateBookProgressResponse = {
-  status: 200;
+  status: 200
   data: {
-    ids: number[];
-  };
-} & ErrorResponse;
+    ids: number[]
+  }
+} & ErrorResponse
 
 // 출석부 학생 인증
 export type UpdateAttendeeVerifyRequest = {
-  attendeeId: number;
-};
+  attendeeId: number
+}
 export type UpdateAttendeeVerifyResponse = {
-  status: 200;
+  status: 200
   data: {
-    id: number;
-  };
-} & ErrorResponse;
+    id: number
+  }
+} & ErrorResponse
 
 export type GetAttendeeDetailRequest = {
-  attendanceBookId: number;
-  attendeeId: number;
-};
+  attendanceBookId: number
+  attendeeId: number
+}
 
 export type GetAttendeeDetailResponse = {
-  status: 200;
+  status: 200
   data: {
-    id: number;
-    name: string;
-    gender: GenderType;
-    birthDate: string;
-    enrollmentDate: string;
-    age: number;
-    status: StudentStatus;
-    phoneNumber: string;
-    description: string;
-    school: string;
-    familyId: number;
-    associates?: Associates[];
+    id: number
+    name: string
+    gender: GenderType
+    birthDate: string
+    enrollmentDate: string
+    age: number
+    status: StudentStatus
+    phoneNumber: string
+    description: string
+    school: string
+    familyId: number
+    associates?: Associates[]
     siblings: {
-      id: number;
-      name: string;
-      gender: GenderType;
-      age: number;
-    }[];
-    address_1: string;
-    address_2: string;
+      id: number
+      name: string
+      gender: GenderType
+      age: number
+    }[]
+    futureSchedules: FutureScheduleType[]
+
+    address_1: string
+    address_2: string
     schedules: {
-      id: number;
-      day: DaysType;
-      time: string;
-    }[];
-    progresses: Progresses;
-  };
-} & ErrorResponse;
+      id: number
+      day: DaysType
+      time: string
+    }[]
+    progresses: Progresses
+  }
+} & ErrorResponse
 
 export type SearchAttendeeRequest = {
-  attendanceBookId: number;
-  name: string;
-};
+  attendanceBookId: number
+  name: string
+}
 
 export type SearchAttendeeResponse = {
-  status: 200;
-  data: SearchAttendeeDataType;
-} & ErrorResponse;
+  status: 200
+  data: SearchAttendeeDataType
+} & ErrorResponse
 
 export type GetAttendeeProgressLogRequest = {
-  attendanceBookId: number;
-  attendeeId: number;
-};
+  attendanceBookId: number
+  attendeeId: number
+}
 
 export type GetAttendeeProgressLogResponse = {
-  status: 200;
-  data: ProgressLog[];
-} & ErrorResponse;
+  status: 200
+  data: ProgressLog[]
+} & ErrorResponse
 
 export type UpdateProgressPromoteRequest = {
-  attendeeProgressId: number;
-  completedAt: string;
-  startAt: string;
-  nextGradeId?: number;
-};
+  attendeeProgressId: number
+  completedAt: string
+  startAt: string
+  nextGradeId?: number
+}
 
 export type UpdateProgressPromoteResponse = {
-  status: 200;
+  status: 200
   data: {
-    id: number;
-  };
-} & ErrorResponse;
+    id: number
+  }
+} & ErrorResponse
 
 export type UpdateAttendeeDetailRequest = {
-  birthDate: string;
-  gender: GenderType;
-  address_1: string;
-  description: string;
-};
+  birthDate: string
+  gender: GenderType
+  address_1: string
+  description: string
+}
 
 export type UpdateAttendeeDetailResponse = {
-  status: 200;
+  status: 200
   data: {
-    id: number;
-  };
-} & ErrorResponse;
+    id: number
+  }
+} & ErrorResponse
 
 export type GetAttendeeStatisticsRequest = {
-  type: AttendeeStatisticsType;
-};
+  type: AttendeeStatisticsType
+}
 
 export type GetAttendeeStatisticsResponse = {
-  status: 200;
-  data: AttendeeStatisticType;
-} & ErrorResponse;
+  status: 200
+  data: AttendeeStatisticType
+} & ErrorResponse

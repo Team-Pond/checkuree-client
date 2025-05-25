@@ -121,6 +121,7 @@ export default function BookAttendeeDetail() {
               school: attendeeDetail?.school!,
             }}
             scheduleItems={attendeeDetail?.schedules!}
+            futureSchedules={attendeeDetail?.futureSchedules!}
             associates={{
               relation:
                 (studentAssociate || [])?.length > 0

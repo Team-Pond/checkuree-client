@@ -11,6 +11,7 @@ import DateDrawer from '../../book-check/components/DateDrawer'
 import dayjs from 'dayjs'
 import useModalStore from '@/store/dialogStore'
 import ConfirmModal from '../../book-check/components/ConfirmModal'
+import { dayMap } from '@/api/type'
 
 export const ScheduleModify = () => {
   const { bookId, attendeeId } = useParams()
@@ -24,7 +25,7 @@ export const ScheduleModify = () => {
   })
 
   const [attendeeSchedules, setAttendeeSchedules] =
-    useState<UpdateAttendeeScheduleRequest>()
+    useState<Omit<UpdateAttendeeScheduleRequest, 'appliedFrom'>>()
 
   const handleCurrentDay = useCallback((date: Date) => {
     setSelectedDate(dayjs(date))
@@ -33,7 +34,10 @@ export const ScheduleModify = () => {
   const { mutate: scheduleMutation } = useOnlyScheduleUpdate({
     paramBookId: Number(bookId),
     attendeeId: Number(attendeeId),
-    attendeeSchedules: attendeeSchedules!,
+    attendeeSchedules: {
+      schedules: attendeeSchedules?.schedules!,
+      appliedFrom: selectedDate.toISOString(),
+    },
   })
 
   const onClickStartToday = () => {
@@ -51,11 +55,6 @@ export const ScheduleModify = () => {
     }
   }, [attendeeDetail?.data])
 
-  console.log(
-    'attendeeSchedules',
-    attendeeSchedules?.schedules.map((schedule) => schedule.day),
-  )
-
   return (
     <form className="flex flex-col gap-7 w-full">
       <SEO
@@ -70,6 +69,7 @@ export const ScheduleModify = () => {
           width={32}
           height={32}
           onClick={() => navigate(-1)}
+          className="cursor-pointer"
         />
       </div>
 
@@ -83,6 +83,7 @@ export const ScheduleModify = () => {
             <ScheduleModifyDetail
               setAttendeeSchedules={setAttendeeSchedules}
               attendeeSchedules={attendeeSchedules!}
+              futureSchedules={attendeeDetail.data?.futureSchedules!}
             />
             <ScheduleModifyDetailDate
               selectedDate={selectedDate}
@@ -103,7 +104,21 @@ export const ScheduleModify = () => {
             <button
               onClick={() =>
                 openModal(
-                  <ConfirmModal message="변경된 스케줄로 저장하시겠습니까?" />,
+                  <ConfirmModal
+                    message={
+                      <>
+                        {selectedDate.format('M월 D일부터 일정을')} <br />
+                        {Array.from(
+                          new Set(
+                            attendeeSchedules?.schedules.map(
+                              (schedule) => dayMap[schedule.day],
+                            ),
+                          ),
+                        ).join(', ')}
+                        으로 저장하시겠습니까?
+                      </>
+                    }
+                  />,
                   () => {
                     scheduleMutation()
                     navigate(-1)

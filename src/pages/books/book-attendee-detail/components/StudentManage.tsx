@@ -4,7 +4,12 @@ import { useState } from 'react'
 import CurriculumModify from './CurriculumModify'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import AttendeeModify from './AttendeeModify'
-import { DaysType, GenderType, Progresses } from '@/api/type'
+import {
+  DaysType,
+  FutureScheduleType,
+  GenderType,
+  Progresses,
+} from '@/api/type'
 import tw from 'tailwind-styled-components'
 
 type ScheduleItem = {
@@ -32,6 +37,7 @@ type StudentManageProps = {
     school: string
   }
   scheduleItems: ScheduleItem
+  futureSchedules: FutureScheduleType[]
   associates?: {
     relation?: string
     phoneNumber?: string
@@ -51,7 +57,14 @@ interface AttendeeModifyFormState {
 }
 
 export default function StudentManage(props: StudentManageProps) {
-  const { student, registerInfo, scheduleItems, associates, lessonInfo } = props
+  const {
+    student,
+    registerInfo,
+    scheduleItems,
+    associates,
+    lessonInfo,
+    futureSchedules,
+  } = props
 
   const location = useLocation()
 
@@ -71,7 +84,7 @@ export default function StudentManage(props: StudentManageProps) {
   const { bookId, attendeeId } = useParams()
 
   const [_attendeeSchedules, setAttendeeSchedules] = useState<
-    UpdateAttendeeScheduleRequest | undefined
+    Omit<UpdateAttendeeScheduleRequest, 'appliedFrom'> | undefined
   >()
 
   const [formData, setFormData] = useState<AttendeeModifyFormState>({
@@ -123,6 +136,7 @@ export default function StudentManage(props: StudentManageProps) {
           onChangeGrade={onChangeGrade}
           setAttendeeSchedules={setAttendeeSchedules}
           setIsCourseModify={setIsCourseModify}
+          futureSchedules={futureSchedules}
         />
       ) : isAttendeeModify ? (
         <AttendeeModify
@@ -141,7 +155,8 @@ export default function StudentManage(props: StudentManageProps) {
                 src="/images/icons/ico-pencil.svg"
                 width={20}
                 height={20}
-                alt=""
+                alt="course-edit icon"
+                className="cursor-pointer"
                 onClick={() => {
                   navigate(
                     `/book/${bookId}/attendee/${attendeeId}/schedule${location.search}`,

@@ -53,7 +53,13 @@ export const useOnlyScheduleUpdate = ({
   return useMutation({
     mutationFn: async () =>
       await updateAttendeeSchedule({
-        params: attendeeSchedules!,
+        params: {
+          schedules: attendeeSchedules.schedules.map((schedule) => ({
+            day: schedule.day,
+            hhmm: schedule.hhmm,
+          })),
+          appliedFrom: attendeeSchedules.appliedFrom,
+        },
         attendanceBookId: paramBookId,
         attendeeId,
       }),
