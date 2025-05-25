@@ -45,6 +45,7 @@ export default function Calendar({
           aria-label="calendar backward"
           className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] mr-2"
           onClick={() => setSelectedMonth(add(selectedMonth, { months: -1 }))}
+          type="button"
         >
           <LeftArrowIcon width={12} height={12} />
         </button>
@@ -57,6 +58,7 @@ export default function Calendar({
           aria-label="calendar forward"
           className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] ml-2"
           onClick={() => setSelectedMonth(add(selectedMonth, { months: 1 }))}
+          type="button"
         >
           <RightArrowIcon width={12} height={12} />
         </button>
