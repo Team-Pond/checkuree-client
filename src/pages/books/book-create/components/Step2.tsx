@@ -72,6 +72,8 @@ export default function Step2(props: GradeItemProps) {
         level: index + 1,
       }))
 
+  console.log(errors)
+
   return (
     <>
       <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">

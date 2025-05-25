@@ -90,7 +90,7 @@ export default function BookCreate() {
                   type="button" // submit 대신 버튼 타입을 일반 button으로 변경
                   data-cy="stepSubmit"
                   aria-label="stepSubmit"
-                  issubmit
+                  className="bg-bg-tertiary text-[#F1F8F3]"
                   onClick={async () =>
                     (await trigger([
                       'availableDays',
@@ -112,6 +112,7 @@ export default function BookCreate() {
                 />
                 <div className="flex gap-4 w-full">
                   <Button
+                    type="button"
                     onClick={() => history.back()}
                     data-cy="previous-book-create"
                     aria-label="previous-book-create"
@@ -119,9 +120,10 @@ export default function BookCreate() {
                     이전으로
                   </Button>
                   <Button
-                    issubmit
+                    type="submit"
                     data-cy="submit-book-create"
                     aria-label="submit-book-create"
+                    className="bg-bg-tertiary text-[#F1F8F3]"
                   >
                     생성하기
                   </Button>
@@ -135,7 +137,7 @@ export default function BookCreate() {
   )
 }
 
-const Button = tw.button`${({ issubmit }: { issubmit?: boolean }) => (issubmit ? 'bg-bg-tertiary text-[#F1F8F3]' : 'bg-bg-secondary text-text-secondary')} text-lg font-semibold w-full h-[54px] flex justify-center items-center rounded-2xl `
+const Button = tw.button`bg-bg-secondary text-text-secondary text-lg font-semibold w-full h-[54px] flex justify-center items-center rounded-2xl`
 
 const Form = tw.form`flex flex-col gap-10 w-full pb-[30px] `
 const FormInner = tw.div`w-full flex flex-col gap-6 items-center max-w-[342px] justify-center mx-auto`
