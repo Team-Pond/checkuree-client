@@ -43,6 +43,7 @@ export default function Calendar({
       <div className="flex items-center justify-center h-10 gap-3">
         <button
           aria-label="calendar backward"
+          type="button"
           className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] mr-2"
           onClick={() => setSelectedMonth(add(selectedMonth, { months: -1 }))}
         >
@@ -55,6 +56,7 @@ export default function Calendar({
 
         <button
           aria-label="calendar forward"
+          type="button"
           className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] ml-2"
           onClick={() => setSelectedMonth(add(selectedMonth, { months: 1 }))}
         >
