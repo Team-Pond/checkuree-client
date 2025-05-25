@@ -20,42 +20,45 @@ export default function MainContent(props: MainContentProps) {
           .filter((student) => {
             return !searchName || student.name.includes(searchName)
           })
-          .map((student) => (
-            <div
-              key={student.id}
-              className="py-4 px-2 flex gap-4 cursor-pointer"
-              onClick={() =>
-                navigate(
-                  `/book/${bookId}/attendee/${student.id}${
-                    location.search
-                  }&scheduleDays=${getDayGroupFromInput(
-                    student.scheduleDays,
-                  )}&grade=${getGrades(student.grades)}`,
-                  { state: { from: location.pathname + location.search } },
-                )
-              }
-            >
-              <IconStudent width={40} height={40} className="rounded-full" />
-              <div className="gap-1 text-left">
-                <div className="flex gap-2">
-                  <p className="text-m-bold text-text-primary">
-                    {student.name}
-                  </p>
-                  <p className="text-m-semibold text-text-secondary">
-                    {student.age + '세'}
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  <p className="text-text-brand text-s-semibold">
-                    {getDayGroupFromInput(student.scheduleDays)}
-                  </p>
-                  <p className="text-[#B0B0B0] text-s-medium">
-                    {getGrades(student.grades)}
-                  </p>
+          .map((student) => {
+            const dayGroup = getDayGroupFromInput(
+              Array.from(new Set(student.scheduleDays)),
+            )
+            return (
+              <div
+                key={student.id}
+                className="py-4 px-2 flex gap-4 cursor-pointer"
+                onClick={() =>
+                  navigate(
+                    `/book/${bookId}/attendee/${student.id}${
+                      location.search
+                    }&scheduleDays=${dayGroup}&grade=${getGrades(student.grades)}`,
+                    { state: { from: location.pathname + location.search } },
+                  )
+                }
+              >
+                <IconStudent width={40} height={40} className="rounded-full" />
+                <div className="gap-1 text-left">
+                  <div className="flex gap-2">
+                    <p className="text-m-bold text-text-primary">
+                      {student.name}
+                    </p>
+                    <p className="text-m-semibold text-text-secondary">
+                      {student.age + '세'}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <p className="text-text-brand text-s-semibold">
+                      {dayGroup}
+                    </p>
+                    <p className="text-[#B0B0B0] text-s-medium">
+                      {getGrades(student.grades)}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
       </div>
     </div>
   )
