@@ -29,7 +29,7 @@ export default function MainContent(props: MainContentProps) {
                   `/book/${bookId}/attendee/${student.id}${
                     location.search
                   }&scheduleDays=${getDayGroupFromInput(
-                    student.scheduleDays,
+                    Array.from(new Set(student.scheduleDays)),
                   )}&grade=${getGrades(student.grades)}`,
                   { state: { from: location.pathname + location.search } },
                 )
@@ -47,7 +47,9 @@ export default function MainContent(props: MainContentProps) {
                 </div>
                 <div className="flex gap-2">
                   <p className="text-text-brand text-s-semibold">
-                    {getDayGroupFromInput(student.scheduleDays)}
+                    {getDayGroupFromInput(
+                      Array.from(new Set(student.scheduleDays)),
+                    )}
                   </p>
                   <p className="text-[#B0B0B0] text-s-medium">
                     {getGrades(student.grades)}
