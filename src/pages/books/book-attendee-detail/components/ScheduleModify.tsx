@@ -36,7 +36,7 @@ export const ScheduleModify = () => {
     attendeeId: Number(attendeeId),
     attendeeSchedules: {
       schedules: attendeeSchedules?.schedules!,
-      appliedFrom: selectedDate.toISOString(),
+      appliedFrom: selectedDate.format('YYYY-MM-DD'),
     },
   })
 
