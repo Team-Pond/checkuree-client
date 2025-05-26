@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import { LoginDataType } from './SignIn'
+import { LoginDataType } from './page'
 import axios, { AxiosError } from 'axios'
 import { setTokens } from '@/lib/auth'
 import toast from 'react-hot-toast'
