@@ -12,12 +12,10 @@ import tw from 'tailwind-styled-components'
 export default function Bottom() {
   const location = useLocation()
   const attendeeUrl = location.pathname.includes('attendee')
+
   const bookUrl = location.pathname.split('/')[1]
-
   const dashBoardUrl = location.pathname.includes('dashboard')
-
   const navigate = useNavigate()
-
   const { bookId } = useParams()
 
   const isBookActive = !!bookUrl && !dashBoardUrl && !attendeeUrl
@@ -25,10 +23,7 @@ export default function Bottom() {
   const isDashBoardActive = !!dashBoardUrl
 
   return (
-    <div
-      className="flex justify-between px-[44px] items-center fixed bottom-0 left-1/2 transform -translate-x-1/2 z-40
-             w-full max-w-[390px] h-[92px] bg-white rounded-2xl"
-    >
+    <BottomContainer>
       <Button
         data-cy="navigate-check"
         aria-label="navigate-check"
@@ -56,7 +51,7 @@ export default function Bottom() {
         )}
         <p
           className={twMerge(
-            'text-xs ',
+            'text-xs',
             isAttendeeActive ? 'text-text-primary' : 'text-text-tertiary',
           )}
         >
@@ -82,8 +77,10 @@ export default function Bottom() {
           통계
         </p>
       </Button>
-    </div>
+    </BottomContainer>
   )
 }
 
 const Button = tw.div`flex flex-col gap-2 items-center cursor-pointer`
+const BottomContainer = tw.div`flex justify-between px-[44px] items-center fixed bottom-0 left-1/2 transform -translate-x-1/2 z-40
+             w-full max-w-[390px] h-[92px] bg-white rounded-2xl`
