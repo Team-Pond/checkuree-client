@@ -55,7 +55,7 @@ export default function Step1() {
       input = input.slice(0, 8) + String(convertedDay).padStart(2, '0')
     }
 
-    setValue(parameter, input.replaceAll('.', '-'))
+    setValue(parameter, input.replaceAll('-', '.'))
   }
 
   const {
@@ -176,13 +176,13 @@ export default function Step1() {
               ariaLabel="today-enroll"
               checked={
                 watch('attendeeRequest.enrollmentDate') ===
-                formattedDate.replaceAll('.', '-')
+                formattedDate.replaceAll('-', '.')
               }
               onChange={(e) => {
                 if (e.target.checked) {
                   setValue(
                     'attendeeRequest.enrollmentDate',
-                    formattedDate.replaceAll('.', '-'),
+                    formattedDate.replaceAll('-', '.'),
                   )
                 } else {
                   setValue('attendeeRequest.enrollmentDate', '')

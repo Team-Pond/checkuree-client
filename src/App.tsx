@@ -9,13 +9,15 @@ import ScrollToTop from './components/ScrollToTop'
 import BookLayout from './layouts/BookLayout'
 import NotFound from './pages/404'
 
-import { ScheduleModify } from './pages/book/book-attendee-detail/_components/ScheduleModify'
 import Modal from './components/Modal'
 
 // Lazy load components
 const BooksPage = lazy(() => import('@/pages/book/page'))
 const AttendeeCreatePage = lazy(
   () => import('@/pages/book/book-attendee/attendee-create/page'),
+)
+const ScheduleModifyPage = lazy(
+  () => import('@/pages/book/book-attendee-detail/_components/ScheduleModify'),
 )
 const BookCreatePage = lazy(() => import('@/pages/book/book-create/page'))
 const BookAttendeePage = lazy(() => import('@/pages/book/book-attendee/page'))
@@ -28,10 +30,10 @@ const BookCheckPage = lazy(() => import('@/pages/book/book-check/page'))
 const BookAttendeeDetailPage = lazy(
   () => import('@/pages/book/book-attendee-detail/page'),
 )
-const CounsellingCreate = lazy(
+const CounsellingCreatePage = lazy(
   () => import('@/pages/book/book-attendee-detail/counsel/page'),
 )
-const Dashboard = lazy(() => import('@/pages/book/dashboard/page'))
+const DashboardPage = lazy(() => import('@/pages/book/dashboard/page'))
 
 interface RouteType {
   path: string
@@ -49,15 +51,15 @@ const routes: RouteType[] = [
   },
   {
     path: '/book/:bookId/attendee/:attendeeId/schedule',
-    element: <ScheduleModify />, // 학생 일정 수정
+    element: <ScheduleModifyPage />, // 학생 일정 수정
   },
   {
     path: '/book/:bookId/attendee/:attendeeId/counselling',
-    element: <CounsellingCreate />, // 상담 생성
+    element: <CounsellingCreatePage />, // 상담 생성
   },
   {
     path: '/book/:bookId/dashboard',
-    element: <Dashboard />,
+    element: <DashboardPage />,
   },
 ]
 

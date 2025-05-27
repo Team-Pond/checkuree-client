@@ -2,12 +2,14 @@ import { useNavigate, useParams } from 'react-router-dom'
 import ScheduleModifyDetail from './modify_components/ScheduleModifyDetail'
 
 import { useEffect, useState } from 'react'
-import { UpdateAttendeeScheduleRequest } from '../../../../api/AttendeeSchema'
+
 import { useAttendeeDetail } from '../queries'
 import SEO from '@/components/SEO'
+
+import { UpdateAttendeeScheduleRequest } from '@/api/AttendeeSchema'
 import { useOnlyScheduleUpdate } from '../../book-attendee/attendee-create/queries'
 
-export const ScheduleModify = () => {
+export default function ScheduleModify() {
   const { bookId, attendeeId } = useParams()
   const navigate = useNavigate()
 

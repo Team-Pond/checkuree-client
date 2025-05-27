@@ -47,10 +47,15 @@ export default function Page() {
     if (isValid) {
       const { associates, ...attendeeRequestWithoutAssociates } =
         data.attendeeRequest
-
       // any로 단언하여 타입 오류를 회피합니다.
       const attendeeRequestPayload = {
         ...attendeeRequestWithoutAssociates,
+        birthDate: attendeeRequestWithoutAssociates.birthDate.replaceAll(
+          '.',
+          '-',
+        ),
+        enrollmentDate:
+          attendeeRequestWithoutAssociates.enrollmentDate.replaceAll('.', '-'),
         actualName: data.attendeeRequest.name,
       } as any
 
@@ -93,9 +98,7 @@ export default function Page() {
         title="체쿠리 | 학생 등록"
         content="체쿠리 음악학원 출석부 서비스의 학생 등록 페이지입니다."
       />
-      <Form
-      // onSubmit={handleSubmit(handleStep2Next)}
-      >
+      <Form onSubmit={handleSubmit(handleStep2Next)}>
         <FormHeader isStep2={funnel.step === 'Step2'} />
         <FormInner>
           <funnel.Render
