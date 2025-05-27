@@ -1,12 +1,12 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { twMerge } from 'tailwind-merge'
 
-import BookActiveIcon from '@/assets/icons/book-check/ico-book-active.svg?react'
-import BookIcon from '@/assets/icons/book-check/ico-book.svg?react'
-import RoasterActiveIcon from '@/assets/icons/book-check/ico-roaster-active.svg?react'
-import RoasterIcon from '@/assets/icons/book-check/ico-roaster.svg?react'
-import StatisticsActiveIcon from '@/assets/icons/book-check/ico-statistics-active.svg?react'
-import StatisticsIcon from '@/assets/icons/book-check/ico-statistics.svg?react'
+import BookActiveIcon from '@/assets/icons/bottom-menu/ico-book-active.svg?react'
+import BookIcon from '@/assets/icons/bottom-menu/ico-book.svg?react'
+import AttendeeIconActive from '@/assets/icons/bottom-menu/ico-attendee-active.svg?react'
+import ActtendeeIcon from '@/assets/icons/bottom-menu/ico-attendee.svg?react'
+import DashboardIconActive from '@/assets/icons/book-check/ico-statistics-active.svg?react'
+import Dashboardicon from '@/assets/icons/book-check/ico-statistics.svg?react'
 import tw from 'tailwind-styled-components'
 
 export default function Bottom() {
@@ -29,7 +29,7 @@ export default function Bottom() {
         aria-label="navigate-check"
         onClick={() => navigate(`/book/${bookId}${location.search}`)}
       >
-        {isBookActive ? <BookActiveIcon width={20} /> : <BookIcon width={20} />}
+        {isBookActive ? <BookActiveIcon /> : <BookIcon />}
         <p
           className={twMerge(
             'text-xs ',
@@ -44,11 +44,7 @@ export default function Bottom() {
         aria-label="navigate-attendee"
         onClick={() => navigate(`/book/${bookId}/attendee${location.search}`)}
       >
-        {isAttendeeActive ? (
-          <RoasterActiveIcon width={20} />
-        ) : (
-          <RoasterIcon width={20} />
-        )}
+        {isAttendeeActive ? <AttendeeIconActive /> : <ActtendeeIcon />}
         <p
           className={twMerge(
             'text-xs',
@@ -63,11 +59,7 @@ export default function Bottom() {
         aria-label="navigate-statistics"
         onClick={() => navigate(`/book/${bookId}/dashboard${location.search}`)}
       >
-        {isDashBoardActive ? (
-          <StatisticsActiveIcon width={20} />
-        ) : (
-          <StatisticsIcon width={20} />
-        )}
+        {isDashBoardActive ? <DashboardIconActive /> : <Dashboardicon />}
         <p
           className={twMerge(
             'text-xs',
