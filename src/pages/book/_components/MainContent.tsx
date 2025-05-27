@@ -41,7 +41,7 @@ function Book({
       key={attendance.id}
       data-cy={`book-${index}`}
       aria-label={`book-${index}`}
-      className={`max-w-[162px] w-full h-[195px] ${index % 2 === 1 ? 'justify-self-start' : 'justify-self-end'}`}
+      className={`max-w-[162px] cursor-pointer w-full h-[195px] ${index % 2 === 1 ? 'justify-self-start' : 'justify-self-end'}`}
       onClick={() => {
         handleNavigation({
           id: attendance.id,
