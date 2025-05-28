@@ -62,7 +62,7 @@ export default function Page() {
         title="체쿠리 | 학생 상세"
         content="체쿠리 음악학원 출석부 서비스의 학생 상세 페이지입니다."
       />
-      <div className="w-full h-[64px] flex items-center px-4 py-5 bg-white">
+      <div className="cursor-pointer w-full h-[64px] flex items-center px-4 py-5 bg-white">
         <img
           src="/images/icons/ico-arrow-left-black.svg"
           alt="닫기 아이콘"

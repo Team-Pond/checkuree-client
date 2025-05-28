@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
 
 export default function FormHeader({ studentName }: { studentName: string }) {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   return (
     <>
-      <div className="w-full h-[64px] flex items-center justify-between px-4 py-5">
+      <div className="w-full h-[64px] flex items-center justify-between px-4 py-5 cursor-pointer">
         <p className="font-bold text-text-primary text-[22px]">
           {studentName} 상담 기록
         </p>
@@ -18,5 +18,5 @@ export default function FormHeader({ studentName }: { studentName: string }) {
       </div>
       <hr className="border-[2px] border-bg-tertiary max-w-[356px]  w-full rounded-full mx-auto" />
     </>
-  );
+  )
 }
