@@ -12,11 +12,7 @@
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
     { "source": "/robots.txt", "destination": "/robots.txt" },
-    { "source": "/((?!sitemap\\.xml|robots\\.txt).*)", "destination": "/" },
-    {
-      "source": "/api/v1/:path*",
-      "destination": "https://dev.checkuree.com/api/v1/:path*"
-    }
+    { "source": "/((?!sitemap\\.xml|robots\\.txt).*)", "destination": "/" }
   ],
   "headers": [
     {
