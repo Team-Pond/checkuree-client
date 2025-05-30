@@ -26,11 +26,15 @@ export default function Page() {
         content="체쿠리 음악학원 출석부 서비스의 출석부 목록 페이지입니다."
       />
       <Header />
-      {bookList?.status === 200 && (
+      {bookList?.status === 200 && bookList.data.length > 0 ? (
         <MainContent
           bookList={bookList.data}
           handleNavigation={handleNavigation}
         />
+      ) : (
+        <div className="bg-bg-secondary flex items-center h-full justify-center font-semibold text-text-disabled">
+          <p className="text-text-secondary">출석부를 등록해 주세요</p>
+        </div>
       )}
       <Button />
     </section>

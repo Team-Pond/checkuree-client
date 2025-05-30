@@ -10,7 +10,7 @@ export default function MainContent({
   handleNavigation,
 }: MainContentProps) {
   return (
-    <div className=" bg-bg-secondary w-full h-full">
+    <div className="bg-bg-secondary w-full h-full">
       <div className="w-full py-5 grid grid-cols-2 gap-y-6 gap-x-4 justify-items-stretch mx-auto">
         {bookList.map((book, index) => {
           return (
@@ -68,16 +68,15 @@ function Book({
             {attendeeCount}
           </p>
         </div>
-        <div className="flex flex-col gap-1">
-          <p className="text-text-brand font-bold text-sm leading-4">
+        <div className="flex flex-col gap-1 text-sm leading-4">
+          <p className="text-text-brand font-bold ">
             {getDayGroupFromInput(availableDays)}
           </p>
-          <p className="text-text-secondary font-medium text-[13px] leading-4">
+          <p className="text-text-secondary font-medium truncate">
             {formatTimeRange(
               availableFrom.replace(':', ''),
               availableTo.replace(':', ''),
             )}
-            {/* {formatTimeRange('0800', '2100')} */}
           </p>
         </div>
       </div>

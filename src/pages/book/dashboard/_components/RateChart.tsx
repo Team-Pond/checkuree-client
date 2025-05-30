@@ -175,7 +175,7 @@ export default function RateChart({ statisticData }: RateChartProps) {
   )
 }
 
-const StatisticItemWrapper = tw.p`flex flex-col gap-2px`
+const StatisticItemWrapper = tw.p`flex flex-col gap-2px w-[93.5px]`
 const Summation = tw.p`text-s-semibold mt-4`
 
 const Squre = tw.div`${({ bg }: { bg: string }) =>
