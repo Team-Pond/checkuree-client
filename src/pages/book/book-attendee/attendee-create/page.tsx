@@ -4,19 +4,26 @@ import Step1 from './_components/Step1'
 import Step2 from './_components/Step2'
 import { getTodayYYYYMMDD } from '@/utils'
 import { FormProvider, useForm } from 'react-hook-form'
-import { AttendeeSchema, CreateAttendeeSchema } from './_schema'
+import {
+  AttendeeRequestSchema,
+  AttendeeSchema,
+  CreateAttendeeSchema,
+} from './_schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createAttendee } from '@/api/AttendeeApiClient'
 import toast from 'react-hot-toast'
 import SEO from '@/components/SEO'
 import FormHeader from './_components/FormHeader'
 import tw from 'tailwind-styled-components'
+import { z } from 'zod'
 
 export default function Page() {
   const navigate = useNavigate()
   const { bookId } = useParams<{ bookId: string }>()
   const [step, setStep] = useState<'Step1' | 'Step2'>('Step1')
+
   const queryString = useLocation().search
+
   const methods = useForm<CreateAttendeeSchema>({
     resolver: zodResolver(AttendeeSchema),
     mode: 'onSubmit',
@@ -30,11 +37,24 @@ export default function Page() {
     ])
   }
 
-  const handleStep2Next = async (data: CreateAttendeeSchema) => {
+  const formattedHhmm = (hhmm: string): string => {
+    const [hour, minute] = hhmm.split(':')
+    return `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`
+  }
+
+  const nextStep = async () => {
+    if (await trigger('attendeeRequest')) {
+      setStep('Step2')
+    }
+  }
+  const submit = async (data: CreateAttendeeSchema) => {
     const isValid = await trigger('attendeeRequest')
     if (isValid) {
       const { associates, ...attendeeRequestWithoutAssociates } =
         data.attendeeRequest
+
+      const { schedules } = data.schedulesRequest
+
       // any로 단언하여 타입 오류를 회피합니다.
       const attendeeRequestPayload = {
         ...attendeeRequestWithoutAssociates,
@@ -45,7 +65,7 @@ export default function Page() {
         enrollmentDate:
           attendeeRequestWithoutAssociates.enrollmentDate.replaceAll('.', '-'),
         actualName: data.attendeeRequest.name,
-      } as any
+      } as z.infer<typeof AttendeeRequestSchema>
 
       if (
         associates &&
@@ -64,6 +84,12 @@ export default function Page() {
         attendanceBookId: Number(bookId),
         params: {
           ...data,
+          schedulesRequest: {
+            schedules: schedules.map((schedule) => ({
+              day: schedule.day,
+              hhmm: formattedHhmm(schedule.hhmm),
+            })),
+          },
           attendeeRequest: attendeeRequestPayload,
         },
       })
@@ -83,7 +109,7 @@ export default function Page() {
         title="체쿠리 | 학생 등록"
         content="체쿠리 음악학원 출석부 서비스의 학생 등록 페이지입니다."
       />
-      <Form onSubmit={handleSubmit(handleStep2Next)}>
+      <Form onSubmit={handleSubmit(submit)}>
         <FormHeader isStep2={step === 'Step2'} />
         <FormInner>
           {step === 'Step1' ? (
@@ -92,11 +118,7 @@ export default function Page() {
               <Button
                 type="button"
                 className="bg-bg-tertiary text-[#F1F8F3]"
-                onClick={async () => {
-                  if (await trigger('attendeeRequest')) {
-                    setStep('Step2')
-                  }
-                }}
+                onClick={nextStep}
                 data-cy="stepSubmit"
                 aria-label="stepSubmit"
               >

@@ -228,7 +228,6 @@ export default function Step1() {
                 { name: '관계', value: 'NONE' },
                 { name: '모', value: 'MOTHER' },
                 { name: '부', value: 'FATHER' },
-                { name: '형제', value: 'SIBLING' },
                 { name: '기타', value: 'OTHER' },
               ]}
               placeholder="관계"
