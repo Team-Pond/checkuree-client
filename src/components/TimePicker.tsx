@@ -90,7 +90,7 @@ const TimePicker = (props: TimePickerProps) => {
             selectedValue === item ? 'font-bold text-black' : 'text-gray-400'
           }`}
         >
-          {item}
+          {Number(item) < 10 && Number(item) > 0 ? '0' + item : item}
         </div>
       ))}
       {/* Spacer for bottom alignment */}
@@ -130,8 +130,8 @@ const TimePicker = (props: TimePickerProps) => {
       >
         {/* Period Column */}
         {renderColumn(periodRef, periods, selectedPeriod, setSelectedPeriod)}
-
         {/* Hour Column */}
+
         {renderColumn(hourRef, hours, selectedHour, setSelectedHour)}
 
         {/* Minute Column */}
