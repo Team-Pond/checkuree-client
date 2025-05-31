@@ -5,7 +5,7 @@ import RightArrowIcon from '@/assets/icons/ico-arrow-right.svg?react'
 import DownArrowIcon from '@/assets/icons/ico-arrow-down.svg?react'
 import AttendanceCategoryChart from './_components/AttendanceCategoryChart'
 
-import Bottom from '../_components/Bottom'
+import Bottom from '../_components/Footer'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useAttendeeStatistic, useBookStatistic } from '../queries'
 import dayjs from 'dayjs'

@@ -15,6 +15,7 @@ import { useParams } from 'react-router-dom'
 import { isArray } from 'lodash'
 import { twMerge } from 'tailwind-merge'
 import { AttendeeRecord, STATUS } from '@/api/type'
+import Button from '@/components/Button'
 
 type AttendanceManageProps = {
   studentInfo: {
@@ -161,7 +162,7 @@ export default function AttendanceManage(props: AttendanceManageProps) {
         </div>
 
         <div className="flex items-center justify-center mt-6">
-          <button
+          <Button
             aria-label="calendar backward"
             className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] mr-2"
             onClick={() => setSelectedMonth(add(selectedMonth, { months: -1 }))}
@@ -181,13 +182,13 @@ export default function AttendanceManage(props: AttendanceManageProps) {
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
               <polyline points="15 6 9 12 15 18" />
             </svg>
-          </button>
+          </Button>
           <div>
             <span className="focus:outline-none text-s-bold text-text-primary">
               {format(selectedMonth, 'yyyy년 MM월')}
             </span>
           </div>
-          <button
+          <Button
             aria-label="calendar forward"
             className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] ml-2"
             onClick={() => setSelectedMonth(add(selectedMonth, { months: 1 }))}
@@ -207,7 +208,7 @@ export default function AttendanceManage(props: AttendanceManageProps) {
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
               <polyline points="9 6 15 12 9 18" />
             </svg>
-          </button>
+          </Button>
         </div>
 
         <div className="flex items-center justify-between mt-1">

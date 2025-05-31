@@ -8,6 +8,7 @@ import SEO from '@/components/SEO'
 
 import { UpdateAttendeeScheduleRequest } from '@/api/AttendeeSchema'
 import { useOnlyScheduleUpdate } from '../../book-attendee/attendee-create/queries'
+import Button from '@/components/Button'
 
 export default function ScheduleModify() {
   const { bookId, attendeeId } = useParams()
@@ -67,25 +68,21 @@ export default function ScheduleModify() {
               attendeeSchedules={attendeeSchedules!}
             />
             <div className="flex gap-4 w-full">
-              <button
-                type="button"
-                onClick={() => {
-                  navigate(-1)
-                }}
+              <Button
+                onClick={() => navigate(-1)}
                 className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
               >
                 이전으로
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => {
                   scheduleMutation()
                   navigate(-1)
                 }}
-                type="button"
                 className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
               >
                 저장하기
-              </button>
+              </Button>
             </div>
           </div>
         </div>

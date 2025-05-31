@@ -1,22 +1,23 @@
-import React from "react";
-import { twMerge } from "tailwind-merge";
-import { useAttendeeUpdate } from "../queries";
-import { GenderType } from "@/api/type";
+import React from 'react'
+import { twMerge } from 'tailwind-merge'
+import { useAttendeeUpdate } from '../queries'
+import { GenderType } from '@/api/type'
+import Button from '@/components/Button'
 
 interface AttendeeModifyFormState {
-  birthDate: string;
-  gender: GenderType;
-  address_1: string;
-  description: string;
+  birthDate: string
+  gender: GenderType
+  address_1: string
+  description: string
 }
 
 // Step1에서 받을 props 정의
 interface AttendeeModifyProps {
-  formData: AttendeeModifyFormState;
-  setIsAttendeeModify: React.Dispatch<React.SetStateAction<boolean>>;
-  setFormData: React.Dispatch<React.SetStateAction<AttendeeModifyFormState>>;
-  bookId: number;
-  attendeeId: number;
+  formData: AttendeeModifyFormState
+  setIsAttendeeModify: React.Dispatch<React.SetStateAction<boolean>>
+  setFormData: React.Dispatch<React.SetStateAction<AttendeeModifyFormState>>
+  bookId: number
+  attendeeId: number
 }
 
 export default function AttendeeModify({
@@ -28,38 +29,38 @@ export default function AttendeeModify({
 }: AttendeeModifyProps) {
   const handleBirthdateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 1) 숫자만 남기기
-    let input = e.target.value.replace(/\D/g, ""); // 숫자 이외 제거
+    let input = e.target.value.replace(/\D/g, '') // 숫자 이외 제거
 
     // 2) 최대 8자리(YYYYMMDD)까지만 허용
     if (input.length > 8) {
-      input = input.slice(0, 8);
+      input = input.slice(0, 8)
     }
 
     // 3) 4자리 넘어가면 YYYY. 형식으로
     if (input.length >= 5) {
-      input = input.slice(0, 4) + "." + input.slice(4);
+      input = input.slice(0, 4) + '.' + input.slice(4)
     }
     // 4) 6자리 넘어가면 YYYY.MM. 형식으로
     if (input.length >= 8) {
-      input = input.slice(0, 7) + "." + input.slice(7);
+      input = input.slice(0, 7) + '.' + input.slice(7)
     }
 
     // 최종 formData 갱신
     setFormData((prev) => ({
       ...prev,
       birthDate: input,
-    }));
-  };
+    }))
+  }
 
   const { mutate: attendeeMutation } = useAttendeeUpdate({
     bookId,
     attendeeId,
     formData,
     setIsAttendeeModify,
-  });
+  })
 
   const isFormInvalid =
-    !formData.address_1 || !formData.birthDate || !formData.gender;
+    !formData.address_1 || !formData.birthDate || !formData.gender
 
   return (
     <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full bg-white p-5 rounded-2xl">
@@ -94,7 +95,7 @@ export default function AttendeeModify({
                     type="radio"
                     id="male"
                     className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-slate-400 transition-all"
-                    checked={formData.gender === "MALE"}
+                    checked={formData.gender === 'MALE'}
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
@@ -123,7 +124,7 @@ export default function AttendeeModify({
                     type="radio"
                     id="female"
                     className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 checked:border-slate-400 transition-all"
-                    checked={formData.gender === "FEMALE"}
+                    checked={formData.gender === 'FEMALE'}
                     onChange={(e) =>
                       setFormData((prev) => ({
                         ...prev,
@@ -184,31 +185,29 @@ export default function AttendeeModify({
         />
       </div>
       <div className="flex gap-4 w-full">
-        <button
-          type="button"
+        <Button
           onClick={() => {
-            setIsAttendeeModify(false);
+            setIsAttendeeModify(false)
           }}
           className="w-full h-12 flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
         >
           취소
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => {
-            attendeeMutation();
+            attendeeMutation()
           }}
           disabled={isFormInvalid}
-          type="button"
           className={twMerge(
-            "w-full h-12 flex justify-center items-center rounded-2xl bg-bg-tertiary font-semibold text-[18px]",
+            'w-full h-12 flex justify-center items-center rounded-2xl bg-bg-tertiary font-semibold text-[18px]',
             !isFormInvalid
-              ? "bg-bg-tertiary text-[white]"
-              : "bg-bg-disabled text-text-disabled"
+              ? 'bg-bg-tertiary text-[white]'
+              : 'bg-bg-disabled text-text-disabled',
           )}
         >
           저장하기
-        </button>
+        </Button>
       </div>
     </div>
-  );
+  )
 }

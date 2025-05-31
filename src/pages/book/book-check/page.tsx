@@ -5,7 +5,7 @@ import { useCallback, useContext, useEffect, useState } from 'react'
 import { BookContext } from '@/context/BookContext'
 import { useParams, useSearchParams } from 'react-router-dom'
 import dayjs from 'dayjs'
-import Bottom from '../_components/Bottom'
+import Bottom from '../_components/Footer'
 import { useBookSchedules } from './queries'
 import { BottomAddRecord } from './_components/BottomAddRecord'
 import SEO from '@/components/SEO'
@@ -68,7 +68,7 @@ export default function Page() {
   }, [bookSchedules])
 
   return (
-    <section className="flex flex-col w-full scrollbar-hide custom-scrollbar-hide bg-bg-secondary flex-1">
+    <main className="flex flex-col w-full scrollbar-hide custom-scrollbar-hide bg-bg-secondary flex-1">
       <SEO
         title="체쿠리 | 출석부 출석"
         content="체쿠리 음악학원 출석부 서비스의 출석부 출석 페이지입니다."
@@ -112,6 +112,6 @@ export default function Page() {
         handleCurrentDay={handleCurrentDay}
       />
       {!openFilter && <Bottom />}
-    </section>
+    </main>
   )
 }

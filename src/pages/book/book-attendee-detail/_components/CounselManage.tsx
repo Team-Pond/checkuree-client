@@ -2,6 +2,7 @@ import CounselList from './CounselList'
 import { useCounsellingList } from '../queries'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Associates } from '@/api/type'
+import Button from '@/components/Button'
 
 type CounselManageProps = {
   studentInfo: {
@@ -62,7 +63,7 @@ export default function CounselManage(props: CounselManageProps) {
         />
       ))}
       <div className="fixed bottom-11 right-[5%] max-w-[390px]">
-        <button
+        <Button
           onClick={() =>
             navigate(
               `/book/${bookId}/attendee/${attendeeId}/counselling${location.search}`,
@@ -83,7 +84,7 @@ export default function CounselManage(props: CounselManageProps) {
             height={16}
           />
           <p className="text-white font-semibold text-lg">상담</p>
-        </button>
+        </Button>
       </div>
     </div>
   )

@@ -1,5 +1,6 @@
 import { DaysType, GenderType } from '@/api/type'
 import BottomDrawer from '@/components/BottomDrawer'
+import Button from '@/components/Button'
 import { useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 
@@ -70,7 +71,7 @@ export default function BottomFilter(props: BottomFilterProps) {
               <div className="flex gap-2">
                 {GENDER_BUTTONS.map((button) => {
                   return (
-                    <button
+                    <Button
                       key={button.gender}
                       onClick={() => onChangeGender(button.gender)}
                       className={twMerge(
@@ -81,7 +82,7 @@ export default function BottomFilter(props: BottomFilterProps) {
                       )}
                     >
                       {button.name}
-                    </button>
+                    </Button>
                   )
                 })}
               </div>
@@ -91,7 +92,7 @@ export default function BottomFilter(props: BottomFilterProps) {
             <div className="flex flex-col gap-3 text-left">
               <p className="text-m-bold text-text-primary">학생 연령</p>
               <div className="flex gap-2">
-                <button
+                <Button
                   onClick={() => onAgeChange(0, 6)}
                   className={twMerge(
                     'rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium',
@@ -101,8 +102,8 @@ export default function BottomFilter(props: BottomFilterProps) {
                   )}
                 >
                   미취학
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={() => onAgeChange(7, 12)}
                   className={twMerge(
                     'rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium',
@@ -112,8 +113,8 @@ export default function BottomFilter(props: BottomFilterProps) {
                   )}
                 >
                   초등
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={() => onAgeChange(13, 15)}
                   className={twMerge(
                     'rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium',
@@ -123,8 +124,8 @@ export default function BottomFilter(props: BottomFilterProps) {
                   )}
                 >
                   중등
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={() => onAgeChange(16, 18)}
                   className={twMerge(
                     'rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium',
@@ -134,8 +135,8 @@ export default function BottomFilter(props: BottomFilterProps) {
                   )}
                 >
                   고등
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={() => onAgeChange(19, 100)}
                   className={twMerge(
                     'rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium',
@@ -145,7 +146,7 @@ export default function BottomFilter(props: BottomFilterProps) {
                   )}
                 >
                   성인
-                </button>
+                </Button>
               </div>
             </div>
 
@@ -155,7 +156,7 @@ export default function BottomFilter(props: BottomFilterProps) {
               <div className="flex gap-2">
                 {DAYS.map((day, index) => {
                   return (
-                    <button
+                    <Button
                       key={day}
                       className={twMerge(
                         'rounded-lg border border-[#d1d1d1] w-[41px] h-[33px] text-s-medium text-border-secondary-hover',
@@ -166,7 +167,7 @@ export default function BottomFilter(props: BottomFilterProps) {
                       onClick={() => onDaysChange(DAYS[index] as DaysType)}
                     >
                       {DAYS[index]}
-                    </button>
+                    </Button>
                   )
                 })}
               </div>
@@ -174,18 +175,18 @@ export default function BottomFilter(props: BottomFilterProps) {
           </div>
 
           <div className={'flex gap-4 w-full'}>
-            <button
+            <Button
               className="w-full h-[54px] bg-gray-300 text-text-secondary  rounded-2xl text-l-semibold"
               onClick={resetFilter}
             >
               초기화
-            </button>
-            <button
+            </Button>
+            <Button
               className="w-full h-[54px] bg-bg-tertiary text-[#f1f8f3] rounded-2xl text-l-semibold"
               onClick={() => onChangeFilter(dayArrays, gender, age)}
             >
               필터 적용
-            </button>
+            </Button>
           </div>
         </>
       }

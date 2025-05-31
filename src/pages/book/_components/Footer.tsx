@@ -9,7 +9,7 @@ import DashboardIconActive from '@/assets/icons/book-check/ico-statistics-active
 import Dashboardicon from '@/assets/icons/book-check/ico-statistics.svg?react'
 import tw from 'tailwind-styled-components'
 
-export default function Bottom() {
+export default function Footer() {
   const location = useLocation()
   const attendeeUrl = location.pathname.includes('attendee')
 
@@ -74,5 +74,5 @@ export default function Bottom() {
 }
 
 const Button = tw.div`flex flex-col gap-2 items-center cursor-pointer`
-const BottomContainer = tw.div`border-[#f6f6f6] border-[1px] flex justify-between px-[44px] items-center fixed bottom-0 left-1/2 transform -translate-x-1/2 z-40
-             w-full max-w-[390px] h-[92px] bg-white rounded-2xl`
+const BottomContainer = tw.div`border-[#f6f6f6] border-t-[1px] flex justify-between px-[44px] items-center fixed bottom-0 left-1/2 transform -translate-x-1/2 z-40
+             w-full max-w-[390px] h-[92px] bg-white rounded-t-2xl`

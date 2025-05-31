@@ -7,7 +7,7 @@ type MainContentProps = {
   getGrades: (grades: { id: number; name: string }[]) => string
   searchName: string
 }
-export default function MainContent(props: MainContentProps) {
+export default function Main(props: MainContentProps) {
   const { roaster, getGrades, searchName } = props
   const { bookId } = useParams()
   const location = useLocation()

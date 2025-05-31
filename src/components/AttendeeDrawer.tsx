@@ -1,6 +1,7 @@
 import BottomDrawer from '@/components/BottomDrawer'
 import { convertEngDayToKorDay, getAddMinuteHhmm } from '@/utils'
 import { DaysType } from '@/api/type'
+import Button from './Button'
 
 type Attendee = {
   name: string
@@ -57,17 +58,15 @@ export default function AttendeeDrawer({
         </div>
 
         <div className="flex gap-4 w-full fixed bottom-5 max-w-[357px]">
-          <button
-            type="button"
+          <Button
             data-cy="close-schedule-button"
             aria-label="close-schedule-button"
             onClick={() => onClose()}
             className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
           >
             닫기
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
             data-cy="add-schedule-button"
             aria-label="add-schedule-button"
             className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
@@ -79,7 +78,7 @@ export default function AttendeeDrawer({
             }}
           >
             {isSelected ? '삭제하기' : '추가하기'}
-          </button>
+          </Button>
         </div>
       </div>
     </BottomDrawer>

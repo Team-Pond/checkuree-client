@@ -15,6 +15,7 @@ import { createCounsellings, updateCounsellings } from '@/api/CounselApiClient'
 import { CounsellingSchema, CreateCounsellingSchema } from '../_schema'
 import FormHeader from './_components/FormHeader'
 import CounsellingCreateForm from './_components/CounsellingCreateForm'
+import Button from '@/components/Button'
 
 export default function CounsellingCreate() {
   const navigate = useNavigate()
@@ -112,33 +113,30 @@ export default function CounsellingCreate() {
   return (
     <FormProvider {...methods}>
       <SEO
-        title="체쿠리 | 학생 등록"
-        content="체쿠리 음악학원 출석부 서비스의 학생 등록 페이지입니다."
+        title="체쿠리 | 상담 등록"
+        content="체쿠리 음악학원 출석부 서비스의 상담 등록 페이지입니다."
       />
       <form
         className="flex flex-col w-full pb-[30px]"
         onSubmit={handleSubmit(Submit)}
       >
         <FormHeader studentName={location?.state.name} />
-        <div className="w-full flex flex-col gap-10 items-center mt-10">
-          <div className="flex w-full justify-center">
-            <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
-              <CounsellingCreateForm
-                onChangeCounseleeId={(id: number) => setCounseleeId(id)}
-                counselors={counselors}
-                counsellorName={location.state.counsellorName}
-              />
-              <button
-                type="submit"
-                className={twMerge(
-                  'max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl',
-                  'bg-bg-tertiary text-[#f1f8f3]',
-                )}
-              >
-                <p className="font-semibold text-lg">저장하기</p>
-              </button>
-            </div>
-          </div>
+
+        <div className="flex flex-col mx-auto justify-center gap-6 max-w-[342px] w-full mt-10">
+          <CounsellingCreateForm
+            onChangeCounseleeId={(id: number) => setCounseleeId(id)}
+            counselors={counselors}
+            counsellorName={location.state.counsellorName}
+          />
+          <Button
+            type="submit"
+            className={twMerge(
+              'max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl',
+              'bg-bg-tertiary text-[#f1f8f3]',
+            )}
+          >
+            <p className="font-semibold text-lg">저장하기</p>
+          </Button>
         </div>
       </form>
     </FormProvider>

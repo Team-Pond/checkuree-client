@@ -5,6 +5,7 @@ import { useProgressLog, useProgressPromote } from '../queries'
 import useModalStore from '@/store/dialogStore'
 import useProgressFormStore from '@/store/progressStore'
 import { Progresses } from '@/api/type'
+import Button from '@/components/Button'
 
 type LearningManageProps = {
   studentInfo: {
@@ -76,13 +77,12 @@ export default function LearningManage(props: LearningManageProps) {
             <div className="flex items-center justify-between text-s-semibold">
               <p className="text-text-tertiary">커리큘럼 1</p>
               <p className="text-text-primary">{progress.gradeTitle}</p>
-              <button
+              <Button
                 className="max-w-[109px] w-full h-8 rounded-lg bg-[#f6f6f6] text-s-medium text-text-secondary"
-                type="button"
                 onClick={() => openNextProgressModal(Number(progress.id))}
               >
                 다음 과정으로
-              </button>
+              </Button>
             </div>
             <div className="flex items-center justify-between text-s-semibold">
               <p className="text-text-tertiary">시작일</p>

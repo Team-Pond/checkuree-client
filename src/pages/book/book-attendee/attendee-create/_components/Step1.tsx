@@ -148,7 +148,11 @@ export default function Step1() {
             )}
           </div>
 
-          <input type="hidden" {...register('attendeeRequest.gender')} />
+          <input
+            type="hidden"
+            readOnly
+            {...register('attendeeRequest.gender')}
+          />
         </div>
       </FieldWrapper>
 

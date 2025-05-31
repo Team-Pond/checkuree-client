@@ -5,10 +5,7 @@ interface MainContentProps {
   bookList: BookType[]
   handleNavigation: (bookData: BookType) => void
 }
-export default function MainContent({
-  bookList,
-  handleNavigation,
-}: MainContentProps) {
+export default function Main({ bookList, handleNavigation }: MainContentProps) {
   return (
     <div className="bg-bg-secondary w-full h-full">
       <div className="w-full py-5 grid grid-cols-2 gap-y-6 gap-x-4 justify-items-stretch mx-auto">
@@ -50,14 +47,12 @@ function Book({
       data-cy={`book-${index}`}
       aria-label={`book-${index}`}
       className={`max-w-[162px] cursor-pointer w-full h-[195px] ${index % 2 === 1 ? 'justify-self-start' : 'justify-self-end'}`}
-      onClick={() => {
-        handleNavigation(book)
-      }}
+      onClick={() => handleNavigation(book)}
     >
       <img
         src={'/images/img-test.png'}
         className="w-full h-[97px] rounded-t-2xl"
-        alt=""
+        alt="출석부 이미지"
       />
       <div className="flex flex-col gap-2 px-3 py-4 text-left rounded-b-2xl h-[98px] bg-white">
         <div className="flex gap-2">

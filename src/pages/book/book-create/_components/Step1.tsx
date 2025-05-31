@@ -1,5 +1,5 @@
 import TimePicker from '@/components/TimePicker'
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
 import { CreateBookSchema } from '../_schema'
@@ -9,6 +9,7 @@ import tw from 'tailwind-styled-components'
 import { spaceBlockKeyDown } from '@/utils'
 import toast from 'react-hot-toast'
 import FieldTitle from '@/components/FieldTitle'
+import Button from '@/components/Button'
 
 const DAYS = ['월', '화', '수', '목', '금', '토', '일']
 
@@ -77,26 +78,22 @@ export default function Step1() {
   const availableFrom = watch('availableFrom')
   const availableTo = watch('availableTo')
 
-  const transferCallback = useCallback(transfer, [])
-
-  const formatTimeToKoreanCallback = useCallback(formatTimeToKorean, [])
-
   const handleStartTimeChange = (time: Time) => {
-    setValue('availableFrom', transferCallback(time))
+    setValue('availableFrom', transfer(time))
     setIsStartPickerOpen(false)
   }
 
   const handleEndTimeChange = (time: Time) => {
-    setValue('availableTo', transferCallback(time))
+    setValue('availableTo', transfer(time))
     setIsEndPickerOpen(false)
   }
 
-  const handleOpenStartTimePicker = () => {
-    setIsStartPickerOpen(true)
-  }
-
-  const handleOpenEndTimePicker = () => {
-    setIsEndPickerOpen(true)
+  const handleOpenTimePicker = (type: 'start' | 'end') => {
+    if (type === 'start') {
+      setIsStartPickerOpen(true)
+    } else {
+      setIsEndPickerOpen(true)
+    }
   }
 
   const [isStartPickerOpen, setIsStartPickerOpen] = useState<boolean>(false)
@@ -104,24 +101,21 @@ export default function Step1() {
 
   const PICKER_RENDER = [
     {
-      text: availableFrom
-        ? formatTimeToKoreanCallback(availableFrom)
-        : '시작 시간',
+      text: availableFrom ? formatTimeToKorean(availableFrom) : '시작 시간',
       timeText: '부터',
       onChange: handleStartTimeChange,
-      handleOpen: handleOpenStartTimePicker,
+      handleOpen: () => handleOpenTimePicker('start'), // 함수로 감싸서 넘기기
       dataCy: 'startTime',
     },
 
     {
-      text: availableTo ? formatTimeToKoreanCallback(availableTo) : '종료 시간',
+      text: availableTo ? formatTimeToKorean(availableTo) : '종료 시간',
       timeText: '까지',
-      onchange: handleEndTimeChange,
-      handleOpen: handleOpenEndTimePicker,
+      onChange: handleEndTimeChange, // 대문자 'C'
+      handleOpen: () => handleOpenTimePicker('end'),
       dataCy: 'endTime',
     },
   ]
-
   useEffect(() => {
     setFocus('title')
   }, [setFocus])
@@ -189,6 +183,7 @@ export default function Step1() {
       </TextWrapper>
       <input
         type="hidden"
+        readOnly
         {...register('availableDays', { required: '필수' })}
       />
 
@@ -201,19 +196,16 @@ export default function Step1() {
               return (
                 <div
                   className="flex gap-2 items-center max-w-[163px] w-full"
-                  onClick={() => time.handleOpen()}
+                  onClick={time.handleOpen}
                   key={index}
                   data-cy={time.dataCy}
                   aria-label={time.dataCy}
                 >
-                  <button
-                    type="button"
-                    className="outline-none border border-[#E7E7E7] rounded-xl max-w-[130px] w-full h-12  flex items-center pl-4"
-                  >
+                  <Button className="outline-none border border-[#E7E7E7] rounded-xl max-w-[130px] w-full h-12  flex items-center pl-4">
                     <p className="font-bold text-sm text-[#B0B0B0]">
                       {time.text}
                     </p>
-                  </button>
+                  </Button>
                   <p className="text-sm font-bold text-text-primary">
                     {time.timeText}
                   </p>

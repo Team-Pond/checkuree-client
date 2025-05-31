@@ -1,5 +1,5 @@
 import React from 'react'
-import TimeButtons from './TimeButtons'
+import PeriodButtons from './PeriodButtons'
 
 import tw from 'tailwind-styled-components'
 import { PeriodType } from '@/api/type'
@@ -35,7 +35,7 @@ function AttendanceRateChart({
                 statisticData.data.to.replaceAll('-', '.')}
           </p>
         </div>
-        <TimeButtons
+        <PeriodButtons
           timeStatus={tab}
           handleTimeStatus={(timeStatus) => tabChange(timeStatus)}
         />

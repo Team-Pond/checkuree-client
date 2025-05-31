@@ -1,4 +1,5 @@
 import { AttendeeStatisticsType } from '@/api/type'
+import Button from '@/components/Button'
 import React from 'react'
 import { twMerge } from 'tailwind-merge'
 
@@ -20,6 +21,7 @@ const BUTTON_OPTIONS = [
     type: '커리큘럼',
   },
 ]
+
 function CategoryButtons({
   timeStatus,
   handleTimeStatus,
@@ -28,7 +30,7 @@ function CategoryButtons({
     <div className="flex">
       {BUTTON_OPTIONS.map((option) => {
         return (
-          <Button
+          <CategoryButton
             key={option.status}
             timeStatus={timeStatus}
             handleTimeStatus={handleTimeStatus}
@@ -43,14 +45,14 @@ function CategoryButtons({
 
 export default React.memo(CategoryButtons)
 
-function Button({
+function CategoryButton({
   timeStatus,
   handleTimeStatus,
   status,
   type,
 }: CategoryButtonsProps & { status: AttendeeStatisticsType; type: string }) {
   return (
-    <button
+    <Button
       onClick={() => handleTimeStatus(status)}
       className={twMerge(
         'px-4 h-[33px] rounded-lg',
@@ -67,6 +69,6 @@ function Button({
       >
         {type}
       </span>
-    </button>
+    </Button>
   )
 }

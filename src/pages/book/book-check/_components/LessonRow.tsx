@@ -10,6 +10,7 @@ import NoteActiveIcon from '@/assets/icons/book-check/ico-note-active.svg?react'
 import NoteIcon from '@/assets/icons/book-check/ico-note.svg?react'
 import React from 'react'
 import { start } from 'repl'
+import Button from '@/components/Button'
 
 type LessonRowProps = {
   bookId: number
@@ -81,7 +82,7 @@ function LessonRow(props: LessonRowProps) {
       </div>
       <div className="flex gap-4">
         <div className="flex gap-2">
-          <button
+          <Button
             onClick={() => {
               handleAttendanceStatusWithConfirmation(
                 'ABSENT',
@@ -97,8 +98,8 @@ function LessonRow(props: LessonRowProps) {
             )}
           >
             결석
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => {
               handleAttendanceStatusWithConfirmation(
                 'ATTEND',
@@ -114,9 +115,9 @@ function LessonRow(props: LessonRowProps) {
             )}
           >
             출석
-          </button>
+          </Button>
         </div>
-        <button
+        <Button
           className={twMerge(
             'w-8 h-8 flex items-center justify-center rounded-lg',
             schedule.recordStatus !== 'ATTEND'
@@ -134,7 +135,7 @@ function LessonRow(props: LessonRowProps) {
           disabled={schedule.recordStatus !== 'ATTEND'}
         >
           {schedule.isTaught ? <NoteActiveIcon /> : <NoteIcon />}
-        </button>
+        </Button>
       </div>
     </LessonWrapper>
   )

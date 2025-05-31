@@ -12,6 +12,7 @@ import {
 import { DaysType } from '@/api/type'
 import { getSub30MinuteHhmm } from '@/utils'
 import AttendeeDrawer from '@/components/AttendeeDrawer'
+import Button from '@/components/Button'
 
 interface CurriculumModifyProps {
   setAttendeeSchedules: React.Dispatch<
@@ -244,24 +245,22 @@ export default function CurriculumModify({
         handleRemoveAttendeeSchedules={handleRemoveAttendeeSchedules}
       />
       <div className="flex gap-4 w-full">
-        <button
-          type="button"
+        <Button
           onClick={() => {
             setIsCourseModify(false)
           }}
           className="w-full h-12 flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
         >
           취소
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => {
             //   상후님 여기에 action 넣으시면 돼요!
           }}
-          type="button"
           className="w-full h-12 flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
         >
           저장하기
-        </button>
+        </Button>
       </div>
     </div>
   )

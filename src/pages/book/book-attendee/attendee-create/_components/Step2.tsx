@@ -202,7 +202,11 @@ function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
             </p>
           )}
         </div>
-        <input type="hidden" {...register('schedulesRequest.schedules')} />
+        <input
+          type="hidden"
+          readOnly
+          {...register('schedulesRequest.schedules')}
+        />
       </FieldWrapper>
       <FieldWrapper>
         <FieldTitle title="클래스 일정" essential />

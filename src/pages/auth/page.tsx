@@ -13,7 +13,7 @@ export interface LoginDataType {
 export default function Page() {
   const navigate = useNavigate()
   return (
-    <section className="flex flex-col justify-center items-center h-full gap-8 ">
+    <main className="flex flex-col justify-center items-center h-full gap-8 ">
       <SEO
         title="체쿠리 | 음악 학원 출석부 서비스"
         content="체쿠리의 로그인 페이지입니다."
@@ -43,6 +43,6 @@ export default function Page() {
           <p className="ml-[30px] font-medium text-[17px]">카카오로 시작하기</p>
         </LoginButton>
       </div>
-    </section>
+    </main>
   )
 }

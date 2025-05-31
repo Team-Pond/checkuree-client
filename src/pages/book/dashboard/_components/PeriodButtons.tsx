@@ -1,7 +1,8 @@
 import { PeriodType } from '@/api/type'
+import Button from '@/components/Button'
 import { twMerge } from 'tailwind-merge'
 
-type TimeButtonsProps = {
+type PeriodButtonsProps = {
   timeStatus: PeriodType
   handleTimeStatus: (timeStatus: PeriodType) => void
 }
@@ -19,15 +20,15 @@ const BUTTON_OPTIONS = [
     type: '월간',
   },
 ]
-export default function TimeButtons({
+export default function PeriodButtons({
   timeStatus,
   handleTimeStatus,
-}: TimeButtonsProps) {
+}: PeriodButtonsProps) {
   return (
     <div className="flex">
       {BUTTON_OPTIONS.map((option) => {
         return (
-          <Button
+          <PeriodButton
             key={option.status}
             timeStatus={timeStatus}
             handleTimeStatus={handleTimeStatus}
@@ -40,14 +41,14 @@ export default function TimeButtons({
   )
 }
 
-function Button({
+function PeriodButton({
   timeStatus,
   handleTimeStatus,
   status,
   type,
-}: TimeButtonsProps & { status: PeriodType; type: string }) {
+}: PeriodButtonsProps & { status: PeriodType; type: string }) {
   return (
-    <button
+    <Button
       onClick={() => handleTimeStatus(status)}
       className={twMerge(
         'w-[57px] h-[33px] rounded-lg',
@@ -64,6 +65,6 @@ function Button({
       >
         {type}
       </span>
-    </button>
+    </Button>
   )
 }

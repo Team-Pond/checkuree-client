@@ -9,6 +9,7 @@ import { useAuthLogin } from './queries'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import SEO from '@/components/SEO'
+import Button from '@/components/Button'
 
 export interface LoginDataType {
   username: string
@@ -51,7 +52,7 @@ export default function Page() {
     defaultValues: initailValues,
   })
   return (
-    <section className="flex flex-col justify-center items-center  gap-12 h-full">
+    <main className="max-w-[342px] w-full flex flex-col justify-center items-center gap-12 h-full">
       <SEO
         title="체쿠리 | 음악 학원 출석부 서비스"
         content="체쿠리 사내 로그인 페이지입니다."
@@ -126,7 +127,7 @@ export default function Page() {
           </div>
         </div>
 
-        <button
+        <Button
           id="login-button"
           className={twMerge(
             'w-full h-[54px] rounded-xl text-lg leading-[22px] font-semibold flex items-center justify-center text-[#FFFFFF] bg-[#59996B] cursor-pointer',
@@ -134,20 +135,8 @@ export default function Page() {
           type="submit"
         >
           체쿠리 ID로 계속하기
-        </button>
-
-        <div className="flex justify-between">
-          <p className="text-xs leading-[15px] text-[#5D5D5D] font-semibold w-[114px]">
-            아이디 찾기
-          </p>
-          <p className="text-xs leading-[15px] text-[#5D5D5D] font-semibold border-x border-[#E7E7E7] w-[114px]">
-            회원 가입
-          </p>
-          <p className="text-xs leading-[15px] text-[#5D5D5D] font-semibold w-[114px]">
-            비밀번호 찾기
-          </p>
-        </div>
+        </Button>
       </form>
-    </section>
+    </main>
   )
 }

@@ -21,7 +21,7 @@ export default function Page() {
   }, [])
 
   return (
-    <section className="relative flex flex-col justify-center items-center h-screen gap-8 mb-[31px]">
+    <main className="relative flex flex-col justify-center items-center h-screen gap-8 mb-[31px]">
       <SEO
         title="체쿠리 | 카카오 로그인"
         content="체쿠리 음악학원 출석부 서비스의 카카오 로그인 페이지입니다."
@@ -47,6 +47,6 @@ export default function Page() {
           <p className="ml-[30px] font-medium text-[17px]">카카오로 시작하기</p>
         </LoginButton>
       </div>
-    </section>
+    </main>
   )
 }

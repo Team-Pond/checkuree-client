@@ -7,6 +7,7 @@ import { useSubjectItems, useSubjects } from '../queries'
 import { useFormContext } from 'react-hook-form'
 import { COURSE_ERROR_MESSAGE, CreateBookSchema } from '../_schema'
 import FieldTitle from '@/components/FieldTitle'
+import Button from '@/components/Button'
 
 export type GradeItemProps = {
   handleCurriculum: (state: boolean) => void
@@ -184,7 +185,7 @@ export default function Step2(props: GradeItemProps) {
               </div>
             </div>
 
-            <button
+            <Button
               className={twMerge(
                 'max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl bg-bg-tertiary text-[#f1f8f3]',
                 isCourseNameVaild
@@ -214,10 +215,10 @@ export default function Step2(props: GradeItemProps) {
               type="button"
             >
               <p className="font-semibold text-lg">확인</p>
-            </button>
+            </Button>
           </>
         ) : (
-          <button
+          <Button
             className="w-full h-10 flex justify-center items-center bg-bg-secondary"
             data-cy="curriculum-add-button"
             aria-label="curriculum-add-button"
@@ -230,7 +231,7 @@ export default function Step2(props: GradeItemProps) {
               height={24}
             />
             <p className="text-m-medium text-[#B0B0B0]">커리큘럼 추가하기 </p>
-          </button>
+          </Button>
         )}
 
         {errors.courses && (

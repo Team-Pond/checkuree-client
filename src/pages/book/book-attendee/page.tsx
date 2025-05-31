@@ -1,10 +1,10 @@
 import { useContext, useState } from 'react'
 
 import Header from './_components/Header'
-import Bottom from '../_components/Bottom'
+import Bottom from '../_components/Footer'
 import BottomFilter from './_components/BottomFilter'
 
-import MainContent from './_components/MainContent'
+import MainContent from './_components/Main'
 import { BookContext } from '@/context/BookContext'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useAttendeeList } from './queries'
@@ -73,7 +73,7 @@ export default function Page() {
   }
 
   return (
-    <section className="flex flex-col w-full h-full">
+    <main className="flex flex-col w-full h-full">
       <SEO
         title="체쿠리 | 학생 목록"
         content="체쿠리 음악학원 출석부 서비스의 학생 목록 페이지입니다."
@@ -110,6 +110,6 @@ export default function Page() {
         onChangeFilter={onChangeFilter}
       />
       {!openFilter && <Bottom />}
-    </section>
+    </main>
   )
 }
