@@ -53,8 +53,9 @@ export default function SubjectSelectionDrawer({
   const selectedSub = watch('progressRequest.subject')
   return (
     <BottomDrawer isOpen={isOpen} onClose={onClose}>
-      <div className="flex flex-col gap-4 items-center">
-        <div className="w-full max-w-[345px] h-[234px] flex bg-white ">
+      <div className="flex flex-col gap-7 items-center">
+        <span className="mr-auto text-m-bold">커리큘럼 선택</span>
+        <div className="w-full h-[234px] flex bg-white">
           {/* 왼쪽: 과목 목록 */}
           <ul className="w-full max-w-[107px] overflow-y-scroll scrollbar-hide rounded-tl-lg">
             {bookCourses?.courses?.map((subject) => {

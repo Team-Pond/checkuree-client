@@ -1,9 +1,5 @@
-import { UpdateAttendeeScheduleRequest } from '@/api/AttendeeSchema'
-import { formatSchedule, getTodayYYYYMMDD } from '@/utils'
-import { useState } from 'react'
-import CurriculumModify from './CurriculumModify'
+import { formatSchedule } from '@/utils'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import AttendeeModify from './AttendeeModify'
 import { DaysType, GenderType, Progresses } from '@/api/type'
 import tw from 'tailwind-styled-components'
 
@@ -54,32 +50,9 @@ export default function StudentManage(props: StudentManageProps) {
   const { student, registerInfo, scheduleItems, associates, lessonInfo } = props
 
   const location = useLocation()
-
   const navigate = useNavigate()
-
   const response = scheduleItems?.length > 0 && formatSchedule(scheduleItems)
-
-  const [isCourseModify, setIsCourseModify] = useState<boolean>(false)
-  const [isAttendeeModify, setIsAttendeeModify] = useState<boolean>(false)
-  const [progressGrade, setProgressGrade] = useState<progressGrade[] | []>([])
-  const onChangeGrade = (gradeId: number) => {
-    setProgressGrade([
-      ...progressGrade,
-      { gradeId: gradeId, startAt: getTodayYYYYMMDD() },
-    ])
-  }
   const { bookId, attendeeId } = useParams()
-
-  const [_attendeeSchedules, setAttendeeSchedules] = useState<
-    UpdateAttendeeScheduleRequest | undefined
-  >()
-
-  const [formData, setFormData] = useState<AttendeeModifyFormState>({
-    birthDate: '',
-    gender: '',
-    address_1: '',
-    description: '',
-  })
 
   return (
     <div className="flex flex-col gap-4">
@@ -118,104 +91,88 @@ export default function StudentManage(props: StudentManageProps) {
           </p>
         </div>
       </div>
-      {isCourseModify ? (
-        <CurriculumModify
-          onChangeGrade={onChangeGrade}
-          setAttendeeSchedules={setAttendeeSchedules}
-          setIsCourseModify={setIsCourseModify}
-        />
-      ) : isAttendeeModify ? (
-        <AttendeeModify
-          bookId={Number(bookId)}
-          formData={formData}
-          setFormData={setFormData}
-          setIsAttendeeModify={setIsAttendeeModify}
-          attendeeId={Number(attendeeId)}
-        />
-      ) : (
-        <>
-          <div className="w-full rounded-2xl bg-white p-4 flex flex-col gap-5">
-            <p className="flex text-s-bold text-[#5d5d5d]">
-              <span>수업 정보</span>{' '}
-              <img
-                src="/images/icons/ico-pencil.svg"
-                width={20}
-                height={20}
-                alt=""
-                onClick={() => {
-                  navigate(
-                    `/book/${bookId}/attendee/${attendeeId}/schedule${location.search}`,
-                  )
-                }}
-              />
-            </p>
-            <div className="flex items-center justify-between text-s-semibold">
-              <p className="text-text-tertiary w-12">클래스</p>
-              <div className="flex flex-col text-text-primary text-xs">
-                {response
-                  ? response
-                      .sort((a, b) => a[0].localeCompare(b[0]))
-                      .reduce<string[][]>((acc, cur, index) => {
-                        if (index % 3 === 0) acc.push([]) // 3개 단위로 배열 생성
-                        acc[acc.length - 1].push(cur)
-                        return acc
-                      }, [])
-                      .map((row, rowIndex) => (
-                        <p key={rowIndex} className="break-keep text-left">
-                          {row.map((day, index) => (
-                            <span key={index}>{day} &nbsp;</span>
-                          ))}
-                        </p>
-                      ))
-                  : ''}
-              </div>
+      <>
+        <div className="w-full rounded-2xl bg-white p-4 flex flex-col gap-5">
+          <p className="flex text-s-bold text-[#5d5d5d]">
+            <span>수업 정보</span>{' '}
+            <img
+              src="/images/icons/ico-pencil.svg"
+              width={20}
+              height={20}
+              alt=""
+              onClick={() => {
+                navigate(
+                  `/book/${bookId}/attendee/${attendeeId}/schedule${location.search}`,
+                )
+              }}
+            />
+          </p>
+          <div className="flex items-center justify-between text-s-semibold">
+            <p className="text-text-tertiary w-12">클래스</p>
+            <div className="flex flex-col text-text-primary text-xs">
+              {response
+                ? response
+                    .sort((a, b) => a[0].localeCompare(b[0]))
+                    .reduce<string[][]>((acc, cur, index) => {
+                      if (index % 3 === 0) acc.push([]) // 3개 단위로 배열 생성
+                      acc[acc.length - 1].push(cur)
+                      return acc
+                    }, [])
+                    .map((row, rowIndex) => (
+                      <p key={rowIndex} className="break-keep text-left">
+                        {row.map((day, index) => (
+                          <span key={index}>{day} &nbsp;</span>
+                        ))}
+                      </p>
+                    ))
+                : ''}
             </div>
           </div>
-          <div className="w-full rounded-2xl bg-white p-4 flex flex-col gap-5">
-            <p className="flex text-s-bold text-[#5d5d5d]">
-              <span>등록 정보</span> {/*<img*/}
-              {/*현재 수정 불가능하기 때문에 임시 주석처리*/}
-              {/*  src="/images/icons/ico-pencil.svg"*/}
-              {/*  width={20}*/}
-              {/*  height={20}*/}
-              {/*  alt=""*/}
-              {/*  onClick={() => {*/}
-              {/*    setIsAttendeeModify(true);*/}
-              {/*    setIsCourseModify(false);*/}
-              {/*  }}*/}
-              {/*/>*/}
+        </div>
+        <div className="w-full rounded-2xl bg-white p-4 flex flex-col gap-5">
+          <p className="flex text-s-bold text-[#5d5d5d]">
+            <span>등록 정보</span> {/*<img*/}
+            {/*현재 수정 불가능하기 때문에 임시 주석처리*/}
+            {/*  src="/images/icons/ico-pencil.svg"*/}
+            {/*  width={20}*/}
+            {/*  height={20}*/}
+            {/*  alt=""*/}
+            {/*  onClick={() => {*/}
+            {/*    setIsAttendeeModify(true);*/}
+            {/*    setIsCourseModify(false);*/}
+            {/*  }}*/}
+            {/*/>*/}
+          </p>
+          <InfoWrapper>
+            <p className="text-text-tertiary">기본 정보</p>
+            <p className="text-text-primary">
+              {registerInfo.birthDate?.replaceAll('-', '.')},{' '}
+              {registerInfo.gender === 'MALE' ? '남' : '여'}
             </p>
-            <InfoWrapper>
-              <p className="text-text-tertiary">기본 정보</p>
-              <p className="text-text-primary">
-                {registerInfo.birthDate?.replaceAll('-', '.')},{' '}
-                {registerInfo.gender === 'MALE' ? '남' : '여'}
-              </p>
-            </InfoWrapper>
-            <InfoWrapper>
-              <p className="text-text-tertiary">학교</p>
-              <p className="text-text-primary">{registerInfo.school}</p>
-            </InfoWrapper>
-            <InfoWrapper>
-              <p className="text-text-tertiary">학생 주소</p>
-              <p className="text-text-primary max-w-[250px] overflow-wrap break-word">
-                {registerInfo.address_1}
-              </p>
-            </InfoWrapper>
-            <InfoWrapper>
-              <p className="text-text-tertiary">가족 연락처</p>
-              <p className="text-text-primary">
-                {associates?.relation === 'MOTHER' ? '(모)' : '(부)'}
-                {associates?.phoneNumber}{' '}
-              </p>
-            </InfoWrapper>
-            <InfoWrapper>
-              <p className="text-text-tertiary">비고</p>
-              <p className="text-text-primary">{registerInfo.description}</p>
-            </InfoWrapper>
-          </div>
-        </>
-      )}
+          </InfoWrapper>
+          <InfoWrapper>
+            <p className="text-text-tertiary">학교</p>
+            <p className="text-text-primary">{registerInfo.school}</p>
+          </InfoWrapper>
+          <InfoWrapper>
+            <p className="text-text-tertiary">학생 주소</p>
+            <p className="text-text-primary max-w-[250px] overflow-wrap break-word">
+              {registerInfo.address_1}
+            </p>
+          </InfoWrapper>
+          <InfoWrapper>
+            <p className="text-text-tertiary">가족 연락처</p>
+            <p className="text-text-primary">
+              {associates?.relation === 'MOTHER' ? '(모)' : '(부)'}
+              {associates?.phoneNumber}{' '}
+            </p>
+          </InfoWrapper>
+          <InfoWrapper>
+            <p className="text-text-tertiary">비고</p>
+            <p className="text-text-primary">{registerInfo.description}</p>
+          </InfoWrapper>
+        </div>
+      </>{' '}
     </div>
   )
 }

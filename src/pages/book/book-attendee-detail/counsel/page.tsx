@@ -116,13 +116,12 @@ export default function CounsellingCreate() {
         title="체쿠리 | 상담 등록"
         content="체쿠리 음악학원 출석부 서비스의 상담 등록 페이지입니다."
       />
+      <FormHeader studentName={location?.state.name} />
       <form
-        className="flex flex-col w-full pb-[30px]"
+        className="flex flex-col w-full pb-[30px] px-[17px]"
         onSubmit={handleSubmit(Submit)}
       >
-        <FormHeader studentName={location?.state.name} />
-
-        <div className="flex flex-col mx-auto justify-center gap-6 max-w-[342px] w-full mt-10">
+        <div className="flex flex-col mx-auto justify-center gap-6 w-full mt-10 px-[7px]">
           <CounsellingCreateForm
             onChangeCounseleeId={(id: number) => setCounseleeId(id)}
             counselors={counselors}
@@ -131,7 +130,7 @@ export default function CounsellingCreate() {
           <Button
             type="submit"
             className={twMerge(
-              'max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl',
+              'w-full h-[54px] flex justify-center items-center rounded-xl',
               'bg-bg-tertiary text-[#f1f8f3]',
             )}
           >

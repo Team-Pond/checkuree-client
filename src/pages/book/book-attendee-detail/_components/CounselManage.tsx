@@ -62,30 +62,29 @@ export default function CounselManage(props: CounselManageProps) {
           counseleeId={counsel.counselee.counseleeId}
         />
       ))}
-      <div className="fixed bottom-11 right-[5%] max-w-[390px]">
-        <Button
-          onClick={() =>
-            navigate(
-              `/book/${bookId}/attendee/${attendeeId}/counselling${location.search}`,
-              {
-                state: {
-                  associates: studentInfo.associates,
-                  name: studentInfo.name,
-                },
+
+      <Button
+        onClick={() =>
+          navigate(
+            `/book/${bookId}/attendee/${attendeeId}/counselling${location.search}`,
+            {
+              state: {
+                associates: studentInfo.associates,
+                name: studentInfo.name,
               },
-            )
-          }
-          className="w-[88px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary"
-        >
-          <img
-            src="/images/icons/book/ico-plus.svg"
-            alt="플러스 아이콘"
-            width={16}
-            height={16}
-          />
-          <p className="text-white font-semibold text-lg">상담</p>
-        </Button>
-      </div>
+            },
+          )
+        }
+        className="w-[104px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary fixed bottom-11 right-[5%]"
+      >
+        <img
+          src="/images/icons/book/ico-plus.svg"
+          alt="플러스 아이콘"
+          width={16}
+          height={16}
+        />
+        <p className="text-white font-semibold text-lg">상담</p>
+      </Button>
     </div>
   )
 }

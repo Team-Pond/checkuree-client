@@ -13,9 +13,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { createAttendee } from '@/api/AttendeeApiClient'
 import toast from 'react-hot-toast'
 import SEO from '@/components/SEO'
-import FormHeader from './_components/FormHeader'
+
 import tw from 'tailwind-styled-components'
 import { z } from 'zod'
+import FormHeader from '../../_components/FormHeader'
 
 export default function Page() {
   const navigate = useNavigate()
@@ -109,8 +110,8 @@ export default function Page() {
         title="체쿠리 | 학생 등록"
         content="체쿠리 음악학원 출석부 서비스의 학생 등록 페이지입니다."
       />
-      <Form onSubmit={handleSubmit(submit)}>
-        <FormHeader isStep2={step === 'Step2'} />
+      <FormHeader isStep2={step === 'Step2'} text="학생 등록" />
+      <Form onSubmit={handleSubmit(submit)} className="mt-10 px-[17px]">
         <FormInner>
           {step === 'Step1' ? (
             <>
@@ -157,8 +158,8 @@ export default function Page() {
   )
 }
 
-const Form = tw.form`flex flex-col gap-10 w-full pb-[30px]`
-const FormInner = tw.div`flex flex-col w-full mx-auto justify-center items-center gap-6 max-w-[342px]`
+const Form = tw.form`flex flex-col gap-10 w-full`
+const FormInner = tw.div`flex flex-col w-full mx-auto justify-center items-center gap-6`
 const Button = tw.button`${({ issubmit }: { issubmit?: boolean }) =>
   issubmit
     ? 'bg-bg-tertiary text-[#F1F8F3]'

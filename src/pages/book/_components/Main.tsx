@@ -8,7 +8,7 @@ interface MainContentProps {
 export default function Main({ bookList, handleNavigation }: MainContentProps) {
   return (
     <div className="bg-bg-secondary w-full h-full">
-      <div className="w-full py-5 grid grid-cols-2 gap-y-6 gap-x-4 justify-items-stretch mx-auto">
+      <div className="w-full py-5 px-[25px] grid grid-cols-2 gap-y-6 gap-x-4 justify-items-stretch mx-auto">
         {bookList.map((book, index) => {
           return (
             <Book
@@ -46,7 +46,7 @@ function Book({
       key={id}
       data-cy={`book-${index}`}
       aria-label={`book-${index}`}
-      className={`max-w-[162px] cursor-pointer w-full h-[195px] ${index % 2 === 1 ? 'justify-self-start' : 'justify-self-end'}`}
+      className={`cursor-pointer w-full h-[195px] ${index % 2 === 1 ? 'justify-self-start' : 'justify-self-end'}`}
       onClick={() => handleNavigation(book)}
     >
       <img

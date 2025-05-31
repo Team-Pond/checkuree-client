@@ -19,7 +19,7 @@ export default function DateDrawer({
   }
   return (
     <BottomDrawer isOpen={open} onClose={onClose}>
-      {open && <Calendar className="mx-auto" handleCurrentDay={handleDay} />}
+      <Calendar className="mx-auto" handleCurrentDay={handleDay} />
       <div className="flex gap-4 w-full">
         <Button type="button" onClick={onClose} className=" bg-bg-secondary">
           <span className="text-text-secondary text-l-semibold select-none">

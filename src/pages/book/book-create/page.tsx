@@ -7,8 +7,9 @@ import { useBookCreate } from './queries'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { bookSchema, CreateBookSchema } from './_schema'
 import SEO from '@/components/SEO'
-import FormHeader from './_components/FormHeader'
+
 import tw from 'tailwind-styled-components'
+import FormHeader from '../_components/FormHeader'
 
 export default function Page() {
   // 스텝 상태
@@ -57,9 +58,9 @@ export default function Page() {
         title="체쿠리 | 출석부 등록"
         content="체쿠리 음악학원 출석부 서비스의 출석부 등록 페이지입니다."
       />
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <FormHeader isStep2={step === 'Step2'} text="출석부 등록" />
+      <Form onSubmit={handleSubmit(onSubmit)} className="px-[17px] mt-10">
         {/* 헤더에서 스텝 표시 */}
-        <FormHeader isStep2={step === 'Step2'} />
 
         <FormInner>
           {step === 'Step1' ? (
@@ -125,11 +126,10 @@ const Button = tw.button`
 `
 
 const Form = tw.form`
-  flex flex-col gap-10 w-full pb-[30px]
+  flex flex-col gap-10 w-full
 `
 
 const FormInner = tw.div`
   w-full flex flex-col gap-6
-  items-center max-w-[342px]
-  justify-center mx-auto
+  items-center justify-center mx-auto px-[7px]
 `

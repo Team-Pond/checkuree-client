@@ -92,7 +92,7 @@ export default function Step1() {
             type="text"
             placeholder="학생 이름"
             {...register('attendeeRequest.name')}
-            className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+            className="bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
             onKeyDown={spaceBlockKeyDown}
           />
           {errors?.attendeeRequest?.name && (
@@ -256,7 +256,7 @@ export default function Step1() {
               }}
               placeholder="01012345678"
               className={twMerge(
-                'max-w-[342px] w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary',
+                'w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary',
                 associate &&
                   associate[0].relationType &&
                   associate[0].relationType !== 'NONE'
@@ -285,7 +285,7 @@ export default function Step1() {
             type="text"
             placeholder="학생 주소"
             {...register('attendeeRequest.address_1')}
-            className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+            className="bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
           />
         </div>
       </FieldWrapper>
@@ -296,7 +296,7 @@ export default function Step1() {
           type="text"
           placeholder="개굴초등학교"
           {...register('attendeeRequest.school')}
-          className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+          className="bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />
       </FieldWrapper>
       {/* 비고(선택) */}
@@ -306,12 +306,12 @@ export default function Step1() {
           type="text"
           placeholder=""
           {...register('attendeeRequest.description')}
-          className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+          className="bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />
       </FieldWrapper>
     </Step1Form>
   )
 }
 
-const Step1Form = tw.div`flex flex-col justify-center gap-6 max-w-[342px] w-full`
+const Step1Form = tw.div`flex flex-col justify-center gap-6 w-full px-[7px]`
 const FieldWrapper = tw.div`flex flex-col gap-2`

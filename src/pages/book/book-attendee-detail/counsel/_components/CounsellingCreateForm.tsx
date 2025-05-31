@@ -68,7 +68,7 @@ export default function CounsellingCreateForm({
   }
 
   return (
-    <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
+    <div className="flex flex-col justify-center gap-6 w-full">
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
           <p className="font-bold text-m-medium">상담자</p>
@@ -192,7 +192,7 @@ export default function CounsellingCreateForm({
         <textarea
           {...register('description')}
           placeholder=""
-          className="max-w-[342px] h-[92px] bg-white w-full border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+          className="h-[92px] bg-white w-full border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />
       </div>
     </div>

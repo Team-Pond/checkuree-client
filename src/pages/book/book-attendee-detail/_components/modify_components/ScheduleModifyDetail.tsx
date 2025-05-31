@@ -7,7 +7,7 @@ import { getSub30MinuteHhmm } from '@/utils'
 
 import ScheduleTable from '../ScheduleTable'
 import AttendeeDrawer from '@/components/AttendeeDrawer'
-import { ScheduleParamsType } from '../CurriculumModify'
+
 import {
   useSchedule,
   useScheduleTable,
@@ -18,6 +18,12 @@ type ScheduleModifyDetailProps = {
     React.SetStateAction<UpdateAttendeeScheduleRequest | undefined>
   >
   attendeeSchedules: UpdateAttendeeScheduleRequest
+}
+
+interface ScheduleParamsType {
+  dayOfWeek: string
+  hhmm: string
+  isSelected: boolean
 }
 
 export default function ScheduleModifyDetail({
@@ -152,10 +158,10 @@ export default function ScheduleModifyDetail({
   }
 
   return (
-    <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
+    <div className="flex flex-col justify-center gap-6 w-full">
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
-          <p className="font-bold text-m-medium">클래스 일정</p>
+          <p className="font-bold text-m-medium">클래스 일정 선택</p>
           <p className="text-text-danger">*</p>
 
           <div className="flex items-center gap-2 ml-auto text-xs-semibold text-text-secondary">

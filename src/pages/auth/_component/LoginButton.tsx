@@ -17,7 +17,7 @@ export default function LoginButton({
   return (
     <Button
       className={twMerge(
-        'flex items-center justify-center text-lg  w-[342px] h-[52px] rounded-xl leading-[22px] cursor-pointer',
+        'flex items-center justify-center text-lg w-full h-[52px] rounded-xl leading-[22px] cursor-pointer',
         className,
       )}
       type={type}

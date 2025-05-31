@@ -175,7 +175,7 @@ function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
   }
 
   return (
-    <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
+    <div className="flex flex-col justify-center gap-6 w-full">
       <FieldWrapper>
         <FieldTitle title="커리큘럼" essential />
         <div
@@ -192,7 +192,7 @@ function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
                 ? `${selectedSubject.title} - ${selectedSubjectItems.title}`
                 : ''
             }
-            className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#5D5D5D] text-left cursor-pointer"
+            className="bg-white w-full h-12 border border-[#E7E7E7] rounded-xl px-4 outline-none text-s-semibold text-[#5D5D5D] text-left cursor-pointer"
             readOnly
           />
 

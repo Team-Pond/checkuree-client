@@ -75,7 +75,7 @@ export default function Step2(props: GradeItemProps) {
 
   return (
     <>
-      <div className="flex flex-col justify-center gap-6 max-w-[342px] w-full">
+      <div className="flex flex-col justify-center gap-6 w-full">
         {/* 커리큘럼 추가된 것 */}
         {courseData.map((course, index) => {
           return (
@@ -109,17 +109,17 @@ export default function Step2(props: GradeItemProps) {
                 aria-label="curriculum-input"
                 onChange={(e) => setCourseTitle(e.target.value)}
                 placeholder="커리큘럼 이름"
-                className="max-w-[342px] bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
+                className="bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
               />
             </div>
             {/* 커리큘럼 내용 */}
             <div className="flex flex-col gap-2">
               <FieldTitle title="커리큘럼 내용" essential />
 
-              <div className="max-w-[343px] rounded-2xl py-1 px-2 text-left bg-bg-base">
+              <div className="rounded-2xl py-1 px-2 text-left bg-bg-base">
                 <ul>
-                  <li className="h-11 w-[326px] py-4 text-s-semibold text-text-primary">
-                    <p className="ml-8 px-[2px]">올챙이(기본)</p>
+                  <li className="h-11 w-[326px] px-1 py-1 text-s-semibold text-text-primary flex justify-between">
+                    <span className="px-[2px]">올챙이(기본)</span>
                   </li>
                   {selectedSubjectItems.map((subjectItem) => {
                     return (
@@ -127,7 +127,7 @@ export default function Step2(props: GradeItemProps) {
                         key={subjectItem.subjectItemId}
                         className="h-11 w-[326px] px-1 py-1 text-s-semibold text-text-primary flex justify-between"
                       >
-                        <div className="flex items-center gap-1 justify-center">
+                        <div className="flex items-center gap-2 justify-center">
                           <img
                             src={'/images/icons/book-create/ico-equal.svg'}
                             alt="이미지 추가 아이콘"
@@ -135,9 +135,7 @@ export default function Step2(props: GradeItemProps) {
                             height={24}
                             className=""
                           />
-                          <p className="px-[2px] mt-[1px]">
-                            {subjectItem.title}
-                          </p>
+                          <span>{subjectItem.title}</span>
                         </div>
                         <img
                           src="/images/icons/book-create/ico-close-gray.svg"
@@ -187,7 +185,7 @@ export default function Step2(props: GradeItemProps) {
 
             <Button
               className={twMerge(
-                'max-w-[341px] w-full h-[54px] flex justify-center items-center rounded-xl bg-bg-tertiary text-[#f1f8f3]',
+                'w-full h-[54px] flex justify-center items-center rounded-xl bg-bg-tertiary text-[#f1f8f3]',
                 isCourseNameVaild
                   ? 'bg-bg-tertiary text-[#f1f8f3]'
                   : 'bg-bg-disabled text-text-disabled',
@@ -258,7 +256,7 @@ export default function Step2(props: GradeItemProps) {
               />
             </div>
 
-            <div className="w-full max-w-[345px] h-[234px] flex bg-white ">
+            <div className="w-full h-[234px] flex bg-white ">
               <ul className="w-full max-w-[107px] overflow-y-scroll scrollbar-hide rounded-tl-lg">
                 {subjects?.map((subject) => {
                   return (
