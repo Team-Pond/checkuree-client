@@ -74,5 +74,5 @@ export default function Footer() {
 }
 
 const Button = tw.div`flex flex-col gap-2 items-center cursor-pointer`
-const BottomContainer = tw.div`border-[#f6f6f6] border-t-[1px] flex justify-between px-[44px] items-center fixed bottom-0 left-1/2 transform -translate-x-1/2 z-40
+const BottomContainer = tw.div`border-[#f6f6f6] border-t-[1px] border-x-[1px] flex justify-between px-[44px] items-center fixed bottom-0 left-1/2 transform -translate-x-1/2 z-40
              w-full max-w-[390px] h-[92px] bg-white rounded-t-2xl`
