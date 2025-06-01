@@ -7,6 +7,7 @@ interface FormHeaderProps {
 }
 export default function FormHeader({ isStep2, text }: FormHeaderProps) {
   const navigate = useNavigate()
+
   return (
     <div className="w-full flex flex-col px-4">
       <div className="w-full h-[64px] flex items-center justify-between py-5">
@@ -22,7 +23,7 @@ export default function FormHeader({ isStep2, text }: FormHeaderProps) {
       <div className="flex gap-2 w-full justify-center">
         <hr className="border-[2px] border-bg-tertiary w-full rounded-full" />
 
-        {text !== '스케줄 변경' && (
+        {text !== '클래스 수정' && (
           <hr
             className={twMerge(
               'border-[2px] w-full rounded-full',

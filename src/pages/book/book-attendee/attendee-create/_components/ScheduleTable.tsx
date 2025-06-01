@@ -2,10 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { DaysType } from '@/api/type'
-import { useBookDetail } from '@/pages/books/queries'
+
 import { UpdateAttendeeScheduleRequest } from '@/api/AttendeeSchema'
 import { CreateAttendeeSchema } from '../_schema'
 import { useFormContext } from 'react-hook-form'
+import { useBookDetail } from '@/pages/book/queries'
 
 interface ScheduleItem {
   dayOfWeek: DaysType

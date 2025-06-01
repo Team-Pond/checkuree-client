@@ -73,7 +73,10 @@ const CounselList = (args: CounselListProps) => {
                 }, [])
                 .map((subjects) => {
                   return (
-                    <p className="break-keep text-left text-s-semibold">
+                    <p
+                      className="break-keep text-left text-s-semibold"
+                      key={subjects.join(', ')}
+                    >
                       {subjects
                         .map((subject) => counsellingTopicTypeToKor(subject))
                         .join(', ')}

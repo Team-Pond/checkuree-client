@@ -49,7 +49,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({
     >
       {/* 드로어 콘텐츠 */}
       <div
-        className={`w-full max-w-[430] bg-white rounded-t-lg shadow-lg transform transition-transform duration-300 ${
+        className={`w-full max-w-[430px] bg-white rounded-t-lg shadow-lg transform transition-transform duration-300 ${
           isOpen ? 'translate-y-0' : 'translate-y-full'
         }`}
         onClick={(e) => e.stopPropagation()} // 클릭 이벤트 전파 방지

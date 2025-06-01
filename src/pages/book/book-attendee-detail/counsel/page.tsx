@@ -23,7 +23,7 @@ export default function CounsellingCreate() {
   const { bookId, attendeeId } = useParams()
   const [counseleeId, setCounseleeId] = useState<number>()
 
-  const Submit = async (data: CreateCounsellingSchema) => {
+  const submit = async (data: CreateCounsellingSchema) => {
     if (location.state.counsellingId) {
       await updateCounsellings({
         params: {
@@ -84,15 +84,15 @@ export default function CounsellingCreate() {
     },
   )
 
+  console.log(location?.state.associates)
+
   const dateFormat = (dateString: string) => {
     const date = new Date(dateString)
 
-    // 년, 월, 일 추출
     const year = date.getFullYear()
     const month = String(date.getMonth() + 1).padStart(2, '0') // 월은 0부터 시작하므로 1을 더해줍니다.
     const day = String(date.getDate()).padStart(2, '0')
 
-    // 원하는 형식으로 출력
     return `${year}-${month}-${day}`
   }
 
@@ -110,6 +110,8 @@ export default function CounsellingCreate() {
 
   const { handleSubmit } = methods
 
+  console.log(location.state.counsellorName)
+
   return (
     <FormProvider {...methods}>
       <SEO
@@ -119,7 +121,7 @@ export default function CounsellingCreate() {
       <FormHeader studentName={location?.state.name} />
       <form
         className="flex flex-col w-full pb-[30px] px-[17px]"
-        onSubmit={handleSubmit(Submit)}
+        onSubmit={handleSubmit(submit)}
       >
         <div className="flex flex-col mx-auto justify-center gap-6 w-full mt-10 px-[7px]">
           <CounsellingCreateForm

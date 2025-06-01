@@ -78,7 +78,7 @@ export default function CounsellingCreateForm({
           <CounsellerSelect
             onChange={onChangeCounseleeId}
             options={counselors || []}
-            placeholder={counsellorName ? counsellorName : '상담자'}
+            placeholder={counsellorName ?? '상담자'}
             disabled={!!counsellorName}
           />
         </div>
