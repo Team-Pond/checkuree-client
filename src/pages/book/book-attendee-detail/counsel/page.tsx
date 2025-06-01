@@ -84,8 +84,6 @@ export default function CounsellingCreate() {
     },
   )
 
-  console.log(location?.state.associates)
-
   const dateFormat = (dateString: string) => {
     const date = new Date(dateString)
 
@@ -109,8 +107,6 @@ export default function CounsellingCreate() {
   })
 
   const { handleSubmit } = methods
-
-  console.log(location.state.counsellorName)
 
   return (
     <FormProvider {...methods}>
