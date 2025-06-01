@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { DaysType } from '@/api/type'
-import { useBookDetail } from '@/pages/book/queries'
+import { useBookDetail } from '@/pages/books/queries'
 import { UpdateAttendeeScheduleRequest } from '@/api/AttendeeSchema'
 import { CreateAttendeeSchema } from '../_schema'
 import { useFormContext } from 'react-hook-form'
@@ -145,21 +145,20 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                           schedule.hhmm === beforeHhmm),
                     ) ?? false
 
-                  const baseCellClasses =
-                    'border border-[#f6f6f6] text-sm w-[54px] h-[34px] align-middle cursor-pointer text-xs-medium'
-
                   return (
                     <td
                       key={[dayData.dayOfWeek, slotIndex].join('-')}
                       data-cy={`schedule-${index}`}
                       // ▼ isSelected면 빨간색, 아니면 기존 로직
-                      className={`${baseCellClasses} ${
-                        isSelected
-                          ? 'bg-bg-tertiary text-text-interactive-inverse'
-                          : count > 0
-                            ? 'bg-bg-primary text-text-secondary'
-                            : 'bg-bg-secondary text-text-secondary'
-                      }`}
+                      className={`border border-[#f6f6f6] text-sm w-[54px] h-[34px] align-middle cursor-pointer
+                        ${
+                          isSelected
+                            ? 'bg-bg-tertiary text-text-interactive-inverse text-xs-medium'
+                            : count > 0
+                              ? 'bg-bg-primary text-text-secondary text-xs-medium'
+                              : 'bg-bg-secondary text-text-secondary text-xs-medium'
+                        }
+                      `}
                       onClick={() =>
                         handleSchedule(dayData.dayOfWeek, hhmm, isSelected)
                       }
