@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { LoginDataType } from './page'
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 import { setTokens } from '@/lib/auth'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'

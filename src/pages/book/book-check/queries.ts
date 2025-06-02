@@ -14,7 +14,6 @@ import useFormDataStore from '@/store/recordStore'
 import { getCurrentTimeParts } from '@/utils'
 import { handleError } from '@/utils/handleError'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
 import toast from 'react-hot-toast'
 
 export const useBookSchedules = ({
