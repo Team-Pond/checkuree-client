@@ -1,4 +1,4 @@
-import useLongPress from '@/hook/useLongPress'
+import useLongPress from '@/pages/book/book-check/hook/useLongPress'
 import useModalStore from '@/store/dialogStore'
 import tw from 'tailwind-styled-components'
 import ConfirmModal from './ConfirmModal'
@@ -9,7 +9,6 @@ import { ScheduleData } from '@/api/type'
 import NoteActiveIcon from '@/assets/icons/book-check/ico-note-active.svg?react'
 import NoteIcon from '@/assets/icons/book-check/ico-note.svg?react'
 import React from 'react'
-import { start } from 'repl'
 import Button from '@/components/Button'
 
 type LessonRowProps = {

@@ -7,9 +7,15 @@ export default function Button({
   className,
   type = 'button',
   onClick,
+  'data-cy': dataCy,
 }: ButtonProps) {
   return (
-    <button type={type} onClick={onClick} className={className}>
+    <button
+      type={type}
+      onClick={onClick}
+      className={className}
+      data-cy={dataCy}
+    >
       {children}
     </button>
   )
