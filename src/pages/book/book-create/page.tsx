@@ -59,7 +59,10 @@ export default function Page() {
         content="체쿠리 음악학원 출석부 서비스의 출석부 등록 페이지입니다."
       />
       <FormHeader isStep2={step === 'Step2'} text="출석부 등록" />
-      <Form onSubmit={handleSubmit(onSubmit)} className="px-[17px] mt-10">
+      <Form
+        onSubmit={handleSubmit(onSubmit)}
+        className="px-[17px] mt-10 pb-[30px]"
+      >
         {/* 헤더에서 스텝 표시 */}
 
         <FormInner>

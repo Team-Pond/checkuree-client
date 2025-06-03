@@ -118,14 +118,14 @@ export default function Step2(props: GradeItemProps) {
 
               <div className="rounded-2xl py-1 px-2 text-left bg-bg-base">
                 <ul>
-                  <li className="h-11 w-[326px] px-1 py-1 text-s-semibold text-text-primary flex justify-between">
-                    <span className="px-[2px]">올챙이(기본)</span>
+                  <li className="h-11 w-full px-9  py-1 text-s-semibold text-text-primary flex items-center justify-between ">
+                    <span className="">올챙이(기본)</span>
                   </li>
                   {selectedSubjectItems.map((subjectItem) => {
                     return (
                       <li
                         key={subjectItem.subjectItemId}
-                        className="h-11 w-[326px] px-1 py-1 text-s-semibold text-text-primary flex justify-between"
+                        className="h-11 w-full px-1 py-1 text-s-semibold text-text-primary flex justify-between"
                       >
                         <div className="flex items-center gap-2 justify-center">
                           <img
@@ -166,7 +166,7 @@ export default function Step2(props: GradeItemProps) {
                     onClick={() => handleBottomDrawer(true)}
                     data-cy="subject-add-button"
                     aria-label="subject-add-button"
-                    className="h-11 w-[326px] text-s-semibold text-text-primary flex gap-[1px] justify-center items-center"
+                    className="h-11 w-full text-s-semibold text-text-primary flex gap-[1px] justify-center items-center"
                   >
                     <img
                       src={'/images/icons/book-create/ico-plus.svg'}

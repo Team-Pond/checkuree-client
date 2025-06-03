@@ -13,7 +13,7 @@ export default function Radio({
   ariaLabel,
 }: RadioProps) {
   return (
-    <div className="inline-flex items-center">
+    <div className="inline-flex flex-row items-center whitespace-nowrap">
       <div
         className="relative flex items-center"
         onClick={() => onChange(!checked)}

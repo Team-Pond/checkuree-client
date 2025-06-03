@@ -150,7 +150,7 @@ export default function Step1() {
       <TextWrapper>
         <FieldTitle title="수업 요일" essential />
         <div className="flex flex-col gap-[1px] w-full text-left">
-          <div className="grid grid-cols-7 gap-0" data-cy="availableDays">
+          <div className="grid grid-cols-7 gap-1" data-cy="availableDays">
             {DAYS.map((day, index) => {
               const isActive = currentDays.includes(DaysMatch[DAYS[index]])
               return (
@@ -195,18 +195,18 @@ export default function Step1() {
             {PICKER_RENDER.map((time, index) => {
               return (
                 <div
-                  className="flex gap-2 items-center max-w-[163px] w-full"
+                  className="flex gap-2 items-center w-full"
                   onClick={time.handleOpen}
                   key={index}
                   data-cy={time.dataCy}
                   aria-label={time.dataCy}
                 >
-                  <Button className="outline-none border border-[#E7E7E7] rounded-xl max-w-[130px] w-full h-12  flex items-center pl-4">
+                  <Button className="outline-none border border-[#E7E7E7] rounded-xl max-w-[130px] w-full h-12 flex items-center pl-4">
                     <p className="font-bold text-sm text-[#B0B0B0]">
                       {time.text}
                     </p>
                   </Button>
-                  <p className="text-sm font-bold text-text-primary">
+                  <p className="text-sm font-bold text-text-primary whitespace-nowrap">
                     {time.timeText}
                   </p>
                 </div>

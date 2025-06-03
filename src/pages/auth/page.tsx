@@ -1,7 +1,6 @@
 import SEO from '@/components/SEO'
 import { useNavigate } from 'react-router-dom'
 import LoginButton from './_component/LoginButton'
-import Hr from './_component/Hr'
 import HeaderBanner from './_component/HeaderBanner'
 
 export interface LoginDataType {
@@ -44,5 +43,15 @@ export default function Page() {
         </LoginButton>
       </div>
     </main>
+  )
+}
+
+function Hr() {
+  return (
+    <div className="flex items-center justify-center gap-2">
+      <hr className="flex-1 h-[1px] bg-[rgba(0,0,0,0.24)]" />
+      <span className="text-xs text-[rgba(0,0,0,0.24)]">또는</span>
+      <hr className="flex-1 h-[1px] bg-[rgba(0,0,0,0.24)]" />
+    </div>
   )
 }

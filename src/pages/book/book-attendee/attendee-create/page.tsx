@@ -111,7 +111,10 @@ export default function Page() {
         content="체쿠리 음악학원 출석부 서비스의 학생 등록 페이지입니다."
       />
       <FormHeader isStep2={step === 'Step2'} text="학생 등록" />
-      <Form onSubmit={handleSubmit(submit)} className="mt-10 px-[17px]">
+      <Form
+        onSubmit={handleSubmit(submit)}
+        className="mt-10 px-[17px] pb-[30px]"
+      >
         <FormInner>
           {step === 'Step1' ? (
             <>

@@ -37,19 +37,19 @@ export default function AttendeeDrawer({
     <BottomDrawer isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col gap-4 items-center h-[249px] overflow-auto">
         {/* Drawer 상단 영역 */}
-        <div className="text-left w-full h-10 px-4 border-b border-[#f6f6f6] flex items-center text-s-semibold text-text-secondary">
+        <div className="text-left w-full h-10 border-b border-[#f6f6f6] flex items-center text-s-semibold text-text-secondary">
           ({convertEngDayToKorDay(dayOfWeek)}) {hhmm}-{' '}
           {getAddMinuteHhmm(hhmm, 30)}
         </div>
 
         {/* 수강생 목록 */}
 
-        <div className="grid grid-cols-2 px-6 max-h-[130px] overflow-y-auto">
+        <div className="grid grid-cols-2 max-h-[130px] overflow-y-auto w-full px-[6px]">
           {scheduleData?.map((attendee, index) => (
             <div
               // 중복 데이터가 발생하는 현상이 있어 key 변경
               key={[attendee.name, attendee.age, index].join('-')}
-              className="flex gap-2 w-[171px] h-9"
+              className="h-9 w-full text-left"
             >
               <span className="text-m-bold text-text-primary">
                 {attendee.name}
@@ -58,7 +58,7 @@ export default function AttendeeDrawer({
           ))}
         </div>
 
-        <div className="flex gap-4 w-full fixed bottom-5 max-w-[357px]">
+        <div className="flex gap-4 w-full bottom-5 ">
           <Button
             data-cy="close-schedule-button"
             aria-label="close-schedule-button"
