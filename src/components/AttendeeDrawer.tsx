@@ -43,7 +43,8 @@ export default function AttendeeDrawer({
         </div>
 
         {/* 수강생 목록 */}
-        <div className="grid grid-cols-2 px-6">
+
+        <div className="grid grid-cols-2 px-6 max-h-[130px] overflow-y-auto">
           {scheduleData?.map((attendee, index) => (
             <div
               // 중복 데이터가 발생하는 현상이 있어 key 변경
