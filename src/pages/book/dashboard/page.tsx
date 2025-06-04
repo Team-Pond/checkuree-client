@@ -1,4 +1,3 @@
-import PageContainer from '@/components/PageContainer'
 import AttendanceRateChart from './_components/AttendanceRateChart'
 import LeftArrowIcon from '@/assets/icons/ico-arrow-left.svg?react'
 import RightArrowIcon from '@/assets/icons/ico-arrow-right.svg?react'
