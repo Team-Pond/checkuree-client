@@ -55,8 +55,6 @@ export default function Page() {
   const studentAssociate = attendeeDetail?.associates?.filter(
     (fam) => fam.relationType === 'MOTHER' || fam.relationType === 'FATHER',
   )
-
-  console.log(attendeeDetail)
   return (
     <main className="bg-bg-secondary flex-1 w-full">
       <SEO
