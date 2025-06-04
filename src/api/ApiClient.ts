@@ -14,7 +14,6 @@ const ApiClient: AxiosInstance = axios.create({
 ApiClient.interceptors.request.use(
   (config) => {
     const token = getAccessToken()
-    config.withCredentials = true
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }

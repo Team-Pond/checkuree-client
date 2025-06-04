@@ -2,7 +2,7 @@ import { defineConfig } from 'cypress'
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:5173',
+    baseUrl: import.meta.env.VITE_CYPRESS_BASE_URL || 'http://locahost:5173',
   },
   experimentalWebKitSupport: true,
 })

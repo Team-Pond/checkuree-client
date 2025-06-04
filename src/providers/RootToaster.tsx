@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import toast, { Toaster, useToasterStore } from 'react-hot-toast'
 
 export function RootToaster({
-  max = 10,
+  max = 1,
   ...props
 }: React.ComponentProps<typeof Toaster> & {
   max?: number
@@ -21,6 +21,7 @@ export function RootToaster({
       position="top-center"
       toastOptions={{
         // warn
+        duration: 1000,
         icon: (
           <img
             src="/images/icons/toast/ico-warning.svg"

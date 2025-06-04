@@ -1,6 +1,13 @@
 # 🌐 Links
 
 > **Service** : https://pond-client.vercel.app (dev - 작업중)
+> <br/>
+
+**TEST Account**
+<br/>
+ID : dkandkdlel
+<br/>
+PW : test123123!!
 
 # ⚒️ Stacks
 

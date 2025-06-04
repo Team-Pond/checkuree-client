@@ -13,6 +13,7 @@ import { useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import LeftArrowIcon from '@/assets/icons/ico-arrow-left.svg?react'
 import RightArrowIcon from '@/assets/icons/ico-arrow-right.svg?react'
+import Button from './Button'
 
 type CalendarProps = {
   className?: string
@@ -41,27 +42,27 @@ export default function Calendar({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-center h-10 gap-3">
-        <button
+        <Button
           aria-label="calendar backward"
           type="button"
           className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] mr-2"
           onClick={() => setSelectedMonth(add(selectedMonth, { months: -1 }))}
         >
           <LeftArrowIcon width={12} height={12} />
-        </button>
+        </Button>
 
         <span className="focus:outline-none text-l-bold text-text-primary">
           {format(selectedMonth, 'yyyy년 MM월')}
         </span>
 
-        <button
+        <Button
           aria-label="calendar forward"
           type="button"
           className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] ml-2"
           onClick={() => setSelectedMonth(add(selectedMonth, { months: 1 }))}
         >
           <RightArrowIcon width={12} height={12} />
-        </button>
+        </Button>
       </div>
       <table className={twMerge('w-full table-fixed', className)}>
         <thead>

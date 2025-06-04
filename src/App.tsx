@@ -9,59 +9,57 @@ import ScrollToTop from './components/ScrollToTop'
 import BookLayout from './layouts/BookLayout'
 import NotFound from './pages/404'
 
-// TODO: function으로 변경
-import { ScheduleModify } from './pages/books/book-attendee-detail/components/ScheduleModify'
 import Modal from './components/Modal'
 
 // Lazy load components
-const Books = lazy(() => import('@/pages/books/Books'))
-const AttendeeCreate = lazy(
-  () => import('@/pages/attendee-create/AttendeeCreate'),
+const BooksPage = lazy(() => import('@/pages/book/page'))
+const AttendeeCreatePage = lazy(
+  () => import('@/pages/book/book-attendee/attendee-create/page'),
 )
-const BookCreate = lazy(() => import('@/pages/books/book-create/BookCreate'))
-const BookRoaster = lazy(
-  () => import('@/pages/books/book-attendee/BookAttendee'),
+const ScheduleModifyPage = lazy(
+  () => import('@/pages/book/book-attendee-detail/_components/ScheduleModify'),
 )
-const KakaoSignIn = lazy(() => import('@/pages/auth/kakao-auth/SignIn'))
-const CheckureeSignIn = lazy(() => import('@/pages/auth/checkuree-auth/SignIn'))
-const SignIn = lazy(() => import('@/pages/auth/SignIn'))
-const BookCheck = lazy(() => import('@/pages/books/book-check/BookCheck'))
-const BookAttendeeDetail = lazy(
-  () => import('@/pages/books/book-attendee-detail/BookAttendeeDetail'),
+const BookCreatePage = lazy(() => import('@/pages/book/book-create/page'))
+const BookAttendeePage = lazy(() => import('@/pages/book/book-attendee/page'))
+const KakaoSignInPage = lazy(() => import('@/pages/auth/kakao-auth/page'))
+const CheckureeSignInPage = lazy(
+  () => import('@/pages/auth/checkuree-auth/page'),
 )
-const CounsellingCreate = lazy(
-  () =>
-    import(
-      '@/pages/books/book-attendee-detail/counsel/components/CounsellingCreate'
-    ),
+const SignInPage = lazy(() => import('@/pages/auth/page'))
+const BookCheckPage = lazy(() => import('@/pages/book/book-check/page'))
+const BookAttendeeDetailPage = lazy(
+  () => import('@/pages/book/book-attendee-detail/page'),
 )
-const Dashboard = lazy(() => import('@/pages/books/dashboard/Dashboard'))
+const CounsellingCreatePage = lazy(
+  () => import('@/pages/book/book-attendee-detail/counsel/page'),
+)
+const DashboardPage = lazy(() => import('@/pages/book/dashboard/page'))
 
 interface RouteType {
   path: string
   element: JSX.Element
 }
 const routes: RouteType[] = [
-  { path: '/book', element: <Books /> }, // 출석부 목록
-  { path: '/book/create', element: <BookCreate /> }, // 출석부 생성
-  { path: '/book/:bookId/attendee/create', element: <AttendeeCreate /> }, // 학생 생성
-  { path: '/book/:bookId', element: <BookCheck /> }, // 출석부 출석
-  { path: '/book/:bookId/attendee', element: <BookRoaster /> }, // 출석부 명단
+  { path: '/book', element: <BooksPage /> }, // 출석부 목록
+  { path: '/book/create', element: <BookCreatePage /> }, // 출석부 생성
+  { path: '/book/:bookId/attendee/create', element: <AttendeeCreatePage /> }, // 학생 생성
+  { path: '/book/:bookId', element: <BookCheckPage /> }, // 출석부 출석
+  { path: '/book/:bookId/attendee', element: <BookAttendeePage /> }, // 출석부 명단
   {
     path: '/book/:bookId/attendee/:attendeeId',
-    element: <BookAttendeeDetail />, // 학생 상세
+    element: <BookAttendeeDetailPage />, // 학생 상세
   },
   {
     path: '/book/:bookId/attendee/:attendeeId/schedule',
-    element: <ScheduleModify />, // 학생 일정 수정
+    element: <ScheduleModifyPage />, // 학생 일정 수정
   },
   {
     path: '/book/:bookId/attendee/:attendeeId/counselling',
-    element: <CounsellingCreate />, // 상담 생성
+    element: <CounsellingCreatePage />, // 상담 생성
   },
   {
     path: '/book/:bookId/dashboard',
-    element: <Dashboard />,
+    element: <DashboardPage />,
   },
 ]
 
@@ -73,9 +71,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to={'/book'} />} />
           <Route path="*" element={<NotFound />} /> {/* 404페이지 */}
-          <Route path="/auth/signin" element={<SignIn />} />
-          <Route path="/checkuree-auth/signin" element={<CheckureeSignIn />} />
-          <Route path="/auth/login" element={<KakaoSignIn />} />
+          <Route path="/auth/signin" element={<SignInPage />} />
+          <Route
+            path="/checkuree-auth/signin"
+            element={<CheckureeSignInPage />}
+          />
+          <Route path="/auth/login" element={<KakaoSignInPage />} />
           {/* 인증 처리 */}
           <Route element={<BookLayout />}>
             {routes.map((route) => (

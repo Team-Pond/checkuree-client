@@ -2,7 +2,7 @@ import { AttendeeStatisticsType } from '@/api/type'
 import React from 'react'
 import { twMerge } from 'tailwind-merge'
 
-type CategoryButtonsProps = {
+type IProps = {
   timeStatus: AttendeeStatisticsType
   handleTimeStatus: (timeStatus: AttendeeStatisticsType) => void
 }
@@ -20,10 +20,7 @@ const BUTTON_OPTIONS = [
     type: '커리큘럼',
   },
 ]
-function CategoryButtons({
-  timeStatus,
-  handleTimeStatus,
-}: CategoryButtonsProps) {
+function CategoryButtons({ timeStatus, handleTimeStatus }: IProps) {
   return (
     <div className="flex">
       {BUTTON_OPTIONS.map((option) => {
@@ -48,7 +45,7 @@ function Button({
   handleTimeStatus,
   status,
   type,
-}: CategoryButtonsProps & { status: AttendeeStatisticsType; type: string }) {
+}: IProps & { status: AttendeeStatisticsType; type: string }) {
   return (
     <button
       onClick={() => handleTimeStatus(status)}

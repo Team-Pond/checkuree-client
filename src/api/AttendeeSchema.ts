@@ -1,4 +1,3 @@
-import { AttendeeSchema } from '@/pages/attendee-create/_schema'
 import { z } from 'zod'
 import {
   Associates,
@@ -14,6 +13,7 @@ import {
   AttendeeStatisticType,
   FutureScheduleType,
 } from './type'
+import { AttendeeSchema } from '@/pages/book/book-attendee/attendee-create/_schema'
 
 type ResponseBase = {
   status: number
@@ -187,15 +187,22 @@ export type GetAttendeeDetailResponse = {
       gender: GenderType
       age: number
     }[]
-    futureSchedules: FutureScheduleType[]
+    futureSchedules: {
+      appliedFrom: string
+      schedules: FutureScheduleType[]
+    }
 
     address_1: string
     address_2: string
     schedules: {
-      id: number
-      day: DaysType
-      time: string
-    }[]
+      appliedFrom: string
+      schedules: {
+        id: number
+        day: DaysType
+        time: string
+      }[]
+    }
+
     progresses: Progresses
   }
 } & ErrorResponse
