@@ -15,6 +15,16 @@ import { useOnlyScheduleUpdate } from '../../book-attendee/attendee-create/queri
 import tw from 'tailwind-styled-components'
 import FormHeader from '../../_components/FormHeader'
 
+const weekDaySorter: Record<string, number> = {
+  월: 1,
+  화: 2,
+  수: 3,
+  목: 4,
+  금: 5,
+  토: 6,
+  일: 7,
+}
+
 export default function ScheduleModify() {
   const { bookId, attendeeId } = useParams()
   const navigate = useNavigate()
@@ -101,6 +111,7 @@ export default function ScheduleModify() {
               onClick={() =>
                 openModal(
                   <ConfirmModal
+                    className="text-center break-keep"
                     message={
                       <>
                         {selectedDate.format('M월 D일부터 일정을')} <br />
@@ -110,7 +121,10 @@ export default function ScheduleModify() {
                               (schedule) => dayMap[schedule.day],
                             ),
                           ),
-                        ).join(', ')}
+                        )
+                          .sort((a, b) => weekDaySorter[a] - weekDaySorter[b])
+                          .map((day) => `(${day})`)
+                          .join(', ')}
                         으로 저장하시겠습니까?
                       </>
                     }

@@ -1,14 +1,16 @@
 import React from 'react'
+import { twMerge } from 'tailwind-merge'
 
 interface Props {
   message: string | React.ReactNode
+  className?: string
 }
 
-export const ConfirmModal: React.FC<Props> = ({ message }) => {
+export const ConfirmModal: React.FC<Props> = ({ message, className }) => {
   return (
-    <div className="flex flex-col gap-6 justify-center items-center w-full">
-      <p className="text-m-bold text-text-primary">{message}</p>
-    </div>
+    <p className={`text-m-bold text-text-primary ${className ?? ''}`}>
+      {message}
+    </p>
   )
 }
 
