@@ -56,6 +56,7 @@ export default function Page() {
     (fam) => fam.relationType === 'MOTHER' || fam.relationType === 'FATHER',
   )
 
+  console.log(attendeeDetail)
   return (
     <main className="bg-bg-secondary flex-1 w-full">
       <SEO
@@ -120,8 +121,8 @@ export default function Page() {
               description: attendeeDetail?.description!,
               school: attendeeDetail?.school!,
             }}
-            scheduleItems={attendeeDetail?.schedules!}
-            futureSchedules={attendeeDetail?.futureSchedules!}
+            scheduleItems={attendeeDetail?.schedules.schedules!}
+            futureSchedules={attendeeDetail?.futureSchedules.schedules!}
             associates={{
               relation:
                 (studentAssociate || [])?.length > 0

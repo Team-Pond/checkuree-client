@@ -1,6 +1,11 @@
 import { formatSchedule } from '@/utils'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { DaysType, GenderType, Progresses } from '@/api/type'
+import {
+  DaysType,
+  FutureScheduleType,
+  GenderType,
+  Progresses,
+} from '@/api/type'
 import tw from 'tailwind-styled-components'
 
 type ScheduleItem = {
@@ -27,6 +32,7 @@ type StudentManageProps = {
     description: string
     school: string
   }
+  futureSchedules: FutureScheduleType[]
   scheduleItems: ScheduleItem
   associates?: {
     relation?: string
