@@ -18,7 +18,7 @@ interface ScheduleProps {
   handleSchedule: (dayOfWeek: string, hhmm: string, isSelected: boolean) => void
   handleAttendeeBottomDrawer: (state: boolean) => void
   attendeeSchedules?: Omit<UpdateAttendeeScheduleRequest, 'appliedFrom'>
-  futureSchedules: FutureScheduleType[]
+  futureSchedules?: FutureScheduleType[]
 }
 
 function parseHhmm(hhmm: string) {

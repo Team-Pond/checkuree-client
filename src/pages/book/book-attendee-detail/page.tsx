@@ -122,7 +122,6 @@ export default function Page() {
               school: attendeeDetail?.school!,
             }}
             scheduleItems={attendeeDetail?.schedules.schedules!}
-            futureSchedules={attendeeDetail?.futureSchedules.schedules!}
             associates={{
               relation:
                 (studentAssociate || [])?.length > 0

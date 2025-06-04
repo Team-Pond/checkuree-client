@@ -20,7 +20,7 @@ type ScheduleModifyDetailProps = {
     >
   >
   attendeeSchedules: Omit<UpdateAttendeeScheduleRequest, 'appliedFrom'>
-  futureSchedules: FutureScheduleType[]
+  futureSchedules?: FutureScheduleType[]
 }
 
 interface ScheduleParamsType {

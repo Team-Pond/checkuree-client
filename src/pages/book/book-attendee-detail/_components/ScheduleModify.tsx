@@ -55,12 +55,14 @@ export default function ScheduleModify() {
           hhmm: schedule.time.substring(0, 5),
         })),
       })
-      setSelectedDate(
-        dayjs(
-          data.futureSchedules.appliedFrom || data.schedules.appliedFrom,
-          'YYYY-MM-DD',
-        ),
-      )
+
+      if (data.futureSchedules)
+        setSelectedDate(
+          dayjs(
+            data.futureSchedules.appliedFrom || data.schedules.appliedFrom,
+            'YYYY-MM-DD',
+          ),
+        )
     }
   }, [attendeeDetail?.data])
 
@@ -77,7 +79,7 @@ export default function ScheduleModify() {
             <ScheduleModifyDetail
               setAttendeeSchedules={setAttendeeSchedules}
               attendeeSchedules={attendeeSchedules!}
-              futureSchedules={attendeeDetail.data?.futureSchedules.schedules!}
+              futureSchedules={attendeeDetail.data?.futureSchedules?.schedules}
             />
             <ScheduleModifyDetailDate
               selectedDate={selectedDate}
