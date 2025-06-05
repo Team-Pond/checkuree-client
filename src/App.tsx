@@ -2,7 +2,7 @@ import './App.css'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import ProtectedRoute from '@/ProtectedRoute'
-import PageContainer from '@/components/PageContainer'
+import PageContainer from '@/PageLayout'
 import Loading from '@/components/Loading'
 import { lazy, Suspense } from 'react'
 import ScrollToTop from './components/ScrollToTop'
