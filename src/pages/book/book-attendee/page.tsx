@@ -73,7 +73,7 @@ export default function Page() {
   }
 
   return (
-    <main className="flex flex-col w-full h-full">
+    <section className="flex flex-col w-full h-full">
       <SEO
         title="체쿠리 | 학생 목록"
         content="체쿠리 음악학원 출석부 서비스의 학생 목록 페이지입니다."
@@ -110,6 +110,6 @@ export default function Page() {
         onChangeFilter={onChangeFilter}
       />
       {!openFilter && <Bottom />}
-    </main>
+    </section>
   )
 }

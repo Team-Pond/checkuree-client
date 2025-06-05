@@ -21,7 +21,7 @@ export default function Page() {
   const { data: bookList } = useBookList()
 
   return (
-    <main className="relative flex flex-col w-full min-h-screen">
+    <section className="relative flex flex-col w-full min-h-screen">
       <SEO
         title="체쿠리 | 출석부 목록"
         content="체쿠리 음악학원 출석부 서비스의 출석부 목록 페이지입니다."
@@ -49,6 +49,6 @@ export default function Page() {
         />
         <p className="text-white font-semibold text-lg">출석부</p>
       </Button>
-    </main>
+    </section>
   )
 }

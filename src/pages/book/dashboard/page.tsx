@@ -49,7 +49,7 @@ export default function Page() {
   })
 
   return (
-    <main className="w-full">
+    <section className="w-full">
       <Header bookName={bookName!} />
       {/* Calendar */}
       <div className="w-full flex h-10 justify-between items-center px-4 border-b border-bg-disabled">
@@ -97,6 +97,6 @@ export default function Page() {
         handleCurrentDay={handleCurrentDay}
       />
       <Bottom />
-    </main>
+    </section>
   )
 }

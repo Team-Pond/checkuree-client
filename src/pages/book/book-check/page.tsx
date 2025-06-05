@@ -68,7 +68,7 @@ export default function Page() {
   }, [bookSchedules])
 
   return (
-    <main className="flex flex-col w-full scrollbar-hide custom-scrollbar-hide bg-bg-secondary flex-1">
+    <section className="flex flex-col w-full scrollbar-hide custom-scrollbar-hide bg-bg-secondary flex-1">
       <SEO
         title="체쿠리 | 출석부 출석"
         content="체쿠리 음악학원 출석부 서비스의 출석부 출석 페이지입니다."
@@ -112,6 +112,6 @@ export default function Page() {
         handleCurrentDay={handleCurrentDay}
       />
       {!openFilter && <Bottom />}
-    </main>
+    </section>
   )
 }

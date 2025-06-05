@@ -52,7 +52,7 @@ export default function Page() {
     defaultValues: initailValues,
   })
   return (
-    <main className="w-full flex flex-col justify-center items-center gap-12 h-full px-6">
+    <section className="w-full flex flex-col justify-center items-center gap-12 h-full px-6">
       <SEO
         title="체쿠리 | 음악 학원 출석부 서비스"
         content="체쿠리 사내 로그인 페이지입니다."
@@ -139,6 +139,6 @@ export default function Page() {
           체쿠리 ID로 계속하기
         </Button>
       </form>
-    </main>
+    </section>
   )
 }
