@@ -75,7 +75,7 @@ export default function Page() {
           className="cursor-pointer"
         />
       </div>
-      <main className="w-full flex-1 bg-bg-secondary flex flex-col gap-4 p-4">
+      <div className="w-full h-screen flex-1 bg-bg-secondary flex flex-col gap-4 p-4">
         <AttendanceRateChart
           statisticData={statisticData!}
           currentDate={currentDate}
@@ -90,7 +90,7 @@ export default function Page() {
         />
 
         <div className="h-[92px]" />
-      </main>
+      </div>
       <DateDrawer
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
