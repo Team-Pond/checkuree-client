@@ -80,9 +80,8 @@ export default function BottomFilter(props: BottomFilterProps) {
                           ? 'border-border-brand text-text-brand'
                           : 'text-border-secondary-hover',
                       )}
-                    >
-                      {button.name}
-                    </Button>
+                      label={button.name}
+                    />
                   )
                 })}
               </div>
@@ -100,9 +99,8 @@ export default function BottomFilter(props: BottomFilterProps) {
                       ? 'border-border-brand text-text-brand'
                       : 'text-border-secondary-hover',
                   )}
-                >
-                  미취학
-                </Button>
+                  label="미취학"
+                />
                 <Button
                   onClick={() => onAgeChange(7, 12)}
                   className={twMerge(
@@ -111,9 +109,8 @@ export default function BottomFilter(props: BottomFilterProps) {
                       ? 'border-border-brand text-text-brand'
                       : 'text-border-secondary-hover',
                   )}
-                >
-                  초등
-                </Button>
+                  label="초등"
+                />
                 <Button
                   onClick={() => onAgeChange(13, 15)}
                   className={twMerge(
@@ -122,9 +119,8 @@ export default function BottomFilter(props: BottomFilterProps) {
                       ? 'border-border-brand text-text-brand'
                       : 'text-border-secondary-hover',
                   )}
-                >
-                  중등
-                </Button>
+                  label="중등"
+                />
                 <Button
                   onClick={() => onAgeChange(16, 18)}
                   className={twMerge(
@@ -133,9 +129,8 @@ export default function BottomFilter(props: BottomFilterProps) {
                       ? 'border-border-brand text-text-brand'
                       : 'text-border-secondary-hover',
                   )}
-                >
-                  고등
-                </Button>
+                  label="고등"
+                />
                 <Button
                   onClick={() => onAgeChange(19, 100)}
                   className={twMerge(
@@ -144,9 +139,8 @@ export default function BottomFilter(props: BottomFilterProps) {
                       ? 'border-border-brand text-text-brand'
                       : 'text-border-secondary-hover',
                   )}
-                >
-                  성인
-                </Button>
+                  label="성인"
+                />
               </div>
             </div>
 
@@ -165,28 +159,25 @@ export default function BottomFilter(props: BottomFilterProps) {
                           : 'text-border-secondary-hover',
                       )}
                       onClick={() => onDaysChange(DAYS[index] as DaysType)}
-                    >
-                      {DAYS[index]}
-                    </Button>
+                      label={DAYS[index]}
+                    />
                   )
                 })}
               </div>
             </div>
           </div>
 
-          <div className={'flex gap-4 w-full'}>
+          <div className="flex gap-4 w-full">
             <Button
-              className="w-full h-[54px] bg-gray-300 text-text-secondary  rounded-2xl text-l-semibold"
+              className="w-full h-[54px] bg-bg-interactive-secondary text-text-secondary  rounded-2xl text-l-semibold"
               onClick={resetFilter}
-            >
-              초기화
-            </Button>
+              label="초기화"
+            />
             <Button
               className="w-full h-[54px] bg-bg-tertiary text-[#f1f8f3] rounded-2xl text-l-semibold"
               onClick={() => onChangeFilter(dayArrays, gender, age)}
-            >
-              필터 적용
-            </Button>
+              label="필터 적용"
+            />
           </div>
         </>
       }

@@ -2,11 +2,10 @@ import './App.css'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import ProtectedRoute from '@/ProtectedRoute'
-import PageContainer from '@/components/PageContainer'
+import PageLayout from '@/PageLayout'
 import Loading from '@/components/Loading'
 import { lazy, Suspense } from 'react'
 import ScrollToTop from './components/ScrollToTop'
-import BookLayout from './layouts/BookLayout'
 import NotFound from './pages/404'
 
 import Modal from './components/Modal'
@@ -66,7 +65,7 @@ const routes: RouteType[] = [
 function App() {
   return (
     <Suspense fallback={<Loading />}>
-      <PageContainer>
+      <PageLayout>
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Navigate to={'/book'} />} />
@@ -89,9 +88,20 @@ function App() {
           </Route>
         </Routes>
         <Modal />
-      </PageContainer>
+      </PageLayout>
     </Suspense>
   )
 }
 
 export default App
+
+import { BookProvider } from '@/context/BookContext'
+import { Outlet } from 'react-router-dom'
+
+function BookLayout() {
+  return (
+    <BookProvider>
+      <Outlet />
+    </BookProvider>
+  )
+}

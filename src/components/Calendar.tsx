@@ -47,9 +47,8 @@ export default function Calendar({
           type="button"
           className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] mr-2"
           onClick={() => setSelectedMonth(add(selectedMonth, { months: -1 }))}
-        >
-          <LeftArrowIcon width={12} height={12} />
-        </Button>
+          children={<LeftArrowIcon width={12} height={12} />}
+        />
 
         <span className="focus:outline-none text-l-bold text-text-primary">
           {format(selectedMonth, 'yyyy년 MM월')}
@@ -60,9 +59,8 @@ export default function Calendar({
           type="button"
           className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] ml-2"
           onClick={() => setSelectedMonth(add(selectedMonth, { months: 1 }))}
-        >
-          <RightArrowIcon width={12} height={12} />
-        </Button>
+          children={<RightArrowIcon width={12} height={12} />}
+        />
       </div>
       <table className={twMerge('w-full table-fixed', className)}>
         <thead>

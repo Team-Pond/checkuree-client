@@ -90,9 +90,8 @@ export const TimeSelectionView = ({
                         }
                         setSelectedTime(time)
                       }}
-                    >
-                      {time}
-                    </Button>
+                      label={time}
+                    />
                   ))}
               </div>
             </>
@@ -122,9 +121,8 @@ export const TimeSelectionView = ({
                         }
                         setSelectedTime(time)
                       }}
-                    >
-                      {formatTimeWith12Hour(time)}
-                    </Button>
+                      label={formatTimeWith12Hour(time)}
+                    />
                   ))}
               </div>
             </>
@@ -135,9 +133,9 @@ export const TimeSelectionView = ({
         <Button
           className="w-full h-[54px] bg-gray-300 rounded-2xl text-l-semibold"
           onClick={onBack}
-        >
-          이전으로
-        </Button>
+          label="이전으로"
+        />
+
         <Button
           className={twMerge(
             'w-full h-[54px] rounded-2xl text-l-semibold',
@@ -147,9 +145,8 @@ export const TimeSelectionView = ({
           )}
           onClick={() => onConfirm(selectedTime)}
           disabled={!selectedTime}
-        >
-          추가하기
-        </Button>
+          label="추가하기"
+        />
       </div>
     </div>
   )

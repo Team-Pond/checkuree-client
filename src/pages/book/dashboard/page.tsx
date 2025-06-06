@@ -1,4 +1,3 @@
-import PageContainer from '@/components/PageContainer'
 import AttendanceRateChart from './_components/AttendanceRateChart'
 import LeftArrowIcon from '@/assets/icons/ico-arrow-left.svg?react'
 import RightArrowIcon from '@/assets/icons/ico-arrow-right.svg?react'
@@ -50,7 +49,7 @@ export default function Page() {
   })
 
   return (
-    <main className="w-full">
+    <section className="w-full">
       <Header bookName={bookName!} />
       {/* Calendar */}
       <div className="w-full flex h-10 justify-between items-center px-4 border-b border-bg-disabled">
@@ -76,7 +75,7 @@ export default function Page() {
           className="cursor-pointer"
         />
       </div>
-      <main className="w-full flex-1 bg-bg-secondary flex flex-col gap-4 p-4">
+      <div className="w-full h-screen flex-1 bg-bg-secondary flex flex-col gap-4 p-4">
         <AttendanceRateChart
           statisticData={statisticData!}
           currentDate={currentDate}
@@ -91,13 +90,13 @@ export default function Page() {
         />
 
         <div className="h-[92px]" />
-      </main>
+      </div>
       <DateDrawer
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
         handleCurrentDay={handleCurrentDay}
       />
       <Bottom />
-    </main>
+    </section>
   )
 }

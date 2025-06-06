@@ -1,10 +1,7 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { twMerge } from 'tailwind-merge'
-
 import { useState } from 'react'
-
 import { FormProvider, useForm } from 'react-hook-form'
-
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import toast from 'react-hot-toast'
@@ -16,6 +13,7 @@ import { CounsellingSchema, CreateCounsellingSchema } from '../_schema'
 import FormHeader from './_components/FormHeader'
 import CounsellingCreateForm from './_components/CounsellingCreateForm'
 import Button from '@/components/Button'
+import tw from 'tailwind-styled-components'
 
 export default function CounsellingCreate() {
   const navigate = useNavigate()
@@ -115,27 +113,24 @@ export default function CounsellingCreate() {
         content="체쿠리 음악학원 출석부 서비스의 상담 등록 페이지입니다."
       />
       <FormHeader studentName={location?.state.name} />
-      <form
-        className="flex flex-col w-full pb-[30px] px-[17px]"
-        onSubmit={handleSubmit(submit)}
-      >
-        <div className="flex flex-col mx-auto justify-center gap-6 w-full mt-10 px-[7px]">
-          <CounsellingCreateForm
-            onChangeCounseleeId={(id: number) => setCounseleeId(id)}
-            counselors={counselors}
-            counsellorName={location.state.counsellorName}
-          />
-          <Button
-            type="submit"
-            className={twMerge(
-              'w-full h-[54px] flex justify-center items-center rounded-xl',
-              'bg-bg-tertiary text-[#f1f8f3]',
-            )}
-          >
-            <p className="font-semibold text-lg">저장하기</p>
-          </Button>
-        </div>
-      </form>
+      <Form className="" onSubmit={handleSubmit(submit)}>
+        <CounsellingCreateForm
+          onChangeCounseleeId={(id: number) => setCounseleeId(id)}
+          counselors={counselors}
+          counsellorName={location.state.counsellorName}
+        />
+        <Button
+          type="submit"
+          className={twMerge(
+            'w-full h-[54px] flex justify-center items-center rounded-xl',
+            'bg-bg-tertiary text-[#f1f8f3]',
+          )}
+          label="저장하기"
+          labelClassName="font-semibold text-lg"
+        />
+      </Form>
     </FormProvider>
   )
 }
+
+const Form = tw.form`flex flex-col w-full pb-[30px] justify-center gap-6 mt-10 px-6 mx-auto`

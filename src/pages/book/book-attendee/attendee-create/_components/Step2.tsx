@@ -175,7 +175,7 @@ function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
   }
 
   return (
-    <div className="flex flex-col justify-center gap-6 w-full">
+    <React.Fragment>
       <FieldWrapper>
         <FieldTitle title="커리큘럼" essential />
         <div
@@ -240,7 +240,7 @@ function Step2({ attendanceBookId, onChangeGrade }: Step2Props) {
         handleAttendeeSchedules={handleAttendeeSchedules}
         handleRemoveAttendeeSchedules={handleRemoveAttendeeSchedules}
       />
-    </div>
+    </React.Fragment>
   )
 }
 

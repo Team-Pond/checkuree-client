@@ -1,4 +1,3 @@
-import { twMerge } from 'tailwind-merge'
 import axios from 'axios'
 
 import Cookies from 'js-cookie'
@@ -52,7 +51,7 @@ export default function Page() {
     defaultValues: initailValues,
   })
   return (
-    <main className="w-full flex flex-col justify-center items-center gap-12 h-full px-6">
+    <section className="w-full flex flex-col justify-center items-center gap-12 h-full px-6">
       <SEO
         title="체쿠리 | 음악 학원 출석부 서비스"
         content="체쿠리 사내 로그인 페이지입니다."
@@ -131,14 +130,13 @@ export default function Page() {
           id="login-button"
           data-cy="login-button"
           aria-label="login-button"
-          className={twMerge(
-            'w-full h-[54px] rounded-xl text-lg leading-[22px] font-semibold flex items-center justify-center text-[#FFFFFF] bg-[#59996B] cursor-pointer',
-          )}
+          className={
+            'w-full h-[54px] rounded-xl text-lg leading-[22px] font-semibold flex items-center justify-center text-[#FFFFFF] bg-[#59996B] cursor-pointer'
+          }
           type="submit"
-        >
-          체쿠리 ID로 계속하기
-        </Button>
+          label="체쿠리 ID로 계속하기"
+        />
       </form>
-    </main>
+    </section>
   )
 }

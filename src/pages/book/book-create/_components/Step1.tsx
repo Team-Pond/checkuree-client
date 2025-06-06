@@ -201,11 +201,11 @@ export default function Step1() {
                   data-cy={time.dataCy}
                   aria-label={time.dataCy}
                 >
-                  <Button className="outline-none border border-[#E7E7E7] rounded-xl max-w-[130px] w-full h-12 flex items-center pl-4">
-                    <p className="font-bold text-sm text-[#B0B0B0]">
-                      {time.text}
-                    </p>
-                  </Button>
+                  <Button
+                    label={time.text}
+                    labelClassName="font-bold text-sm text-[#B0B0B0]"
+                    className="outline-none border border-[#E7E7E7] rounded-xl max-w-[130px] w-full h-12 flex items-center pl-4"
+                  />
                   <p className="text-sm font-bold text-text-primary whitespace-nowrap">
                     {time.timeText}
                   </p>

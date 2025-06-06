@@ -81,7 +81,7 @@ export default function Step1() {
   }, [setFocus])
 
   return (
-    <Step1Form>
+    <React.Fragment>
       {/* 학생 이름 */}
       <FieldWrapper>
         <FieldTitle title="학생 이름" essential />
@@ -309,9 +309,8 @@ export default function Step1() {
           className="bg-white w-full h-12 border border-[#E7E7E7] rounded-xl p-4 outline-none text-m-medium text-text-secondary"
         />
       </FieldWrapper>
-    </Step1Form>
+    </React.Fragment>
   )
 }
 
-const Step1Form = tw.div`flex flex-col justify-center gap-6 w-full px-[7px]`
 const FieldWrapper = tw.div`flex flex-col gap-2`

@@ -80,9 +80,8 @@ export default function LearningManage(props: LearningManageProps) {
               <Button
                 className="max-w-[109px] w-full h-8 rounded-lg bg-[#f6f6f6] text-s-medium text-text-secondary"
                 onClick={() => openNextProgressModal(Number(progress.id))}
-              >
-                다음 과정으로
-              </Button>
+                label="다음 과정으로"
+              />
             </div>
             <div className="flex items-center justify-between text-s-semibold">
               <p className="text-text-tertiary">시작일</p>

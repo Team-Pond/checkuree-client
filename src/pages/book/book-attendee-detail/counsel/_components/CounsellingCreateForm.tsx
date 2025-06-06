@@ -5,6 +5,7 @@ import { CreateCounsellingSchema } from '../../_schema'
 import { CounsellingTopicType } from '@/api/CounselSchema'
 import Radio from '@/components/Radio'
 import CheckBox from '@/components/CheckBox'
+import FieldTitle from '@/components/FieldTitle'
 
 interface Step1Props {
   onChangeCounseleeId: (id: number) => void
@@ -70,10 +71,7 @@ export default function CounsellingCreateForm({
   return (
     <div className="flex flex-col justify-center gap-6 w-full">
       <div className="flex flex-col gap-2">
-        <div className="flex gap-1 items-center">
-          <p className="font-bold text-m-medium">상담자</p>
-          <p className="text-text-danger">*</p>
-        </div>
+        <FieldTitle title="상담자" essential />
         <div className="flex flex-col gap-[1px] w-full text-left">
           <CounsellerSelect
             onChange={onChangeCounseleeId}
@@ -86,11 +84,7 @@ export default function CounsellingCreateForm({
 
       {/* 상담 유형 */}
       <div className="flex flex-col gap-2">
-        <div className="flex gap-1 items-center">
-          <p className="font-bold text-m-medium">상담 유형</p>
-          <p className="text-text-danger">*</p>
-        </div>
-
+        <FieldTitle title="상담 유형" essential />
         <div className="flex px-2 w-full h-12">
           <div className="flex gap-8">
             <Radio
@@ -120,10 +114,7 @@ export default function CounsellingCreateForm({
 
       {/* 상담일시 */}
       <div className="flex flex-col gap-2">
-        <div className="flex gap-1 items-center">
-          <p className="font-bold text-m-medium">상담일시</p>
-          <p className="text-text-danger">*</p>
-        </div>
+        <FieldTitle title="상담 일시" essential />
 
         <div className="flex flex-col gap-[1px] w-full text-left">
           <div className="flex items-center gap-[9px]">
@@ -145,9 +136,7 @@ export default function CounsellingCreateForm({
 
       {/* 상담 주제 */}
       <div className="flex flex-col gap-2">
-        <div className="flex gap-1 items-center">
-          <p className="font-bold text-m-medium">상담 주제</p>
-        </div>
+        <FieldTitle title="상담 주제" essential />
         <div className="flex flex-col w-full">
           <div className="flex gap-2">
             <CheckBox
@@ -186,9 +175,7 @@ export default function CounsellingCreateForm({
 
       {/* 비고(선택) */}
       <div className="flex flex-col gap-2">
-        <div className="flex gap-1 items-center">
-          <p className="font-bold text-m-medium">상담 내용</p>
-        </div>
+        <FieldTitle title="상담 내용" />
         <textarea
           {...register('description')}
           placeholder=""
