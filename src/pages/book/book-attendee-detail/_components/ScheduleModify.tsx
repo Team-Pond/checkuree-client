@@ -14,6 +14,7 @@ import DateDrawer from '../../book-check/_components/DateDrawer'
 import { useOnlyScheduleUpdate } from '../../book-attendee/attendee-create/queries'
 import tw from 'tailwind-styled-components'
 import FormHeader from '../../_components/FormHeader'
+import Button from '@/components/Button'
 
 const weekDaySorter: Record<string, number> = {
   월: 1,
@@ -98,16 +99,14 @@ export default function ScheduleModify() {
             />
           </div>
           <div className="flex gap-4 w-full mt-20">
-            <button
-              type="button"
+            <Button
               onClick={() => {
                 navigate(-1)
               }}
               className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
-            >
-              이전으로
-            </button>
-            <button
+              label="이전으로"
+            />
+            <Button
               onClick={() =>
                 openModal(
                   <ConfirmModal
@@ -135,11 +134,9 @@ export default function ScheduleModify() {
                   },
                 )
               }
-              type="button"
+              label="저장하기"
               className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
-            >
-              저장하기
-            </button>
+            />
           </div>
         </div>
       </Form>
