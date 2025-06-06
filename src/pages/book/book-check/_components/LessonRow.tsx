@@ -95,9 +95,8 @@ function LessonRow(props: LessonRowProps) {
                 ? 'bg-bg-destructive text-text-interactive-destructive'
                 : 'bg-bg-disabled text-text-disabled',
             )}
-          >
-            결석
-          </Button>
+            label="결석"
+          />
           <Button
             onClick={() => {
               handleAttendanceStatusWithConfirmation(
@@ -112,10 +111,10 @@ function LessonRow(props: LessonRowProps) {
                 ? 'bg-bg-primary text-text-interactive-primary'
                 : 'bg-bg-disabled text-text-disabled',
             )}
-          >
-            출석
-          </Button>
+            label="출석"
+          />
         </div>
+
         <Button
           className={twMerge(
             'w-8 h-8 flex items-center justify-center rounded-lg',
@@ -132,9 +131,8 @@ function LessonRow(props: LessonRowProps) {
             })
           }}
           disabled={schedule.recordStatus !== 'ATTEND'}
-        >
-          {schedule.isTaught ? <NoteActiveIcon /> : <NoteIcon />}
-        </Button>
+          children={schedule.isTaught ? <NoteActiveIcon /> : <NoteIcon />}
+        />
       </div>
     </LessonWrapper>
   )

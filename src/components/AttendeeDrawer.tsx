@@ -60,14 +60,14 @@ export default function AttendeeDrawer({
 
         <div className="flex gap-4 w-full bottom-5 ">
           <Button
+            label="닫기"
             data-cy="close-schedule-button"
             aria-label="close-schedule-button"
             onClick={() => onClose()}
             className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
-          >
-            닫기
-          </Button>
+          />
           <Button
+            label={isSelected ? '삭제하기' : '추가하기'}
             data-cy="add-schedule-button"
             aria-label="add-schedule-button"
             className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
@@ -77,9 +77,7 @@ export default function AttendeeDrawer({
                 : handleRemoveAttendeeSchedules(dayOfWeek as DaysType, hhmm),
                 onClose()
             }}
-          >
-            {isSelected ? '삭제하기' : '추가하기'}
-          </Button>
+          />
         </div>
       </div>
     </BottomDrawer>

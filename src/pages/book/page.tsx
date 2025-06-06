@@ -40,15 +40,18 @@ export default function Page() {
       <Button
         onClick={() => navigate('/book/create')}
         className="w-[104px] h-[46px] rounded-full flex gap-2 justify-center items-center bg-bg-tertiary fixed bottom-11 right-[5%]"
-      >
-        <img
-          src="/images/icons/book/ico-plus.svg"
-          alt="플러스 아이콘"
-          width={16}
-          height={16}
-        />
-        <p className="text-white font-semibold text-lg">출석부</p>
-      </Button>
+        children={
+          <>
+            <img
+              src="/images/icons/book/ico-plus.svg"
+              alt="플러스 아이콘"
+              width={16}
+              height={16}
+            />
+            <p className="text-white font-semibold text-lg">출석부</p>
+          </>
+        }
+      />
     </section>
   )
 }

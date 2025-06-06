@@ -59,18 +59,16 @@ export default function ScheduleModify() {
               <Button
                 onClick={() => navigate(-1)}
                 className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
-              >
-                이전으로
-              </Button>
+                label="이전으로"
+              />
               <Button
                 onClick={() => {
                   scheduleMutation()
                   navigate(-1)
                 }}
                 className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
-              >
-                저장하기
-              </Button>
+                label="저장하기"
+              />
             </div>
           </div>
         </div>

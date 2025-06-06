@@ -1,7 +1,7 @@
 import BottomDrawer from '@/components/BottomDrawer'
+import Button from '@/components/Button'
 import Calendar from '@/components/Calendar'
 import { useState } from 'react'
-import tw from 'tailwind-styled-components'
 
 type DateDrawerProps = {
   open: boolean
@@ -21,26 +21,22 @@ export default function DateDrawer({
     <BottomDrawer isOpen={open} onClose={onClose}>
       <Calendar className="mx-auto" handleCurrentDay={handleDay} />
       <div className="flex gap-4 w-full">
-        <Button type="button" onClick={onClose} className=" bg-bg-secondary">
-          <span className="text-text-secondary text-l-semibold select-none">
-            취소
-          </span>
-        </Button>
         <Button
-          type="button"
-          className={'bg-bg-tertiary'}
+          onClick={onClose}
+          className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary"
+          label="취소"
+          labelClassName="text-text-secondary text-l-semibold select-none"
+        />
+        <Button
+          className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary"
           onClick={() => {
             handleCurrentDay(selectedDay)
             onClose()
           }}
-        >
-          <span className="text-[#F1F8F3] text-l-semibold select-none">
-            이동하기
-          </span>
-        </Button>
+          label="이동하기"
+          labelClassName="text-[#F1F8F3] text-l-semibold select-none"
+        />
       </div>
     </BottomDrawer>
   )
 }
-
-const Button = tw.button`w-full h-[54px] flex justify-center items-center rounded-2xl`

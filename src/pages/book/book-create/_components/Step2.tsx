@@ -210,10 +210,9 @@ export default function Step2(props: GradeItemProps) {
                 )
                 handleCurriculum(false)
               }}
-              type="button"
-            >
-              <p className="font-semibold text-lg">확인</p>
-            </Button>
+              label="확인"
+              labelClassName="text-lg font-semibold"
+            />
           </>
         ) : (
           <Button

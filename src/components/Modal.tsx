@@ -2,6 +2,7 @@ import useModalStore from '@/store/dialogStore'
 import { twMerge } from 'tailwind-merge'
 import tw from 'tailwind-styled-components'
 import { createPortal } from 'react-dom'
+import Button from './Button'
 
 const Modal = () => {
   const { isOpen, content, action, closeAction, closeModal, buttonProps } =
@@ -23,29 +24,27 @@ const Modal = () => {
 
         <div className="flex gap-4 w-full mt-7">
           <Button
-            type="button"
             onClick={() => {
               closeModal()
               closeAction()
             }}
-            className=" bg-bg-secondary"
-          >
-            <span className="text-text-secondary text-l-semibold">취소</span>
-          </Button>
+            className="w-full h-12 flex justify-center items-center rounded-2xl bg-bg-secondary"
+            label="취소"
+            labelClassName="text-text-secondary text-l-semibold"
+          />
           <Button
-            type="button"
             className={twMerge(
-              buttonProps?.color ? buttonProps?.color : 'bg-bg-tertiary',
+              buttonProps?.color
+                ? buttonProps?.color
+                : 'bg-bg-tertiary w-full h-12 flex justify-center items-center rounded-2xl',
             )}
             onClick={() => {
               action()
               closeModal()
             }}
-          >
-            <span className="text-[#F1F8F3] text-l-semibold">
-              {buttonProps?.text ? buttonProps.text : '저장하기'}
-            </span>
-          </Button>
+            label={buttonProps?.text ? buttonProps.text : '저장하기'}
+            labelClassName="text-[#F1F8F3] text-l-semibold"
+          />
         </div>
       </div>
     </div>,
@@ -54,5 +53,3 @@ const Modal = () => {
 }
 
 export default Modal
-
-const Button = tw.button`w-full h-12 flex justify-center items-center rounded-2xl`
