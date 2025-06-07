@@ -1,7 +1,7 @@
 import './App.css'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
-import ProtectedRoute from '@/ProtectedRoute'
+import ProtectedRoute from '@/providers/ProtectedRoute'
 import PageLayout from '@/PageLayout'
 import Loading from '@/components/Loading'
 import { lazy, Suspense } from 'react'
