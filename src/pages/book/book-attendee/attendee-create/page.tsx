@@ -1,5 +1,5 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 enum Step {
   Step1 = 'Step1',
@@ -25,6 +25,7 @@ import { z } from 'zod'
 import FormHeader from '../../_components/FormHeader'
 import Button from '@/components/Button'
 import { twMerge } from 'tailwind-merge'
+import { useGAEvent } from '../../useGAEvent'
 
 export default function Page() {
   const navigate = useNavigate()
@@ -32,6 +33,9 @@ export default function Page() {
   const [step, setStep] = useState<Step>(Step.Step1)
 
   const queryString = useLocation().search
+
+  // Google Analytics 이벤트 전송
+  const sendGAEvent = useGAEvent()
 
   const methods = useForm<CreateAttendeeSchema>({
     resolver: zodResolver(AttendeeSchema),
@@ -53,12 +57,16 @@ export default function Page() {
 
   const nextStep = async () => {
     if (await trigger('attendeeRequest')) {
+      sendGAEvent('student_register_step1_complete')
       setStep(Step.Step2)
     }
   }
   const submit = async (data: CreateAttendeeSchema) => {
     const isValid = await trigger('attendeeRequest')
     if (isValid) {
+      sendGAEvent('student_register_step2_complete', {
+        student_name: data.attendeeRequest.name,
+      })
       const { associates, ...attendeeRequestWithoutAssociates } =
         data.attendeeRequest
 
@@ -111,6 +119,13 @@ export default function Page() {
         })
     }
   }
+
+  useEffect(() => {
+    sendGAEvent('student_register_page_view', {
+      page_location: window.location.href,
+      page_path: window.location.pathname + window.location.search,
+    })
+  }, [])
 
   return (
     <FormProvider {...methods}>
