@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react-swc'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import tailwindcss from 'tailwindcss'
 import svgr from 'vite-plugin-svgr'
-import svg from 'vite-plugin-svgo'
+
 import path from 'path'
 import createSitemap from 'vite-plugin-sitemap'
 
@@ -23,10 +23,7 @@ export default defineConfig({
     react(),
     tsconfigPaths(),
     svgr(),
-    svg({
-      multipass: true,
-      plugins: ['preset-default'],
-    }),
+
     createSitemap({
       hostname: 'https://pond-client.vercel.app',
       // 동적 경로에 원하는 URL들을 명시합니다.
