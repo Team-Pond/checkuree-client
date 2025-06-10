@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
-import tw from "tailwind-styled-components";
+import { Link } from 'react-router-dom'
+import tw from 'tailwind-styled-components'
 
-const NOT_FOUND_TEXT = {
-  top: "해당 페이지를 찾을 수 없습니다.",
-  bottom: "출석부로 돌아가시려면",
-};
-const CLICK_TEXT = "를 눌러주세요!";
+const NOT_FOUND_MESSAGE = {
+  heading: '해당 페이지를 찾을 수 없습니다.',
+  instruction: '출석부로 돌아가시려면',
+}
+const CLICK_PROMPT = '를 눌러주세요!'
 
 const NotFound = () => {
   return (
@@ -18,23 +18,24 @@ const NotFound = () => {
         className="mb-4"
       />
 
-      <H2>
-        {NOT_FOUND_TEXT.top}
-        <br />
-        {NOT_FOUND_TEXT.bottom} &nbsp;
-        <Link
-          to="/auth/signin"
-          className="font-semibold text-bg-tertiary underline"
-        >
-          {"여기"}
-        </Link>
-        {CLICK_TEXT}
-      </H2>
+      <MessageContainer>
+        <p>{NOT_FOUND_MESSAGE.heading}</p>
+        <p>
+          {NOT_FOUND_MESSAGE.instruction}&nbsp;
+          <Link
+            to="/auth/signin"
+            className="font-semibold text-bg-tertiary underline"
+          >
+            여기
+          </Link>
+          {CLICK_PROMPT}
+        </p>
+      </MessageContainer>
     </Section>
-  );
-};
+  )
+}
 
-export default NotFound;
+export default NotFound
 
-const Section = tw.section`w-[393px] flex flex-col gap-5 items-center justify-center h-full`;
-const H2 = tw.section`text-center mb-12 font-appleLiGothic font-semibold`;
+const Section = tw.section`w-[393px] flex flex-col gap-5 items-center justify-center h-full`
+const MessageContainer = tw.section`text-center mb-12 font-appleLiGothic font-semibold`

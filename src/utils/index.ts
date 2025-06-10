@@ -1,6 +1,17 @@
 import { PeriodType } from '@/api/type'
 import dayjs, { Dayjs } from 'dayjs'
 
+/**
+ * 날짜를 다양한 형식으로 포맷팅합니다.
+ * - 'slash': YYYY/MM/DD
+ * - 'dash': YYYY-MM-DD
+ * - 'dot': YYYY.MM.DD
+ * - 'fullDash': YYYY-MM-DD HH:mm
+ * - 'fullDot': YYYY.MM.DD HH:mm
+ * @param date
+ * @param type
+ * @returns
+ */
 export const dateFormat = (
   date: Date | string,
   type: 'slash' | 'dash' | 'dot' | 'fullDash' | 'fullDot',
@@ -85,6 +96,14 @@ export const DayTransfer = {
   SUNDAY: '일',
 }
 
+/**
+ * 입력된 요일 배열을 한글 요일로 변환하여 그룹화합니다.
+ * - 매일: 모든 요일이 포함된 경우
+ * - 평일: 월~금 요일만 포함된 경우
+ * - 주말: 토, 일 요일만 포함된 경우
+ * - 각각 요일: 나머지 경우
+ * @param input - 요일 배열 (예: ['MONDAY', 'TUESDAY', 'WEDNESDAY'])
+ */
 export function getDayGroupFromInput(input: DayOfWeek[]) {
   const weekdays = ['월', '화', '수', '목', '금']
   const weekends = ['토', '일']
@@ -133,7 +152,7 @@ export function formatTime(time: string) {
   const period = hours < 12 ? '오전' : '오후'
   const formattedHour = hours % 12 === 0 ? 12 : hours % 12
 
-  return `${period} ${formattedHour}${minutes === '00' ? '' : `${minutes}`}시`
+  return `${period} ${formattedHour}시 ${minutes === '00' ? '' : `${minutes}분`}`
 }
 
 export function formatTimeRange(startTime: string, endTime: string) {
@@ -144,6 +163,10 @@ export function formatTimeRange(startTime: string, endTime: string) {
 }
 
 // 오늘날짜 구하기
+/**
+ *
+ * @returns 오늘 날짜를 "YYYY-MM-DD" 형식으로 반환합니다.
+ */
 export function getTodayYYYYMMDD(): string {
   const today = new Date()
 
@@ -154,6 +177,13 @@ export function getTodayYYYYMMDD(): string {
 
   return `${year}-${month}-${day}`
 }
+
+/**
+ * 시간 문자열을 받아서 오전/오후 hh:mm 형식으로 변환합니다.
+ * 예: "14:30" -> "오후 2:30"
+ * @param input
+ * @returns
+ */
 
 export function scheduleCheckformatTime(input: string) {
   if (!input || typeof input !== 'string') return 'Invalid Input'
@@ -171,6 +201,11 @@ export function scheduleCheckformatTime(input: string) {
   return `${period} ${hour}:${minute.toString().padStart(2, '0')}`
 }
 
+/**
+ *
+ * @returns 현재 시간의 시, 분, 초, 나노초를 반환합니다.
+ * 시: 0~23, 분: 0~59, 초: 0~59, 나노초: 0~999999999
+ */
 export function getCurrentTimeParts() {
   const now = new Date()
 
@@ -315,6 +350,13 @@ export const getAddMinuteHhmm = (hhmm: string, minute: number) => {
     : '24:00'
 }
 
+/**
+ * 통계 기간 텍스트를 생성합니다.
+ * DAILY, WEEKLY, MONTHLY에 따라 다른 형식으로 반환합니다.
+ * @param date
+ * @param period
+ * @returns
+ */
 export const statisticPeriodText = (date: Dayjs, period: PeriodType) => {
   const today = dayjs(date).format('YYYY.MM.DD(ddd)')
 

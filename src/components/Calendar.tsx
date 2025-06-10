@@ -8,72 +8,76 @@ import {
   startOfMonth,
   startOfToday,
   startOfWeek,
-} from "date-fns";
-import { useState } from "react";
-import { twMerge } from "tailwind-merge";
-import LeftArrowIcon from "@/assets/icons/ico-arrow-left.svg?react";
-import RightArrowIcon from "@/assets/icons/ico-arrow-right.svg?react";
-interface IProps {
-  className?: string;
-  handleCurrentDay: (date: Date) => void;
-}
-export default function Calendar({ className, handleCurrentDay }: IProps) {
-  const today = startOfToday();
-  const [selectedMonth, setSelectedMonth] = useState(startOfMonth(today));
-  const [selectedDay, setSelectedDay] = useState<Date>(today);
+} from 'date-fns'
+import { useState } from 'react'
+import { twMerge } from 'tailwind-merge'
+import LeftArrowIcon from '@/assets/icons/ico-arrow-left.svg?react'
+import RightArrowIcon from '@/assets/icons/ico-arrow-right.svg?react'
+import Button from './Button'
 
-  const lastDayOfMonth = endOfMonth(selectedMonth);
+type CalendarProps = {
+  className?: string
+  handleCurrentDay: (date: Date) => void
+}
+
+export default function Calendar({
+  className,
+  handleCurrentDay,
+}: CalendarProps) {
+  const today = startOfToday()
+  const [selectedMonth, setSelectedMonth] = useState(startOfMonth(today))
+  const [selectedDay, setSelectedDay] = useState<Date>(today)
+
+  const lastDayOfMonth = endOfMonth(selectedMonth)
   const additionalPreviousMonth = startOfWeek(selectedMonth, {
     weekStartsOn: 0,
-  });
-  const additionalNextMonth = endOfWeek(lastDayOfMonth, { weekStartsOn: 0 });
+  })
+  const additionalNextMonth = endOfWeek(lastDayOfMonth, { weekStartsOn: 0 })
 
   const dates = eachDayOfInterval({
     start: additionalPreviousMonth,
     end: additionalNextMonth,
-  });
+  })
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-center h-10 gap-3">
-        <button
+        <Button
           aria-label="calendar backward"
           className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] mr-2"
           onClick={() => setSelectedMonth(add(selectedMonth, { months: -1 }))}
-        >
-          <LeftArrowIcon width={12} height={12} />
-        </button>
+          children={<LeftArrowIcon width={12} height={12} />}
+        />
 
         <span className="focus:outline-none text-l-bold text-text-primary">
-          {format(selectedMonth, "yyyy년 MM월")}
+          {format(selectedMonth, 'yyyy년 MM월')}
         </span>
 
-        <button
+        <Button
           aria-label="calendar forward"
           className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] ml-2"
           onClick={() => setSelectedMonth(add(selectedMonth, { months: 1 }))}
-        >
-          <RightArrowIcon width={12} height={12} />
-        </button>
+          children={<RightArrowIcon width={12} height={12} />}
+        />
       </div>
-      <table className={twMerge("w-full table-fixed", className)}>
+      <table className={twMerge('w-full table-fixed', className)}>
         <thead>
           <tr>
-            {["일", "월", "화", "수", "목", "금", "토"].map((day) => {
+            {['일', '월', '화', '수', '목', '금', '토'].map((day) => {
               return (
                 <th key={day} className="w-1/7">
                   <div className="w-full h-[30px] flex justify-center items-center">
                     <p
                       className={twMerge(
-                        "text-s-semibold text-center",
-                        day === "일" ? "text-border-danger" : "text-[#5d5d5d]"
+                        'text-s-semibold text-center',
+                        day === '일' ? 'text-border-danger' : 'text-[#5d5d5d]',
                       )}
                     >
                       {day}
                     </p>
                   </div>
                 </th>
-              );
+              )
             })}
           </tr>
         </thead>
@@ -83,9 +87,9 @@ export default function Calendar({ className, handleCurrentDay }: IProps) {
             dates
               .reduce((acc, _, index) => {
                 if (index % 7 === 0) {
-                  acc.push(dates.slice(index, index + 7));
+                  acc.push(dates.slice(index, index + 7))
                 }
-                return acc;
+                return acc
               }, [] as Date[][])
               .map((dates, index) => {
                 return (
@@ -93,49 +97,49 @@ export default function Calendar({ className, handleCurrentDay }: IProps) {
                     {dates.map((date) => {
                       const isTextColor =
                         isEqual(selectedDay, date) &&
-                        "rounded-full w-9 h-9 bg-[#BDDDC3]";
+                        'rounded-full w-9 h-9 bg-[#BDDDC3]'
 
                       const holidayColor =
                         date.getDay() === 0
-                          ? "text-[#f44336]"
+                          ? 'text-[#f44336]'
                           : date.getMonth() !== selectedMonth.getMonth()
-                          ? "text-text-tertiary"
-                          : "text-[#5d5d5d]";
+                            ? 'text-text-tertiary'
+                            : 'text-[#5d5d5d]'
                       return (
                         <td key={date.toString()}>
                           <div
                             onClick={() => {
-                              setSelectedDay(date);
-                              handleCurrentDay(date);
+                              setSelectedDay(date)
+                              handleCurrentDay(date)
                             }}
                             className="relative flex justify-center items-center w-full h-[45px]"
                           >
                             <p className="relative z-10">
                               <span
                                 className={twMerge(
-                                  "text-s-semibold flex items-center justify-center",
-                                  holidayColor
+                                  'text-s-semibold flex items-center justify-center',
+                                  holidayColor,
                                 )}
                               >
-                                {format(date, "d")}
+                                {format(date, 'd')}
                               </span>
                             </p>
                             <p
                               className={twMerge(
-                                "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0",
-                                isTextColor
+                                'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0',
+                                isTextColor,
                               )}
                             />
                           </div>
                         </td>
-                      );
+                      )
                     })}
                   </tr>
-                );
+                )
               })
           }
         </tbody>
       </table>
     </div>
-  );
+  )
 }
