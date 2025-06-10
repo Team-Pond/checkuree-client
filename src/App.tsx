@@ -58,7 +58,7 @@ const routes: RouteType[] = [
   },
   {
     path: '/book/:bookId/dashboard',
-    element: <DashboardPage />,
+    element: <DashboardPage />, // 대시보드
   },
 ]
 

@@ -78,6 +78,7 @@ export const attendeeKeys = createQueryKeys('attendee', {
     },
   }),
 
+  // 수강생 수업 데이터
   courses: (bookId: number) => ({
     queryKey: [bookId],
     queryFn: async () => {
@@ -85,6 +86,8 @@ export const attendeeKeys = createQueryKeys('attendee', {
       if (res.status === 200) return res.data
     },
   }),
+
+  // 수강생 진도 기록
   progressLog: (bookId: number, attendeeId: number) => ({
     queryKey: [bookId, attendeeId],
     queryFn: async () =>
@@ -96,6 +99,7 @@ export const attendeeKeys = createQueryKeys('attendee', {
 })
 
 export const bookKeys = createQueryKeys('book', {
+  // 출석부 스케줄 데이터
   schedules: (bookId?: number, formattedDate?: string) => ({
     queryKey: [bookId, formattedDate],
     queryFn: async () =>
@@ -111,6 +115,7 @@ export const bookKeys = createQueryKeys('book', {
         },
       }),
   }),
+  // 출석부 리스트트
   list: () => ({
     queryKey: [''],
     queryFn: async () => {
@@ -120,6 +125,8 @@ export const bookKeys = createQueryKeys('book', {
       }
     },
   }),
+
+  // 출석부 상세
   detail: (bookId: number) => ({
     queryKey: [bookId],
     queryFn: async () => {
@@ -129,6 +136,8 @@ export const bookKeys = createQueryKeys('book', {
       }
     },
   }),
+
+  // 출석부 과목 리스트트
   subjects: () => ({
     queryKey: [''],
     queryFn: async () =>
@@ -136,6 +145,8 @@ export const bookKeys = createQueryKeys('book', {
         if (res.status === 200) return res.data
       }),
   }),
+
+  // 출석부 과목별 수업 리스트
   subjectCourses: (subjectId: number) => ({
     queryKey: [subjectId],
     queryFn: async () =>
@@ -145,6 +156,8 @@ export const bookKeys = createQueryKeys('book', {
         }
       }),
   }),
+
+  // 출석부 통계계
   statistic: (bookId: number, from: string, periodType: PeriodType) => ({
     queryKey: [bookId, from, periodType],
     queryFn: async () => {
@@ -160,6 +173,8 @@ export const bookKeys = createQueryKeys('book', {
       }
     },
   }),
+
+  // 출석부 통계 - 학생생
   statisticAttendee: (bookId: number, type: AttendeeStatisticsType) => ({
     queryKey: [bookId, type],
     queryFn: async () => {
@@ -177,6 +192,7 @@ export const bookKeys = createQueryKeys('book', {
 })
 
 export const counsellingKeys = createQueryKeys('counselling', {
+  // 상담 리스트
   list: (bookId: number, attendeeId: number) => ({
     queryKey: [bookId, attendeeId],
     queryFn: async () =>
