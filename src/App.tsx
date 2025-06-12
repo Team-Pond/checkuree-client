@@ -63,6 +63,8 @@ const routes: RouteType[] = [
 ]
 
 function App() {
+  const A: number = '22'
+
   return (
     <Suspense fallback={<Loading />}>
       <PageLayout>
