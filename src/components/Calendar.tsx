@@ -18,15 +18,17 @@ import Button from './Button'
 type CalendarProps = {
   className?: string
   handleCurrentDay: (date: Date) => void
+  value?: Date
 }
 
 export default function Calendar({
   className,
   handleCurrentDay,
+  value,
 }: CalendarProps) {
   const today = startOfToday()
   const [selectedMonth, setSelectedMonth] = useState(startOfMonth(today))
-  const [selectedDay, setSelectedDay] = useState<Date>(today)
+  const [selectedDay, setSelectedDay] = useState<Date>(value || today)
 
   const lastDayOfMonth = endOfMonth(selectedMonth)
   const additionalPreviousMonth = startOfWeek(selectedMonth, {
