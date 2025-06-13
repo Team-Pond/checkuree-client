@@ -16,7 +16,7 @@ const colors = {
   'bg-destructive-press': '#f37676',
   'bg-interactive-destructive': '#EA5353',
   'bg-interactive-primary': '#BDDDC3',
-  'bg-disabled': '#e7e7e7',
+  'bg-interactive-disabled': '#e7e7e7',
 
   // Border colors
   'border-brand': '#59996b',
