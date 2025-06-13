@@ -57,6 +57,11 @@ export default function ScheduleModify() {
     setSelectedDate(dayjs())
   }
 
+  const beforeDate = dayjs(
+    attendeeDetail.data?.futureSchedules?.appliedFrom ||
+      attendeeDetail.data?.schedules.appliedFrom,
+  )
+
   useEffect(() => {
     const data = attendeeDetail.data
     if (data) {
@@ -112,7 +117,7 @@ export default function ScheduleModify() {
                   <ConfirmModal
                     className="text-center break-keep"
                     message={
-                      <>
+                      <React.Fragment>
                         {selectedDate.format('M월 D일부터 일정을')} <br />
                         {Array.from(
                           new Set(
@@ -125,7 +130,12 @@ export default function ScheduleModify() {
                           .map((day) => `(${day})`)
                           .join(', ')}
                         으로 저장하시겠습니까?
-                      </>
+                        <br />
+                        <span className="text-border-danger text-xs-semibold">
+                          ({beforeDate.format('M월 D일')}에 적용 예정이던
+                          스케쥴은 삭제됩니다)
+                        </span>
+                      </React.Fragment>
                     }
                   />,
                   () => {

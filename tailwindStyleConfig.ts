@@ -34,7 +34,7 @@ const colors = {
   // Text colors
   'text-primary': '#171717',
   'text-secondary': '#5d5d5d',
-  'text-tertiary': '#d1d1d1',
+  'text-tertiary': '#B0B0B0',
   'text-disabled': '#888888',
   'text-brand': '#428758',
   'text-danger': '#d62c2c',
