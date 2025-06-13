@@ -8,12 +8,14 @@ type DateDrawerProps = {
   onClose: () => void
   handleCurrentDay: (date: Date) => void
   saveButtonText?: string
+  value?: Date
 }
 export default function DateDrawer({
   onClose,
   open = false,
   handleCurrentDay,
   saveButtonText = '이동하기',
+  value,
 }: DateDrawerProps) {
   const [selectedDay, setSelectedDay] = useState<Date>(new Date())
   const handleDay = (date: Date) => {
@@ -21,7 +23,11 @@ export default function DateDrawer({
   }
   return (
     <BottomDrawer isOpen={open} onClose={onClose}>
-      <Calendar className="mx-auto" handleCurrentDay={handleDay} />
+      <Calendar
+        className="mx-auto"
+        handleCurrentDay={handleDay}
+        value={value}
+      />
       <div className="flex gap-4 w-full">
         <Button
           onClick={onClose}

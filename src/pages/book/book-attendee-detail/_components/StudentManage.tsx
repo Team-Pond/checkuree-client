@@ -55,7 +55,9 @@ function formatFutureSchedule(future: {
     return acc
   }, [])
 
-  return lines.join('\n')
+  const [year, month, day] = future.appliedFrom.split('-')
+  const scheduleStr = lines.join('\n')
+  return `${year}년 ${month}월 ${day}일부터\n${scheduleStr}`
 }
 
 type ScheduleItem = {

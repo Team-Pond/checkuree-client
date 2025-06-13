@@ -15,6 +15,7 @@ import { useOnlyScheduleUpdate } from '../../book-attendee/attendee-create/queri
 import tw from 'tailwind-styled-components'
 import FormHeader from '../../_components/FormHeader'
 import Button from '@/components/Button'
+import { twMerge } from 'tailwind-merge'
 
 const weekDaySorter: Record<string, number> = {
   월: 1,
@@ -72,13 +73,14 @@ export default function ScheduleModify() {
         })),
       })
 
-      if (data.futureSchedules)
+      if (data.futureSchedules) {
         setSelectedDate(
           dayjs(
             data.futureSchedules.appliedFrom || data.schedules.appliedFrom,
             'YYYY-MM-DD',
           ),
         )
+      }
     }
   }, [attendeeDetail?.data])
 
@@ -145,7 +147,13 @@ export default function ScheduleModify() {
                 )
               }
               label="저장하기"
-              className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-tertiary text-[#F1F8F3] text-l-semibold"
+              disabled={beforeDate.isSame(selectedDate, 'day')}
+              className={twMerge(
+                'w-full h-[54px] flex justify-center items-center rounded-2xl text-l-semibold',
+                beforeDate.isSame(selectedDate, 'day')
+                  ? 'bg-bg-interactive-disabled text-text-disabled'
+                  : 'bg-bg-tertiary text-[#F1F8F3]',
+              )}
             />
           </div>
         </div>
@@ -155,6 +163,7 @@ export default function ScheduleModify() {
         onClose={() => setOpenDrawer(false)}
         handleCurrentDay={handleCurrentDay}
         saveButtonText="선택하기"
+        value={beforeDate.toDate()}
       />
     </React.Fragment>
   )
