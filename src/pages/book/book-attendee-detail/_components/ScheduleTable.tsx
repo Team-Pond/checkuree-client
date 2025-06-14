@@ -173,15 +173,13 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                   return (
                     <td
                       key={`${dayData.dayOfWeek}-${slotIndex}`}
-                      className={twMerge(
-                        `border border-[#f6f6f6] ${borderClass}
-                      text-sm w-[54px] h-[34px] align-middle cursor-pointer`,
+                      className={`border border-[#f6f6f6] ${borderClass}  text-xs-medium w-[54px] h-[34px] align-middle cursor-pointer ${
                         isSelected
-                          ? 'bg-bg-tertiary text-text-interactive-inverse text-xs-medium'
+                          ? 'bg-bg-tertiary text-text-interactive-inverse'
                           : count > 0
-                            ? 'bg-bg-primary text-text-secondary text-xs-medium'
-                            : 'bg-bg-secondary text-text-secondary text-xs-medium',
-                      )}
+                            ? 'bg-bg-primary text-text-secondary'
+                            : 'bg-bg-secondary text-text-secondary'
+                      }`}
                       onClick={() =>
                         handleSchedule(dayData.dayOfWeek, hhmm, isSelected)
                       }
@@ -219,12 +217,12 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                     <td
                       key={`${dayData.dayOfWeek}-${secondSlotIndex}`}
                       className={`border border-[#f6f6f6] ${borderClass}
-                      text-sm w-[54px] h-[34px] align-middle cursor-pointer ${
+                      text-xs-medium w-[54px] h-[34px] align-middle cursor-pointer ${
                         isSelected
-                          ? 'bg-bg-tertiary text-text-interactive-inverse text-xs-medium'
+                          ? 'bg-bg-tertiary text-text-interactive-inverse'
                           : count > 0
-                            ? 'bg-bg-primary text-text-secondary text-xs-medium'
-                            : 'bg-bg-secondary text-text-secondary text-xs-medium'
+                            ? 'bg-bg-primary text-text-secondary'
+                            : 'bg-bg-secondary text-text-secondary'
                       }`}
                       onClick={() =>
                         handleSchedule(dayData.dayOfWeek, hhmm, isSelected)
