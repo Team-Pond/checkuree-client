@@ -82,18 +82,18 @@ function LessonRow(props: LessonRowProps) {
       <div className="flex gap-4">
         <div className="flex gap-2">
           <Button
-            onClick={() => {
+            onClick={() =>
               handleAttendanceStatusWithConfirmation(
                 'ABSENT',
                 schedule,
                 startTime,
               )
-            }}
+            }
             className={twMerge(
               'rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center',
               schedule.recordStatus === 'ABSENT'
                 ? 'bg-bg-destructive text-text-interactive-destructive'
-                : 'bg-bg-disabled text-text-disabled',
+                : 'bg-bg-interactive-disabled text-text-disabled',
             )}
             label="결석"
           />
@@ -109,7 +109,7 @@ function LessonRow(props: LessonRowProps) {
               'rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center',
               schedule.recordStatus === 'ATTEND'
                 ? 'bg-bg-primary text-text-interactive-primary'
-                : 'bg-bg-disabled text-text-disabled',
+                : 'bg-bg-interactive-disabled text-text-disabled',
             )}
             label="출석"
           />
