@@ -110,7 +110,8 @@ export default function ScheduleModify() {
               onClick={() => {
                 navigate(-1)
               }}
-              className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary text-text-secondary text-l-semibold"
+              labelClassName="text-text-secondary text-l-semibold"
+              className="w-full h-[54px] flex justify-center items-center rounded-2xl bg-bg-secondary"
               label="이전으로"
             />
             <Button
@@ -148,8 +149,9 @@ export default function ScheduleModify() {
               }
               label="저장하기"
               disabled={beforeDate.isSame(selectedDate, 'day')}
+              labelClassName="text-l-semibold"
               className={twMerge(
-                'w-full h-[54px] flex justify-center items-center rounded-2xl text-l-semibold',
+                'text-l-semibold w-full h-[54px] flex justify-center items-center rounded-2xl',
                 beforeDate.isSame(selectedDate, 'day')
                   ? 'bg-bg-interactive-disabled text-text-disabled'
                   : 'bg-bg-tertiary text-[#F1F8F3]',
