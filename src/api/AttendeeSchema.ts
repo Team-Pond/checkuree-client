@@ -11,6 +11,7 @@ import {
   StudentStatus,
   UpdateScheduleAttendeeDataType,
   AttendeeStatisticType,
+  FutureScheduleType,
 } from './type'
 import { AttendeeSchema } from '@/pages/book/book-attendee/attendee-create/_schema'
 
@@ -125,6 +126,7 @@ export type UpdateAttendeeScheduleRequest = {
     hhmm: string
     day: DaysType
   }[]
+  appliedFrom: string
 }
 
 export type UpdateAttendeeScheduleResponse = {
@@ -185,13 +187,22 @@ export type GetAttendeeDetailResponse = {
       gender: GenderType
       age: number
     }[]
+    futureSchedules: {
+      appliedFrom: string
+      schedules: FutureScheduleType[]
+    }
+
     address_1: string
     address_2: string
     schedules: {
-      id: number
-      day: DaysType
-      time: string
-    }[]
+      appliedFrom: string
+      schedules: {
+        id: number
+        day: DaysType
+        time: string
+      }[]
+    }
+
     progresses: Progresses
   }
 } & ErrorResponse

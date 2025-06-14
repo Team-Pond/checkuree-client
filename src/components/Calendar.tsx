@@ -18,15 +18,17 @@ import Button from './Button'
 type CalendarProps = {
   className?: string
   handleCurrentDay: (date: Date) => void
+  value?: Date
 }
 
 export default function Calendar({
   className,
   handleCurrentDay,
+  value,
 }: CalendarProps) {
   const today = startOfToday()
   const [selectedMonth, setSelectedMonth] = useState(startOfMonth(today))
-  const [selectedDay, setSelectedDay] = useState<Date>(today)
+  const [selectedDay, setSelectedDay] = useState<Date>(value || today)
 
   const lastDayOfMonth = endOfMonth(selectedMonth)
   const additionalPreviousMonth = startOfWeek(selectedMonth, {
@@ -44,6 +46,7 @@ export default function Calendar({
       <div className="flex items-center justify-center h-10 gap-3">
         <Button
           aria-label="calendar backward"
+          type="button"
           className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] mr-2"
           onClick={() => setSelectedMonth(add(selectedMonth, { months: -1 }))}
           children={<LeftArrowIcon width={12} height={12} />}
@@ -55,6 +58,7 @@ export default function Calendar({
 
         <Button
           aria-label="calendar forward"
+          type="button"
           className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] ml-2"
           onClick={() => setSelectedMonth(add(selectedMonth, { months: 1 }))}
           children={<RightArrowIcon width={12} height={12} />}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useBookDetail } from '../../queries'
 import { UpdateAttendeeScheduleRequest } from '@/api/AttendeeSchema'
-import { dayMap, DayOfWeek } from '@/api/type'
+import { dayMap, DayOfWeek, FutureScheduleType } from '@/api/type'
 import { twMerge } from 'tailwind-merge'
 
 interface ScheduleItem {
@@ -17,8 +17,8 @@ interface ScheduleProps {
   endHhmm: string
   handleSchedule: (dayOfWeek: string, hhmm: string, isSelected: boolean) => void
   handleAttendeeBottomDrawer: (state: boolean) => void
-  attendeeSchedules?: UpdateAttendeeScheduleRequest
-  futureSchedules?: UpdateAttendeeScheduleRequest
+  attendeeSchedules?: Omit<UpdateAttendeeScheduleRequest, 'appliedFrom'>
+  futureSchedules?: FutureScheduleType[]
 }
 
 function parseHhmm(hhmm: string) {
@@ -37,7 +37,7 @@ function getBeforeHhmm(hhmm: string) {
 }
 
 function getBorderClass(
-  futureSchedules: { hhmm: string; day: string }[] | undefined,
+  futureSchedules: FutureScheduleType[] | undefined,
   day: DayOfWeek,
   hhmm: string,
   beforeHhmm: string,
@@ -47,7 +47,7 @@ function getBorderClass(
   for (const schedule of futureSchedules) {
     if (schedule.day !== day) continue
 
-    if (schedule.hhmm === hhmm) {
+    if (schedule.time.slice(0, 5) === hhmm) {
       return [
         'border-r-red-400 border-r-[2px]',
         'border-l-red-400 border-l-[2px]',
@@ -56,7 +56,7 @@ function getBorderClass(
       ].join(' ')
     }
 
-    if (schedule.hhmm === beforeHhmm) {
+    if (schedule.time.slice(0, 5) === beforeHhmm) {
       return [
         'border-r-red-400 border-r-[2px]',
         'border-l-red-400 border-l-[2px]',
@@ -76,15 +76,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
   handleSchedule,
   attendeeSchedules,
   // FIXME: Dummy Data
-  futureSchedules = {
-    schedules: [
-      { hhmm: '13:00', day: 'MONDAY' },
-      { hhmm: '13:30', day: 'TUESDAY' },
-      { hhmm: '14:00', day: 'WEDNESDAY' },
-      { hhmm: '14:30', day: 'THURSDAY' },
-      { hhmm: '15:00', day: 'FRIDAY' },
-    ],
-  },
+  futureSchedules = [],
 }) => {
   const { bookId } = useParams()
   const { data: bookDetail } = useBookDetail(Number(bookId))
@@ -172,7 +164,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                     ) ?? false
 
                   const borderClass = getBorderClass(
-                    futureSchedules?.schedules,
+                    futureSchedules,
                     dayData.dayOfWeek,
                     hhmm,
                     beforeHhmm,
@@ -181,15 +173,13 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                   return (
                     <td
                       key={`${dayData.dayOfWeek}-${slotIndex}`}
-                      className={twMerge(
-                        `border border-[#f6f6f6] ${borderClass}
-                      text-sm w-[54px] h-[34px] align-middle cursor-pointer`,
+                      className={`border border-[#f6f6f6] ${borderClass}  text-xs-medium w-[54px] h-[34px] align-middle cursor-pointer ${
                         isSelected
-                          ? 'bg-bg-tertiary text-text-interactive-inverse text-xs-medium'
+                          ? 'bg-bg-tertiary text-text-interactive-inverse'
                           : count > 0
-                            ? 'bg-bg-primary text-text-secondary text-xs-medium'
-                            : 'bg-bg-secondary text-text-secondary text-xs-medium',
-                      )}
+                            ? 'bg-bg-primary text-text-secondary'
+                            : 'bg-bg-secondary text-text-secondary'
+                      }`}
                       onClick={() =>
                         handleSchedule(dayData.dayOfWeek, hhmm, isSelected)
                       }
@@ -217,7 +207,7 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                     ) ?? false
 
                   const borderClass = getBorderClass(
-                    futureSchedules.schedules,
+                    futureSchedules,
                     dayData.dayOfWeek,
                     hhmm,
                     beforeHhmm,
@@ -227,12 +217,12 @@ const ScheduleTable: React.FC<ScheduleProps> = ({
                     <td
                       key={`${dayData.dayOfWeek}-${secondSlotIndex}`}
                       className={`border border-[#f6f6f6] ${borderClass}
-                      text-sm w-[54px] h-[34px] align-middle cursor-pointer ${
+                      text-xs-medium w-[54px] h-[34px] align-middle cursor-pointer ${
                         isSelected
-                          ? 'bg-bg-tertiary text-text-interactive-inverse text-xs-medium'
+                          ? 'bg-bg-tertiary text-text-interactive-inverse'
                           : count > 0
-                            ? 'bg-bg-primary text-text-secondary text-xs-medium'
-                            : 'bg-bg-secondary text-text-secondary text-xs-medium'
+                            ? 'bg-bg-primary text-text-secondary'
+                            : 'bg-bg-secondary text-text-secondary'
                       }`}
                       onClick={() =>
                         handleSchedule(dayData.dayOfWeek, hhmm, isSelected)
