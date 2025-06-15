@@ -62,6 +62,13 @@ export default function ScheduleModify() {
     attendeeDetail.data?.futureSchedules?.appliedFrom ||
       attendeeDetail.data?.schedules.appliedFrom,
   )
+  const beforeSchedules =
+    attendeeDetail.data?.schedules.schedules.map((schedule) => ({
+      day: schedule.day,
+      hhmm: schedule.time.substring(0, 5),
+    })) || []
+
+  const beforeDateIsSame = beforeDate.isSame(selectedDate, 'day')
 
   useEffect(() => {
     const data = attendeeDetail.data
@@ -134,10 +141,12 @@ export default function ScheduleModify() {
                           .join(', ')}
                         으로 저장하시겠습니까?
                         <br />
-                        <span className="text-border-danger text-xs-semibold">
-                          ({beforeDate.format('M월 D일')}에 적용 예정이던
-                          스케쥴은 삭제됩니다)
-                        </span>
+                        {attendeeDetail.data?.futureSchedules.appliedFrom && (
+                          <span className="text-border-danger text-xs-semibold">
+                            ({beforeDate.format('M월 D일')}에 적용 예정이던
+                            스케쥴은 삭제됩니다)
+                          </span>
+                        )}
                       </React.Fragment>
                     }
                   />,
@@ -152,7 +161,8 @@ export default function ScheduleModify() {
               labelClassName="text-l-semibold"
               className={twMerge(
                 'text-l-semibold w-full h-[54px] flex justify-center items-center rounded-2xl',
-                beforeDate.isSame(selectedDate, 'day')
+                beforeDateIsSame &&
+                  beforeSchedules.length === attendeeSchedules?.schedules.length
                   ? 'bg-bg-interactive-disabled text-text-disabled'
                   : 'bg-bg-tertiary text-[#F1F8F3]',
               )}
@@ -166,6 +176,7 @@ export default function ScheduleModify() {
         handleCurrentDay={handleCurrentDay}
         saveButtonText="선택하기"
         value={beforeDate.toDate()}
+        disableBeforeToday
       />
     </React.Fragment>
   )
