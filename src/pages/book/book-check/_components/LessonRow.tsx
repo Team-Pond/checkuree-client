@@ -119,7 +119,7 @@ function LessonRow(props: LessonRowProps) {
           className={twMerge(
             'w-8 h-8 flex items-center justify-center rounded-lg',
             schedule.recordStatus !== 'ATTEND'
-              ? 'bg-bg-disabled'
+              ? 'bg-bg-interactive-disabled'
               : schedule.isTaught
                 ? 'bg-bg-tertiary'
                 : 'bg-bg-base', // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?
