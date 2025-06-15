@@ -112,7 +112,7 @@ export default function StudentManage(props: StudentManageProps) {
 
   const formattedFuture = React.useMemo(
     () => formatFutureSchedule(futureSchedules),
-    [futureSchedules.appliedFrom, futureSchedules.schedules],
+    [futureSchedules?.appliedFrom, futureSchedules?.schedules],
   )
   return (
     <div className="flex flex-col gap-4">
