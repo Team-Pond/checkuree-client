@@ -17,6 +17,8 @@ import FormHeader from '../../_components/FormHeader'
 import Button from '@/components/Button'
 import { twMerge } from 'tailwind-merge'
 
+import { formmattedHhmm } from '@/utils'
+
 const weekDaySorter: Record<string, number> = {
   월: 1,
   화: 2,
@@ -76,7 +78,7 @@ export default function ScheduleModify() {
       setAttendeeSchedules({
         schedules: data.schedules.schedules.map((schedule) => ({
           day: schedule.day,
-          hhmm: schedule.time.substring(0, 5),
+          hhmm: formmattedHhmm(schedule.time.substring(0, 5)),
         })),
       })
 
@@ -141,7 +143,7 @@ export default function ScheduleModify() {
                           .join(', ')}
                         으로 저장하시겠습니까?
                         <br />
-                        {attendeeDetail.data?.futureSchedules.appliedFrom && (
+                        {attendeeDetail.data?.futureSchedules?.appliedFrom && (
                           <span className="text-border-danger text-xs-semibold">
                             ({beforeDate.format('M월 D일')}에 적용 예정이던
                             스케쥴은 삭제됩니다)
@@ -157,7 +159,10 @@ export default function ScheduleModify() {
                 )
               }
               label="저장하기"
-              disabled={beforeDate.isSame(selectedDate, 'day')}
+              disabled={
+                beforeDateIsSame &&
+                beforeSchedules.length === attendeeSchedules?.schedules.length
+              }
               labelClassName="text-l-semibold"
               className={twMerge(
                 'text-l-semibold w-full h-[54px] flex justify-center items-center rounded-2xl',
