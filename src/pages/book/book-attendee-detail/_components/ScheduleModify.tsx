@@ -29,6 +29,8 @@ const weekDaySorter: Record<string, number> = {
   일: 7,
 }
 
+const isToday = (date: dayjs.Dayjs): boolean => date.isSame(dayjs(), 'day')
+
 export default function ScheduleModify() {
   const { bookId, attendeeId } = useParams()
   const navigate = useNavigate()
@@ -143,12 +145,17 @@ export default function ScheduleModify() {
                           .join(', ')}
                         으로 저장하시겠습니까?
                         <br />
-                        {attendeeDetail.data?.futureSchedules?.appliedFrom && (
-                          <span className="text-border-danger text-xs-semibold">
-                            ({beforeDate.format('M월 D일')}에 적용 예정이던
-                            스케쥴은 삭제됩니다)
-                          </span>
-                        )}
+                        {/* 
+                        1. futureSchedules가 존재하고
+                        2. selectedDate가 오늘이 아니면
+                         */}
+                        {attendeeDetail.data?.futureSchedules?.appliedFrom &&
+                          !isToday(selectedDate) && (
+                            <span className="text-border-danger text-xs-semibold">
+                              ({beforeDate.format('M월 D일')}에 적용 예정이던
+                              스케쥴은 삭제됩니다)
+                            </span>
+                          )}
                       </React.Fragment>
                     }
                   />,
@@ -186,4 +193,5 @@ export default function ScheduleModify() {
     </React.Fragment>
   )
 }
+
 const Form = tw.form`flex flex-col gap-10 w-full`
