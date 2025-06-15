@@ -9,6 +9,7 @@ type DateDrawerProps = {
   handleCurrentDay: (date: Date) => void
   saveButtonText?: string
   value?: Date
+  disableBeforeToday?: boolean
 }
 export default function DateDrawer({
   onClose,
@@ -16,6 +17,7 @@ export default function DateDrawer({
   handleCurrentDay,
   saveButtonText = '이동하기',
   value,
+  disableBeforeToday,
 }: DateDrawerProps) {
   const [selectedDay, setSelectedDay] = useState<Date>(new Date())
   const handleDay = (date: Date) => {
@@ -27,6 +29,7 @@ export default function DateDrawer({
         className="mx-auto"
         handleCurrentDay={handleDay}
         value={value}
+        disableBeforeToday={disableBeforeToday}
       />
       <div className="flex gap-4 w-full">
         <Button
