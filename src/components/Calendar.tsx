@@ -9,7 +9,7 @@ import {
   startOfToday,
   startOfWeek,
 } from 'date-fns'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import LeftArrowIcon from '@/assets/icons/ico-arrow-left.svg?react'
 import RightArrowIcon from '@/assets/icons/ico-arrow-right.svg?react'
@@ -29,7 +29,9 @@ export default function Calendar({
   disableBeforeToday,
 }: CalendarProps) {
   const today = startOfToday()
-  const [selectedMonth, setSelectedMonth] = useState(startOfMonth(today))
+  const [selectedMonth, setSelectedMonth] = useState(
+    startOfMonth(value || today),
+  )
   const [selectedDay, setSelectedDay] = useState<Date>(value || today)
 
   const lastDayOfMonth = endOfMonth(selectedMonth)
@@ -43,6 +45,12 @@ export default function Calendar({
     end: additionalNextMonth,
   })
 
+  useEffect(() => {
+    setSelectedMonth(startOfMonth(value || today))
+    setSelectedDay(value || today)
+  }, [value])
+
+  console.log(selectedDay)
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-center h-10 gap-3">
@@ -111,21 +119,20 @@ export default function Calendar({
                         : ''
 
                       const isTodayMonth =
-                        date.getMonth() !== selectedMonth.getMonth()
-
+                        date.getMonth() === selectedMonth.getMonth()
                       const holidayColor =
                         date.getDay() === 0
                           ? 'text-[#f44336]'
-                          : isTodayMonth
+                          : !isTodayMonth
                             ? 'text-text-tertiary'
-                            : 'text-[#5d5d5d]'
+                            : ''
                       return (
                         <td key={date.toString()}>
                           <div
                             onClick={() => {
                               if (
                                 (disableBeforeToday && date < today) ||
-                                isTodayMonth
+                                !isTodayMonth
                               )
                                 return
                               setSelectedDay(date)
@@ -136,9 +143,9 @@ export default function Calendar({
                             <p className="relative z-10">
                               <span
                                 className={twMerge(
-                                  'text-s-semibold flex items-center justify-center',
-                                  holidayColor,
+                                  '!text-s-semibold flex items-center justify-center',
                                   disabledStyle,
+                                  holidayColor,
                                 )}
                               >
                                 {format(date, 'd')}

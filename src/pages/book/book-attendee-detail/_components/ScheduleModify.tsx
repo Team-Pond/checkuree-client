@@ -175,7 +175,7 @@ export default function ScheduleModify() {
         onClose={() => setOpenDrawer(false)}
         handleCurrentDay={handleCurrentDay}
         saveButtonText="선택하기"
-        value={beforeDate.toDate()}
+        value={selectedDate.toDate()}
         disableBeforeToday
       />
     </React.Fragment>
