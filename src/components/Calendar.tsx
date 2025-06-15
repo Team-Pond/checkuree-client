@@ -19,12 +19,14 @@ type CalendarProps = {
   className?: string
   handleCurrentDay: (date: Date) => void
   value?: Date
+  disableBeforeToday?: boolean
 }
 
 export default function Calendar({
   className,
   handleCurrentDay,
   value,
+  disableBeforeToday,
 }: CalendarProps) {
   const today = startOfToday()
   const [selectedMonth, setSelectedMonth] = useState(startOfMonth(today))
@@ -103,16 +105,29 @@ export default function Calendar({
                         isEqual(selectedDay, date) &&
                         'rounded-full w-9 h-9 bg-[#BDDDC3]'
 
+                      const isPast = disableBeforeToday && date < today
+                      const disabledStyle = isPast
+                        ? 'text-text-disabled cursor-not-allowed'
+                        : ''
+
+                      const isTodayMonth =
+                        date.getMonth() !== selectedMonth.getMonth()
+
                       const holidayColor =
                         date.getDay() === 0
                           ? 'text-[#f44336]'
-                          : date.getMonth() !== selectedMonth.getMonth()
+                          : isTodayMonth
                             ? 'text-text-tertiary'
                             : 'text-[#5d5d5d]'
                       return (
                         <td key={date.toString()}>
                           <div
                             onClick={() => {
+                              if (
+                                (disableBeforeToday && date < today) ||
+                                isTodayMonth
+                              )
+                                return
                               setSelectedDay(date)
                               handleCurrentDay(date)
                             }}
@@ -123,6 +138,7 @@ export default function Calendar({
                                 className={twMerge(
                                   'text-s-semibold flex items-center justify-center',
                                   holidayColor,
+                                  disabledStyle,
                                 )}
                               >
                                 {format(date, 'd')}
