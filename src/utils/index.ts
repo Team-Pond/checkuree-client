@@ -86,6 +86,42 @@ export function sortWeekdays(weekdays: string[]): DayOfWeek[] {
   ) as DayOfWeek[]
 }
 
+/**
+ * 주어진 시간을 "HH:mm" 포맷으로 반환합니다.
+ * - "5:3" → "05:03"
+ * - "12:30" → "12:30"
+ * - 530      → "05:30"
+ *
+ * @param time "H:mm", "HH:mm" 또는 숫자 (예: 530, 1230)
+ * @returns 두 자리 시:분 문자열
+ */
+export function formmattedHhmm(time: string | number): string {
+  // 1) 문자열로 통일
+  const str = typeof time === 'number' ? time.toString() : time
+
+  // 2) 콜론 기준 분리
+  const parts = str.split(':')
+  let [h, m] = parts
+
+  // 숫자 입력이면서 콜론이 없을 때 (e.g. 530, 1230) 처리
+  if (parts.length === 1 && /^\d+$/.test(str)) {
+    const num = str.padStart(4, '0') // "530" → "0530"
+    h = num.slice(0, num.length - 2) // "05"
+    m = num.slice(-2) // "30"
+  }
+
+  // 3) 시·분이 없거나 비정상 포맷이면 원본 반환
+  if (typeof h === 'undefined' || typeof m === 'undefined') {
+    return str
+  }
+
+  // 4) 두 자리로 패딩
+  const hh = h.padStart(2, '0')
+  const mm = m.padStart(2, '0')
+
+  return `${hh}:${mm}`
+}
+
 export const DayTransfer = {
   MONDAY: '월',
   TUESDAY: '화',
