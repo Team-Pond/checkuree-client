@@ -2,12 +2,12 @@ import {
   eachDayOfInterval,
   endOfMonth,
   endOfWeek,
-  isEqual,
   format,
   add,
   startOfMonth,
   startOfToday,
   startOfWeek,
+  isSameDay,
 } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
@@ -32,6 +32,7 @@ export default function Calendar({
   const [selectedMonth, setSelectedMonth] = useState(
     startOfMonth(value || today),
   )
+
   const [selectedDay, setSelectedDay] = useState<Date>(value || today)
 
   const lastDayOfMonth = endOfMonth(selectedMonth)
@@ -50,7 +51,6 @@ export default function Calendar({
     setSelectedDay(value || today)
   }, [value])
 
-  console.log(selectedDay)
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-center h-10 gap-3">
@@ -82,10 +82,9 @@ export default function Calendar({
                 <th key={day} className="w-1/7">
                   <div className="w-full h-[30px] flex justify-center items-center">
                     <p
-                      className={twMerge(
-                        'text-s-semibold text-center',
-                        day === '일' ? 'text-border-danger' : 'text-[#5d5d5d]',
-                      )}
+                      className={`text-center text-s-semibold ${
+                        day === '일' ? 'text-border-danger' : 'text-[#5d5d5d]'
+                      }`}
                     >
                       {day}
                     </p>
@@ -110,7 +109,7 @@ export default function Calendar({
                   <tr key={index}>
                     {dates.map((date) => {
                       const isTextColor =
-                        isEqual(selectedDay, date) &&
+                        isSameDay(selectedDay, date) &&
                         'rounded-full w-9 h-9 bg-[#BDDDC3]'
 
                       const isPast = disableBeforeToday && date < today
@@ -122,7 +121,7 @@ export default function Calendar({
                         date.getMonth() === selectedMonth.getMonth()
                       const holidayColor =
                         date.getDay() === 0
-                          ? 'text-[#f44336]'
+                          ? 'text-[#f44336] '
                           : !isTodayMonth
                             ? 'text-text-tertiary'
                             : ''
