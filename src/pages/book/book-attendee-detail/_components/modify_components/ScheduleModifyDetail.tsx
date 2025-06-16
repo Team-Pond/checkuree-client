@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { DaysType } from '@/api/type'
+import { DaysType, FutureScheduleType } from '@/api/type'
 import { UpdateAttendeeScheduleRequest } from '@/api/AttendeeSchema'
 
-import { getSub30MinuteHhmm } from '@/utils'
+import { formmattedHhmm, getSub30MinuteHhmm } from '@/utils'
 
 import ScheduleTable from '../ScheduleTable'
 import AttendeeDrawer from '@/components/AttendeeDrawer'
@@ -15,9 +15,12 @@ import {
 
 type ScheduleModifyDetailProps = {
   setAttendeeSchedules: React.Dispatch<
-    React.SetStateAction<UpdateAttendeeScheduleRequest | undefined>
+    React.SetStateAction<
+      Omit<UpdateAttendeeScheduleRequest, 'appliedFrom'> | undefined
+    >
   >
-  attendeeSchedules: UpdateAttendeeScheduleRequest
+  attendeeSchedules: Omit<UpdateAttendeeScheduleRequest, 'appliedFrom'>
+  futureSchedules?: FutureScheduleType[]
 }
 
 interface ScheduleParamsType {
@@ -29,6 +32,7 @@ interface ScheduleParamsType {
 export default function ScheduleModifyDetail({
   setAttendeeSchedules,
   attendeeSchedules,
+  futureSchedules,
 }: ScheduleModifyDetailProps) {
   const { bookId } = useParams()
 
@@ -85,7 +89,7 @@ export default function ScheduleModifyDetail({
           schedules: [
             {
               day,
-              hhmm,
+              hhmm: formmattedHhmm(hhmm),
             },
           ],
         }
@@ -184,6 +188,7 @@ export default function ScheduleModifyDetail({
             handleSchedule={handleSchedule}
             handleAttendeeBottomDrawer={handleAttendeeBottomDrawer}
             attendeeSchedules={attendeeSchedules}
+            futureSchedules={futureSchedules}
           />
         )}
       </div>

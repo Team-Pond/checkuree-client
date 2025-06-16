@@ -1,5 +1,5 @@
 // src/querys.ts
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { updateBookProgress } from '@/api/AttendanceBookApiClient'
 import {
   updateAttendeeSchedule,
@@ -10,6 +10,7 @@ import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { attendeeKeys } from '@/queryKeys'
 import { handleError } from '@/utils/handleError'
+import { formmattedHhmm } from '@/utils'
 
 // 일정(요일, 시간)에 따른 수강생 데이터를 가져오는 커스텀 훅
 export const useSchedule = (
@@ -49,15 +50,25 @@ export const useOnlyScheduleUpdate = ({
   attendeeId: number
   attendeeSchedules: UpdateAttendeeScheduleRequest
 }) => {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async () =>
       await updateAttendeeSchedule({
-        params: attendeeSchedules!,
+        params: {
+          schedules: attendeeSchedules.schedules.map((schedule) => ({
+            day: schedule.day,
+            hhmm: formmattedHhmm(schedule.hhmm),
+          })),
+          appliedFrom: attendeeSchedules.appliedFrom,
+        },
         attendanceBookId: paramBookId,
         attendeeId,
       }),
     onSuccess: () => {
       toast.success('수강생 일정이 수정되었습니다.')
+      queryClient.invalidateQueries(
+        attendeeKeys.detail(paramBookId, attendeeId),
+      )
     },
     onError: handleError,
   })

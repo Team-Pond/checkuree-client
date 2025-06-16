@@ -7,16 +7,16 @@ const colors = {
   'bg-secondary': '#f6f6f6',
   'bg-secondary-hover': '#e7e7e7',
   'bg-secondary-press': '#d1d1d1',
-  'bg-interactive-secondary': '#f6f6f6',
   'bg-tertiary': '#59996b',
   'bg-tertiary-hover': '#428758',
   'bg-tertiary-press': '#306b44',
   'bg-destructive': '#fccccc',
   'bg-destructive-hover': '#f9a8a8',
   'bg-destructive-press': '#f37676',
+  'bg-interactive-secondary': '#f6f6f6',
   'bg-interactive-destructive': '#EA5353',
   'bg-interactive-primary': '#BDDDC3',
-  'bg-disabled': '#e7e7e7',
+  'bg-interactive-disabled': '#e7e7e7',
 
   // Border colors
   'border-brand': '#59996b',
@@ -34,7 +34,7 @@ const colors = {
   // Text colors
   'text-primary': '#171717',
   'text-secondary': '#5d5d5d',
-  'text-tertiary': '#d1d1d1',
+  'text-tertiary': '#B0B0B0',
   'text-disabled': '#888888',
   'text-brand': '#428758',
   'text-danger': '#d62c2c',

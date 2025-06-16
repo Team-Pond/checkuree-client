@@ -1,7 +1,64 @@
 import { formatSchedule } from '@/utils'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { DaysType, GenderType, Progresses } from '@/api/type'
+import {
+  DaysType,
+  FutureScheduleType,
+  GenderType,
+  Progresses,
+} from '@/api/type'
 import tw from 'tailwind-styled-components'
+import React from 'react'
+
+const dayMap: Record<DaysType, string> = {
+  MONDAY: '월',
+  TUESDAY: '화',
+  WEDNESDAY: '수',
+  THURSDAY: '목',
+  FRIDAY: '금',
+  SATURDAY: '토',
+  SUNDAY: '일',
+}
+
+function formatFutureSchedule(future: {
+  appliedFrom: string
+  schedules: FutureScheduleType[]
+}) {
+  if (!future) return ''
+
+  const groups = future.schedules.reduce(
+    (acc, { day, time }) => {
+      const dow = dayMap[day]
+      const [h, m] = time.split(':')
+      let hour = Number(h)
+      const period = hour >= 12 ? '오후' : '오전'
+      hour = hour % 12 === 0 ? 12 : hour % 12
+      const minute = m.padStart(2, '0')
+      const timeStr = `${period} ${hour}:${minute}`
+      if (!acc[dow]) acc[dow] = []
+      acc[dow].push(timeStr)
+      return acc
+    },
+    {} as Record<string, string[]>,
+  )
+
+  const dayOrder = ['월', '화', '수', '목', '금', '토', '일']
+  const entries = dayOrder
+    .filter((dow) => groups[dow]?.length)
+    .flatMap((dow) => groups[dow].map((time) => `(${dow}) ${time}`))
+
+  const lines = entries.reduce<string[]>((acc, cur, idx) => {
+    if (idx % 2 === 0) {
+      acc.push(cur)
+    } else {
+      acc[acc.length - 1] += `, ${cur}`
+    }
+    return acc
+  }, [])
+
+  const [year, month, day] = future.appliedFrom.split('-')
+  const scheduleStr = lines.join('\n')
+  return `${year}년 ${month}월 ${day}일부터\n${scheduleStr}`
+}
 
 type ScheduleItem = {
   id: number
@@ -32,28 +89,31 @@ type StudentManageProps = {
     relation?: string
     phoneNumber?: string
   }
-}
-
-interface progressGrade {
-  startAt: string
-  gradeId: number
-}
-
-interface AttendeeModifyFormState {
-  birthDate: string
-  gender: GenderType
-  address_1: string
-  description: string
+  futureSchedules: {
+    appliedFrom: string
+    schedules: FutureScheduleType[]
+  }
 }
 
 export default function StudentManage(props: StudentManageProps) {
-  const { student, registerInfo, scheduleItems, associates, lessonInfo } = props
+  const {
+    student,
+    registerInfo,
+    scheduleItems,
+    associates,
+    lessonInfo,
+    futureSchedules,
+  } = props
 
   const location = useLocation()
   const navigate = useNavigate()
   const response = scheduleItems?.length > 0 && formatSchedule(scheduleItems)
   const { bookId, attendeeId } = useParams()
 
+  const formattedFuture = React.useMemo(
+    () => formatFutureSchedule(futureSchedules),
+    [futureSchedules?.appliedFrom, futureSchedules?.schedules],
+  )
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-8 items-center w-full rounded-2xl bg-white">
@@ -107,25 +167,33 @@ export default function StudentManage(props: StudentManageProps) {
               }}
             />
           </p>
-          <div className="flex items-center justify-between text-s-semibold">
-            <p className="text-text-tertiary w-12">클래스</p>
-            <div className="flex flex-col text-text-primary text-xs">
+          <div className="flex justify-between">
+            <p className="text-text-tertiary text-s-semibold">클래스</p>
+            <div className="flex flex-col text-text-primary text-s-semibold text-left w-[200px]">
               {response
                 ? response
                     .sort((a, b) => a[0].localeCompare(b[0]))
                     .reduce<string[][]>((acc, cur, index) => {
-                      if (index % 3 === 0) acc.push([]) // 3개 단위로 배열 생성
+                      if (index % 2 === 0) acc.push([]) // 2개 단위로 배열 생성
                       acc[acc.length - 1].push(cur)
                       return acc
                     }, [])
                     .map((row, rowIndex) => (
-                      <p key={rowIndex} className="break-keep text-left">
-                        {row.map((day, index) => (
-                          <span key={index}>{day} &nbsp;</span>
-                        ))}
-                      </p>
+                      <React.Fragment key={rowIndex}>
+                        <p key={rowIndex} className="break-keep text-left">
+                          {row.map((day, index) => (
+                            <span key={index}>{day} &nbsp;</span>
+                          ))}
+                        </p>
+                      </React.Fragment>
                     ))
                 : ''}
+            </div>
+          </div>
+          <div className="flex justify-between">
+            <p className="text-text-tertiary text-s-semibold">예정된 일정</p>
+            <div className="flex flex-col text-text-secondary text-s-semibold whitespace-pre-line text-left w-[200px]">
+              {formattedFuture}
             </div>
           </div>
         </div>

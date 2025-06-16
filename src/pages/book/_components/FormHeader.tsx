@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { twMerge } from 'tailwind-merge'
 
 interface FormHeaderProps {
-  isStep2: boolean
+  isStep2?: boolean
   text: string
 }
 export default function FormHeader({ isStep2, text }: FormHeaderProps) {

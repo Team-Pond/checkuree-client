@@ -82,18 +82,18 @@ function LessonRow(props: LessonRowProps) {
       <div className="flex gap-4">
         <div className="flex gap-2">
           <Button
-            onClick={() => {
+            onClick={() =>
               handleAttendanceStatusWithConfirmation(
                 'ABSENT',
                 schedule,
                 startTime,
               )
-            }}
+            }
             className={twMerge(
               'rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center',
               schedule.recordStatus === 'ABSENT'
                 ? 'bg-bg-destructive text-text-interactive-destructive'
-                : 'bg-bg-disabled text-text-disabled',
+                : 'bg-bg-interactive-disabled text-text-disabled',
             )}
             label="결석"
           />
@@ -109,7 +109,7 @@ function LessonRow(props: LessonRowProps) {
               'rounded-lg text-sm w-[57px] h-[33px] flex items-center justify-center',
               schedule.recordStatus === 'ATTEND'
                 ? 'bg-bg-primary text-text-interactive-primary'
-                : 'bg-bg-disabled text-text-disabled',
+                : 'bg-bg-interactive-disabled text-text-disabled',
             )}
             label="출석"
           />
@@ -119,7 +119,7 @@ function LessonRow(props: LessonRowProps) {
           className={twMerge(
             'w-8 h-8 flex items-center justify-center rounded-lg',
             schedule.recordStatus !== 'ATTEND'
-              ? 'bg-bg-disabled'
+              ? 'bg-bg-interactive-disabled'
               : schedule.isTaught
                 ? 'bg-bg-tertiary'
                 : 'bg-bg-base', // recordStatus === "ATTEND" && isTaught === false 인 경우 bg-bg-base 맞나 ?

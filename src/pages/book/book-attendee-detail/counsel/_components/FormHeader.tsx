@@ -14,9 +14,10 @@ export default function FormHeader({ studentName }: { studentName: string }) {
           width={32}
           height={32}
           onClick={() => navigate(-1)}
+          className="cursor-pointer"
         />
       </div>
-      <hr className="border-[2px] border-bg-tertiary   w-full rounded-full mx-auto" />
+      <hr className="border-[2px] border-bg-tertiary w-full rounded-full mx-auto" />
     </div>
   )
 }

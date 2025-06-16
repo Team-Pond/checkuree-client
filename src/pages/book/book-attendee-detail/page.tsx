@@ -13,6 +13,7 @@ import AttendanceManage from './_components/AttendanceManage'
 import LearningManage from './_components/LearningManage'
 import CounselManage from './_components/CounselManage'
 import SEO from '@/components/SEO'
+import Loading from '@/components/Loading'
 
 const Menu = [
   {
@@ -56,6 +57,8 @@ export default function Page() {
     (fam) => fam.relationType === 'MOTHER' || fam.relationType === 'FATHER',
   )
 
+  if (!attendeeDetail) return <Loading />
+  // 이후에는 non-null 단언 없이 바로 attendeeDetail.name 등 사용
   return (
     <section className="bg-bg-secondary flex-1 w-full">
       <SEO
@@ -106,21 +109,22 @@ export default function Page() {
         >
           <StudentManage
             student={{
-              name: attendeeDetail?.name!,
-              age: Number(attendeeDetail?.age),
-              phoneNumber: attendeeDetail?.phoneNumber!,
-              enrollDate: attendeeDetail?.enrollmentDate!,
+              name: attendeeDetail.name,
+              age: Number(attendeeDetail.age),
+              phoneNumber: attendeeDetail.phoneNumber,
+              enrollDate: attendeeDetail.enrollmentDate,
             }}
-            lessonInfo={attendeeDetail?.progresses!}
+            futureSchedules={attendeeDetail.futureSchedules}
+            lessonInfo={attendeeDetail.progresses}
             registerInfo={{
-              address_1: attendeeDetail?.address_1!,
-              birthDate: attendeeDetail?.birthDate!,
-              gender: attendeeDetail?.gender!,
-              phoneNumber: attendeeDetail?.phoneNumber!,
-              description: attendeeDetail?.description!,
-              school: attendeeDetail?.school!,
+              address_1: attendeeDetail.address_1,
+              birthDate: attendeeDetail.birthDate,
+              gender: attendeeDetail.gender,
+              phoneNumber: attendeeDetail.phoneNumber,
+              description: attendeeDetail.description,
+              school: attendeeDetail.school || '',
             }}
-            scheduleItems={attendeeDetail?.schedules!}
+            scheduleItems={attendeeDetail.schedules.schedules || []}
             associates={{
               relation:
                 (studentAssociate || [])?.length > 0
@@ -142,8 +146,8 @@ export default function Page() {
         >
           <AttendanceManage
             studentInfo={{
-              name: attendeeDetail?.name!,
-              age: Number(attendeeDetail?.age),
+              name: attendeeDetail.name,
+              age: Number(attendeeDetail.age),
               grade: grade!,
               scheduleDays: scheduleDays!,
             }}
@@ -157,10 +161,10 @@ export default function Page() {
           }}
         >
           <LearningManage
-            progresses={attendeeDetail?.progresses!}
+            progresses={attendeeDetail.progresses}
             studentInfo={{
-              name: attendeeDetail?.name!,
-              age: Number(attendeeDetail?.age),
+              name: attendeeDetail.name,
+              age: Number(attendeeDetail.age),
               grade: grade!,
               scheduleDays: scheduleDays!,
             }}
@@ -175,11 +179,11 @@ export default function Page() {
         >
           <CounselManage
             studentInfo={{
-              name: attendeeDetail?.name!,
-              age: Number(attendeeDetail?.age),
+              name: attendeeDetail.name,
+              age: Number(attendeeDetail.age),
               grade: grade!,
               scheduleDays: scheduleDays!,
-              associates: attendeeDetail?.associates || [],
+              associates: attendeeDetail.associates || [],
             }}
           />
         </Content>

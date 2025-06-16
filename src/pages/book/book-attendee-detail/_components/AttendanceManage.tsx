@@ -4,7 +4,7 @@ import {
   endOfMonth,
   endOfWeek,
   format,
-  isEqual,
+  isSameDay,
   startOfMonth,
   startOfToday,
   startOfWeek,
@@ -247,7 +247,7 @@ export default function AttendanceManage(props: AttendanceManageProps) {
                               ? 'text-[#f44336]'
                               : date.getMonth() !== selectedMonth.getMonth()
                                 ? 'text-text-tertiary'
-                                : isEqual(today, date)
+                                : isSameDay(today, date)
                                   ? 'text-[#5d5d5d] rounded-full w-4 h-4 bg-[#BDDDC3]'
                                   : 'text-[#5d5d5d]'
                           return (
