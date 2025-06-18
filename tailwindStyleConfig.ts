@@ -47,6 +47,7 @@ const colors = {
   'text-interactive-destructive': '#951f1f',
   'text-interactive-inverse': '#f6f6f6',
   'text-interactive-secondary': '#B0B0B0',
+  'text-interactive-tertiary': '#F1F8F3',
 
   // Shadow colors
   'shadow-12': '#0000001f',
