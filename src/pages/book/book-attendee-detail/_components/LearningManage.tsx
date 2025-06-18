@@ -75,7 +75,7 @@ export default function LearningManage(props: LearningManageProps) {
         {progresses?.map((progress) => (
           <Fragment key={progress.id}>
             <div className="flex items-center justify-between text-s-semibold">
-              <p className="text-text-tertiary">커리큘럼 1</p>
+              <p className="text-text-tertiary">커리큘럼</p>
               <p className="text-text-primary">{progress.gradeTitle}</p>
               <Button
                 className="max-w-[109px] w-full h-8 rounded-lg bg-[#f6f6f6] text-s-medium text-text-secondary"
