@@ -29,12 +29,12 @@ type SelectProps = {
 }
 
 const Select = (props: SelectProps) => {
-  const { onChange, options, placeholder, value } = props
+  const { onChange, options, placeholder } = props
   return (
     <Root onValueChange={(value) => onChange(value, value)}>
       <Trigger className="rounded-md outline-none inline-flex items-center justify-between w-[120px] px-3 py-2 bg-white border border-border-brand ounded-md text-sm focus:outline-none  focus:ring-green-500 ">
-        <Value placeholder={value || placeholder} />
-        <Icon>
+        <Value placeholder={placeholder} />
+        <Icon className="mb-0.5">
           <ChevronDownIcon />
         </Icon>
       </Trigger>
@@ -46,7 +46,7 @@ const Select = (props: SelectProps) => {
           <Viewport className="p-2">
             {options.map(({ name, value }) => (
               <Item
-                key={value}
+                key={`${value}-${name}`}
                 value={value}
                 className="flex items-center p-2 rounded-md text-sm cursor-pointer hover:bg-gray-100"
               >
