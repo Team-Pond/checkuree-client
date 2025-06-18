@@ -67,13 +67,20 @@ export type CreateRecordResponse =
 
 // attendTime의 형태를 정의하는 타입
 
-export type CreateRecordRequest = {
+export interface BaseRecordCreateCommon {
   attendanceBookId: number
   attendeeId: number
-  scheduleId?: number
-  attendDate: string // "YYYY-MM-DD" 형태의 문자열로 전송
-  attendTime: string
+  attendDate: string
+  attendTime?: string
+}
+
+export interface NormalRecordCreate extends BaseRecordCreateCommon {
   status: STATUS
+  scheduleId: number
+}
+
+export interface MakeupRecordCreate extends BaseRecordCreateCommon {
+  status: 'PENDING'
 }
 
 /**
