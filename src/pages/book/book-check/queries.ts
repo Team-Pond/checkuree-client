@@ -107,6 +107,7 @@ export const useRecordUpdate = ({
 }
 
 /**
+ * 출결을 생성하는 훅
  * @param attendTime : 'HH:mm' 형식으로 입력
  * attendTime 을 입력하지 않을 경우 현재 시간이 자동으로 입력됨
  */
@@ -141,10 +142,9 @@ export const useRecordCreate = ({
         params: {
           attendanceBookId: bookId,
           attendeeId: attendeeId,
-          scheduleId: scheduleId,
+          scheduleId: scheduleId!,
           attendDate: currentDate,
           attendTime: recordTime,
-
           status: status,
         },
       }),
@@ -191,6 +191,52 @@ export const useRecordCreate = ({
     onSettled: () => {
       // 최종적으로 서버 상태와 동기화
       queryClient.invalidateQueries({ queryKey: key })
+    },
+  })
+}
+
+/**
+ * 보강 기록을 생성하는 훅
+ * @param attendTime : 'HH:mm' 형식으로 입력
+ * attendTime 을 입력하지 않을 경우 현재 시간이 자동으로 입력됨
+ */
+export const useMakeUpClassCreate = ({
+  attendanceBookId,
+  currentDate,
+  attendTime,
+  studentName,
+  closeDrawer,
+}: {
+  attendanceBookId: number
+  currentDate: string
+  attendTime: string
+  studentName: string
+  closeDrawer?: () => void
+}) => {
+  const key = bookKeys.schedules(attendanceBookId, currentDate).queryKey
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ attendeeId }: { attendeeId: number }) =>
+      await createRecord({
+        params: {
+          attendanceBookId,
+          attendeeId,
+          attendDate: currentDate,
+          attendTime,
+          status: 'PENDING',
+        },
+      }),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: key })
+      toast.success(
+        `${studentName} 학생의 스케쥴이 \n${attendTime}에 추가되었습니다.`,
+      )
+      closeDrawer && closeDrawer()
+    },
+    onError: () => {
+      toast.error('보강 생성에 실패했습니다.')
     },
   })
 }
