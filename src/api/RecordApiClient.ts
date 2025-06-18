@@ -1,6 +1,5 @@
 import ApiClient from './ApiClient'
 import {
-  CreateRecordRequest,
   CreateRecordResponse,
   DeleteRecordRequest,
   DeleteRecordResponse,
@@ -8,6 +7,8 @@ import {
   GetAttendeeRecordsResponse,
   GetStatisticsRequest,
   GetStatisticsResponse,
+  MakeupRecordCreate,
+  NormalRecordCreate,
   UpdateRecordAllRequest,
   UpdateRecordAllResponse,
   UpdateRecordLessonRequest,
@@ -79,7 +80,7 @@ export const updateRecordAll = async ({
 export const createRecord = async ({
   params,
 }: {
-  params: CreateRecordRequest
+  params: NormalRecordCreate | MakeupRecordCreate
 }): Promise<CreateRecordResponse> => {
   const response = await ApiClient.request({
     method: 'POST',

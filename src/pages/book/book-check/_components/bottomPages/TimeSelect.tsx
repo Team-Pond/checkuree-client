@@ -50,7 +50,7 @@ export const TimeSelectionView = ({
     ? useBookDetail(Number(bookId))
     : { data: null } // monad 유지
 
-  // timeSloe 생성
+  // timeSlots 생성
   const availableFrom =
     selectedBook?.availableFrom ?? bookDetailResult?.data?.availableFrom
   const availableTo =
@@ -80,7 +80,7 @@ export const TimeSelectionView = ({
                       className={twMerge(
                         'rounded-lg border border-[#d1d1d1] w-[61px] h-[33px] text-s-medium text-border-secondary-hover',
                         selectedTime === time
-                          ? 'border-border-brand text-text-brand bg-bg-tertiary '
+                          ? 'border-border-brand text-text-brand '
                           : 'text-border-secondary-hover',
                       )}
                       onClick={() => {
@@ -131,18 +131,17 @@ export const TimeSelectionView = ({
       </div>
       <div className="absolute bottom-0 left-0 right-0 p-4 flex flex-row gap-2 shadow-md">
         <Button
-          className="w-full h-[54px] bg-gray-300 rounded-2xl text-l-semibold"
+          className="w-full h-[54px] bg-bg-interactive-secondary text-text-secondary rounded-2xl text-l-semibold"
           onClick={onBack}
           label="이전으로"
         />
 
         <Button
-          className={twMerge(
-            'w-full h-[54px] rounded-2xl text-l-semibold',
+          className={`w-full h-[54px] rounded-2xl ${
             selectedTime === ''
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50' // 비활성화 스타일
-              : 'bg-bg-tertiary text-[#f1f8f3]', // 활성화 스타일
-          )}
+              ? 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50 text-l-semibold'
+              : 'bg-bg-tertiary text-text-interactive-tertiary text-l-semibold'
+          }`}
           onClick={() => onConfirm(selectedTime)}
           disabled={!selectedTime}
           label="추가하기"
