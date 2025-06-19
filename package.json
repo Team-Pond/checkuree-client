@@ -1,6 +1,6 @@
 {
-  "name": "pond-client",
-  "homepage": "https://pond-client.vercel.app",
+  "name": "checkuree",
+  "homepage": "https://checkuree.com",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -41,7 +41,6 @@
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.474.0",
     "path-browserify": "^1.0.1",
-    "pond-client": "file:",
     "react": "^18.0.0",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^18.0.0",
