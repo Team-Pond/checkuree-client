@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { DaysType, FutureScheduleType } from '@/api/type'
 import { UpdateAttendeeScheduleRequest } from '@/api/AttendeeSchema'
 
-import { formmattedHhmm, getSub30MinuteHhmm } from '@/utils'
+import { formatHHmm, getSub30MinuteHhmm } from '@/utils'
 
 import ScheduleTable from '../ScheduleTable'
 import AttendeeDrawer from '@/components/AttendeeDrawer'
@@ -89,7 +89,7 @@ export default function ScheduleModifyDetail({
           schedules: [
             {
               day,
-              hhmm: formmattedHhmm(hhmm),
+              hhmm: formatHHmm(hhmm),
             },
           ],
         }

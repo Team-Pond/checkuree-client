@@ -25,7 +25,7 @@ export default defineConfig({
     svgr(),
 
     createSitemap({
-      hostname: 'https://pond-client.vercel.app',
+      hostname: 'https://checkuree.com',
       // 동적 경로에 원하는 URL들을 명시합니다.
       dynamicRoutes: ['/auth/login', '/auth/signin'],
       // 제외할 경로 (예: 네이버 소유권 확인 파일)

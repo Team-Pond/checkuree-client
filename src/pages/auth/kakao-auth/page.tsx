@@ -32,7 +32,7 @@ export default function Page() {
           className="relative bg-[#FEE500]"
           onClick={() =>
             (window.location.href =
-              'https://dev.checkuree.com/oauth2/authorization/kakao')
+              'https://checkuree.com/oauth2/authorization/kakao')
           }
         >
           <img

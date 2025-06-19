@@ -33,11 +33,7 @@ const Modal = () => {
             labelClassName="text-text-secondary text-l-semibold"
           />
           <Button
-            className={twMerge(
-              buttonProps?.color
-                ? buttonProps?.color
-                : 'bg-bg-tertiary w-full h-12 flex justify-center items-center rounded-2xl',
-            )}
+            className={`bg-bg-tertiary w-full h-12 flex justify-center items-center rounded-2xl ${buttonProps?.color ? buttonProps?.color : ''}`}
             onClick={() => {
               action()
               closeModal()

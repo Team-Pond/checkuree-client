@@ -1,8 +1,8 @@
 import BottomDrawer from '../../../../components/BottomDrawer'
 import { useState } from 'react'
-import { useRecordCreate } from '../queries'
+import { useMakeUpClassCreate } from '../queries'
 import { useParams } from 'react-router-dom'
-import toast from 'react-hot-toast'
+
 import { TimeSelectionView } from './bottomPages/TimeSelect'
 import { StudentSearchView } from './bottomPages/StudentSearch'
 
@@ -25,11 +25,6 @@ export const BottomAddRecord = (props: BottomAddRecordProps) => {
     name: string
   } | null>(null)
 
-  const { mutate: recordMutation } = useRecordCreate({
-    bookId: Number(bookId!),
-    currentDate: props.currentDate,
-  })
-
   const unsetSelectedStudent = () => {
     setSelectedTime('')
     setSelectedStudent(null)
@@ -41,13 +36,16 @@ export const BottomAddRecord = (props: BottomAddRecordProps) => {
     onDrawerChange()
   }
 
+  const { mutate: makeUpClassMutation } = useMakeUpClassCreate({
+    attendanceBookId: Number(bookId!),
+    currentDate: props.currentDate,
+    attendTime: selectedTime,
+    studentName: selectedStudent?.name || '',
+    closeDrawer: closeDrawer,
+  })
+
   return (
-    <BottomDrawer
-      isOpen={openFilter}
-      onClose={() => {
-        closeDrawer()
-      }}
-    >
+    <BottomDrawer isOpen={openFilter} onClose={() => closeDrawer()}>
       <div className="flex flex-col min-h-[350px] gap-0 p-1  max-h-[80vh] overflow-y-auto">
         {!selectedStudent ? (
           <StudentSearchView
@@ -61,19 +59,12 @@ export const BottomAddRecord = (props: BottomAddRecordProps) => {
             student={selectedStudent}
             selectedTime={selectedTime}
             setSelectedTime={setSelectedTime}
-            onBack={() => {
-              unsetSelectedStudent()
-            }}
-            onConfirm={(time) => {
-              recordMutation({
+            onBack={() => unsetSelectedStudent()}
+            onConfirm={() =>
+              makeUpClassMutation({
                 attendeeId: selectedStudent.id,
-                status: 'PENDING',
               })
-              toast.success(
-                `${selectedStudent.name} 학생의 스케쥴이 \n${time}에 추가되었습니다.`,
-              )
-              closeDrawer()
-            }}
+            }
           />
         )}
       </div>

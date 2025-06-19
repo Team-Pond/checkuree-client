@@ -10,7 +10,7 @@ import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { attendeeKeys } from '@/queryKeys'
 import { handleError } from '@/utils/handleError'
-import { formmattedHhmm } from '@/utils'
+import { formatHHmm } from '@/utils'
 
 // 일정(요일, 시간)에 따른 수강생 데이터를 가져오는 커스텀 훅
 export const useSchedule = (
@@ -57,7 +57,7 @@ export const useOnlyScheduleUpdate = ({
         params: {
           schedules: attendeeSchedules.schedules.map((schedule) => ({
             day: schedule.day,
-            hhmm: formmattedHhmm(schedule.hhmm),
+            hhmm: formatHHmm(schedule.hhmm),
           })),
           appliedFrom: attendeeSchedules.appliedFrom,
         },

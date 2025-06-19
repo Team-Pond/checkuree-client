@@ -1,20 +1,20 @@
-import { Helmet } from "react-helmet-async";
-import { useLocation } from "react-router-dom";
+import { Helmet } from 'react-helmet-async'
+import { useLocation } from 'react-router-dom'
 
 interface SEOProps {
-  title: string;
-  content: string;
+  title: string
+  content: string
 }
 export default function SEO(props: SEOProps) {
-  const { title, content } = props;
-  const location = useLocation();
+  const { title, content } = props
+  const location = useLocation()
 
   // 환경에 따라 base URL 결정
   const baseUrl =
-    process.env.NODE_ENV === "development"
+    process.env.NODE_ENV === 'development'
       ? window.location.origin
-      : "https://dev.checkuree.com";
-  const currentUrl = `${baseUrl}${location.pathname}`;
+      : 'https://checkuree.com'
+  const currentUrl = `${baseUrl}${location.pathname}`
 
   return (
     <Helmet key={location.key}>
@@ -25,9 +25,9 @@ export default function SEO(props: SEOProps) {
 
       <meta
         property="og:image"
-        content="https://dev.checkuree.com/images/logos/checkuree_logo.svg"
+        content="https://checkuree.com/images/logos/checkuree_logo.svg"
       />
       <meta property="og:url" content={currentUrl} />
     </Helmet>
-  );
+  )
 }

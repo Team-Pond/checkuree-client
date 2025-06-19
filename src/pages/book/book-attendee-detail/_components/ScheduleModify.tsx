@@ -17,7 +17,7 @@ import FormHeader from '../../_components/FormHeader'
 import Button from '@/components/Button'
 import { twMerge } from 'tailwind-merge'
 
-import { formmattedHhmm } from '@/utils'
+import { formatHHmm } from '@/utils'
 
 const weekDaySorter: Record<string, number> = {
   월: 1,
@@ -80,7 +80,7 @@ export default function ScheduleModify() {
       setAttendeeSchedules({
         schedules: data.schedules.schedules.map((schedule) => ({
           day: schedule.day,
-          hhmm: formmattedHhmm(schedule.time.substring(0, 5)),
+          hhmm: formatHHmm(schedule.time.substring(0, 5)),
         })),
       })
 
