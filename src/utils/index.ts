@@ -95,7 +95,7 @@ export function sortWeekdays(weekdays: string[]): DayOfWeek[] {
  * @param time "H:mm", "HH:mm" 또는 숫자 (예: 530, 1230)
  * @returns 두 자리 시:분 문자열
  */
-export function formmattedHhmm(time: string | number): string {
+export function formatHHmm(time: string | number): string {
   // 1) 문자열로 통일
   const str = typeof time === 'number' ? time.toString() : time
 

@@ -1,6 +1,6 @@
 // 출석 관리 대상 API
 
-import { formmattedHhmm } from '@/utils'
+import { formatHHmm } from '@/utils'
 import ApiClient from './ApiClient'
 import {
   AttendeeCheckNameRequest,
@@ -106,7 +106,7 @@ export const getScheduleAttendee = async (
 
   const response = await ApiClient.request({
     method: 'GET',
-    url: `/book/${attendanceBookId}/attendee/schedule?dayOfWeek=${dayOfWeek}&hhmm=${formmattedHhmm(hhmm)}`,
+    url: `/book/${attendanceBookId}/attendee/schedule?dayOfWeek=${dayOfWeek}&hhmm=${formatHHmm(hhmm)}`,
   })
 
   return response.data
