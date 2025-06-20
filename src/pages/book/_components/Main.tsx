@@ -64,7 +64,7 @@ function Book({
           </p>
         </div>
         <div className="flex flex-col gap-1 text-sm leading-4">
-          <p className="text-text-brand font-bold ">
+          <p className="text-text-brand font-bold">
             {getDayGroupFromInput(availableDays)}
           </p>
           <p className="text-text-secondary font-medium truncate">
