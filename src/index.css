@@ -25,6 +25,31 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+  font-family: 'SUIT';
+  font-weight: 400;
+  src: url('/fonts/SUIT/SUIT-Regular.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SUIT';
+  font-weight: 500;
+  src: url('/fonts/SUIT/SUIT-Medium.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SUIT';
+  font-weight: 600;
+  src: url('/fonts/SUIT/SUIT-SemiBold.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SUIT';
+  font-weight: 700;
+  src: url('/fonts/SUIT/SUIT-Bold.woff2') format('woff2');
+  font-display: swap;
+}
+
 body {
   width: 100%;
   min-height: 100vh;
@@ -34,7 +59,7 @@ body {
   background-color: white;
   color: #222222;
   margin: 0;
-  font-family: "SUIT", sans-serif;
+  font-family: 'SUIT', sans-serif;
 
   input:-webkit-autofill {
     -webkit-text-fill-color: black !important;
