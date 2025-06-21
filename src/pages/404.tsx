@@ -16,6 +16,7 @@ const NotFound = () => {
         width={70}
         height={70}
         className="mb-4"
+        loading="lazy"
       />
 
       <MessageContainer>

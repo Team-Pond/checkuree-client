@@ -83,6 +83,7 @@ export default function CounselManage(props: CounselManageProps) {
           alt="플러스 아이콘"
           width={16}
           height={16}
+          loading="lazy"
         />
         <p className="text-white font-semibold text-lg">상담</p>
       </Button>

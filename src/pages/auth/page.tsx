@@ -37,6 +37,7 @@ export default function Page() {
             height={18}
             alt="카카오 심볼 로고"
             className="absolute left-4"
+            loading="lazy"
           />
 
           <p className="ml-[30px] font-medium text-[17px]">카카오로 시작하기</p>
